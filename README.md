@@ -1,5 +1,7 @@
 # VibeDisasm
 
+[![Build and Test](https://github.com/sampletext32/VibeDisasm/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/sampletext32/VibeDisasm/actions/workflows/build-and-test.yml)
+
 ## Overview
 VibeDisasm is a comprehensive .NET toolkit for analyzing and disassembling executable files, with a focus on the Portable Executable (PE) format and x86 instruction set. The project provides tools for extracting detailed information from PE files and disassembling x86 machine code with high precision and fidelity.
 
