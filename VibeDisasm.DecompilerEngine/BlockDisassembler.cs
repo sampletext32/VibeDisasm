@@ -1,10 +1,15 @@
-﻿using VibeDisasm.Disassembler.X86;
+﻿using System.Diagnostics;
+using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Disassembler.X86.Operands;
 
 namespace VibeDisasm.DecompilerEngine;
 
 public class BlockDisassembler
 {
+    /// <summary>
+    /// Disassembles an assembly function from a starting position in the fileBuffer.
+    /// </summary>
+    /// <returns>A dictionary of block address to the block itself</returns>
     public static Dictionary<uint, InstructionBlock> DisassembleBlock(byte[] fileBuffer, uint startPosition)
     {
         var decoder = new InstructionDecoder(fileBuffer, fileBuffer.Length);
@@ -23,7 +28,7 @@ public class BlockDisassembler
             // if this jump was already disassembled
             if (instructionBlocks.ContainsKey(position))
             {
-                Console.WriteLine($"BlockDisassembler stepped onto already visited block {position:X8}");
+                Debug.WriteLine($"BlockDisassembler stepped onto already visited block {position:X8}");
                 continue;
             }
             
@@ -31,7 +36,7 @@ public class BlockDisassembler
             var existingBlock = instructionBlocks.Values.FirstOrDefault(x => x.Instructions.Any(y => y.Address == position));
             if (existingBlock is not null)
             {
-                Console.WriteLine($"BlockDisassembler at {position:X8} appeared in the middle of already existing block starting at {existingBlock.StartAddress:X8}. Splitting!");
+                Debug.WriteLine($"BlockDisassembler at {position:X8} appeared in the middle of already existing block starting at {existingBlock.StartAddress:X8}. Splitting!");
 
                 var firstInstructionOfNestedBlockIndex = existingBlock.Instructions.FindIndex(x => x.Address == position);
 
@@ -49,6 +54,8 @@ public class BlockDisassembler
 
                 instructionBlocks[position] = innerBlock;
                 
+                Debug.WriteLine($"Split block at {existingBlock.StartAddress:X8}. Created block {innerBlock.StartAddress:X8}.");
+                
                 continue;
             }
 
@@ -61,6 +68,7 @@ public class BlockDisassembler
             // jump to the block
             decoder.SetPosition(position);
 
+            Debug.WriteLine($"Start disassembling block at {position:X8}");
             // disassemble while we can
             while (true)
             {
@@ -68,7 +76,7 @@ public class BlockDisassembler
 
                 if (instruction is null)
                 {
-                    throw new InvalidOperationException($"Failed disassembling instruction at {decoder.GetPosition()}");
+                    throw new InvalidOperationException($"Failed disassembling instruction at {decoder.GetPosition():X8}");
                 }
 
                 blockInstructions.Add(instruction);
@@ -77,6 +85,8 @@ public class BlockDisassembler
                 {
                     block.Instructions = blockInstructions;
                     instructionBlocks[position] = block;
+                    
+                    Debug.WriteLine($"Block at {position:X8} reached RET");
                     break;
                 }
                 else if (instruction.Type.IsConditionalJump())
@@ -84,7 +94,7 @@ public class BlockDisassembler
                     // finish current block
                     block.Instructions = blockInstructions;
                     instructionBlocks[position] = block;
-                    
+
                     // enqueue next position (in case a jump condition was not performed)
                     offsetQueue.Enqueue(decoder.GetPosition());
 
@@ -92,6 +102,8 @@ public class BlockDisassembler
                     if (instruction.StructuredOperands[0] is RelativeOffsetOperand roo)
                     {
                         offsetQueue.Enqueue(roo.TargetAddress);
+
+                        Debug.WriteLine($"Block at {position:X8} reached CondJump {instruction.Type}. Enqueued {decoder.GetPosition():X8} continuation and {roo.TargetAddress:X8} jump");
                     }
                     else
                     {
@@ -109,6 +121,8 @@ public class BlockDisassembler
                     if (instruction.StructuredOperands[0] is RelativeOffsetOperand roo)
                     {
                         offsetQueue.Enqueue(roo.TargetAddress);
+
+                        Debug.WriteLine($"Block at {position:X8} reached UncondJump {instruction.Type}. Enqueued {roo.TargetAddress:X8} jump");
                     }
                     else
                     {
@@ -116,7 +130,18 @@ public class BlockDisassembler
                     }
                     break;
                 }
+                else if (instructionBlocks.ContainsKey(decoder.GetPosition()))
+                {
+                    // reached another block start
+                    
+                    block.Instructions = blockInstructions;
+                    instructionBlocks[position] = block;
+                    Debug.WriteLine($"Block at {position:X8} reached another block at {decoder.GetPosition():X8}.");
+                    break;
+                }
             }
+            
+            Debug.WriteLine($"Finished disassembling block at {block.StartAddress:X8}.");
         }
 
         return instructionBlocks;

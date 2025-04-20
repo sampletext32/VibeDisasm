@@ -285,10 +285,11 @@ foreach (var codeOffset in definiteCodeOffsets.OrderBy(o => o.FileOffset))
 
 var entryPointCodeOffset = definiteCodeOffsets.FirstOrDefault(x => x.Source == "Entry Point");
 
+// Disassemble the entry point into basic blocks
 var instructionBlocks = BlockDisassembler.DisassembleBlock(fileData, entryPointCodeOffset.FileOffset);
 
-Console.WriteLine("\nEntry point Instruction blocks:");
-foreach (var (offset, block) in instructionBlocks)
+Console.WriteLine("\nEntry point instruction blocks:");
+foreach (var (offset, block) in instructionBlocks.OrderBy(x => x.Key))
 {
     Console.WriteLine("{0,-10:X8}", offset);
     foreach (var blockInstruction in block.Instructions)
@@ -297,7 +298,46 @@ foreach (var (offset, block) in instructionBlocks)
     }
 }
 
+// Build a control flow graph from the instruction blocks
+var blockGraph = InstructionBlockGraphBuilder.BuildGraph(instructionBlocks, entryPointCodeOffset.FileOffset);
 
+// Print information about the control flow graph
+// Console.WriteLine("\nControl Flow Graph Analysis:");
+// Console.WriteLine($"Total blocks: {blockGraph.Blocks.Count}");
+// Console.WriteLine($"Entry points: {blockGraph.EntryPoints.Count}");
+// Console.WriteLine($"Exit points: {blockGraph.ExitPoints.Count}");
+// Console.WriteLine($"Total edges: {blockGraph.Edges.Count}");
+//
+// // Print the entry points
+// Console.WriteLine("\nEntry Points:");
+// foreach (var entryPoint in blockGraph.EntryPoints)
+// {
+//     Console.WriteLine($"  {entryPoint:X8}");
+// }
+//
+// // Print the exit points
+// Console.WriteLine("\nExit Points:");
+// foreach (var exitPoint in blockGraph.ExitPoints)
+// {
+//     Console.WriteLine($"  {exitPoint:X8}");
+// }
+//
+// // Print the edges
+// Console.WriteLine("\nControl Flow Edges:");
+// foreach (var edge in blockGraph.Edges)
+// {
+//     Console.WriteLine($"  {edge}");
+// }
+//
+// // Generate a DOT graph for visualization
+// string dotGraph = InstructionBlockGraphBuilder.GenerateDotGraph(blockGraph);
+//
+// // Save the DOT graph to a file
+// string dotFilePath = Path.Combine(Path.GetDirectoryName(filePath) ?? ".", $"{Path.GetFileNameWithoutExtension(filePath)}_cfg.dot");
+// File.WriteAllText(dotFilePath, dotGraph);
+// Console.WriteLine($"\nDOT graph saved to: {dotFilePath}");
+// Console.WriteLine("You can visualize this graph using tools like Graphviz or online DOT graph viewers.");
+//
 // Helper function to read a null-terminated string from a byte array
 static string ReadNullTerminatedString(byte[] data, int offset)
 {

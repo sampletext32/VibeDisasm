@@ -19,7 +19,12 @@ public class Instruction
     /// Gets or sets the structured operands of the instruction
     /// </summary>
     public List<Operand> StructuredOperands { get; set; } = [];
-    
+
+    /// <summary>
+    /// The length of this instruction in bytes
+    /// </summary>
+    public ulong Length { get; set; }
+
     /// <summary>
     /// Returns a string representation of the instruction
     /// </summary>
