@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for CMP instruction sequences
@@ -23,7 +23,7 @@ public class CmpInstructionSequenceTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Cmp, instruction.Type);
         
@@ -89,7 +89,7 @@ public class CmpInstructionSequenceTests
         Assert.Equal(InstructionType.Jge, jgeInstruction.Type);
         
         // Check that we have one operand
-        Assert.Single(jgeInstruction.StructuredOperands);
+        Assert.Single((IEnumerable) jgeInstruction.StructuredOperands);
         
         // Check the operand (relative offset)
         var relativeOffsetOperand = jgeInstruction.StructuredOperands[0];
@@ -151,7 +151,7 @@ public class CmpInstructionSequenceTests
         Assert.Equal(InstructionType.Jge, jgeInstruction.Type);
         
         // Check that we have one operand
-        Assert.Single(jgeInstruction.StructuredOperands);
+        Assert.Single((IEnumerable) jgeInstruction.StructuredOperands);
         
         // Check the operand (relative offset)
         var relativeOffsetOperand = jgeInstruction.StructuredOperands[0];
@@ -186,7 +186,7 @@ public class CmpInstructionSequenceTests
         Assert.Equal(InstructionType.Jmp, jmpInstruction.Type);
         
         // Check that we have one operand
-        Assert.Single(jmpInstruction.StructuredOperands);
+        Assert.Single((IEnumerable) jmpInstruction.StructuredOperands);
         
         // Check the operand (relative offset)
         var relativeOffsetOperand2 = jmpInstruction.StructuredOperands[0];

@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for jump instruction handlers
@@ -27,7 +27,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jmp, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instruction.StructuredOperands[0];
@@ -57,7 +57,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jmp, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instruction.StructuredOperands[0];
@@ -87,7 +87,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jz, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instruction.StructuredOperands[0];
@@ -117,7 +117,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jnz, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instruction.StructuredOperands[0];
@@ -147,7 +147,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jge, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instruction.StructuredOperands[0];
@@ -174,11 +174,11 @@ public class JumpInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         Assert.Equal(InstructionType.Jge, instructions[0].Type);
         
         // Check that we have one operand
-        Assert.Single(instructions[0].StructuredOperands);
+        Assert.Single((IEnumerable) instructions[0].StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instructions[0].StructuredOperands[0];
@@ -214,7 +214,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jge, instructions[0].Type);
         
         // Check that we have one operand
-        Assert.Single(instructions[0].StructuredOperands);
+        Assert.Single((IEnumerable) instructions[0].StructuredOperands);
         
         // Check that the operand is a relative offset operand
         var operand = instructions[0].StructuredOperands[0];
@@ -249,7 +249,7 @@ public class JumpInstructionTests
         Assert.Equal(InstructionType.Jmp, instructions[2].Type);
         
         // Check that we have one operand
-        Assert.Single(instructions[2].StructuredOperands);
+        Assert.Single((IEnumerable) instructions[2].StructuredOperands);
         
         // Check that the operand is a relative offset operand
         operand = instructions[2].StructuredOperands[0];

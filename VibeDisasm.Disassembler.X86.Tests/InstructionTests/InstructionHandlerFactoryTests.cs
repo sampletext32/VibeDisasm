@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
-using X86Disassembler.X86;
-using X86Disassembler.X86.Handlers;
+using VibeDisasm.Disassembler.X86.Handlers;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 public class InstructionHandlerFactoryTests
 {

@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for push and pop instruction handlers
@@ -23,13 +23,13 @@ public class PushPopInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Push, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EAX)
         var eaxOperand = instruction.StructuredOperands[0];
@@ -54,13 +54,13 @@ public class PushPopInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Push, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EBP)
         var ebpOperand = instruction.StructuredOperands[0];
@@ -85,13 +85,13 @@ public class PushPopInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Push, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (immediate value)
         var immOperand = instruction.StructuredOperands[0];
@@ -115,13 +115,13 @@ public class PushPopInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Push, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (immediate value)
         var immOperand = instruction.StructuredOperands[0];
@@ -145,13 +145,13 @@ public class PushPopInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Pop, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EAX)
         var eaxOperand = instruction.StructuredOperands[0];
@@ -176,13 +176,13 @@ public class PushPopInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Pop, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EBP)
         var ebpOperand = instruction.StructuredOperands[0];
@@ -216,7 +216,7 @@ public class PushPopInstructionTests
         Assert.Equal(InstructionType.Push, pushInstruction.Type);
         
         // Check that we have one operand
-        Assert.Single(pushInstruction.StructuredOperands);
+        Assert.Single((IEnumerable) pushInstruction.StructuredOperands);
         
         // Check the operand (EBP)
         var ebpOperand = pushInstruction.StructuredOperands[0];
@@ -271,7 +271,7 @@ public class PushPopInstructionTests
         Assert.Equal(InstructionType.Pop, popInstruction.Type);
         
         // Check that we have one operand
-        Assert.Single(popInstruction.StructuredOperands);
+        Assert.Single((IEnumerable) popInstruction.StructuredOperands);
         
         // Check the operand (EBP)
         var ebpOperand = popInstruction.StructuredOperands[0];

@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for arithmetic unary operations (DIV, IDIV, MUL, IMUL, NEG, NOT)
@@ -28,7 +28,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(InstructionType.Div, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
@@ -58,7 +58,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(InstructionType.IDiv, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
@@ -88,7 +88,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(InstructionType.Mul, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
@@ -118,7 +118,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(InstructionType.IMul, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
@@ -148,7 +148,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(InstructionType.Neg, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
@@ -178,7 +178,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(InstructionType.Not, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];

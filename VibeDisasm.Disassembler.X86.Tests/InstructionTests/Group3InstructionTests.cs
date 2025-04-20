@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for Group3 instruction handlers
@@ -24,13 +24,13 @@ public class Group3InstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Not, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EAX)
         var eaxOperand = instruction.StructuredOperands[0];
@@ -56,13 +56,13 @@ public class Group3InstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Neg, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
@@ -88,13 +88,13 @@ public class Group3InstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mul, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EDX)
         var edxOperand = instruction.StructuredOperands[0];
@@ -120,13 +120,13 @@ public class Group3InstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.IMul, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EBX)
         var ebxOperand = instruction.StructuredOperands[0];
@@ -152,13 +152,13 @@ public class Group3InstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Div, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (ESP)
         var espOperand = instruction.StructuredOperands[0];
@@ -184,13 +184,13 @@ public class Group3InstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.IDiv, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (EBP)
         var ebpOperand = instruction.StructuredOperands[0];

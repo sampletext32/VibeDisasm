@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for CMP r/m8, imm8 instruction (0x80 /7)
@@ -22,7 +22,7 @@ public class CmpImmWithRm8Tests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         Assert.Equal(InstructionType.Cmp, instructions[0].Type);
         
         // Check that we have two operands
@@ -56,7 +56,7 @@ public class CmpImmWithRm8Tests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         Assert.Equal(InstructionType.Cmp, instructions[0].Type);
         
         // Check that we have two operands

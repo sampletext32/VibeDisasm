@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for floating-point instruction handlers
@@ -23,13 +23,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fnstsw, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (AX)
         var axOperand = instruction.StructuredOperands[0];
@@ -54,7 +54,7 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fadd, instruction.Type);
@@ -90,13 +90,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fadd, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (dword ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -121,13 +121,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fld, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (dword ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -152,13 +152,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fldcw, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (word ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -183,13 +183,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fiadd, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (dword ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -214,13 +214,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fild, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (dword ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -245,13 +245,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fadd, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (qword ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -276,7 +276,7 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fadd, instruction.Type);
@@ -312,13 +312,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fld, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (qword ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -343,13 +343,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fiadd, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (word ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];
@@ -374,13 +374,13 @@ public class FloatingPointInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Fild, instruction.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction.StructuredOperands);
+        Assert.Single((IEnumerable) instruction.StructuredOperands);
         
         // Check the operand (word ptr [eax])
         var memoryOperand = instruction.StructuredOperands[0];

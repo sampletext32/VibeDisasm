@@ -1,10 +1,9 @@
 using System.Reflection;
 using System.Text;
-using X86Disassembler.X86;
-using X86Disassembler.X86.Handlers;
+using VibeDisasm.Disassembler.X86.Handlers;
 using Xunit.Abstractions;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Debug test to find missing handler registrations

@@ -1,8 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Handlers;
-using X86Disassembler.X86.Handlers.Inc;
+using VibeDisasm.Disassembler.X86.Handlers;
+using VibeDisasm.Disassembler.X86.Handlers.Inc;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for handler selection in the InstructionHandlerFactory

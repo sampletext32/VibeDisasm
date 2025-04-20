@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for OR r/m8, r8 instruction handler
@@ -23,7 +23,7 @@ public class OrRm8R8HandlerTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Or, instruction.Type);
@@ -64,7 +64,7 @@ public class OrRm8R8HandlerTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Or, instruction.Type);

@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for the InstructionDecoder class
@@ -266,7 +266,7 @@ public class InstructionDecoderTests
         Assert.Equal(InstructionType.Jz, instruction2.Type);
         
         // Check that we have one operand
-        Assert.Single(instruction2.StructuredOperands);
+        Assert.Single((IEnumerable) instruction2.StructuredOperands);
         
         // Check the operand (offset)
         var offsetOperand = instruction2.StructuredOperands[0];

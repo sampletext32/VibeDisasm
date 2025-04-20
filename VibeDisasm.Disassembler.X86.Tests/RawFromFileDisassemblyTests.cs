@@ -1,7 +1,6 @@
-using X86Disassembler.X86;
 using Xunit.Abstractions;
 
-namespace X86DisassemblerTests;
+namespace VibeDisasm.Disassembler.X86.Tests;
 
 /// <summary>
 /// Tests for disassembling raw bytes from CSV test files

@@ -3,9 +3,8 @@ using System.Text.Json.Serialization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
-using X86Disassembler.X86;
 
-namespace X86DisassemblerTests;
+namespace VibeDisasm.Disassembler.X86.Tests;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public sealed class CsvJsonConverter<T> : DefaultTypeConverter

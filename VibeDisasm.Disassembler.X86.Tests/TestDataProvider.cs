@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Globalization;
-using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-namespace X86DisassemblerTests;
+namespace VibeDisasm.Disassembler.X86.Tests;
 
 /// <summary>
 /// Provides test data from CSV files in the TestData directory

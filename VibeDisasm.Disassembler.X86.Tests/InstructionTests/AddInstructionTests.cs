@@ -1,7 +1,7 @@
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
+using System.Collections;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests.InstructionTests;
+namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
 /// <summary>
 /// Tests for ADD instruction handlers
@@ -22,7 +22,7 @@ public class AddInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         Assert.Equal(InstructionType.Add, instructions[0].Type);
         
         // Check that we have two operands
@@ -57,7 +57,7 @@ public class AddInstructionTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single(instructions);
+        Assert.Single((IEnumerable) instructions);
         Assert.Equal(InstructionType.Add, instructions[0].Type);
         
         // Check that we have two operands

@@ -1,9 +1,7 @@
 using System.Text.Json.Serialization;
 using CsvHelper.Configuration;
-using X86Disassembler.X86;
-using X86Disassembler.X86.Operands;
 
-namespace X86DisassemblerTests;
+namespace VibeDisasm.Disassembler.X86.Tests;
 
 public class TestFromFileEntry
 {
