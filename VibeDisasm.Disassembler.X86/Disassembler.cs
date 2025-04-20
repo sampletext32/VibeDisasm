@@ -42,7 +42,7 @@ public class Disassembler
         // Decode instructions until the end of the buffer is reached
         while (true)
         {
-            int position = decoder.GetPosition();
+            uint position = decoder.GetPosition();
 
             // Check if we've reached the end of the buffer
             if (!decoder.CanReadByte())
@@ -51,7 +51,7 @@ public class Disassembler
             }
 
             // Store the position before decoding to handle prefixes properly
-            int startPosition = position;
+            uint startPosition = position;
 
             // Decode the instruction
             Instruction? instruction = decoder.DecodeInstruction();

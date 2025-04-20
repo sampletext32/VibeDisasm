@@ -21,7 +21,7 @@ public class InstructionDecoder
     private readonly int _length;
 
     // The current position in the buffer
-    private int _position;
+    private uint _position;
 
     // The instruction handler factory
     private readonly InstructionHandlerFactory _handlerFactory;
@@ -62,12 +62,12 @@ public class InstructionDecoder
         _prefixDecoder.Reset();
 
         // Save the start position of the instruction
-        int startPosition = _position;
+        uint startPosition = _position;
 
         // Create a new instruction
         Instruction instruction = new Instruction
         {
-            Address = (uint) startPosition,
+            Address = startPosition,
         };
 
         // Handle prefixes
@@ -196,7 +196,7 @@ public class InstructionDecoder
     /// </summary>
     /// <returns>The current position</returns>
     [Pure]
-    public int GetPosition()
+    public uint GetPosition()
     {
         return _position;
     }
@@ -205,7 +205,7 @@ public class InstructionDecoder
     /// Sets the current position in the buffer
     /// </summary>
     /// <param name="position">The new position</param>
-    public void SetPosition(int position)
+    public void SetPosition(uint position)
     {
         _position = position;
     }
@@ -288,9 +288,9 @@ public class InstructionDecoder
     /// </summary>
     /// <param name="offset">The offset from the current position</param>
     /// <returns>The byte peaked</returns>
-    public byte PeakByte(int offset)
+    public byte PeakByte(uint offset)
     {
-        int targetPosition = _position + offset;
+        uint targetPosition = _position + offset;
         
         if (targetPosition >= _length || targetPosition < 0)
         {

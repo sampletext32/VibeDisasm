@@ -64,12 +64,12 @@ public class ConditionalJumpHandler : InstructionHandler
         }
         
         // Read the offset and calculate target address
-        int position = Decoder.GetPosition();
+        uint position = Decoder.GetPosition();
         sbyte offset = (sbyte)Decoder.ReadByte();
-        int targetAddress = position + 1 + offset;
+        uint targetAddress = (uint) (position + 1 + offset);
         
         // Create the target address operand
-        var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress, 8);
+        var targetOperand = OperandFactory.CreateRelativeOffsetOperand(targetAddress, 8);
         
         // Set the structured operands
         instruction.StructuredOperands = 

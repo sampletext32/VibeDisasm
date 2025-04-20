@@ -42,13 +42,13 @@ public class CallRel32Handler : InstructionHandler
             return false;
         }
 
-        int position = Decoder.GetPosition();
+        uint position = Decoder.GetPosition();
 
         // Read the relative offset
         uint offset = Decoder.ReadUInt32();
 
         // Calculate the target address
-        uint targetAddress = (uint) (position + offset + 4);
+        uint targetAddress = position + offset + 4;
 
         // Create the target address operand
         var targetOperand = OperandFactory.CreateRelativeOffsetOperand(targetAddress);

@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\VibeDisasm.DecompilerEngine\VibeDisasm.DecompilerEngine.csproj" />
       <ProjectReference Include="..\VibeDisasm.Pe\VibeDisasm.Pe.csproj" />
     </ItemGroup>
 

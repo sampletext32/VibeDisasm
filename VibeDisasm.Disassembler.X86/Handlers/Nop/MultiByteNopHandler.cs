@@ -116,7 +116,7 @@ public class MultiByteNopHandler : InstructionHandler
             byte[] buffer = new byte[expectedBytes.Length];
             
             // Read the bytes into the buffer without advancing the decoder position
-            for (int i = 0; i < expectedBytes.Length; i++)
+            for (uint i = 0; i < expectedBytes.Length; i++)
             {
                 if (!Decoder.CanReadByte())
                 {
