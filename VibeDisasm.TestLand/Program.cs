@@ -58,4 +58,20 @@ var importExtractor = new ImportExtractor();
 ImportInfo? importInfo = importExtractor.Extract(rawPeFile);
 ImportInfoPrinter.Print(importInfo);
 
-_ = 5;
+// Extract resource information
+var resourceExtractor = new ResourceExtractor(includeData: true);
+ResourceInfo? resourceInfo = resourceExtractor.Extract(rawPeFile);
+ResourceInfoPrinter.Print(resourceInfo);
+
+// Debug resource directory
+Console.WriteLine("\r\nResource Directory Debug:");
+if (rawPeFile.ResourceDirectory != null)
+{
+    Console.WriteLine($"  Resource Directory Found: Yes");
+    Console.WriteLine($"  Named Entries: {rawPeFile.ResourceDirectory.NumberOfNamedEntries}");
+    Console.WriteLine($"  ID Entries: {rawPeFile.ResourceDirectory.NumberOfIdEntries}");
+}
+else
+{
+    Console.WriteLine($"  Resource Directory Found: No");
+}
