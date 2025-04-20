@@ -26,8 +26,8 @@ public class ResourceInfoPrinter
             if (resourceInfo.Resources.Count > 0)
             {
                 Console.WriteLine("\r\n  Resources:");
-                Console.WriteLine("  {0,-10} {1,-8} {2,-10} {3,-10} {4,-8} {5}", 
-                    "Type", "ID", "Language", "Size", "RVA", "Data");
+                Console.WriteLine("  {0,-10} {1,-8} {2,-10} {3,-10} {4,-8} {5,-10} {6}", 
+                    "Type", "ID", "Language", "Size", "RVA", "FileOffset", "Data");
                 Console.WriteLine("  " + new string('-', 70));
                 
                 foreach (var resource in resourceInfo.Resources)
@@ -81,12 +81,13 @@ public class ResourceInfoPrinter
                     }
                     catch { /* Use default numeric value */ }
                     
-                    Console.WriteLine("  {0,-10} {1,-8} {2,-10} 0x{3,-8:X} 0x{4,-6:X} {5}", 
+                    Console.WriteLine("  {0,-10} {1,-8} {2,-10} 0x{3,-8:X} 0x{4,-6:X} 0x{5,-8:X} {6}", 
                         resource.Type,
                         resource.Id,
                         languageDisplay,
                         resource.Size,
                         resource.RVA,
+                        resource.FileOffset,
                         dataPreview);
                 }
                 
@@ -126,8 +127,8 @@ public class ResourceInfoPrinter
             
             // Format the language ID in hexadecimal for display
             string languageHex = $"0x{table.LanguageId:X4}";
-            Console.WriteLine($"\r\n  String Table ID: {table.Id}, Language: {languageHex} ({languageName})");
-            Console.WriteLine("  {0,-6} {1}", "ID", "String");
+            Console.WriteLine($"\r\n  String Table ID: {table.Id}, Language: {languageHex} ({languageName}), FileOffset: 0x{table.FileOffset:X8}");
+            Console.WriteLine("  {0,-6} {1,-12} {2}", "ID", "FileOffset", "String");
             Console.WriteLine("  " + new string('-', 60));
             
             foreach (var entry in table.Strings.OrderBy(s => s.Key))
@@ -142,7 +143,14 @@ public class ResourceInfoPrinter
                 // Replace control characters for better display
                 displayValue = displayValue.Replace('\r', '⏎').Replace('\n', '⏎');
                 
-                Console.WriteLine("  {0,-6} {1}", entry.Key, displayValue);
+                // Get the file offset for this string, if available
+                string fileOffsetDisplay = "N/A";
+                if (table.StringFileOffsets.TryGetValue(entry.Key, out uint offset))
+                {
+                    fileOffsetDisplay = $"0x{offset:X8}";
+                }
+                
+                Console.WriteLine("  {0,-6} {1,-12} {2}", entry.Key, fileOffsetDisplay, displayValue);
             }
         }
     }

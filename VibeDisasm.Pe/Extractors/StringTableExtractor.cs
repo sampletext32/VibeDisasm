@@ -48,7 +48,8 @@ public class StringTableExtractor
             var stringTable = ExtractSingleStringTable(
                 resource.Data,
                 resource.Id,
-                resource.LanguageId);
+                resource.LanguageId,
+                resource.FileOffset);
             
             if (stringTable.Strings.Count > 0)
             {
@@ -65,8 +66,9 @@ public class StringTableExtractor
     /// <param name="resourceData">The raw resource data</param>
     /// <param name="id">The ID of the string table</param>
     /// <param name="languageId">The language ID of the string table</param>
+    /// <param name="fileOffset">The absolute file offset of the resource data</param>
     /// <returns>A string table info object</returns>
-    public static StringTableInfo ExtractSingleStringTable(byte[] resourceData, uint id, uint languageId)
+    public static StringTableInfo ExtractSingleStringTable(byte[] resourceData, uint id, uint languageId, uint fileOffset = 0)
     {
         if (resourceData.Length == 0)
         {
@@ -80,7 +82,8 @@ public class StringTableExtractor
         var stringTable = new StringTableInfo
         {
             Id = id,
-            LanguageId = languageId
+            LanguageId = languageId,
+            FileOffset = fileOffset
         };
 
         try
@@ -126,6 +129,11 @@ public class StringTableExtractor
                         break;
                     }
 
+                    // Calculate and store the absolute file offset for this string
+                    // Base offset + current position within the resource data
+                    uint stringOffset = fileOffset + (uint)reader.BaseStream.Position;
+                    stringTable.StringFileOffsets[stringId] = stringOffset;
+
                     // Read the Unicode string data
                     byte[] stringData = reader.ReadBytes(length * 2);
                     string value = Encoding.Unicode.GetString(stringData);
@@ -137,6 +145,8 @@ public class StringTableExtractor
                 {
                     // Empty string
                     stringTable.Strings[stringId] = string.Empty;
+                    // Still track the position for empty strings
+                    stringTable.StringFileOffsets[stringId] = fileOffset + (uint)reader.BaseStream.Position - 2; // -2 to point to the length field
                 }
             }
         }

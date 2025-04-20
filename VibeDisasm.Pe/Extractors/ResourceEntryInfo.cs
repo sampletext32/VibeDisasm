@@ -49,4 +49,9 @@ public class ResourceEntryInfo
     /// Gets or sets the relative virtual address of the resource data
     /// </summary>
     public uint RVA { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the absolute file offset of the resource data
+    /// </summary>
+    public uint FileOffset { get; set; }
 }

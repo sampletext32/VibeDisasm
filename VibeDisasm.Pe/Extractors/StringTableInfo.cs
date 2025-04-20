@@ -19,5 +19,15 @@ namespace VibeDisasm.Pe.Extractors
         /// Gets or sets the collection of strings in the string table
         /// </summary>
         public Dictionary<ushort, string> Strings { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets the absolute file offset of the string table
+        /// </summary>
+        public uint FileOffset { get; set; }
+
+        /// <summary>
+        /// Gets or sets a dictionary mapping string IDs to their file offsets
+        /// </summary>
+        public Dictionary<ushort, uint> StringFileOffsets { get; set; } = new();
     }
 }

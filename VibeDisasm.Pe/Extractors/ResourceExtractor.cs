@@ -203,6 +203,8 @@ public static class ResourceExtractor
                 {
                     // Read the resource data
                     uint dataOffset = Util.RvaToOffset(rawPeFile, dataRva);
+                    // Store the absolute file offset
+                    resource.FileOffset = dataOffset;
                     resource.Data = new byte[dataSize];
                     Array.Copy(rawPeFile.RawData, (int) dataOffset, resource.Data, 0, (int) dataSize);
                 }
