@@ -111,4 +111,4 @@ foreach (var table in stringTables)
 - C# 12.0 or higher
 
 ## License
-This project is licensed under the terms of the MIT license.
+This project is released into the public domain under the Unlicense. See the main repository [LICENSE](../LICENSE) file for details.
