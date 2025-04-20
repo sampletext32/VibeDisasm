@@ -17,7 +17,7 @@ namespace VibeDisasm.Pe.Extractors
         /// <summary>
         /// Gets or sets the language ID of the string table
         /// </summary>
-        public LanguageId LanguageId { get; set; }
+        public uint LanguageId { get; set; }
 
         /// <summary>
         /// Gets or sets the collection of strings in the string table
@@ -37,7 +37,7 @@ namespace VibeDisasm.Pe.Extractors
         /// <param name="id">The ID of the string table</param>
         /// <param name="languageId">The language ID of the string table</param>
         /// <returns>A string table info object</returns>
-        public StringTableInfo Extract(byte[] resourceData, uint id, LanguageId languageId)
+        public StringTableInfo Extract(byte[] resourceData, uint id, uint languageId)
         {
             if (resourceData == null || resourceData.Length == 0)
             {

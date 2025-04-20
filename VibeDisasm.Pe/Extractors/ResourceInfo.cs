@@ -76,7 +76,7 @@ public class ResourceEntryInfo
     /// <summary>
     /// Gets or sets the language ID of the resource
     /// </summary>
-    public LanguageId LanguageId { get; set; }
+    public uint LanguageId { get; set; }
     
     /// <summary>
     /// Gets or sets the code page of the resource

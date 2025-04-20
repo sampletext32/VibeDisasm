@@ -26,8 +26,8 @@ public class ResourceInfoPrinter
             if (resourceInfo.Resources.Count > 0)
             {
                 Console.WriteLine("\r\n  Resources:");
-                Console.WriteLine("  {0,-10} {1,-8} {2,-8} {3,-10} {4,-8} {5}", 
-                    "Type", "ID", "Lang ID", "Size", "RVA", "Data");
+                Console.WriteLine("  {0,-10} {1,-8} {2,-10} {3,-10} {4,-8} {5}", 
+                    "Type", "ID", "Language", "Size", "RVA", "Data");
                 Console.WriteLine("  " + new string('-', 70));
                 
                 foreach (var resource in resourceInfo.Resources)
@@ -72,10 +72,19 @@ public class ResourceInfoPrinter
                         dataPreview = "[No data loaded]";
                     }
                     
-                    Console.WriteLine("  {0,-10} {1,-8} {2,-8} 0x{3,-8:X} 0x{4,-6:X} {5}", 
+                    // Try to get language name for display
+                    string languageDisplay = resource.LanguageId.ToString();
+                    try
+                    {
+                        var culture = new CultureInfo((int)resource.LanguageId);
+                        languageDisplay = culture.Name.Split('-')[0]; // Just use the language code, not the region
+                    }
+                    catch { /* Use default numeric value */ }
+                    
+                    Console.WriteLine("  {0,-10} {1,-8} {2,-10} 0x{3,-8:X} 0x{4,-6:X} {5}", 
                         resource.Type,
                         resource.Id,
-                        resource.LanguageId,
+                        languageDisplay,
                         resource.Size,
                         resource.RVA,
                         dataPreview);
@@ -100,10 +109,10 @@ public class ResourceInfoPrinter
         
         foreach (var table in stringTables)
         {
-            // Get the language name from the LanguageId enum
-            string languageName = table.LanguageId.ToString();
+            // Get the language name using CultureInfo
+            string languageName = "Unknown";
+            string languageCode = $"0x{table.LanguageId:X4}";
             
-            // Try to get a more descriptive name using CultureInfo
             try
             {
                 var culture = new CultureInfo((int)table.LanguageId);
@@ -111,10 +120,13 @@ public class ResourceInfoPrinter
             }
             catch
             {
-                // Fallback to the enum name if CultureInfo fails
+                // If CultureInfo fails, just use the numeric code
+                languageName = $"Language {languageCode}";
             }
             
-            Console.WriteLine($"\r\n  String Table ID: {table.Id}, Language: {table.LanguageId} ({languageName})");
+            // Format the language ID in hexadecimal for display
+            string languageHex = $"0x{table.LanguageId:X4}";
+            Console.WriteLine($"\r\n  String Table ID: {table.Id}, Language: {languageHex} ({languageName})");
             Console.WriteLine("  {0,-6} {1}", "ID", "String");
             Console.WriteLine("  " + new string('-', 60));
             

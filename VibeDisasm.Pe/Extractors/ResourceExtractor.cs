@@ -211,7 +211,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                     Type = GetResourceType(typeId),
                     Id = nameId,
                     HasName = false, // We're using IDs for simplicity
-                    LanguageId = (LanguageId)languageId,
+                    LanguageId = languageId,
                     CodePage = codePage,
                     Size = dataSize,
                     RVA = dataRva
@@ -278,7 +278,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
             var stringTable = stringTableExtractor.Extract(
                 resource.Data,
                 resource.Id,
-                (LanguageId)resource.LanguageId);
+                resource.LanguageId);
             
             if (stringTable.Strings.Count > 0)
             {
