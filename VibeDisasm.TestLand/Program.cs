@@ -63,15 +63,13 @@ var resourceExtractor = new ResourceExtractor(includeData: true);
 ResourceInfo? resourceInfo = resourceExtractor.Extract(rawPeFile);
 ResourceInfoPrinter.Print(resourceInfo);
 
-// Debug resource directory
-Console.WriteLine("\r\nResource Directory Debug:");
-if (rawPeFile.ResourceDirectory != null)
+// Extract and print string tables if available
+if (resourceExtractor.StringTables.Count > 0)
 {
-    Console.WriteLine($"  Resource Directory Found: Yes");
-    Console.WriteLine($"  Named Entries: {rawPeFile.ResourceDirectory.NumberOfNamedEntries}");
-    Console.WriteLine($"  ID Entries: {rawPeFile.ResourceDirectory.NumberOfIdEntries}");
+    ResourceInfoPrinter.PrintStringTables(resourceExtractor.StringTables);
 }
-else
-{
-    Console.WriteLine($"  Resource Directory Found: No");
-}
+
+// Extract and print resource directory information
+var resourceDirectoryExtractor = new ResourceDirectoryExtractor();
+ResourceDirectoryInfo? resourceDirectoryInfo = resourceDirectoryExtractor.Extract(rawPeFile);
+ResourceDirectoryPrinter.Print(resourceDirectoryInfo);
