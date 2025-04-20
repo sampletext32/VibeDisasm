@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Flags;
+namespace VibeDisasm.Disassembler.X86.Handlers.Flags;
 
 /// <summary>
 /// Handler for CLD (Clear Direction Flag) instruction (opcode FC)

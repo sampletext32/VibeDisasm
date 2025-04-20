@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.And;
+namespace VibeDisasm.Disassembler.X86.Handlers.And;
 
 /// <summary>
 /// Handler for AND AL, imm8 instruction (0x24)

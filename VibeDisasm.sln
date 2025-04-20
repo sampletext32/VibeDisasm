@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.Pe", "VibeDisasm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.TestLand", "VibeDisasm.TestLand\VibeDisasm.TestLand.csproj", "{5B9453F3-48DB-4861-AACE-26AD544A20EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.Disassembler.X86", "VibeDisasm.Disassembler.X86\VibeDisasm.Disassembler.X86.csproj", "{1F969D82-1EFE-43D4-BFDE-806E6BE19DAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5B9453F3-48DB-4861-AACE-26AD544A20EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B9453F3-48DB-4861-AACE-26AD544A20EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B9453F3-48DB-4861-AACE-26AD544A20EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F969D82-1EFE-43D4-BFDE-806E6BE19DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F969D82-1EFE-43D4-BFDE-806E6BE19DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F969D82-1EFE-43D4-BFDE-806E6BE19DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F969D82-1EFE-43D4-BFDE-806E6BE19DAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Add;
+namespace VibeDisasm.Disassembler.X86.Handlers.Add;
 
 /// <summary>
 /// Handler for ADD AX, imm16 instruction (0x05 with 0x66 prefix)

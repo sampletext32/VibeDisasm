@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Cmp;
+namespace VibeDisasm.Disassembler.X86.Handlers.Cmp;
 
 /// <summary>
 /// Handler for CMP EAX, imm32 instruction (opcode 3D)

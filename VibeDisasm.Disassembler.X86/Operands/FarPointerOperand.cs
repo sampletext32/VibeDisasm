@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Operands;
 
 /// <summary>
 /// Represents a far pointer memory operand (m16:32) in an x86 instruction

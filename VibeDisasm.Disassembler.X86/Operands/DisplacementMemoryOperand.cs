@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Operands;
 
 /// <summary>
 /// Represents a memory operand with a base register and displacement in an x86 instruction (e.g., [eax+0x4])

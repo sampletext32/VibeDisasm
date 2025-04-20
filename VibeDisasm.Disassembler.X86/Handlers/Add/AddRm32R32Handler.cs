@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Add;
+namespace VibeDisasm.Disassembler.X86.Handlers.Add;
 
 /// <summary>
 /// Handler for ADD r/m32, r32 instruction (0x01)

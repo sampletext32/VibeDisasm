@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Stack;
+namespace VibeDisasm.Disassembler.X86.Handlers.Stack;
 
 /// <summary>
 /// Handler for POPFD instruction (0x9D)

@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Adc;
+namespace VibeDisasm.Disassembler.X86.Handlers.Adc;
 
 /// <summary>
 /// Handler for ADC r8, r/m8 instruction (0x12)

@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Misc;
+namespace VibeDisasm.Disassembler.X86.Handlers.Misc;
 
 /// <summary>
 /// Handler for OUT instruction (0xE6, 0xE7, 0xEE, 0xEF)

@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Misc;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Misc;
 
 /// <summary>
 /// Handler for INT instruction (0xCD)

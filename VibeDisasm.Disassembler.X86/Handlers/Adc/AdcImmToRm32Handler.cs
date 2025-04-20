@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Adc;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Adc;
 
 /// <summary>
 /// Handler for ADC r/m32, imm32 instruction (0x81 /2)

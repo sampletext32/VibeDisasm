@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Xchg;
+namespace VibeDisasm.Disassembler.X86.Handlers.Xchg;
 
 /// <summary>
 /// Handler for XCHG r32, r/m32 instruction (opcode 0x87)

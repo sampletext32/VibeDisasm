@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Mul;
+namespace VibeDisasm.Disassembler.X86.Handlers.Mul;
 
 /// <summary>
 /// Handler for MUL r/m32 instruction (0xF7 /4)

@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.And;
+namespace VibeDisasm.Disassembler.X86.Handlers.And;
 
 /// <summary>
 /// Handler for AND r/m16, r16 instruction (0x21 with 0x66 prefix)

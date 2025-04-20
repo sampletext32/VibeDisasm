@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Div;
+namespace VibeDisasm.Disassembler.X86.Handlers.Div;
 
 /// <summary>
 /// Handler for DIV r/m8 instruction (0xF6 /6)

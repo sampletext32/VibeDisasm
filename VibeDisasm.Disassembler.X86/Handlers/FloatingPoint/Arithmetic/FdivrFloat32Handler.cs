@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
 
 /// <summary>
 /// Handler for FDIVR float32 instruction (D8 /7)

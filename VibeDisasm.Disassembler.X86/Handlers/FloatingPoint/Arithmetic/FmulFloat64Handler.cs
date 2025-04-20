@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
 
 /// <summary>
 /// Handler for FMUL float64 instruction (DC /1)

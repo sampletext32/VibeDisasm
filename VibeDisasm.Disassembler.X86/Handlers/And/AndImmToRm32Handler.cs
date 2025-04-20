@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.And;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.And;
 
 /// <summary>
 /// Handler for AND r/m32, imm32 instruction (0x81 /4)

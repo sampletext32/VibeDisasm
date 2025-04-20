@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Shift;
+namespace VibeDisasm.Disassembler.X86.Handlers.Shift;
 
 /// <summary>
 /// Handler for SAR r/m32, imm8 instruction (0xC1 /7)

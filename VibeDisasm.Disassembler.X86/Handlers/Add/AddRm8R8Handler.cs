@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Add;
+namespace VibeDisasm.Disassembler.X86.Handlers.Add;
 
 /// <summary>
 /// Handler for ADD r/m8, r8 instruction (opcode 00)

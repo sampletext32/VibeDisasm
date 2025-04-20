@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Jump;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Jump;
 
 /// <summary>
 /// Handler for JMP rel8 instruction (0xEB)

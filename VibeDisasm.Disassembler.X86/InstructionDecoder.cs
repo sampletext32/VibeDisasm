@@ -1,9 +1,8 @@
 using System.Diagnostics.Contracts;
+using VibeDisasm.Disassembler.X86.Handlers;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86;
-
-using Handlers;
-using Operands;
+namespace VibeDisasm.Disassembler.X86;
 
 public static class Printer
 {

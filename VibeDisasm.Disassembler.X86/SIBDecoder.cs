@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Handles decoding of SIB (Scale-Index-Base) bytes in x86 instructions

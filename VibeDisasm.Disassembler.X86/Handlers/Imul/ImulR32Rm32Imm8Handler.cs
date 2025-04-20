@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Imul;
+namespace VibeDisasm.Disassembler.X86.Handlers.Imul;
 
 /// <summary>
 /// Handler for IMUL r32, r/m32, imm8 instruction (0x6B /r ib)

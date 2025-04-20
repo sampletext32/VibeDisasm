@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Xor;
+namespace VibeDisasm.Disassembler.X86.Handlers.Xor;
 
 /// <summary>
 /// Handler for XOR r/m8, imm8 instruction (0x80 /6)

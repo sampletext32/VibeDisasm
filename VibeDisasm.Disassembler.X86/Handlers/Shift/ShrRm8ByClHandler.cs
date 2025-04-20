@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Shift;
+namespace VibeDisasm.Disassembler.X86.Handlers.Shift;
 
 /// <summary>
 /// Handler for SHR r/m8, CL instruction (0xD2 /5)

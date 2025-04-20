@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers;
+namespace VibeDisasm.Disassembler.X86.Handlers;
 
 /// <summary>
 /// Interface for instruction handlers

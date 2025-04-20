@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Control;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Control;
 
 /// <summary>
 /// Handler for FSTSW AX instruction (0x9B 0xDF 0xE0) - Store FPU status word with wait prefix to AX register

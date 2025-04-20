@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Operands;
 
 /// <summary>
 /// Represents an immediate value operand in an x86 instruction

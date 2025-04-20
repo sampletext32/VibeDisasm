@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Xor;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Xor;
 
 /// <summary>
 /// Handler for XOR EAX, imm32 instruction (0x35)

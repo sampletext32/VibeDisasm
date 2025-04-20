@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Misc;
+namespace VibeDisasm.Disassembler.X86.Handlers.Misc;
 
 /// <summary>
 /// Handler for WAIT/FWAIT instruction (0x9B)

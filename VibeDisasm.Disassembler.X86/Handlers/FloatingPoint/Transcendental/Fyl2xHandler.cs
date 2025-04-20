@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Transcendental;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Transcendental;
 
 /// <summary>
 /// Handler for FYL2X instruction (D9 F1)

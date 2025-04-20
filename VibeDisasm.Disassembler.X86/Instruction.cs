@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86;
-
-using System.Collections.Generic;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Represents an x86 instruction

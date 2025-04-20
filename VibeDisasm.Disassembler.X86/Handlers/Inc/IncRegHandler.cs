@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Inc;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Inc;
 
 /// <summary>
 /// Handler for INC r32 instructions (0x40-0x47)

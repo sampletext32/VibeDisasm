@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Operands;
 
 /// <summary>
 /// Represents a relative offset operand in an x86 instruction (used for jumps and calls)

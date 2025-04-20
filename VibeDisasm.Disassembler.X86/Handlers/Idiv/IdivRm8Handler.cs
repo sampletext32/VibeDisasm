@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Idiv;
+namespace VibeDisasm.Disassembler.X86.Handlers.Idiv;
 
 /// <summary>
 /// Handler for IDIV r/m8 instruction (0xF6 /7)

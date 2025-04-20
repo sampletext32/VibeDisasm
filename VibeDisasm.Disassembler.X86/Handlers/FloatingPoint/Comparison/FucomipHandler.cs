@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Comparison;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Comparison;
 
 /// <summary>
 /// Handler for FUCOMIP ST(0), ST(i) instruction (DF E8-EF)

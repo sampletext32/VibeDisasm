@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Imul;
+namespace VibeDisasm.Disassembler.X86.Handlers.Imul;
 
 /// <summary>
 /// Handler for IMUL r/m32 instruction (0xF7 /5)

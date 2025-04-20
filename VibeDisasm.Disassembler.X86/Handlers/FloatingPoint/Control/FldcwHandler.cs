@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Control;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Control;
 
 /// <summary>
 /// Handler for FLDCW instruction (D9 /5)

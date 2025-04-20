@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Nop;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Nop;
 
 /// <summary>
 /// Handler for INT3 instruction (0xCC)

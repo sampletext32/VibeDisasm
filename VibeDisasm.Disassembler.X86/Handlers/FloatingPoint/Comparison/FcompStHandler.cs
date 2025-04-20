@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Comparison;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Comparison;
 
 /// <summary>
 /// Handler for FCOMP ST(i) instruction (D8 D8-DF) - compares ST(0) with ST(i) and pops the register stack

@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Handles decoding of instruction prefixes

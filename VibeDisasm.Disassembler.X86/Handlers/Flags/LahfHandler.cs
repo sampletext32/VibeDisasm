@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Flags;
+namespace VibeDisasm.Disassembler.X86.Handlers.Flags;
 
 /// <summary>
 /// Handler for LAHF (Load Flags into AH) instruction (opcode 9F)

@@ -1,8 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86;
-
-using System.Collections.Generic;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Core x86 instruction disassembler

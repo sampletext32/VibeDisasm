@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Call;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Call;
 
 /// <summary>
 /// Handler for CALL rel32 instruction (0xE8)

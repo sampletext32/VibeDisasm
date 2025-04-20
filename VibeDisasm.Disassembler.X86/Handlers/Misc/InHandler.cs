@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Misc;
+namespace VibeDisasm.Disassembler.X86.Handlers.Misc;
 
 /// <summary>
 /// Handler for IN instruction (0xE4, 0xE5, 0xEC, 0xED)

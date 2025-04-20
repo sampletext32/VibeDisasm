@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Jump;
+namespace VibeDisasm.Disassembler.X86.Handlers.Jump;
 
 /// <summary>
 /// Handler for JMP r/m32 instruction (opcode FF /4)

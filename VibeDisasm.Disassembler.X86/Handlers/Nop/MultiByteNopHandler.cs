@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Nop;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Nop;
 
 /// <summary>
 /// Handler for multi-byte NOP instructions (0x0F 0x1F ...)

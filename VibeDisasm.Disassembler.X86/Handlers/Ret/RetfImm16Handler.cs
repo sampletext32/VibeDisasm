@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Ret;
+namespace VibeDisasm.Disassembler.X86.Handlers.Ret;
 
 /// <summary>
 /// Handler for RETF imm16 instruction with operand size prefix (0xCA with 0x66 prefix)

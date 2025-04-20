@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Neg;
+namespace VibeDisasm.Disassembler.X86.Handlers.Neg;
 
 /// <summary>
 /// Handler for NEG r/m8 instruction (0xF6 /3)

@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Control;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Control;
 
 /// <summary>
 /// Handler for FINIT instruction with WAIT prefix (0x9B 0xDB 0xE3) - Initialize FPU after checking for pending unmasked floating-point exceptions

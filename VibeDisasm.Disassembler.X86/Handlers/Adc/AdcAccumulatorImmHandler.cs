@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Adc;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Adc;
 
 /// <summary>
 /// Handler for ADC AX/EAX, imm16/32 instruction (opcode 0x15)

@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Not;
+namespace VibeDisasm.Disassembler.X86.Handlers.Not;
 
 /// <summary>
 /// Handler for NOT r/m8 instruction (0xF6 /2)

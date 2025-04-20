@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Misc;
+namespace VibeDisasm.Disassembler.X86.Handlers.Misc;
 
 /// <summary>
 /// Handler for CPUID instruction (0x0F 0xA2)

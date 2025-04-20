@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Call;
+namespace VibeDisasm.Disassembler.X86.Handlers.Call;
 
 /// <summary>
 /// Handler for CALL m16:32 instruction (FF /3) - Far call with memory operand

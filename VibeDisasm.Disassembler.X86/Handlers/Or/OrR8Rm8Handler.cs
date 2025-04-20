@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Or;
+namespace VibeDisasm.Disassembler.X86.Handlers.Or;
 
 /// <summary>
 /// Handler for OR r8, r/m8 instruction (0x0A)

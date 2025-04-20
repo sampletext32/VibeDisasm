@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Control;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Control;
 
 /// <summary>
 /// Handler for FSTSW m2byte instruction (0x9B 0xDD /7) - Store FPU status word with wait prefix to memory

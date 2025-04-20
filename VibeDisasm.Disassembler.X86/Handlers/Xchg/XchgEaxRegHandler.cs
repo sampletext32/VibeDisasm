@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Xchg;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Xchg;
 
 /// <summary>
 /// Handler for XCHG EAX, r32 instruction (0x90-0x97)

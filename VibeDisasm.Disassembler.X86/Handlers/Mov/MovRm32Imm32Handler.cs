@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Mov;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Mov;
 
 /// <summary>
 /// Handler for MOV r/m32, imm32 instruction (0xC7)

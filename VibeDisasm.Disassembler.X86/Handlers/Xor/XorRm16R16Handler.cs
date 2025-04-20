@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Xor;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Xor;
 
 /// <summary>
 /// Handler for XOR r/m16, r16 instruction (0x31 with 0x66 prefix)

@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Adc;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Adc;
 
 /// <summary>
 /// Handler for ADC r16, r/m16 instruction (0x13 with 0x66 prefix)

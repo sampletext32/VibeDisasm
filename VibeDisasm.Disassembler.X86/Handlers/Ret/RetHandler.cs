@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Ret;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Ret;
 
 /// <summary>
 /// Handler for RET instruction (0xC3)

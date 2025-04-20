@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Push;
+namespace VibeDisasm.Disassembler.X86.Handlers.Push;
 
 /// <summary>
 /// Handler for PUSH r/m32 instruction (0xFF /6)

@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.Stack;
+namespace VibeDisasm.Disassembler.X86.Handlers.Stack;
 
 /// <summary>
 /// Handler for PUSHAD instruction (0x60)

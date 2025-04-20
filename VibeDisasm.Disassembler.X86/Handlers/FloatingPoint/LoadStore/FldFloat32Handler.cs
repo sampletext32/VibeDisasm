@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.FloatingPoint.LoadStore;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.LoadStore;
 
 /// <summary>
 /// Handler for FLD float32 instruction (D9 /0)

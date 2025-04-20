@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Dec;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Dec;
 
 /// <summary>
 /// Handler for DEC r32 instructions (0x48-0x4F)

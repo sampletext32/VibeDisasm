@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
 
 /// <summary>
 /// Handler for FXTRACT instruction (D9 F4) - Extracts the exponent and significand from the ST(0) value

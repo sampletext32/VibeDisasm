@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
 
 /// <summary>
 /// Handler for FPREM1 instruction (D9 F5) - Computes the IEEE-compliant partial remainder of ST(0) ÷ ST(1)

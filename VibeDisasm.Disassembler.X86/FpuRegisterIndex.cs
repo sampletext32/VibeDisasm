@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Represents the index values for x87 floating-point unit registers.

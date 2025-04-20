@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Control;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Control;
 
 /// <summary>
 /// Handler for FNSAVE instruction (DD /6)

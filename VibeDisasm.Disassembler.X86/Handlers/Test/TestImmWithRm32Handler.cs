@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Test;
+namespace VibeDisasm.Disassembler.X86.Handlers.Test;
 
 /// <summary>
 /// Handler for TEST r/m32, imm32 instruction (0xF7 /0)

@@ -1,4 +1,4 @@
-namespace X86Disassembler.X86;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Represents the type of operand in an x86 instruction

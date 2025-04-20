@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Arithmetic;
 
 /// <summary>
 /// Handler for FADD float64 instruction (DC /0)

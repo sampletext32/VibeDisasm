@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Sub;
+namespace VibeDisasm.Disassembler.X86.Handlers.Sub;
 
 /// <summary>
 /// Handler for SUB r16, r/m16 instruction (0x2B with 0x66 prefix)

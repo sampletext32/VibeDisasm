@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Comparison;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Comparison;
 
 /// <summary>
 /// Handler for FCOMP float32 instruction (D8 /3)

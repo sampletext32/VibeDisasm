@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Add;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Add;
 
 /// <summary>
 /// Handler for ADD r/m8, imm8 instruction (0x80 /0)

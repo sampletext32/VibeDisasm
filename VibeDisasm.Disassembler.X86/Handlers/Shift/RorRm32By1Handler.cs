@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Shift;
+namespace VibeDisasm.Disassembler.X86.Handlers.Shift;
 
 /// <summary>
 /// Handler for ROR r/m32, 1 instruction (0xD1 /1)

@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Ret;
+namespace VibeDisasm.Disassembler.X86.Handlers.Ret;
 
 /// <summary>
 /// Handler for RETF instruction with operand size prefix (0xCB with 0x66 prefix)

@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Sbb;
+namespace VibeDisasm.Disassembler.X86.Handlers.Sbb;
 
 /// <summary>
 /// Handler for SBB r/m16, r16 instruction (0x19 with 0x66 prefix)

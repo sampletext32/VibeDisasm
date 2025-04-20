@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Mov;
+namespace VibeDisasm.Disassembler.X86.Handlers.Mov;
 
 /// <summary>
 /// Handler for MOV EAX, moffs32 instruction (0xA1) and MOV AL, moffs8 instruction (0xA0)

@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Or;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Or;
 
 /// <summary>
 /// Handler for OR EAX, imm32 instruction (0x0D)

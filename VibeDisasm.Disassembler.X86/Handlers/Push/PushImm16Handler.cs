@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Push;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Push;
 
 /// <summary>
 /// Handler for PUSH imm16 instruction with operand size prefix (0x66 0x68)

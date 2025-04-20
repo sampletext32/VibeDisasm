@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Control;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Control;
 
 /// <summary>
 /// Handler for FNCLEX instruction (0xDB 0xE2) - Clears floating-point exception flags without checking for pending unmasked exceptions

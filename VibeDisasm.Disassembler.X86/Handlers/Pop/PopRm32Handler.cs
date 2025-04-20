@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Pop;
+namespace VibeDisasm.Disassembler.X86.Handlers.Pop;
 
 /// <summary>
 /// Handler for POP r/m32 instruction (0x8F /0)

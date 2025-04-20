@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Sbb;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Sbb;
 
 /// <summary>
 /// Handler for SBB AX/EAX, imm16/32 instruction (0x1D)

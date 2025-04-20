@@ -1,6 +1,4 @@
-using X86Disassembler.X86.Operands;
-
-namespace X86Disassembler.X86.Handlers.Call;
+namespace VibeDisasm.Disassembler.X86.Handlers.Call;
 
 /// <summary>
 /// Handler for CALL r/m32 instruction (FF /2)

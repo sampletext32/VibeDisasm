@@ -1,6 +1,4 @@
-namespace X86Disassembler.X86.Handlers.FloatingPoint.Comparison;
-
-using X86Disassembler.X86.Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.FloatingPoint.Comparison;
 
 /// <summary>
 /// Handler for FICOM int32 instruction (DA /2)

@@ -1,6 +1,6 @@
-using X86Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
-namespace X86Disassembler.X86.Handlers.Sbb;
+namespace VibeDisasm.Disassembler.X86.Handlers.Sbb;
 
 /// <summary>
 /// Handler for SBB r/m8, imm8 instruction (0x80 /3)

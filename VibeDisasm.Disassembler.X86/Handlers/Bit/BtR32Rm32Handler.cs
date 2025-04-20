@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.Bit;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.Bit;
 
 /// <summary>
 /// Handler for BT r32, r/m32 instruction (0F A3)

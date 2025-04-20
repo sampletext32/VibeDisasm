@@ -1,6 +1,6 @@
-namespace X86Disassembler.X86.Handlers.String;
+using VibeDisasm.Disassembler.X86.Operands;
 
-using Operands;
+namespace VibeDisasm.Disassembler.X86.Handlers.String;
 
 /// <summary>
 /// Handler for string instructions (MOVS, CMPS, STOS, LODS, SCAS)
