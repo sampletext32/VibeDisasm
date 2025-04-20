@@ -6,14 +6,14 @@ namespace VibeDisasm.Pe.Extractors;
 /// <summary>
 /// Extracts import information from a PE file
 /// </summary>
-public class ImportExtractor : IExtractor<ImportInfo?>
+public static class ImportExtractor
 {
     /// <summary>
     /// Extracts import information from a PE file
     /// </summary>
     /// <param name="rawPeFile">The raw PE file</param>
     /// <returns>Import information, or null if the PE file has no imports</returns>
-    public ImportInfo? Extract(RawPeFile rawPeFile)
+    public static ImportInfo? Extract(RawPeFile rawPeFile)
     {
         if (rawPeFile == null)
         {
@@ -36,8 +36,8 @@ public class ImportExtractor : IExtractor<ImportInfo?>
             // Get the module name
             if (descriptor.Name != 0)
             {
-                uint nameOffset = RvaToOffset(rawPeFile, descriptor.Name);
-                moduleInfo.Name = ReadAsciiString(rawPeFile.RawData, nameOffset);
+                uint nameOffset = Util.RvaToOffset(rawPeFile, descriptor.Name);
+                moduleInfo.Name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
             }
 
             // Process the imported functions
@@ -46,8 +46,8 @@ public class ImportExtractor : IExtractor<ImportInfo?>
 
             if (thunkRva != 0)
             {
-                uint thunkOffset = RvaToOffset(rawPeFile, thunkRva);
-                uint iatOffset = RvaToOffset(rawPeFile, iatRva);
+                uint thunkOffset = Util.RvaToOffset(rawPeFile, thunkRva);
+                uint iatOffset = Util.RvaToOffset(rawPeFile, iatRva);
                 int thunkSize = rawPeFile.IsPe32Plus ? 8 : 4;
 
                 for (int i = 0; ; i++)
@@ -98,13 +98,13 @@ public class ImportExtractor : IExtractor<ImportInfo?>
                     {
                         // Import by name
                         uint hintNameRva = (uint)(thunkValue & (rawPeFile.IsPe32Plus ? 0x7FFFFFFFFFFFFFFFUL : 0x7FFFFFFFUL));
-                        uint hintNameOffset = RvaToOffset(rawPeFile, hintNameRva);
+                        uint hintNameOffset = Util.RvaToOffset(rawPeFile, hintNameRva);
 
                         // Read the hint
                         functionInfo.Hint = BitConverter.ToUInt16(rawPeFile.RawData, (int)hintNameOffset);
 
                         // Read the name
-                        functionInfo.Name = ReadAsciiString(rawPeFile.RawData, hintNameOffset + 2);
+                        functionInfo.Name = Util.ReadAsciiString(rawPeFile.RawData, hintNameOffset + 2);
                     }
 
                     moduleInfo.Functions.Add(functionInfo);
@@ -115,53 +115,5 @@ public class ImportExtractor : IExtractor<ImportInfo?>
         }
 
         return importInfo;
-    }
-
-    /// <summary>
-    /// Converts a Relative Virtual Address (RVA) to a file offset
-    /// </summary>
-    /// <param name="rawPeFile">The raw PE file</param>
-    /// <param name="rva">The RVA to convert</param>
-    /// <returns>The corresponding file offset</returns>
-    private uint RvaToOffset(RawPeFile rawPeFile, uint rva)
-    {
-        // Find the section containing the RVA
-        foreach (var section in rawPeFile.SectionHeaders)
-        {
-            uint sectionStart = section.VirtualAddress;
-            uint sectionEnd = sectionStart + Math.Max(section.VirtualSize, section.SizeOfRawData);
-
-            if (rva >= sectionStart && rva < sectionEnd)
-            {
-                // Calculate the offset within the section
-                uint offset = rva - sectionStart + section.PointerToRawData;
-                return offset;
-            }
-        }
-
-        // If the RVA is not in any section, it might be in the header
-        if (rva < rawPeFile.OptionalHeader.SizeOfHeaders)
-        {
-            return rva;
-        }
-
-        throw new ArgumentException($"Invalid RVA: 0x{rva:X8}");
-    }
-
-    /// <summary>
-    /// Reads a null-terminated ASCII string from the specified offset
-    /// </summary>
-    /// <param name="data">The raw data</param>
-    /// <param name="offset">The offset of the string</param>
-    /// <returns>The string read from the offset</returns>
-    private string ReadAsciiString(byte[] data, uint offset)
-    {
-        int length = 0;
-        while (offset + length < data.Length && data[offset + length] != 0)
-        {
-            length++;
-        }
-
-        return Encoding.ASCII.GetString(data, (int)offset, length);
     }
 }

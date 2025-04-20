@@ -13,63 +13,59 @@ byte[] fileData = File.ReadAllBytes(filePath);
 // Parse the PE file using the raw parser
 RawPeFile rawPeFile = RawPeFactory.FromBytes(fileData);
 
-// Create extractors for different PE information
-var peInfoExtractor = new PeInfoExtractor(fileName);
-
 // Extract basic PE information
-PeInfo peInfo = peInfoExtractor.Extract(rawPeFile);
+PeInfo peInfo = PeInfoExtractor.Extract(rawPeFile);
 
 // Display basic information about the PE file
-PeInfoPrinter.Print(peInfo);
-
-// Create extractors for different section types (without including the raw data for brevity)
-var allSectionsExtractor = new SectionExtractor { IncludeData = false };
-var executableSectionsExtractor = new ExecutableSectionExtractor { IncludeData = false };
-var codeSectionsExtractor = new CodeSectionExtractor { IncludeData = false };
-var dataSectionsExtractor = new DataSectionExtractor { IncludeData = false };
-var textSectionExtractor = new NamedSectionExtractor(".text") { IncludeData = false };
+PeInfoPrinter.Print(peInfo, fileName);
 
 // Extract all sections
-SectionInfo[] sections = allSectionsExtractor.Extract(rawPeFile);
+SectionInfo[] sections = SectionExtractor.Extract(rawPeFile);
 
 // Display section information
 SectionInfoPrinter.Print(sections);
 
 // Extract executable sections
-SectionInfo[] execSections = executableSectionsExtractor.Extract(rawPeFile);
+SectionInfo[] execSections = CharacteristicsSectionExtractor.Extract(rawPeFile, SectionCharacteristics.Executable);
 SectionInfoPrinter.PrintCollection(execSections, "Executable Sections");
 
 // Extract code sections
-SectionInfo[] codeSections = codeSectionsExtractor.Extract(rawPeFile);
+SectionInfo[] codeSections = CharacteristicsSectionExtractor.Extract(rawPeFile, SectionCharacteristics.ContainsCode);
 SectionInfoPrinter.PrintCollection(codeSections, "Code Sections");
 
 // Extract a specific section with data
-var textSectionWithDataExtractor = new NamedSectionExtractor(".text") { IncludeData = true };
-SectionInfo? textSection = textSectionWithDataExtractor.Extract(rawPeFile);
+SectionInfo? textSection = NamedSectionExtractor.Extract(rawPeFile, ".text");
 SectionInfoPrinter.PrintDetails(textSection, ".text Section");
 
 // Extract export information
-var exportExtractor = new ExportExtractor();
-ExportInfo? exportInfo = exportExtractor.Extract(rawPeFile);
+ExportInfo? exportInfo = ExportExtractor.Extract(rawPeFile);
 ExportInfoPrinter.Print(exportInfo);
 
 // Extract import information
-var importExtractor = new ImportExtractor();
-ImportInfo? importInfo = importExtractor.Extract(rawPeFile);
+ImportInfo? importInfo = ImportExtractor.Extract(rawPeFile);
 ImportInfoPrinter.Print(importInfo);
 
 // Extract resource information
-var resourceExtractor = new ResourceExtractor(includeData: true);
-ResourceInfo? resourceInfo = resourceExtractor.Extract(rawPeFile);
+ResourceInfo? resourceInfo = ResourceExtractor.Extract(rawPeFile);
 ResourceInfoPrinter.Print(resourceInfo);
 
 // Extract and print string tables if available
-if (resourceExtractor.StringTables.Count > 0)
+if (resourceInfo != null)
 {
-    ResourceInfoPrinter.PrintStringTables(resourceExtractor.StringTables);
+    var stringTables = StringTableExtractor.ExtractAll(resourceInfo);
+    if (stringTables.Count > 0)
+    {
+        ResourceInfoPrinter.PrintStringTables(stringTables);
+    }
+    
+    // Extract and print version information if available
+    var versionInfos = VersionExtractor.ExtractAll(resourceInfo);
+    if (versionInfos.Count > 0)
+    {
+        VersionInfoPrinter.Print(versionInfos);
+    }
 }
 
 // Extract and print resource directory information
-var resourceDirectoryExtractor = new ResourceDirectoryExtractor();
-ResourceDirectoryInfo? resourceDirectoryInfo = resourceDirectoryExtractor.Extract(rawPeFile);
+ResourceDirectoryInfo? resourceDirectoryInfo = ResourceDirectoryExtractor.Extract(rawPeFile);
 ResourceDirectoryPrinter.Print(resourceDirectoryInfo);

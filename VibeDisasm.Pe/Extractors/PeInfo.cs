@@ -6,11 +6,6 @@ namespace VibeDisasm.Pe.Extractors;
 public class PeInfo
 {
     /// <summary>
-    /// Gets or sets the name of the PE file
-    /// </summary>
-    public string FileName { get; set; } = string.Empty;
-    
-    /// <summary>
     /// Gets or sets whether the PE file is 64-bit (PE32+)
     /// </summary>
     public bool Is64Bit { get; set; }

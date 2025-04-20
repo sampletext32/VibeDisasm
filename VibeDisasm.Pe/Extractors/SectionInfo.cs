@@ -38,7 +38,7 @@ public class SectionInfo
     /// <summary>
     /// The raw data of the section
     /// </summary>
-    public byte[] Data { get; set; } = Array.Empty<byte>();
+    public byte[] Data { get; set; } = [];
     
     /// <summary>
     /// Gets whether the section is executable

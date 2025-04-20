@@ -11,31 +11,14 @@ namespace VibeDisasm.Pe.Extractors;
 /// <summary>
 /// Extracts resources from a PE file
 /// </summary>
-public class ResourceExtractor : IExtractor<ResourceInfo?>
+public static class ResourceExtractor
 {
-    private readonly bool _includeData;
-    private uint _resourceDirectoryRva;
-    
-    /// <summary>
-    /// Gets or sets the collection of string tables extracted from the resources
-    /// </summary>
-    public List<StringTableInfo> StringTables { get; } = new List<StringTableInfo>();
-    
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ResourceExtractor"/> class
-    /// </summary>
-    /// <param name="includeData">Whether to include the raw resource data in the extraction</param>
-    public ResourceExtractor(bool includeData = false)
-    {
-        _includeData = includeData;
-    }
-    
     /// <summary>
     /// Extracts resource information from a PE file
     /// </summary>
     /// <param name="rawPeFile">The raw PE file</param>
     /// <returns>Resource information, or null if the PE file has no resources</returns>
-    public ResourceInfo? Extract(RawPeFile rawPeFile)
+    public static ResourceInfo? Extract(RawPeFile rawPeFile)
     {
         if (rawPeFile == null)
         {
@@ -50,12 +33,12 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
         }
         
         // Get the resource directory RVA and size
-        _resourceDirectoryRva = rawPeFile.OptionalHeader.DataDirectories[2].VirtualAddress;
+        var resourceDirectoryRva = rawPeFile.OptionalHeader.DataDirectories[2].VirtualAddress;
         uint resourceDirectorySize = rawPeFile.OptionalHeader.DataDirectories[2].Size;
         
         var resourceInfo = new ResourceInfo
         {
-            DirectoryRVA = _resourceDirectoryRva,
+            DirectoryRVA = resourceDirectoryRva,
             DirectorySize = resourceDirectorySize
         };
         
@@ -68,7 +51,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                 using var reader = new BinaryReader(stream);
                 
                 // Get to the root resource directory
-                uint rootOffset = RvaToOffset(rawPeFile, _resourceDirectoryRva);
+                uint rootOffset = Util.RvaToOffset(rawPeFile, resourceDirectoryRva);
                 reader.BaseStream.Seek(rootOffset, SeekOrigin.Begin);
                 
                 // Read the root directory header
@@ -96,15 +79,14 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                         long currentPos = reader.BaseStream.Position;
                         
                         // Process the type directory (level 2)
-                        ProcessTypeDirectory(rawPeFile, reader, subDirOffset, typeId, resourceInfo.Resources);
+                        ProcessTypeDirectory(rawPeFile, reader, subDirOffset, typeId, resourceInfo.Resources, resourceDirectoryRva);
                         
                         // Restore position for next entry
                         reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
                     }
                 }
                 
-                // Process string tables if present
-                ProcessStringTables(resourceInfo);
+                // String tables will be extracted separately by StringTableExtractor
             }
             catch (Exception ex)
             {
@@ -123,10 +105,10 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
     /// <param name="subDirOffset">The offset of the type directory from the start of the resource section</param>
     /// <param name="typeId">The type ID</param>
     /// <param name="resources">The list of resources to add to</param>
-    private void ProcessTypeDirectory(RawPeFile rawPeFile, BinaryReader reader, uint subDirOffset, uint typeId, List<ResourceEntryInfo> resources)
+    private static void ProcessTypeDirectory(RawPeFile rawPeFile, BinaryReader reader, uint subDirOffset, uint typeId, List<ResourceEntryInfo> resources, uint resourceDirectoryRva)
     {
         // Seek to the type directory
-        uint typeOffset = RvaToOffset(rawPeFile, _resourceDirectoryRva + subDirOffset);
+        uint typeOffset = Util.RvaToOffset(rawPeFile, resourceDirectoryRva + subDirOffset);
         reader.BaseStream.Seek(typeOffset, SeekOrigin.Begin);
         
         // Read the type directory header
@@ -154,7 +136,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                 long currentPos = reader.BaseStream.Position;
                 
                 // Process the language directory (level 3)
-                ProcessLanguageDirectory(rawPeFile, reader, langDirOffset, typeId, nameId, resources);
+                ProcessLanguageDirectory(rawPeFile, reader, langDirOffset, typeId, nameId, resources, resourceDirectoryRva);
                 
                 // Restore position for next entry
                 reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
@@ -171,10 +153,10 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
     /// <param name="typeId">The type ID</param>
     /// <param name="nameId">The name/ID</param>
     /// <param name="resources">The list of resources to add to</param>
-    private void ProcessLanguageDirectory(RawPeFile rawPeFile, BinaryReader reader, uint langDirOffset, uint typeId, uint nameId, List<ResourceEntryInfo> resources)
+    private static void ProcessLanguageDirectory(RawPeFile rawPeFile, BinaryReader reader, uint langDirOffset, uint typeId, uint nameId, List<ResourceEntryInfo> resources, uint resourceDirectoryRva)
     {
         // Seek to the language directory
-        uint langOffset = RvaToOffset(rawPeFile, _resourceDirectoryRva + langDirOffset);
+        uint langOffset = Util.RvaToOffset(rawPeFile, resourceDirectoryRva + langDirOffset);
         reader.BaseStream.Seek(langOffset, SeekOrigin.Begin);
         
         // Read the language directory header
@@ -198,7 +180,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
             if (!isDirectory)
             {
                 // This is a data entry
-                uint dataEntryOffset = RvaToOffset(rawPeFile, _resourceDirectoryRva + offsetToData);
+                uint dataEntryOffset = Util.RvaToOffset(rawPeFile, resourceDirectoryRva + offsetToData);
                 reader.BaseStream.Seek(dataEntryOffset, SeekOrigin.Begin);
                 
                 uint dataRva = reader.ReadUInt32();
@@ -208,7 +190,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                 
                 var resource = new ResourceEntryInfo
                 {
-                    Type = GetResourceType(typeId),
+                    Type = (ResourceType)typeId,
                     Id = nameId,
                     HasName = false, // We're using IDs for simplicity
                     LanguageId = languageId,
@@ -216,139 +198,22 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                     Size = dataSize,
                     RVA = dataRva
                 };
-                
-                if (_includeData)
+
+                try
                 {
-                    try
-                    {
-                        // Read the resource data
-                        uint dataOffset = RvaToOffset(rawPeFile, dataRva);
-                        resource.Data = new byte[dataSize];
-                        Array.Copy(rawPeFile.RawData, (int)dataOffset, resource.Data, 0, (int)dataSize);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error reading resource data: {ex.Message}");
-                        resource.Data = Array.Empty<byte>();
-                    }
+                    // Read the resource data
+                    uint dataOffset = Util.RvaToOffset(rawPeFile, dataRva);
+                    resource.Data = new byte[dataSize];
+                    Array.Copy(rawPeFile.RawData, (int) dataOffset, resource.Data, 0, (int) dataSize);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error reading resource data: {ex.Message}");
+                    resource.Data = Array.Empty<byte>();
                 }
                 
                 resources.Add(resource);
             }
         }
-    }
-    
-    /// <summary>
-    /// Processes string tables from the extracted resources
-    /// </summary>
-    /// <param name="resourceInfo">The resource information containing all extracted resources</param>
-    private void ProcessStringTables(ResourceInfo resourceInfo)
-    {
-        // Clear any existing string tables
-        StringTables.Clear();
-        
-        // Find all string table resources
-        var stringTableResources = resourceInfo.Resources
-            .Where(r => r.Type == ResourceType.StringTable)
-            .ToList();
-        
-        if (stringTableResources.Count == 0)
-        {
-            return;
-        }
-        
-        // Group string table resources by ID and language
-        var groupedResources = stringTableResources
-            .GroupBy(r => new { r.Id, r.LanguageId })
-            .ToList();
-        
-        // Process each group
-        foreach (var group in groupedResources)
-        {
-            var resource = group.First();
-            
-            // Skip if we don't have the data
-            if (resource.Data == null || resource.Data.Length == 0)
-            {
-                continue;
-            }
-            
-            // Extract the string table
-            var stringTableExtractor = new StringTableExtractor();
-            var stringTable = stringTableExtractor.Extract(
-                resource.Data,
-                resource.Id,
-                resource.LanguageId);
-            
-            if (stringTable.Strings.Count > 0)
-            {
-                StringTables.Add(stringTable);
-            }
-        }
-    }
-    
-    /// <summary>
-    /// Converts a resource type ID to a resource type enumeration value
-    /// </summary>
-    /// <param name="typeId">The resource type ID</param>
-    /// <returns>The resource type enumeration value</returns>
-    private ResourceType GetResourceType(uint typeId)
-    {
-        return typeId switch
-        {
-            1 => ResourceType.Cursor,
-            2 => ResourceType.Bitmap,
-            3 => ResourceType.Icon,
-            4 => ResourceType.Menu,
-            5 => ResourceType.Dialog,
-            6 => ResourceType.StringTable,
-            7 => ResourceType.FontDir,
-            8 => ResourceType.Font,
-            9 => ResourceType.Accelerator,
-            10 => ResourceType.RcData,
-            11 => ResourceType.MessageTable,
-            12 => ResourceType.GroupCursor,
-            14 => ResourceType.GroupIcon,
-            16 => ResourceType.Version,
-            17 => ResourceType.DlgInclude,
-            19 => ResourceType.PlugPlay,
-            20 => ResourceType.VXD,
-            21 => ResourceType.AniCursor,
-            22 => ResourceType.AniIcon,
-            23 => ResourceType.HTML,
-            24 => ResourceType.Manifest,
-            _ => ResourceType.Unknown
-        };
-    }
-    
-    /// <summary>
-    /// Converts a Relative Virtual Address (RVA) to a file offset
-    /// </summary>
-    /// <param name="rawPeFile">The raw PE file</param>
-    /// <param name="rva">The RVA to convert</param>
-    /// <returns>The corresponding file offset</returns>
-    private uint RvaToOffset(RawPeFile rawPeFile, uint rva)
-    {
-        // Find the section containing the RVA
-        foreach (var section in rawPeFile.SectionHeaders)
-        {
-            uint sectionStart = section.VirtualAddress;
-            uint sectionEnd = sectionStart + Math.Max(section.VirtualSize, section.SizeOfRawData);
-
-            if (rva >= sectionStart && rva < sectionEnd)
-            {
-                // Calculate the offset within the section
-                uint offset = rva - sectionStart + section.PointerToRawData;
-                return offset;
-            }
-        }
-
-        // If the RVA is not in any section, it might be in the header
-        if (rva < rawPeFile.OptionalHeader.SizeOfHeaders)
-        {
-            return rva;
-        }
-
-        throw new ArgumentException($"Invalid RVA: 0x{rva:X8}");
     }
 }

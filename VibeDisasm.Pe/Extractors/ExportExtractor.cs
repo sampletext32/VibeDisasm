@@ -6,14 +6,14 @@ namespace VibeDisasm.Pe.Extractors;
 /// <summary>
 /// Extracts export information from a PE file
 /// </summary>
-public class ExportExtractor : IExtractor<ExportInfo?>
+public static class ExportExtractor
 {
     /// <summary>
     /// Extracts export information from a PE file
     /// </summary>
     /// <param name="rawPeFile">The raw PE file</param>
     /// <returns>Export information, or null if the PE file has no exports</returns>
-    public ExportInfo? Extract(RawPeFile rawPeFile)
+    public static ExportInfo? Extract(RawPeFile rawPeFile)
     {
         if (rawPeFile == null)
         {
@@ -37,8 +37,8 @@ public class ExportExtractor : IExtractor<ExportInfo?>
         // Get the DLL name
         if (rawPeFile.ExportDirectory.NameRva != 0)
         {
-            uint nameOffset = RvaToOffset(rawPeFile, rawPeFile.ExportDirectory.NameRva);
-            exportInfo.Name = ReadAsciiString(rawPeFile.RawData, nameOffset);
+            uint nameOffset = Util.RvaToOffset(rawPeFile, rawPeFile.ExportDirectory.NameRva);
+            exportInfo.Name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
         }
 
         // Process exported functions
@@ -52,14 +52,14 @@ public class ExportExtractor : IExtractor<ExportInfo?>
             var ordinalToName = new Dictionary<uint, string>();
             for (uint i = 0; i < rawPeFile.ExportDirectory.NumberOfNames; i++)
             {
-                uint nameRvaOffset = RvaToOffset(rawPeFile, namesRva + (i * 4));
+                uint nameRvaOffset = Util.RvaToOffset(rawPeFile, namesRva + (i * 4));
                 uint nameRva = BitConverter.ToUInt32(rawPeFile.RawData, (int)nameRvaOffset);
 
-                uint ordinalOffset = RvaToOffset(rawPeFile, ordinalsRva + (i * 2));
+                uint ordinalOffset = Util.RvaToOffset(rawPeFile, ordinalsRva + (i * 2));
                 ushort ordinal = BitConverter.ToUInt16(rawPeFile.RawData, (int)ordinalOffset);
 
-                uint nameOffset = RvaToOffset(rawPeFile, nameRva);
-                string name = ReadAsciiString(rawPeFile.RawData, nameOffset);
+                uint nameOffset = Util.RvaToOffset(rawPeFile, nameRva);
+                string name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
 
                 ordinalToName[ordinal] = name;
             }
@@ -76,7 +76,7 @@ public class ExportExtractor : IExtractor<ExportInfo?>
             // Process each function
             for (uint i = 0; i < rawPeFile.ExportDirectory.NumberOfFunctions; i++)
             {
-                uint functionRvaOffset = RvaToOffset(rawPeFile, functionsRva + (i * 4));
+                uint functionRvaOffset = Util.RvaToOffset(rawPeFile, functionsRva + (i * 4));
                 uint functionRva = BitConverter.ToUInt32(rawPeFile.RawData, (int)functionRvaOffset);
 
                 // Skip functions with RVA = 0 (not exported)
@@ -101,8 +101,8 @@ public class ExportExtractor : IExtractor<ExportInfo?>
                 if (exportDirRva <= functionRva && functionRva < exportDirRva + exportDirSize)
                 {
                     function.IsForwarded = true;
-                    uint forwardOffset = RvaToOffset(rawPeFile, functionRva);
-                    function.ForwardedName = ReadAsciiString(rawPeFile.RawData, forwardOffset);
+                    uint forwardOffset = Util.RvaToOffset(rawPeFile, functionRva);
+                    function.ForwardedName = Util.ReadAsciiString(rawPeFile.RawData, forwardOffset);
                 }
 
                 exportInfo.Functions.Add(function);
@@ -112,51 +112,4 @@ public class ExportExtractor : IExtractor<ExportInfo?>
         return exportInfo;
     }
 
-    /// <summary>
-    /// Converts a Relative Virtual Address (RVA) to a file offset
-    /// </summary>
-    /// <param name="rawPeFile">The raw PE file</param>
-    /// <param name="rva">The RVA to convert</param>
-    /// <returns>The corresponding file offset</returns>
-    private uint RvaToOffset(RawPeFile rawPeFile, uint rva)
-    {
-        // Find the section containing the RVA
-        foreach (var section in rawPeFile.SectionHeaders)
-        {
-            uint sectionStart = section.VirtualAddress;
-            uint sectionEnd = sectionStart + Math.Max(section.VirtualSize, section.SizeOfRawData);
-
-            if (rva >= sectionStart && rva < sectionEnd)
-            {
-                // Calculate the offset within the section
-                uint offset = rva - sectionStart + section.PointerToRawData;
-                return offset;
-            }
-        }
-
-        // If the RVA is not in any section, it might be in the header
-        if (rva < rawPeFile.OptionalHeader.SizeOfHeaders)
-        {
-            return rva;
-        }
-
-        throw new ArgumentException($"Invalid RVA: 0x{rva:X8}");
-    }
-
-    /// <summary>
-    /// Reads a null-terminated ASCII string from the specified offset
-    /// </summary>
-    /// <param name="data">The raw data</param>
-    /// <param name="offset">The offset of the string</param>
-    /// <returns>The string read from the offset</returns>
-    private string ReadAsciiString(byte[] data, uint offset)
-    {
-        int length = 0;
-        while (offset + length < data.Length && data[offset + length] != 0)
-        {
-            length++;
-        }
-
-        return Encoding.ASCII.GetString(data, (int)offset, length);
-    }
 }
