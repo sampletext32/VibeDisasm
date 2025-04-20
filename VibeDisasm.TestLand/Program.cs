@@ -4,6 +4,7 @@ using VibeDisasm.Pe.Raw;
 
 // Path to the PE file to analyze
 const string filePath = @"C:\Program Files (x86)\Nikita\Iron Strategy\Terrain.dll";
+string fileName = Path.GetFileName(filePath);
 
 // Read the file bytes
 byte[] fileData = File.ReadAllBytes(filePath);
@@ -11,11 +12,17 @@ byte[] fileData = File.ReadAllBytes(filePath);
 // Parse the PE file using the raw parser
 RawPeFile rawPeFile = RawPeFactory.FromBytes(fileData);
 
+// Create extractors for different PE information
+var peInfoExtractor = new PeInfoExtractor(fileName);
+
+// Extract basic PE information
+PeInfo peInfo = peInfoExtractor.Extract(rawPeFile);
+
 // Display basic information about the PE file
-Console.WriteLine($"PE File: {Path.GetFileName(filePath)}");
-Console.WriteLine($"Architecture: {(rawPeFile.IsPe32Plus ? "64-bit" : "32-bit")}");
-Console.WriteLine($"Entry Point RVA: 0x{rawPeFile.OptionalHeader.AddressOfEntryPoint:X8}");
-Console.WriteLine($"Number of Sections: {rawPeFile.FileHeader.NumberOfSections}");
+Console.WriteLine($"PE File: {peInfo.FileName}");
+Console.WriteLine($"Architecture: {(peInfo.Is64Bit ? "64-bit" : "32-bit")}");
+Console.WriteLine($"Entry Point RVA: 0x{peInfo.EntryPointRva:X8}");
+Console.WriteLine($"Number of Sections: {peInfo.NumberOfSections}");
 
 // Create extractors for different section types (without including the raw data for brevity)
 var allSectionsExtractor = new SectionExtractor { IncludeData = false };

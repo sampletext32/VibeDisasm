@@ -7,6 +7,7 @@ namespace VibeDisasm.Pe.Raw;
 /// </summary>
 public class RawPeFile
 {
+
     /// <summary>
     /// The raw file data
     /// </summary>
