@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using VibeDisasm.Pe.Raw;
 using VibeDisasm.Pe.Raw.Structures;
@@ -11,6 +15,11 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
 {
     private readonly bool _includeData;
     private uint _resourceDirectoryRva;
+    
+    /// <summary>
+    /// Gets or sets the collection of string tables extracted from the resources
+    /// </summary>
+    public List<StringTableInfo> StringTables { get; } = new List<StringTableInfo>();
     
     /// <summary>
     /// Initializes a new instance of the <see cref="ResourceExtractor"/> class
@@ -93,6 +102,9 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                         reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
                     }
                 }
+                
+                // Process string tables if present
+                ProcessStringTables(resourceInfo);
             }
             catch (Exception ex)
             {
@@ -199,7 +211,7 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
                     Type = GetResourceType(typeId),
                     Id = nameId,
                     HasName = false, // We're using IDs for simplicity
-                    LanguageId = languageId,
+                    LanguageId = (LanguageId)languageId,
                     CodePage = codePage,
                     Size = dataSize,
                     RVA = dataRva
@@ -227,18 +239,86 @@ public class ResourceExtractor : IExtractor<ResourceInfo?>
     }
     
     /// <summary>
-    /// Gets the resource type from the type ID
+    /// Processes string tables from the extracted resources
     /// </summary>
-    /// <param name="typeId">The type ID</param>
-    /// <returns>The resource type</returns>
-    private ResourceType GetResourceType(uint typeId)
+    /// <param name="resourceInfo">The resource information containing all extracted resources</param>
+    private void ProcessStringTables(ResourceInfo resourceInfo)
     {
-        if (Enum.IsDefined(typeof(ResourceType), (int)typeId))
+        // Clear any existing string tables
+        StringTables.Clear();
+        
+        // Find all string table resources
+        var stringTableResources = resourceInfo.Resources
+            .Where(r => r.Type == ResourceType.StringTable)
+            .ToList();
+        
+        if (stringTableResources.Count == 0)
         {
-            return (ResourceType)typeId;
+            return;
         }
         
-        return ResourceType.Unknown;
+        // Group string table resources by ID and language
+        var groupedResources = stringTableResources
+            .GroupBy(r => new { r.Id, r.LanguageId })
+            .ToList();
+        
+        // Process each group
+        foreach (var group in groupedResources)
+        {
+            var resource = group.First();
+            
+            // Skip if we don't have the data
+            if (resource.Data == null || resource.Data.Length == 0)
+            {
+                continue;
+            }
+            
+            // Extract the string table
+            var stringTableExtractor = new StringTableExtractor();
+            var stringTable = stringTableExtractor.Extract(
+                resource.Data,
+                resource.Id,
+                (LanguageId)resource.LanguageId);
+            
+            if (stringTable.Strings.Count > 0)
+            {
+                StringTables.Add(stringTable);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Converts a resource type ID to a resource type enumeration value
+    /// </summary>
+    /// <param name="typeId">The resource type ID</param>
+    /// <returns>The resource type enumeration value</returns>
+    private ResourceType GetResourceType(uint typeId)
+    {
+        return typeId switch
+        {
+            1 => ResourceType.Cursor,
+            2 => ResourceType.Bitmap,
+            3 => ResourceType.Icon,
+            4 => ResourceType.Menu,
+            5 => ResourceType.Dialog,
+            6 => ResourceType.StringTable,
+            7 => ResourceType.FontDir,
+            8 => ResourceType.Font,
+            9 => ResourceType.Accelerator,
+            10 => ResourceType.RcData,
+            11 => ResourceType.MessageTable,
+            12 => ResourceType.GroupCursor,
+            14 => ResourceType.GroupIcon,
+            16 => ResourceType.Version,
+            17 => ResourceType.DlgInclude,
+            19 => ResourceType.PlugPlay,
+            20 => ResourceType.VXD,
+            21 => ResourceType.AniCursor,
+            22 => ResourceType.AniIcon,
+            23 => ResourceType.HTML,
+            24 => ResourceType.Manifest,
+            _ => ResourceType.Unknown
+        };
     }
     
     /// <summary>

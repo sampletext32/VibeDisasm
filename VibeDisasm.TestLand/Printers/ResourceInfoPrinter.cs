@@ -1,3 +1,6 @@
+using System;
+using System.Globalization;
+using System.Text;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.TestLand.Printers;
@@ -77,11 +80,58 @@ public class ResourceInfoPrinter
                         resource.RVA,
                         dataPreview);
                 }
+                
+                // String tables are printed separately via the PrintStringTables method
             }
         }
         else
         {
             Console.WriteLine("  No resource information found.");
+        }
+    }
+    
+    /// <summary>
+    /// Prints string tables to the console
+    /// </summary>
+    /// <param name="stringTables">The string tables to print</param>
+    public static void PrintStringTables(IEnumerable<StringTableInfo> stringTables)
+    {
+        Console.WriteLine("\r\n  String Tables:");
+        
+        foreach (var table in stringTables)
+        {
+            // Get the language name from the LanguageId enum
+            string languageName = table.LanguageId.ToString();
+            
+            // Try to get a more descriptive name using CultureInfo
+            try
+            {
+                var culture = new CultureInfo((int)table.LanguageId);
+                languageName = culture.EnglishName;
+            }
+            catch
+            {
+                // Fallback to the enum name if CultureInfo fails
+            }
+            
+            Console.WriteLine($"\r\n  String Table ID: {table.Id}, Language: {table.LanguageId} ({languageName})");
+            Console.WriteLine("  {0,-6} {1}", "ID", "String");
+            Console.WriteLine("  " + new string('-', 60));
+            
+            foreach (var entry in table.Strings.OrderBy(s => s.Key))
+            {
+                // Format the string value for display
+                string displayValue = entry.Value;
+                if (displayValue.Length > 50)
+                {
+                    displayValue = displayValue.Substring(0, 47) + "...";
+                }
+                
+                // Replace control characters for better display
+                displayValue = displayValue.Replace('\r', '⏎').Replace('\n', '⏎');
+                
+                Console.WriteLine("  {0,-6} {1}", entry.Key, displayValue);
+            }
         }
     }
 }
