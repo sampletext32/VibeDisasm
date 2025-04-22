@@ -23,7 +23,7 @@ public class Instruction
     /// <summary>
     /// The length of this instruction in bytes
     /// </summary>
-    public ulong Length { get; set; }
+    public uint Length { get; set; }
 
     /// <summary>
     /// Returns a string representation of the instruction

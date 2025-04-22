@@ -4,19 +4,19 @@ using VibeDisasm.Disassembler.X86.Operands;
 
 namespace VibeDisasm.DecompilerEngine;
 
-public class BlockDisassembler
+public class ControlFlowBlockDisassembler
 {
     /// <summary>
     /// Disassembles an assembly function from a starting position in the fileBuffer.
     /// </summary>
     /// <returns>A dictionary of block address to the block itself</returns>
-    public static Dictionary<uint, InstructionBlock> DisassembleBlock(byte[] fileBuffer, uint startPosition)
+    public static ControlFlowFunction DisassembleBlock(byte[] fileBuffer, uint startPosition)
     {
         var decoder = new InstructionDecoder(fileBuffer, fileBuffer.Length);
 
         Queue<uint> offsetQueue = [];
 
-        Dictionary<uint, InstructionBlock> instructionBlocks = [];
+        Dictionary<uint, ControlFlowBlock> instructionBlocks = [];
         
         offsetQueue.Enqueue(startPosition);
 
@@ -45,7 +45,7 @@ public class BlockDisassembler
                     throw new InvalidOperationException("Unexpectedly didn't find an index in a nested block");
                 }
 
-                var innerBlock = new InstructionBlock();
+                var innerBlock = new ControlFlowBlock();
                 innerBlock.StartAddress = position;
                 innerBlock.Instructions = existingBlock.Instructions.Skip(firstInstructionOfNestedBlockIndex)
                     .ToList();
@@ -60,10 +60,10 @@ public class BlockDisassembler
             }
 
             // only if we haven't been in this block - go disassemble it
-            var block = new InstructionBlock();
+            var block = new ControlFlowBlock();
             block.StartAddress = position;
 
-            List<Instruction> blockInstructions = [];
+            List<ControlFlowInstruction> blockInstructions = [];
 
             // jump to the block
             decoder.SetPosition(position);
@@ -79,7 +79,9 @@ public class BlockDisassembler
                     throw new InvalidOperationException($"Failed disassembling instruction at {decoder.GetPosition():X8}");
                 }
 
-                blockInstructions.Add(instruction);
+                var controlFlowInstruction = new ControlFlowInstruction(instruction);
+                
+                blockInstructions.Add(controlFlowInstruction);
 
                 if (instruction.Type.IsRet())
                 {
@@ -144,6 +146,12 @@ public class BlockDisassembler
             Debug.WriteLine($"Finished disassembling block at {block.StartAddress:X8}.");
         }
 
-        return instructionBlocks;
+        // explicitly set the starting block as an entry block
+        instructionBlocks[startPosition].IsEntryBlock = true;
+        
+        return new ControlFlowFunction()
+        {
+            Blocks = instructionBlocks
+        };
     }
 }

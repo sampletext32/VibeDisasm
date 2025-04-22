@@ -118,7 +118,7 @@ public class InstructionDecoder
                 Printer.WriteLine?.Invoke($"Handler {handler.GetType().Name} failed!");
             }
 
-            instruction.Length = GetPosition() - instruction.Address;
+            instruction.Length = (uint)(GetPosition() - instruction.Address);
 
             // Apply segment override prefix to the structured operands if needed
             if (handlerSuccess && hasSegmentOverride)

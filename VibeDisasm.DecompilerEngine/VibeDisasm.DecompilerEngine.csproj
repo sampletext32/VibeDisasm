@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -8,6 +8,11 @@
 
     <ItemGroup>
       <ProjectReference Include="..\VibeDisasm.Disassembler.X86\VibeDisasm.Disassembler.X86.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
+      <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.0.1" />
     </ItemGroup>
 
 </Project>
