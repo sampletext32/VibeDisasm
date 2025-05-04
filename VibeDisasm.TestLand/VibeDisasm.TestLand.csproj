@@ -2,18 +2,11 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\VibeDisasm.DecompilerEngine\VibeDisasm.DecompilerEngine.csproj" />
       <ProjectReference Include="..\VibeDisasm.Pe\VibeDisasm.Pe.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="PeNet" Version="5.1.0" />
     </ItemGroup>
 
 </Project>

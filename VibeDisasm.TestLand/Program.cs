@@ -303,15 +303,6 @@ foreach (var (offset, block) in controlFlowFunction.Blocks.OrderBy(x => x.Key))
     }
 }
 
-// Use ProcessStartInfo with the appropriate verb and file path
-var imageFile = Path.GetFullPath("image.png");
-var psi = new ProcessStartInfo
-{
-    FileName = imageFile,
-    UseShellExecute = true
-};
-Process.Start(psi);
-
 static string ReadNullTerminatedString(byte[] data, int offset)
 {
     int length = 0;
