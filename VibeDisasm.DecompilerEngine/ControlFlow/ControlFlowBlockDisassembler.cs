@@ -2,7 +2,7 @@
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Disassembler.X86.Operands;
 
-namespace VibeDisasm.DecompilerEngine;
+namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 public class ControlFlowBlockDisassembler
 {

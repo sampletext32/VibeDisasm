@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Disassembler.X86.Operands;
 
-namespace VibeDisasm.DecompilerEngine;
+namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 /// <summary>
 /// Provides a higher-level abstraction over x86 instructions for control flow analysis

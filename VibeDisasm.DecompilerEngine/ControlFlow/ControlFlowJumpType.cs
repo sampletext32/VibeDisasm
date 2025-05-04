@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.DecompilerEngine;
+﻿namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 public enum ControlFlowJumpType
 {

@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text;
 using VibeDisasm.DecompilerEngine;
+using VibeDisasm.DecompilerEngine.ControlFlow;
 using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
 using VibeDisasm.TestLand.Printers;

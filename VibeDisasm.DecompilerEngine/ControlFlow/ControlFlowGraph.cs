@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using VibeDisasm.Disassembler.X86;
 
-namespace VibeDisasm.DecompilerEngine;
+namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 public class ControlFlowGraph
 {

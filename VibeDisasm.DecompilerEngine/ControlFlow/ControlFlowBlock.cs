@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace VibeDisasm.DecompilerEngine;
+namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 /// <summary>
 /// Represents a basic block of instructions in the control flow graph
