@@ -3,16 +3,9 @@ using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
-public class ControlFlowGraph
+public static class ControlFlowEdgesBuilder
 {
-    private readonly ControlFlowFunction _function;
-
-    public ControlFlowGraph(ControlFlowFunction function)
-    {
-        _function = function;
-    }
-
-    public List<ControlFlowEdge> Build()
+    public static ILookup<uint, ControlFlowEdge> Build(ControlFlowFunction function)
     {
         // build predecessor and successor relation
 
@@ -22,8 +15,8 @@ public class ControlFlowGraph
         List<ControlFlowEdge> edges = [];
 
         blockQueue.Enqueue(
-            _function.Blocks.Values.FirstOrDefault(x => x.IsEntryBlock)
-            ?? throw new InvalidOperationException("ControlFlowGraph didn't expect a function without entry block")
+            function.Blocks.Values.FirstOrDefault(x => x.IsEntryBlock)
+            ?? throw new InvalidOperationException("ControlFlowEdgesBuilder didn't expect a function without entry block")
         );
 
         while (blockQueue.Count > 0)
@@ -32,13 +25,13 @@ public class ControlFlowGraph
 
             if (!visitedBlockAddresses.Add(block.StartAddress))
             {
-                Debug.WriteLine($"ControlFlowGraph already visited block {block.StartAddress:X8}");
+                Debug.WriteLine($"ControlFlowEdgesBuilder already visited block {block.StartAddress:X8}");
                 continue;
             }
 
             if (block.Instructions.Count == 0)
             {
-                throw new InvalidOperationException($"ControlFlowGraph didn't expect empty block at address {block.StartAddress:X8}");
+                throw new InvalidOperationException($"ControlFlowEdgesBuilder didn't expect empty block at address {block.StartAddress:X8}");
             }
 
             var lastInstruction = block.LastControlFlowInstruction!;
@@ -66,8 +59,8 @@ public class ControlFlowGraph
                     fallthroughEdge
                 );
                 
-                blockQueue.Enqueue(_function.Blocks[takenEdge.ToBlockAddress]);
-                blockQueue.Enqueue(_function.Blocks[fallthroughEdge.ToBlockAddress]);
+                blockQueue.Enqueue(function.Blocks[takenEdge.ToBlockAddress]);
+                blockQueue.Enqueue(function.Blocks[fallthroughEdge.ToBlockAddress]);
             }
             else if (lastInstruction.IsUnconditionalJump())
             {
@@ -81,7 +74,7 @@ public class ControlFlowGraph
                     takenEdge
                 );
 
-                blockQueue.Enqueue(_function.Blocks[takenEdge.ToBlockAddress]);
+                blockQueue.Enqueue(function.Blocks[takenEdge.ToBlockAddress]);
             }
             else if(lastInstruction.RawInstruction.Type == InstructionType.Ret)
             {
@@ -101,17 +94,17 @@ public class ControlFlowGraph
                     takenEdge
                 );
 
-                blockQueue.Enqueue(_function.Blocks[takenEdge.ToBlockAddress]);
+                blockQueue.Enqueue(function.Blocks[takenEdge.ToBlockAddress]);
             }
         }
 
-        if (visitedBlockAddresses.Count != _function.Blocks.Count)
+        if (visitedBlockAddresses.Count != function.Blocks.Count)
         {
-            Debug.WriteLine($"ControlFlowGraph didn't visit all blocks of function. Only {visitedBlockAddresses.Count} of {_function.Blocks.Count}.");
+            Debug.WriteLine($"ControlFlowEdgesBuilder didn't visit all blocks of function. Only {visitedBlockAddresses.Count} of {function.Blocks.Count}.");
         }
 
-        _ = 5;
+        var lookup = edges.ToLookup(x => x.FromBlockAddress);
 
-        return edges;
+        return lookup;
     }
 }

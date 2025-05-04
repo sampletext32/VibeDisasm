@@ -290,10 +290,6 @@ var entryPointCodeOffset = definiteCodeOffsets.FirstOrDefault(x => x.Source == "
 // Disassemble the entry point into basic blocks (control flow function)
 var controlFlowFunction = ControlFlowBlockDisassembler.DisassembleBlock(fileData, entryPointCodeOffset.FileOffset);
 
-var graph = new ControlFlowGraph(controlFlowFunction);
-
-graph.Build();
-
 Console.WriteLine("\nEntry point instruction blocks:");
 foreach (var (offset, block) in controlFlowFunction.Blocks.OrderBy(x => x.Key))
 {
@@ -303,6 +299,14 @@ foreach (var (offset, block) in controlFlowFunction.Blocks.OrderBy(x => x.Key))
         Console.WriteLine("\t{0}", blockInstruction);
     }
 }
+
+var cfgEdges = ControlFlowEdgesBuilder.Build(controlFlowFunction);
+
+var diagram = MermaidDiagramGenerator.GenerateDiagram(controlFlowFunction, cfgEdges);
+
+Console.WriteLine("Mermaid diagram----\n\n");
+
+Console.WriteLine(diagram);
 
 static string ReadNullTerminatedString(byte[] data, int offset)
 {
