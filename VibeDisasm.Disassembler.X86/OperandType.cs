@@ -5,9 +5,6 @@ namespace VibeDisasm.Disassembler.X86;
 /// </summary>
 public enum OperandType
 {
-    // No operand
-    None,
-    
     // Register operands
     Register,
     
@@ -22,8 +19,4 @@ public enum OperandType
     
     // Relative addresses
     RelativeOffset,           // Relative jump/call target
-    
-    // Special
-    SegmentRegister,          // Segment register
-    FPURegister               // FPU register
 }

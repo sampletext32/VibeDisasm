@@ -308,6 +308,8 @@ Console.WriteLine("Mermaid diagram----\n\n");
 
 Console.WriteLine(diagram);
 
+_ = 5;
+
 static string ReadNullTerminatedString(byte[] data, int offset)
 {
     int length = 0;
