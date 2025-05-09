@@ -3,8 +3,11 @@ using ImGuiNET;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
+using Microsoft.Extensions.DependencyInjection;
 using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.ImGuiUI;
+using VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.CfgVisualizer.Services;
 
 namespace VibeDisasm.CfgVisualizer;
 
@@ -25,11 +28,8 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
     private static bool _optFullscreen = _optFullscreenPersistant;
     private static ImGuiDockNodeFlags _dockspaceFlags = ImGuiDockNodeFlags.None;
 
-    // UI panels
     private List<IImGuiPanel> _imGuiPanels = [];
-    
-    // Main CFG panel
-    private CfgViewerPanel _cfgViewerPanel = null!;
+    private ActionsService _actionsService;
 
     /// <summary>
     /// Constructor
@@ -54,16 +54,34 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
 
         // Setup ImGui style
         ImGui.StyleColorsLight();
+
+        IServiceCollection serviceCollection = new ServiceCollection();
+
+        foreach (var type in Utils.GetAssignableTypes<IImGuiPanel>())
+        {
+            serviceCollection.AddSingleton(type);
+        }
+
+        serviceCollection.AddSingleton(gl);
+        serviceCollection.AddSingleton(window);
         
-        // Create panels
-        _cfgViewerPanel = new CfgViewerPanel();
-        
-        // Add panels to the list
-        _imGuiPanels = 
-        [
-            new MainMenuBar(_cfgViewerPanel),
-            _cfgViewerPanel
-        ];
+        foreach (var service in Utils.GetAssignableTypes<IService>())
+        {
+            serviceCollection.AddSingleton(service);
+        }
+
+        foreach (var service in Utils.GetAssignableTypes<IViewModel>())
+        {
+            serviceCollection.AddSingleton(service);
+        }
+
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        _imGuiPanels = Utils.GetAssignableTypes<IImGuiPanel>()
+            .Select(t => (serviceProvider.GetService(t) as IImGuiPanel)!)
+            .ToList();
+
+        _actionsService = serviceProvider.GetRequiredService<ActionsService>();
     }
 
     /// <summary>
@@ -76,9 +94,9 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
         {
             // Check if the file has a valid extension
             string extension = Path.GetExtension(paths[0]).ToLowerInvariant();
-            if (extension == ".exe" || extension == ".dll")
+            if (extension is ".exe" or ".dll")
             {
-                _cfgViewerPanel.TryLoadFile(paths[0]);
+                _actionsService.TryLoadFile(paths[0]);
             }
             else
             {

@@ -15,6 +15,7 @@
     <PackageReference Include="Silk.NET" />
     <PackageReference Include="Silk.NET.OpenGL.Extensions.ImGui" />
     <PackageReference Include="NativeFileDialogSharp" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 
   <ItemGroup>

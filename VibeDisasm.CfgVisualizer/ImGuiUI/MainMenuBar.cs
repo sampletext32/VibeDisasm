@@ -1,5 +1,6 @@
 using ImGuiNET;
 using VibeDisasm.CfgVisualizer.Abstractions;
+using VibeDisasm.CfgVisualizer.Services;
 
 namespace VibeDisasm.CfgVisualizer.ImGuiUI;
 
@@ -8,18 +9,13 @@ namespace VibeDisasm.CfgVisualizer.ImGuiUI;
 /// </summary>
 public class MainMenuBar : IImGuiPanel
 {
-    // Reference to the CFG viewer panel
-    private readonly CfgViewerPanel _cfgViewerPanel;
-    
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="cfgViewerPanel">CFG viewer panel</param>
-    public MainMenuBar(CfgViewerPanel cfgViewerPanel)
+    private readonly ActionsService _actionsService;
+
+    public MainMenuBar(ActionsService actionsService)
     {
-        _cfgViewerPanel = cfgViewerPanel;
+        _actionsService = actionsService;
     }
-    
+
     /// <summary>
     /// Renders the main menu bar
     /// </summary>
@@ -36,7 +32,7 @@ public class MainMenuBar : IImGuiPanel
                     
                     if (result.IsOk)
                     {
-                        _cfgViewerPanel.TryLoadFile(result.Path);
+                        _actionsService.TryLoadFile(result.Path);
                     }
                 }
                 
