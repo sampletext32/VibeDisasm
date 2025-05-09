@@ -61,7 +61,7 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
         // Add panels to the list
         _imGuiPanels = 
         [
-            new MainMenuBar(),
+            new MainMenuBar(_cfgViewerPanel),
             _cfgViewerPanel
         ];
     }
@@ -74,7 +74,16 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
     {
         if (paths.Length > 0)
         {
-            // _cfgViewerPanel.TryLoadFile(paths[0]);
+            // Check if the file has a valid extension
+            string extension = Path.GetExtension(paths[0]).ToLowerInvariant();
+            if (extension == ".exe" || extension == ".dll")
+            {
+                _cfgViewerPanel.TryLoadFile(paths[0]);
+            }
+            else
+            {
+                Console.WriteLine($"Unsupported file type: {extension}");
+            }
         }
     }
 

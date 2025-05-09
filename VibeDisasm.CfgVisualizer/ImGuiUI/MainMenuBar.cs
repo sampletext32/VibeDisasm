@@ -8,6 +8,18 @@ namespace VibeDisasm.CfgVisualizer.ImGuiUI;
 /// </summary>
 public class MainMenuBar : IImGuiPanel
 {
+    // Reference to the CFG viewer panel
+    private readonly CfgViewerPanel _cfgViewerPanel;
+    
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="cfgViewerPanel">CFG viewer panel</param>
+    public MainMenuBar(CfgViewerPanel cfgViewerPanel)
+    {
+        _cfgViewerPanel = cfgViewerPanel;
+    }
+    
     /// <summary>
     /// Renders the main menu bar
     /// </summary>
@@ -19,7 +31,13 @@ public class MainMenuBar : IImGuiPanel
             {
                 if (ImGui.MenuItem("Open PE File", "Ctrl+O"))
                 {
-                    // TODO: Implement file open dialog
+                    // Open file dialog using NativeFileDialogSharp
+                    var result = NativeFileDialogSharp.Dialog.FileOpen();
+                    
+                    if (result.IsOk)
+                    {
+                        _cfgViewerPanel.TryLoadFile(result.Path);
+                    }
                 }
                 
                 ImGui.Separator();

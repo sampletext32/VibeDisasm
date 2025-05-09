@@ -1,9 +1,13 @@
 using System.Numerics;
+using System.Text;
 using ImGuiNET;
 using Silk.NET.OpenGL;
 using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.DecompilerEngine;
 using VibeDisasm.DecompilerEngine.ControlFlow;
+using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.CfgVisualizer.ImGuiUI;
 
@@ -25,10 +29,16 @@ public class CfgViewerPanel : IImGuiPanel
     private CfgNodeViewModel? _selectedNode;
     private CfgNodeViewModel? _hoveredNode;
     
-    // File loading
+    // File loading and analysis
     private string _loadedFilePath = string.Empty;
-    private string _selectedFunctionName = string.Empty;
-    private List<string> _availableFunctions = [];
+    private byte[] _fileData = [];
+    private RawPeFile? _rawPeFile;
+    private PeInfo? _peInfo;
+    private ExportInfo? _exportInfo;
+    
+    // Code entry points
+    private List<(uint FileOffset, uint RVA, string Source, string Description)> _codeEntryPoints = [];
+    private int _selectedEntryPointIndex = -1;
     
     /// <summary>
     /// Renders the CFG viewer panel
@@ -60,9 +70,43 @@ public class CfgViewerPanel : IImGuiPanel
         
         if (ImGui.Button("Load PE File"))
         {
-            // TODO: Implement file dialog
-            // For now, we'll just use a hardcoded path for testing
-            // TryLoadFile(@"C:\path\to\test.exe");
+            // Open file dialog using NativeFileDialogSharp
+            var result = NativeFileDialogSharp.Dialog.FileOpen();
+            
+            if (result.IsOk)
+            {
+                TryLoadFile(result.Path);
+            }
+        }
+        
+        // Display entry point selection if we have a loaded file
+        if (_codeEntryPoints.Count > 0)
+        {
+            ImGui.Separator();
+            ImGui.Text("Entry Points:");
+            
+            if (ImGui.BeginListBox("##EntryPoints", new Vector2(-1, 200)))
+            {
+                for (int i = 0; i < _codeEntryPoints.Count; i++)
+                {
+                    var entryPoint = _codeEntryPoints[i];
+                    string label = $"{entryPoint.RVA:X8} - {entryPoint.Source}: {entryPoint.Description}";
+                    
+                    bool isSelected = i == _selectedEntryPointIndex;
+                    if (ImGui.Selectable(label, isSelected))
+                    {
+                        _selectedEntryPointIndex = i;
+                        LoadFunction(entryPoint.FileOffset);
+                    }
+                    
+                    if (isSelected)
+                    {
+                        ImGui.SetItemDefaultFocus();
+                    }
+                }
+                
+                ImGui.EndListBox();
+            }
         }
     }
     
@@ -403,6 +447,131 @@ public class CfgViewerPanel : IImGuiPanel
         ImGui.EndChild();
     }
 
+    /// <summary>
+    /// Tries to load a PE file and analyze its control flow
+    /// </summary>
+    /// <param name="filePath">Path to the PE file</param>
+    /// <returns>True if successful, false otherwise</returns>
+    public bool TryLoadFile(string filePath)
+    {
+        try
+        {
+            // Clear previous data
+            _loadedFilePath = string.Empty;
+            _fileData = [];
+            _rawPeFile = null;
+            _peInfo = null;
+            _exportInfo = null;
+            _codeEntryPoints = [];
+            _selectedEntryPointIndex = -1;
+            _cfgViewModel = null;
+            
+            // Read the file bytes
+            _fileData = File.ReadAllBytes(filePath);
+            
+            // Parse the PE file using the raw parser
+            _rawPeFile = RawPeFactory.FromBytes(_fileData);
+            
+            // Extract basic PE information
+            _peInfo = PeInfoExtractor.Extract(_rawPeFile);
+            
+            // Extract export information
+            _exportInfo = ExportExtractor.Extract(_rawPeFile);
+            
+            // Create a list to store all definite code offsets
+            _codeEntryPoints = [];
+            
+            // 1. Add entry point as definite code
+            if (_peInfo.EntryPointRva > 0)
+            {
+                uint entryPointOffset = Util.RvaToOffset(_rawPeFile, _peInfo.EntryPointRva);
+                _codeEntryPoints.Add((entryPointOffset, _peInfo.EntryPointRva, "Entry Point", "Program entry point"));
+            }
+            
+            // 2. Add exported functions as definite code
+            if (_exportInfo != null && _exportInfo.Functions.Count > 0)
+            {
+                foreach (var exportedFunction in _exportInfo.Functions)
+                {
+                    // Skip forwarded exports (they don't have code in this file)
+                    if (exportedFunction.IsForwarded)
+                        continue;
+                        
+                    uint exportOffset = Util.RvaToOffset(_rawPeFile, exportedFunction.RelativeVirtualAddress);
+                    _codeEntryPoints.Add((exportOffset, exportedFunction.RelativeVirtualAddress, "Export", 
+                        $"Exported function: {exportedFunction.Name} (Ordinal: {exportedFunction.Ordinal})"));
+                }
+            }
+            
+            // Store the file path
+            _loadedFilePath = filePath;
+            
+            // If we have entry points, select the first one
+            if (_codeEntryPoints.Count > 0)
+            {
+                _selectedEntryPointIndex = 0;
+                LoadFunction(_codeEntryPoints[0].FileOffset);
+            }
+            
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading file: {ex.Message}");
+            return false;
+        }
+    }
+    
+    /// <summary>
+    /// Loads a function from the current PE file
+    /// </summary>
+    /// <param name="fileOffset">File offset of the function</param>
+    private void LoadFunction(uint fileOffset)
+    {
+        try
+        {
+            // Disassemble the function into basic blocks (control flow function)
+            var controlFlowFunction = ControlFlowBlockDisassembler.DisassembleBlock(_fileData, fileOffset);
+            
+            // Build edges
+            var cfgEdges = ControlFlowEdgesBuilder.Build(controlFlowFunction);
+            
+            // Create the view model
+            _cfgViewModel = new CfgViewModel(controlFlowFunction);
+            
+            // Reset view
+            _panOffset = Vector2.Zero;
+            _zoom = 1.0f;
+            _selectedNode = null;
+            
+            // Generate Mermaid diagram for debugging
+            var diagram = MermaidDiagramGenerator.GenerateDiagram(controlFlowFunction, cfgEdges);
+            Console.WriteLine("Mermaid diagram:\n");
+            Console.WriteLine(diagram);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading function: {ex.Message}");
+        }
+    }
+    
+    /// <summary>
+    /// Helper method to read a null-terminated string from a byte array
+    /// </summary>
+    /// <param name="data">Byte array</param>
+    /// <param name="offset">Offset to start reading from</param>
+    /// <returns>The null-terminated string</returns>
+    private static string ReadNullTerminatedString(byte[] data, int offset)
+    {
+        int length = 0;
+        while (offset + length < data.Length && data[offset + length] != 0)
+        {
+            length++;
+        }
+        
+        return Encoding.ASCII.GetString(data, offset, length);
+    }
+    
     /// <summary>
     /// Rectangle structure for hit testing
     /// </summary>
