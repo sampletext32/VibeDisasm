@@ -74,74 +74,84 @@ public class CfgViewModel
     }
     
     /// <summary>
-    /// Performs automatic layout of the nodes
+    /// Performs improved layout of the nodes for better control flow visualization.
+    /// For conditional jumps, the taken branch is always to the left, fallthrough below.
     /// </summary>
     public void PerformLayout()
     {
-        // Simple layered layout algorithm
-        // Group nodes by their depth in the CFG
-        var layers = new Dictionary<int, List<CfgNodeViewModel>>();
+        // Constants for layout
+        const float nodeWidth = 200.0f;
+        const float nodeHeight = 100.0f;
+        const float horizontalSpacing = 80.0f;
+        const float verticalSpacing = 80.0f;
+
+        // Reset all node positions
+        foreach (var node in Nodes)
+            node.Position = Vector2.Zero;
+
+        // Track visited nodes to avoid cycles
         var visited = new HashSet<CfgNodeViewModel>();
-        var queue = new Queue<(CfgNodeViewModel Node, int Depth)>();
-        
+
         // Start with the entry node
         var entryNode = Nodes.FirstOrDefault(n => n.Block.IsEntryBlock);
-        if (entryNode != null)
+        if (entryNode == null)
+            return;
+
+        // Recursively layout the graph
+        LayoutNode(entryNode, 0, 0, visited);
+    }
+
+    /// <summary>
+    /// Recursively lays out the graph, placing taken branches to the left
+    /// and fallthroughs below the node.
+    /// </summary>
+    /// <param name="node">Current node</param>
+    /// <param name="x">X position (grid units)</param>
+    /// <param name="y">Y position (grid units)</param>
+    /// <param name="visited">Visited nodes</param>
+    private void LayoutNode(CfgNodeViewModel node, int x, int y, HashSet<CfgNodeViewModel> visited)
+    {
+        // Constants for layout
+        const float nodeWidth = 200.0f;
+        const float nodeHeight = 100.0f;
+        const float horizontalSpacing = 80.0f;
+        const float verticalSpacing = 80.0f;
+
+        if (!visited.Add(node))
+            return;
+
+        // Set node position
+        node.Position = new Vector2(x * (nodeWidth + horizontalSpacing), y * (nodeHeight + verticalSpacing));
+
+        // Get outgoing edges
+        var outgoing = Edges.Where(e => e.Source == node).ToList();
+        if (outgoing.Count == 0)
+            return;
+
+        // Classify edges
+        var takenEdge = outgoing.FirstOrDefault(e => !e.IsFallthrough);
+        var fallthroughEdge = outgoing.FirstOrDefault(e => e.IsFallthrough);
+
+        int nextY = y + 1;
+
+        // Layout taken branch to the left
+        if (takenEdge != null)
         {
-            queue.Enqueue((entryNode, 0));
-            visited.Add(entryNode);
+            LayoutNode(takenEdge.Target, x - 1, nextY, visited);
         }
-        
-        // Breadth-first traversal to assign layers
-        while (queue.Count > 0)
+        // Layout fallthrough branch below
+        if (fallthroughEdge != null)
         {
-            var (node, depth) = queue.Dequeue();
-            
-            if (!layers.TryGetValue(depth, out var layer))
-            {
-                layer = [];
-                layers[depth] = layer;
-            }
-            
-            layer.Add(node);
-            
-            // Enqueue successors
-            foreach (var edge in Edges.Where(e => e.Source == node))
-            {
-                if (!visited.Contains(edge.Target))
-                {
-                    queue.Enqueue((edge.Target, depth + 1));
-                    visited.Add(edge.Target);
-                }
-            }
+            LayoutNode(fallthroughEdge.Target, x, nextY, visited);
         }
-        
-        // Position nodes based on their layer
-        const float layerHeight = 150.0f;
-        const float nodeSpacing = 50.0f;
-        
-        foreach (var (depth, nodes) in layers.OrderBy(kv => kv.Key))
+
+        // Layout any other outgoing edges (e.g. unconditional jumps) to the right
+        foreach (var edge in outgoing)
         {
-            float layerWidth = nodes.Count * 250.0f;
-            float startX = -layerWidth / 2;
-            
-            for (int i = 0; i < nodes.Count; i++)
+            if (edge != takenEdge && edge != fallthroughEdge)
             {
-                nodes[i].Position = new Vector2(
-                    startX + i * (nodes[i].Size.X + nodeSpacing),
-                    depth * layerHeight
-                );
+                LayoutNode(edge.Target, x + 1, nextY, visited);
             }
-        }
-        
-        // Handle any nodes that weren't visited
-        float y = (layers.Count > 0 ? layers.Keys.Max() + 1 : 0) * layerHeight;
-        float x = -((Nodes.Count - visited.Count) * 250.0f) / 2;
-        
-        foreach (var node in Nodes.Where(n => !visited.Contains(n)))
-        {
-            node.Position = new Vector2(x, y);
-            x += node.Size.X + nodeSpacing;
         }
     }
 }

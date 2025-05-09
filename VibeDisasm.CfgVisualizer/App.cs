@@ -77,6 +77,8 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
+        _ = serviceProvider.GetRequiredService<MainViewModel>();
+
         _imGuiPanels = Utils.GetAssignableTypes<IImGuiPanel>()
             .Select(t => (serviceProvider.GetService(t) as IImGuiPanel)!)
             .ToList();
