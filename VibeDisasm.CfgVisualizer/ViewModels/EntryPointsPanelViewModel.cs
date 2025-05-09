@@ -1,9 +1,9 @@
-namespace VibeDisasm.CfgVisualizer.Models;
+namespace VibeDisasm.CfgVisualizer.ViewModels;
 
 /// <summary>
 /// View model for the entry points panel
 /// </summary>
-public class EntryPointsViewModel : IViewModel
+public class EntryPointsPanelViewModel : IViewModel
 {
     // Entry points list
     public List<EntryPointInfo> EntryPoints { get; private set; } = [];
@@ -17,7 +17,7 @@ public class EntryPointsViewModel : IViewModel
     /// <summary>
     /// Constructor
     /// </summary>
-    public EntryPointsViewModel()
+    public EntryPointsPanelViewModel()
     {
     }
     

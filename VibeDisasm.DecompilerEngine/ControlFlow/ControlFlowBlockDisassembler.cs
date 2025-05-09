@@ -45,8 +45,7 @@ public class ControlFlowBlockDisassembler
                     throw new InvalidOperationException("Unexpectedly didn't find an index in a nested block");
                 }
 
-                var innerBlock = new ControlFlowBlock();
-                innerBlock.StartAddress = position;
+                var innerBlock = new ControlFlowBlock(position);
                 innerBlock.Instructions = existingBlock.Instructions.Skip(firstInstructionOfNestedBlockIndex)
                     .ToList();
 
@@ -60,8 +59,7 @@ public class ControlFlowBlockDisassembler
             }
 
             // only if we haven't been in this block - go disassemble it
-            var block = new ControlFlowBlock();
-            block.StartAddress = position;
+            var block = new ControlFlowBlock(position);
 
             List<ControlFlowInstruction> blockInstructions = [];
 

@@ -2,7 +2,8 @@ using System.Numerics;
 using ImGuiNET;
 using Silk.NET.OpenGL;
 using VibeDisasm.CfgVisualizer.Abstractions;
-using VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.CfgVisualizer.Models.Graph;
+using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 
@@ -12,7 +13,7 @@ namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 public class CfgCanvasPanel : IImGuiPanel
 {
     // View model
-    private readonly CfgCanvasViewModel _viewModel;
+    private readonly CfgCanvasPanelViewModel _panelViewModel;
     
     // Panning state
     private bool _isPanning = false;
@@ -21,10 +22,10 @@ public class CfgCanvasPanel : IImGuiPanel
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="viewModel">CFG canvas view model</param>
-    public CfgCanvasPanel(CfgCanvasViewModel viewModel)
+    /// <param name="panelViewModel">CFG canvas view model</param>
+    public CfgCanvasPanel(CfgCanvasPanelViewModel panelViewModel)
     {
-        _viewModel = viewModel;
+        _panelViewModel = panelViewModel;
     }
     
     /// <summary>
@@ -36,7 +37,7 @@ public class CfgCanvasPanel : IImGuiPanel
         bool isOpen = ImGui.Begin("CFG Canvas");
         if (isOpen)
         {
-            if (_viewModel.CfgViewModel == null)
+            if (_panelViewModel.CfgViewModel == null)
             {
                 ImGui.TextColored(new Vector4(0.7f, 0.7f, 0.7f, 1.0f), "No CFG data available");
             }
@@ -54,22 +55,22 @@ public class CfgCanvasPanel : IImGuiPanel
                 HandleCanvasInput(canvasPos, canvasSize);
                 
                 // Calculate transform
-                var transform = _viewModel.GetTransform(canvasSize);
+                var transform = _panelViewModel.GetTransform(canvasSize);
                 
                 // Draw edges
-                foreach (var edge in _viewModel.CfgViewModel.Edges)
+                foreach (var edge in _panelViewModel.CfgViewModel.Edges)
                 {
                     DrawEdge(drawList, edge, canvasPos, transform);
                 }
                 
                 // Draw nodes
-                foreach (var node in _viewModel.CfgViewModel.Nodes)
+                foreach (var node in _panelViewModel.CfgViewModel.Nodes)
                 {
                     DrawNode(drawList, node, canvasPos, transform);
                 }
                 
                 // Draw status text in the bottom-right corner
-                string statusText = $"Zoom: {_viewModel.Zoom:F2}x | Pan: ({_viewModel.PanOffset.X:F1}, {_viewModel.PanOffset.Y:F1}) | Nodes: {_viewModel.CfgViewModel.Nodes.Count} | Edges: {_viewModel.CfgViewModel.Edges.Count}";
+                string statusText = $"Zoom: {_panelViewModel.Zoom:F2}x | Pan: ({_panelViewModel.PanOffset.X:F1}, {_panelViewModel.PanOffset.Y:F1}) | Nodes: {_panelViewModel.CfgViewModel.Nodes.Count} | Edges: {_panelViewModel.CfgViewModel.Edges.Count}";
                 var statusTextSize = ImGui.CalcTextSize(statusText);
                 drawList.AddText(
                     new Vector2(canvasPos.X + canvasSize.X - statusTextSize.X - 10, canvasPos.Y + canvasSize.Y - statusTextSize.Y - 10),
@@ -96,29 +97,29 @@ public class CfgCanvasPanel : IImGuiPanel
         // Zoom controls
         if (ImGui.Button("-"))
         {
-            float newZoom = _viewModel.Zoom * (1 - CfgCanvasViewModel.ZOOM_SPEED * 2);
-            _viewModel.SetZoom(newZoom);
+            float newZoom = _panelViewModel.Zoom * (1 - CfgCanvasPanelViewModel.ZOOM_SPEED * 2);
+            _panelViewModel.SetZoom(newZoom);
         }
         
         ImGui.SameLine();
         ImGui.SetNextItemWidth(100);
-        float zoom = _viewModel.Zoom;
-        if (ImGui.SliderFloat("##Zoom", ref zoom, CfgCanvasViewModel.MIN_ZOOM, CfgCanvasViewModel.MAX_ZOOM, "Zoom: %.2fx"))
+        float zoom = _panelViewModel.Zoom;
+        if (ImGui.SliderFloat("##Zoom", ref zoom, CfgCanvasPanelViewModel.MIN_ZOOM, CfgCanvasPanelViewModel.MAX_ZOOM, "Zoom: %.2fx"))
         {
-            _viewModel.SetZoom(zoom);
+            _panelViewModel.SetZoom(zoom);
         }
         
         ImGui.SameLine();
         if (ImGui.Button("+"))
         {
-            float newZoom = _viewModel.Zoom * (1 + CfgCanvasViewModel.ZOOM_SPEED * 2);
-            _viewModel.SetZoom(newZoom);
+            float newZoom = _panelViewModel.Zoom * (1 + CfgCanvasPanelViewModel.ZOOM_SPEED * 2);
+            _panelViewModel.SetZoom(newZoom);
         }
         
         ImGui.SameLine();
         if (ImGui.Button("Reset View"))
         {
-            _viewModel.ResetView();
+            _panelViewModel.ResetView();
         }
         
         ImGui.SameLine();
@@ -128,9 +129,9 @@ public class CfgCanvasPanel : IImGuiPanel
         // Layout controls
         if (ImGui.Button("Auto Layout"))
         {
-            if (_viewModel.CfgViewModel != null)
+            if (_panelViewModel.CfgViewModel != null)
             {
-                _viewModel.CfgViewModel.PerformLayout();
+                _panelViewModel.CfgViewModel.PerformLayout();
             }
         }
         
@@ -166,7 +167,7 @@ public class CfgCanvasPanel : IImGuiPanel
             else
             {
                 var delta = mousePos - _lastMousePos;
-                _viewModel.AdjustPan(delta);
+                _panelViewModel.AdjustPan(delta);
                 _lastMousePos = mousePos;
             }
         }
@@ -181,7 +182,7 @@ public class CfgCanvasPanel : IImGuiPanel
             else
             {
                 var delta = mousePos - _lastMousePos;
-                _viewModel.AdjustPan(delta);
+                _panelViewModel.AdjustPan(delta);
                 _lastMousePos = mousePos;
             }
         }
@@ -195,10 +196,10 @@ public class CfgCanvasPanel : IImGuiPanel
         if (ImGui.IsWindowHovered() && io.MouseWheel != 0)
         {
             // Calculate mouse position in world space before zoom
-            var mouseWorldPos = _viewModel.ScreenToWorld(mousePos, canvasSize);
+            var mouseWorldPos = _panelViewModel.ScreenToWorld(mousePos, canvasSize);
             
             // Apply zoom
-            _viewModel.AdjustZoom(io.MouseWheel, mouseWorldPos);
+            _panelViewModel.AdjustZoom(io.MouseWheel, mouseWorldPos);
         }
         
         // Handle zooming with keyboard
@@ -207,44 +208,44 @@ public class CfgCanvasPanel : IImGuiPanel
             // Zoom in with + key
             if (ImGui.IsKeyPressed(ImGuiKey.Equal) || ImGui.IsKeyPressed(ImGuiKey.KeypadAdd))
             {
-                float newZoom = _viewModel.Zoom * (1 + CfgCanvasViewModel.ZOOM_SPEED);
-                _viewModel.SetZoom(newZoom);
+                float newZoom = _panelViewModel.Zoom * (1 + CfgCanvasPanelViewModel.ZOOM_SPEED);
+                _panelViewModel.SetZoom(newZoom);
             }
             
             // Zoom out with - key
             if (ImGui.IsKeyPressed(ImGuiKey.Minus) || ImGui.IsKeyPressed(ImGuiKey.KeypadSubtract))
             {
-                float newZoom = _viewModel.Zoom * (1 - CfgCanvasViewModel.ZOOM_SPEED);
-                _viewModel.SetZoom(newZoom);
+                float newZoom = _panelViewModel.Zoom * (1 - CfgCanvasPanelViewModel.ZOOM_SPEED);
+                _panelViewModel.SetZoom(newZoom);
             }
             
             // Reset view with 0 key
             if (ImGui.IsKeyPressed(ImGuiKey._0) || ImGui.IsKeyPressed(ImGuiKey.Keypad0))
             {
-                _viewModel.ResetView();
+                _panelViewModel.ResetView();
             }
             
             // Pan with arrow keys
             Vector2 keyPanDelta = Vector2.Zero;
-            if (ImGui.IsKeyDown(ImGuiKey.LeftArrow)) keyPanDelta.X += 10.0f / _viewModel.Zoom;
-            if (ImGui.IsKeyDown(ImGuiKey.RightArrow)) keyPanDelta.X -= 10.0f / _viewModel.Zoom;
-            if (ImGui.IsKeyDown(ImGuiKey.UpArrow)) keyPanDelta.Y += 10.0f / _viewModel.Zoom;
-            if (ImGui.IsKeyDown(ImGuiKey.DownArrow)) keyPanDelta.Y -= 10.0f / _viewModel.Zoom;
+            if (ImGui.IsKeyDown(ImGuiKey.LeftArrow)) keyPanDelta.X += 10.0f / _panelViewModel.Zoom;
+            if (ImGui.IsKeyDown(ImGuiKey.RightArrow)) keyPanDelta.X -= 10.0f / _panelViewModel.Zoom;
+            if (ImGui.IsKeyDown(ImGuiKey.UpArrow)) keyPanDelta.Y += 10.0f / _panelViewModel.Zoom;
+            if (ImGui.IsKeyDown(ImGuiKey.DownArrow)) keyPanDelta.Y -= 10.0f / _panelViewModel.Zoom;
             
             if (keyPanDelta != Vector2.Zero)
             {
-                _viewModel.AdjustPan(keyPanDelta);
+                _panelViewModel.AdjustPan(keyPanDelta);
             }
         }
         
         // Handle node selection
         if (ImGui.IsMouseClicked(ImGuiMouseButton.Left) && !ImGui.IsAnyItemHovered())
         {
-            var worldPos = _viewModel.ScreenToWorld(mousePos, canvasSize);
-            CfgNodeViewModel? selectedNode = null;
+            var worldPos = _panelViewModel.ScreenToWorld(mousePos, canvasSize);
+            CfgNodeView? selectedNode = null;
             
             // Check if a node was clicked
-            foreach (var node in _viewModel.CfgViewModel?.Nodes ?? [])
+            foreach (var node in _panelViewModel.CfgViewModel?.Nodes ?? [])
             {
                 var nodeRect = new Rect(
                     node.Position.X - node.Size.X / 2,
@@ -261,17 +262,17 @@ public class CfgCanvasPanel : IImGuiPanel
             }
             
             // Update selected node in view model
-            _viewModel.SelectNode(selectedNode);
+            _panelViewModel.SelectNode(selectedNode);
         }
         
         // Handle node hovering
         if (!_isPanning)
         {
-            var worldPos = _viewModel.ScreenToWorld(mousePos, canvasSize);
-            CfgNodeViewModel? hoveredNode = null;
+            var worldPos = _panelViewModel.ScreenToWorld(mousePos, canvasSize);
+            CfgNodeView? hoveredNode = null;
             
             // Check if a node is hovered
-            foreach (var node in _viewModel.CfgViewModel?.Nodes ?? [])
+            foreach (var node in _panelViewModel.CfgViewModel?.Nodes ?? [])
             {
                 var nodeRect = new Rect(
                     node.Position.X - node.Size.X / 2,
@@ -288,44 +289,10 @@ public class CfgCanvasPanel : IImGuiPanel
             }
             
             // Update hovered node in view model
-            _viewModel.HoverNode(hoveredNode);
+            _panelViewModel.HoverNode(hoveredNode);
         }
     }
-    
-    /// <summary>
-    /// Converts a screen position to a world position
-    /// </summary>
-    /// <param name="screenPos">Screen position</param>
-    /// <param name="canvasPos">Canvas position</param>
-    /// <param name="canvasSize">Canvas size</param>
-    /// <returns>World position</returns>
-    private Vector2 ScreenToWorld(Vector2 screenPos, Vector2 canvasPos, Vector2 canvasSize)
-    {
-        // Apply inverse transform
-        var transform = Matrix3x2.CreateTranslation(-canvasSize / 2) * 
-                       Matrix3x2.CreateScale(1.0f / _viewModel.Zoom) * 
-                       Matrix3x2.CreateTranslation(-_viewModel.PanOffset);
-                       
-        return Vector2.Transform(screenPos, transform);
-    }
-    
-    /// <summary>
-    /// Converts a world position to a screen position
-    /// </summary>
-    /// <param name="worldPos">World position</param>
-    /// <param name="canvasPos">Canvas position</param>
-    /// <param name="canvasSize">Canvas size</param>
-    /// <returns>Screen position</returns>
-    private Vector2 WorldToScreen(Vector2 worldPos, Vector2 canvasPos, Vector2 canvasSize)
-    {
-        // Apply transform
-        var transform = Matrix3x2.CreateTranslation(_viewModel.PanOffset) * 
-                       Matrix3x2.CreateScale(_viewModel.Zoom) * 
-                       Matrix3x2.CreateTranslation(canvasSize / 2);
-                       
-        return Vector2.Transform(worldPos, transform) + canvasPos;
-    }
-    
+
     /// <summary>
     /// Draws a node on the canvas
     /// </summary>
@@ -333,11 +300,11 @@ public class CfgCanvasPanel : IImGuiPanel
     /// <param name="node">Node to draw</param>
     /// <param name="canvasPos">Canvas position</param>
     /// <param name="transform">Transform matrix</param>
-    private void DrawNode(ImDrawListPtr drawList, CfgNodeViewModel node, Vector2 canvasPos, Matrix3x2 transform)
+    private void DrawNode(ImDrawListPtr drawList, CfgNodeView node, Vector2 canvasPos, Matrix3x2 transform)
     {
         // Transform node position and size
         var pos = Vector2.Transform(node.Position, transform) + canvasPos;
-        var size = node.Size * _viewModel.Zoom;
+        var size = node.Size * _panelViewModel.Zoom;
         
         // Calculate node rectangle
         var rect = new Rect(
@@ -349,9 +316,9 @@ public class CfgCanvasPanel : IImGuiPanel
         
         // Determine node color
         var color = node.Color;
-        if (node == _viewModel.SelectedNode)
+        if (node == _panelViewModel.SelectedNode)
             color = new Vector4(0.2f, 0.6f, 1.0f, 1.0f);
-        else if (node == _viewModel.HoveredNode)
+        else if (node == _panelViewModel.HoveredNode)
             color = new Vector4(0.4f, 0.8f, 1.0f, 1.0f);
         
         // Draw node background
@@ -373,7 +340,7 @@ public class CfgCanvasPanel : IImGuiPanel
         );
         
         // Draw node address
-        var addressText = $"0x{node.Block.StartAddress:X8}";
+        var addressText = node.Block.ComputedStartAddressView;
         var addressTextSize = ImGui.CalcTextSize(addressText);
         drawList.AddText(
             new Vector2(
@@ -388,8 +355,7 @@ public class CfgCanvasPanel : IImGuiPanel
         var contentText = string.Join("\n", node.Block.Instructions.Take(3).Select(i => i.ToString()));
         if (node.Block.Instructions.Count > 3)
             contentText += "\n...";
-            
-        var contentTextSize = ImGui.CalcTextSize(contentText);
+
         drawList.AddText(
             new Vector2(
                 rect.X + 5,
@@ -407,15 +373,15 @@ public class CfgCanvasPanel : IImGuiPanel
     /// <param name="edge">Edge to draw</param>
     /// <param name="canvasPos">Canvas position</param>
     /// <param name="transform">Transform matrix</param>
-    private void DrawEdge(ImDrawListPtr drawList, CfgEdgeViewModel edge, Vector2 canvasPos, Matrix3x2 transform)
+    private void DrawEdge(ImDrawListPtr drawList, CfgEdgeView edge, Vector2 canvasPos, Matrix3x2 transform)
     {
         // Transform node positions
         var sourcePos = Vector2.Transform(edge.Source.Position, transform) + canvasPos;
         var targetPos = Vector2.Transform(edge.Target.Position, transform) + canvasPos;
         
         // Calculate edge points
-        var sourceSize = edge.Source.Size * _viewModel.Zoom;
-        var targetSize = edge.Target.Size * _viewModel.Zoom;
+        var sourceSize = edge.Source.Size * _panelViewModel.Zoom;
+        var targetSize = edge.Target.Size * _panelViewModel.Zoom;
         
         // Calculate direction vector
         var dir = Vector2.Normalize(targetPos - sourcePos);
@@ -426,9 +392,9 @@ public class CfgCanvasPanel : IImGuiPanel
         
         // Determine edge color
         var color = edge.Color;
-        if (edge.Source == _viewModel.SelectedNode || edge.Target == _viewModel.SelectedNode)
+        if (edge.Source == _panelViewModel.SelectedNode || edge.Target == _panelViewModel.SelectedNode)
             color = new Vector4(0.2f, 0.6f, 1.0f, 1.0f);
-        else if (edge.Source == _viewModel.HoveredNode || edge.Target == _viewModel.HoveredNode)
+        else if (edge.Source == _panelViewModel.HoveredNode || edge.Target == _panelViewModel.HoveredNode)
             color = new Vector4(0.4f, 0.8f, 1.0f, 1.0f);
         
         // Draw edge line
@@ -440,7 +406,7 @@ public class CfgCanvasPanel : IImGuiPanel
         );
         
         // Draw arrow
-        var arrowSize = 10.0f * _viewModel.Zoom;
+        var arrowSize = 10.0f * _panelViewModel.Zoom;
         var arrowDir = Vector2.Normalize(end - start);
         var arrowPerp = new Vector2(-arrowDir.Y, arrowDir.X);
         

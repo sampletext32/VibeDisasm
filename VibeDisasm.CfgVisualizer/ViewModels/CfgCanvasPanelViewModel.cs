@@ -1,22 +1,23 @@
 using System.Numerics;
+using VibeDisasm.CfgVisualizer.Models.Graph;
 
-namespace VibeDisasm.CfgVisualizer.Models;
+namespace VibeDisasm.CfgVisualizer.ViewModels;
 
 /// <summary>
 /// View model for the CFG canvas
 /// </summary>
-public class CfgCanvasViewModel : IViewModel
+public class CfgCanvasPanelViewModel : IViewModel
 {
     // Current CFG view model
-    public CfgViewModel? CfgViewModel { get; private set; }
+    public CfgView? CfgViewModel { get; private set; }
     
     // Panning and zooming
     public Vector2 PanOffset { get; private set; } = Vector2.Zero;
     public float Zoom { get; private set; } = 1.0f;
     
     // Node selection
-    public CfgNodeViewModel? SelectedNode { get; private set; }
-    public CfgNodeViewModel? HoveredNode { get; private set; }
+    public CfgNodeView? SelectedNode { get; private set; }
+    public CfgNodeView? HoveredNode { get; private set; }
     
     // Constants
     public const float MIN_ZOOM = 0.1f;
@@ -26,21 +27,14 @@ public class CfgCanvasViewModel : IViewModel
     
     // Events
     public event EventHandler<NodeSelectionChangedEventArgs>? NodeSelectionChanged;
-    
+
     /// <summary>
-    /// Constructor
+    /// Sets the CFG view
     /// </summary>
-    public CfgCanvasViewModel()
+    /// <param name="cfgView">CFG view</param>
+    public void SetCfg(CfgView? cfgView)
     {
-    }
-    
-    /// <summary>
-    /// Sets the CFG view model
-    /// </summary>
-    /// <param name="cfgViewModel">CFG view model</param>
-    public void SetCfgViewModel(CfgViewModel? cfgViewModel)
-    {
-        CfgViewModel = cfgViewModel;
+        CfgViewModel = cfgView;
         ResetView();
     }
     
@@ -102,7 +96,7 @@ public class CfgCanvasViewModel : IViewModel
     /// Sets the selected node
     /// </summary>
     /// <param name="node">Node to select</param>
-    public void SelectNode(CfgNodeViewModel? node)
+    public void SelectNode(CfgNodeView? node)
     {
         SelectedNode = node;
         
@@ -114,7 +108,7 @@ public class CfgCanvasViewModel : IViewModel
     /// Sets the hovered node
     /// </summary>
     /// <param name="node">Node to hover</param>
-    public void HoverNode(CfgNodeViewModel? node)
+    public void HoverNode(CfgNodeView? node)
     {
         HoveredNode = node;
     }
@@ -133,22 +127,6 @@ public class CfgCanvasViewModel : IViewModel
                        Matrix3x2.CreateTranslation(-PanOffset);
                        
         return Vector2.Transform(screenPos, transform);
-    }
-    
-    /// <summary>
-    /// Converts a world position to a screen position
-    /// </summary>
-    /// <param name="worldPos">World position</param>
-    /// <param name="canvasSize">Canvas size</param>
-    /// <returns>Screen position</returns>
-    public Vector2 WorldToScreen(Vector2 worldPos, Vector2 canvasSize)
-    {
-        // Apply transform
-        var transform = Matrix3x2.CreateTranslation(PanOffset) * 
-                       Matrix3x2.CreateScale(Zoom) * 
-                       Matrix3x2.CreateTranslation(canvasSize / 2);
-                       
-        return Vector2.Transform(worldPos, transform);
     }
     
     /// <summary>
@@ -172,12 +150,12 @@ public class NodeSelectionChangedEventArgs : EventArgs
     /// <summary>
     /// Selected node
     /// </summary>
-    public CfgNodeViewModel? SelectedNode { get; }
+    public CfgNodeView? SelectedNode { get; }
     
     /// <summary>
     /// Constructor
     /// </summary>
-    public NodeSelectionChangedEventArgs(CfgNodeViewModel? selectedNode)
+    public NodeSelectionChangedEventArgs(CfgNodeView? selectedNode)
     {
         SelectedNode = selectedNode;
     }

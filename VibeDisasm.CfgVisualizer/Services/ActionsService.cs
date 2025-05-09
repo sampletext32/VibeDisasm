@@ -1,15 +1,15 @@
-﻿using VibeDisasm.CfgVisualizer.Models;
+﻿using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.Services;
 
 public class ActionsService : IService
 {
-    private readonly FileLoadingViewModel _fileLoadingViewModel;
+    private readonly FileLoadingPanelViewModel _fileLoadingPanelViewModel;
 
-    public ActionsService(FileLoadingViewModel fileLoadingViewModel)
+    public ActionsService(FileLoadingPanelViewModel fileLoadingPanelViewModel)
     {
-        _fileLoadingViewModel = fileLoadingViewModel;
+        _fileLoadingPanelViewModel = fileLoadingPanelViewModel;
     }
 
-    public bool TryLoadFile(string path) => _fileLoadingViewModel.TryLoadFile(path);
+    public bool TryLoadFile(string path) => _fileLoadingPanelViewModel.TryLoadFile(path);
 }

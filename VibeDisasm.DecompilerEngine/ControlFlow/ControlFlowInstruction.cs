@@ -28,6 +28,9 @@ public class ControlFlowInstruction
     /// The type of the instruction
     /// </summary>
     public InstructionType Type => RawInstruction.Type;
+
+    public string ComputedView { get; }
+    public string ComputedAddressView { get; }
     
     /// <summary>
     /// Creates a new control flow instruction wrapper
@@ -35,6 +38,8 @@ public class ControlFlowInstruction
     public ControlFlowInstruction(Instruction instruction)
     {
         RawInstruction = instruction;
+        ComputedView = instruction.ToString();
+        ComputedAddressView = instruction.Address.ToString("0xX8");
     }
     
     /// <summary>

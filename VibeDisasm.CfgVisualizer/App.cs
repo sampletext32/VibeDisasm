@@ -6,8 +6,8 @@ using Silk.NET.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.ImGuiUI;
-using VibeDisasm.CfgVisualizer.Models;
 using VibeDisasm.CfgVisualizer.Services;
+using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer;
 
@@ -77,7 +77,7 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
 
         var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        _ = serviceProvider.GetRequiredService<MainViewModel>();
+        _ = serviceProvider.GetRequiredService<AppState>();
 
         _imGuiPanels = Utils.GetAssignableTypes<IImGuiPanel>()
             .Select(t => (serviceProvider.GetService(t) as IImGuiPanel)!)

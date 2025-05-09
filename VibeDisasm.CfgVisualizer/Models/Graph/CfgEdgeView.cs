@@ -1,21 +1,21 @@
 using System.Numerics;
 
-namespace VibeDisasm.CfgVisualizer.Models;
+namespace VibeDisasm.CfgVisualizer.Models.Graph;
 
 /// <summary>
 /// View model for a CFG edge in the visualization
 /// </summary>
-public class CfgEdgeViewModel
+public class CfgEdgeView
 {
     /// <summary>
     /// Source node of the edge
     /// </summary>
-    public CfgNodeViewModel Source { get; }
+    public CfgNodeView Source { get; }
     
     /// <summary>
     /// Target node of the edge
     /// </summary>
-    public CfgNodeViewModel Target { get; }
+    public CfgNodeView Target { get; }
     
     /// <summary>
     /// Whether this is a fallthrough edge (not a jump)
@@ -35,7 +35,7 @@ public class CfgEdgeViewModel
     /// <summary>
     /// Unique identifier for the edge
     /// </summary>
-    public string Id => $"{Source.Id}->{Target.Id}";
+    public string Id { get; }
 
     /// <summary>
     /// Constructor
@@ -43,10 +43,12 @@ public class CfgEdgeViewModel
     /// <param name="source">Source node</param>
     /// <param name="target">Target node</param>
     /// <param name="isFallthrough">Whether this is a fallthrough edge</param>
-    public CfgEdgeViewModel(CfgNodeViewModel source, CfgNodeViewModel target, bool isFallthrough)
+    public CfgEdgeView(CfgNodeView source, CfgNodeView target, bool isFallthrough)
     {
         Source = source;
         Target = target;
+        Id = $"{Source.Id}->{Target.Id}";
+
         IsFallthrough = isFallthrough;
         
         // Default color: green for fallthrough, red for jumps

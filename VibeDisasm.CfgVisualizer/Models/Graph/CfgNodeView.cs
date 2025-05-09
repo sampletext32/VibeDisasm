@@ -1,12 +1,12 @@
 using System.Numerics;
 using VibeDisasm.DecompilerEngine.ControlFlow;
 
-namespace VibeDisasm.CfgVisualizer.Models;
+namespace VibeDisasm.CfgVisualizer.Models.Graph;
 
 /// <summary>
 /// View model for a CFG node in the visualization
 /// </summary>
-public class CfgNodeViewModel
+public class CfgNodeView
 {
     /// <summary>
     /// The underlying control flow block
@@ -41,15 +41,16 @@ public class CfgNodeViewModel
     /// <summary>
     /// Unique identifier for the node
     /// </summary>
-    public string Id => Block.StartAddress.ToString("X");
+    public string Id { get; }
 
     /// <summary>
     /// Constructor
     /// </summary>
     /// <param name="block">Control flow block</param>
-    public CfgNodeViewModel(ControlFlowBlock block)
+    public CfgNodeView(ControlFlowBlock block)
     {
         Block = block;
+        Id = Block.StartAddress.ToString("X");
         Position = Vector2.Zero;
         Size = new Vector2(200, 100);
         Color = new Vector4(0.7f, 0.7f, 0.7f, 1.0f);

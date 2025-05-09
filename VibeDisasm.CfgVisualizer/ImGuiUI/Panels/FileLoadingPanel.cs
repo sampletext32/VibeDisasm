@@ -1,7 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using VibeDisasm.CfgVisualizer.Abstractions;
-using VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 
@@ -11,15 +11,15 @@ namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 public class FileLoadingPanel : IImGuiPanel
 {
     // View model
-    private readonly FileLoadingViewModel _viewModel;
+    private readonly FileLoadingPanelViewModel _panelViewModel;
     
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="viewModel">File loading view model</param>
-    public FileLoadingPanel(FileLoadingViewModel viewModel)
+    /// <param name="panelViewModel">File loading view model</param>
+    public FileLoadingPanel(FileLoadingPanelViewModel panelViewModel)
     {
-        _viewModel = viewModel;
+        _panelViewModel = panelViewModel;
     }
     
     /// <summary>
@@ -32,8 +32,8 @@ public class FileLoadingPanel : IImGuiPanel
         if (isOpen)
         {
             // Display loaded file name
-            ImGui.Text("Loaded: " + (_viewModel.LoadedFilePath.Length > 0 ? 
-                Path.GetFileName(_viewModel.LoadedFilePath) : "None"));
+            ImGui.Text("Loaded: " + (_panelViewModel.LoadedFilePath.Length > 0 ? 
+                Path.GetFileName(_panelViewModel.LoadedFilePath) : "None"));
             
             ImGui.SameLine();
             
@@ -45,7 +45,7 @@ public class FileLoadingPanel : IImGuiPanel
                 
                 if (result.IsOk)
                 {
-                    _viewModel.TryLoadFile(result.Path);
+                    _panelViewModel.TryLoadFile(result.Path);
                 }
             }
             

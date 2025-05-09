@@ -10,7 +10,16 @@ public class ControlFlowBlock
     /// <summary>
     /// The starting address of the block
     /// </summary>
-    public uint StartAddress { get; set; }
+    public uint StartAddress { get; }
+
+    public string ComputedStartAddressView { get; set; }
+
+    public ControlFlowBlock(uint startAddress)
+    {
+        StartAddress = startAddress;
+
+        ComputedStartAddressView = StartAddress.ToString($"0x{StartAddress:X8}");
+    }
 
     /// <summary>
     /// The list of raw instructions in the block

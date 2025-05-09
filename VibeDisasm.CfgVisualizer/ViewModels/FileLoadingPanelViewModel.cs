@@ -1,15 +1,14 @@
-using System.Text;
-using VibeDisasm.DecompilerEngine;
+using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.DecompilerEngine.ControlFlow;
 using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
 
-namespace VibeDisasm.CfgVisualizer.Models;
+namespace VibeDisasm.CfgVisualizer.ViewModels;
 
 /// <summary>
 /// View model for file loading functionality
 /// </summary>
-public class FileLoadingViewModel : IViewModel
+public class FileLoadingPanelViewModel : IViewModel
 {
     // Loaded file path
     public string LoadedFilePath { get; private set; } = string.Empty;
@@ -125,7 +124,7 @@ public class FileLoadingViewModel : IViewModel
             var cfgEdges = ControlFlowEdgesBuilder.Build(controlFlowFunction);
             
             // Create the view model
-            var cfgViewModel = new CfgViewModel(controlFlowFunction);
+            var cfgViewModel = new CfgView(controlFlowFunction);
             
             // Raise the FunctionLoaded event
             FunctionLoaded?.Invoke(this, new FunctionLoadedEventArgs(cfgViewModel));
@@ -139,23 +138,6 @@ public class FileLoadingViewModel : IViewModel
         {
             Console.WriteLine($"Error loading function: {ex.Message}");
         }
-    }
-    
-    /// <summary>
-    /// Helper method to read a null-terminated string from a byte array
-    /// </summary>
-    /// <param name="data">Byte array</param>
-    /// <param name="offset">Offset to start reading from</param>
-    /// <returns>The null-terminated string</returns>
-    private static string ReadNullTerminatedString(byte[] data, int offset)
-    {
-        int length = 0;
-        while (offset + length < data.Length && data[offset + length] != 0)
-        {
-            length++;
-        }
-        
-        return Encoding.ASCII.GetString(data, offset, length);
     }
 }
 
@@ -183,6 +165,8 @@ public class EntryPointInfo
     /// Description of the entry point
     /// </summary>
     public string Description { get; }
+
+    public string ComputedView { get; }
     
     /// <summary>
     /// Constructor
@@ -193,6 +177,8 @@ public class EntryPointInfo
         RVA = rva;
         Source = source;
         Description = description;
+
+        ComputedView = $"{RVA:X8} - {Source}: {Description}";
     }
 }
 
@@ -223,13 +209,13 @@ public class FunctionLoadedEventArgs : EventArgs
     /// <summary>
     /// CFG view model for the loaded function
     /// </summary>
-    public CfgViewModel CfgViewModel { get; }
+    public CfgView CfgView { get; }
     
     /// <summary>
     /// Constructor
     /// </summary>
-    public FunctionLoadedEventArgs(CfgViewModel cfgViewModel)
+    public FunctionLoadedEventArgs(CfgView cfgView)
     {
-        CfgViewModel = cfgViewModel;
+        CfgView = cfgView;
     }
 }

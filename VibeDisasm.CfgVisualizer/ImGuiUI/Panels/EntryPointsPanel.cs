@@ -1,7 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using VibeDisasm.CfgVisualizer.Abstractions;
-using VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 
@@ -11,15 +11,15 @@ namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 public class EntryPointsPanel : IImGuiPanel
 {
     // View model
-    private readonly EntryPointsViewModel _viewModel;
+    private readonly EntryPointsPanelViewModel _panelViewModel;
     
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="viewModel">Entry points view model</param>
-    public EntryPointsPanel(EntryPointsViewModel viewModel)
+    /// <param name="panelViewModel">Entry points view model</param>
+    public EntryPointsPanel(EntryPointsPanelViewModel panelViewModel)
     {
-        _viewModel = viewModel;
+        _panelViewModel = panelViewModel;
     }
     
     /// <summary>
@@ -31,7 +31,7 @@ public class EntryPointsPanel : IImGuiPanel
         bool isOpen = ImGui.Begin("Entry Points");
         if (isOpen)
         {
-            if (_viewModel.EntryPoints.Count == 0)
+            if (_panelViewModel.EntryPoints.Count == 0)
             {
                 ImGui.TextColored(new Vector4(0.7f, 0.7f, 0.7f, 1.0f), "No entry points available");
             }
@@ -42,15 +42,15 @@ public class EntryPointsPanel : IImGuiPanel
                 
                 if (ImGui.BeginListBox("##EntryPoints", new Vector2(-1, listBoxHeight)))
                 {
-                    for (int i = 0; i < _viewModel.EntryPoints.Count; i++)
+                    for (int i = 0; i < _panelViewModel.EntryPoints.Count; i++)
                     {
-                        var entryPoint = _viewModel.EntryPoints[i];
-                        string label = $"{entryPoint.RVA:X8} - {entryPoint.Source}: {entryPoint.Description}";
+                        var entryPoint = _panelViewModel.EntryPoints[i];
+                        string label = entryPoint.ComputedView;
                         
-                        bool isSelected = i == _viewModel.SelectedEntryPointIndex;
+                        bool isSelected = i == _panelViewModel.SelectedEntryPointIndex;
                         if (ImGui.Selectable(label, isSelected))
                         {
-                            _viewModel.SelectEntryPoint(i);
+                            _panelViewModel.SelectEntryPoint(i);
                         }
                         
                         if (isSelected)

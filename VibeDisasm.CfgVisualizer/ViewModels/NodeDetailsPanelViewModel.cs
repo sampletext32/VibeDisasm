@@ -1,17 +1,19 @@
-namespace VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.CfgVisualizer.Models.Graph;
+
+namespace VibeDisasm.CfgVisualizer.ViewModels;
 
 /// <summary>
 /// View model for the node details panel
 /// </summary>
-public class NodeDetailsViewModel : IViewModel
+public class NodeDetailsPanelViewModel : IViewModel
 {
     // Selected node
-    public CfgNodeViewModel? SelectedNode { get; private set; }
+    public CfgNodeView? SelectedNode { get; private set; }
     
     /// <summary>
     /// Constructor
     /// </summary>
-    public NodeDetailsViewModel()
+    public NodeDetailsPanelViewModel()
     {
     }
     
@@ -19,7 +21,7 @@ public class NodeDetailsViewModel : IViewModel
     /// Sets the selected node
     /// </summary>
     /// <param name="node">Node to select</param>
-    public void SetSelectedNode(CfgNodeViewModel? node)
+    public void SetSelectedNode(CfgNodeView? node)
     {
         SelectedNode = node;
     }

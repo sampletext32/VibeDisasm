@@ -1,12 +1,12 @@
 using System.Numerics;
 using VibeDisasm.DecompilerEngine.ControlFlow;
 
-namespace VibeDisasm.CfgVisualizer.Models;
+namespace VibeDisasm.CfgVisualizer.Models.Graph;
 
 /// <summary>
 /// View model for the entire CFG visualization
 /// </summary>
-public class CfgViewModel
+public class CfgView
 {
     /// <summary>
     /// The underlying control flow function
@@ -16,12 +16,12 @@ public class CfgViewModel
     /// <summary>
     /// Nodes in the CFG
     /// </summary>
-    public List<CfgNodeViewModel> Nodes { get; } = [];
+    public List<CfgNodeView> Nodes { get; } = [];
     
     /// <summary>
     /// Edges in the CFG
     /// </summary>
-    public List<CfgEdgeViewModel> Edges { get; } = [];
+    public List<CfgEdgeView> Edges { get; } = [];
     
     /// <summary>
     /// Camera position in the visualization
@@ -36,23 +36,23 @@ public class CfgViewModel
     /// <summary>
     /// Selected node
     /// </summary>
-    public CfgNodeViewModel? SelectedNode { get; set; }
+    public CfgNodeView? SelectedNode { get; set; }
 
     /// <summary>
     /// Constructor
     /// </summary>
     /// <param name="function">Control flow function</param>
-    public CfgViewModel(ControlFlowFunction function)
+    public CfgView(ControlFlowFunction function)
     {
         Function = function;
 
         var edges = ControlFlowEdgesBuilder.Build(function);
         
         // Create node view models
-        var nodeMap = new Dictionary<uint, CfgNodeViewModel>();
+        var nodeMap = new Dictionary<uint, CfgNodeView>();
         foreach (var block in function.Blocks)
         {
-            var nodeViewModel = new CfgNodeViewModel(block.Value);
+            var nodeViewModel = new CfgNodeView(block.Value);
             Nodes.Add(nodeViewModel);
             nodeMap[block.Key] = nodeViewModel;
         }
@@ -64,7 +64,7 @@ public class CfgViewModel
                 nodeMap.TryGetValue(edge.ToBlockAddress, out var target))
             {
                 var isFallthrough = edge.JumpType == ControlFlowJumpType.Fallthrough;
-                var edgeViewModel = new CfgEdgeViewModel(source, target, isFallthrough);
+                var edgeViewModel = new CfgEdgeView(source, target, isFallthrough);
                 Edges.Add(edgeViewModel);
             }
         }
@@ -79,18 +79,12 @@ public class CfgViewModel
     /// </summary>
     public void PerformLayout()
     {
-        // Constants for layout
-        const float nodeWidth = 200.0f;
-        const float nodeHeight = 100.0f;
-        const float horizontalSpacing = 80.0f;
-        const float verticalSpacing = 80.0f;
-
         // Reset all node positions
         foreach (var node in Nodes)
             node.Position = Vector2.Zero;
 
         // Track visited nodes to avoid cycles
-        var visited = new HashSet<CfgNodeViewModel>();
+        var visited = new HashSet<CfgNodeView>();
 
         // Start with the entry node
         var entryNode = Nodes.FirstOrDefault(n => n.Block.IsEntryBlock);
@@ -109,7 +103,7 @@ public class CfgViewModel
     /// <param name="x">X position (grid units)</param>
     /// <param name="y">Y position (grid units)</param>
     /// <param name="visited">Visited nodes</param>
-    private void LayoutNode(CfgNodeViewModel node, int x, int y, HashSet<CfgNodeViewModel> visited)
+    private void LayoutNode(CfgNodeView node, int x, int y, HashSet<CfgNodeView> visited)
     {
         // Constants for layout
         const float nodeWidth = 200.0f;

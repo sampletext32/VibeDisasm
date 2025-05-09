@@ -1,7 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using VibeDisasm.CfgVisualizer.Abstractions;
-using VibeDisasm.CfgVisualizer.Models;
+using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 
@@ -11,15 +11,15 @@ namespace VibeDisasm.CfgVisualizer.ImGuiUI.Panels;
 public class NodeDetailsPanel : IImGuiPanel
 {
     // View model
-    private readonly NodeDetailsViewModel _viewModel;
+    private readonly NodeDetailsPanelViewModel _panelViewModel;
     
     /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="viewModel">Node details view model</param>
-    public NodeDetailsPanel(NodeDetailsViewModel viewModel)
+    /// <param name="panelViewModel">Node details view model</param>
+    public NodeDetailsPanel(NodeDetailsPanelViewModel panelViewModel)
     {
-        _viewModel = viewModel;
+        _panelViewModel = panelViewModel;
     }
     
     /// <summary>
@@ -31,15 +31,15 @@ public class NodeDetailsPanel : IImGuiPanel
         bool isOpen = ImGui.Begin("Node Details");
         if (isOpen)
         {
-            if (_viewModel.SelectedNode == null)
+            if (_panelViewModel.SelectedNode == null)
             {
                 ImGui.TextColored(new Vector4(0.7f, 0.7f, 0.7f, 1.0f), "Select a node to view details");
             }
             else
             {
                 // Display basic node information
-                ImGui.Text($"Address: 0x{_viewModel.SelectedNode.Block.StartAddress:X8}");
-                ImGui.Text($"Instructions: {_viewModel.SelectedNode.Block.Instructions.Count}");
+                ImGui.Text($"Address: 0x{_panelViewModel.SelectedNode.Block.StartAddress:X8}");
+                ImGui.Text($"Instructions: {_panelViewModel.SelectedNode.Block.Instructions.Count}");
                 
                 ImGui.Separator();
                 
@@ -50,15 +50,15 @@ public class NodeDetailsPanel : IImGuiPanel
                     ImGui.TableSetupColumn("Instruction");
                     ImGui.TableHeadersRow();
                     
-                    foreach (var instruction in _viewModel.SelectedNode.Block.Instructions)
+                    foreach (var instruction in _panelViewModel.SelectedNode.Block.Instructions)
                     {
                         ImGui.TableNextRow();
                         
                         ImGui.TableNextColumn();
-                        ImGui.Text($"0x{instruction.Address:X8}");
+                        ImGui.Text(instruction.ComputedAddressView);
                         
                         ImGui.TableNextColumn();
-                        ImGui.Text(instruction.ToString());
+                        ImGui.Text(instruction.ComputedView);
                     }
                     
                     ImGui.EndTable();
