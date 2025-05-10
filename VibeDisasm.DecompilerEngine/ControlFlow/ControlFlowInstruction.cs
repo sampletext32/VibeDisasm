@@ -39,7 +39,7 @@ public class ControlFlowInstruction
     {
         RawInstruction = instruction;
         ComputedView = instruction.ToString();
-        ComputedAddressView = instruction.Address.ToString("0xX8");
+        ComputedAddressView = instruction.Address.ToString("X8");
     }
     
     /// <summary>

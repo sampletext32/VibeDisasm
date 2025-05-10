@@ -53,8 +53,8 @@ public class CfgEdgeView
         
         // Default color: green for fallthrough, red for jumps
         Color = isFallthrough 
-            ? new Vector4(0.0f, 0.8f, 0.0f, 1.0f) 
-            : new Vector4(0.8f, 0.0f, 0.0f, 1.0f);
+            ? new Vector4(0.8f, 0.0f, 0.0f, 1.0f) 
+            : new Vector4(0.0f, 0.8f, 0.0f, 1.0f);
             
         IsHighlighted = false;
     }

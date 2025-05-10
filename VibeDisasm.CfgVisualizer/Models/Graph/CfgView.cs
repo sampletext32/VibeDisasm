@@ -22,21 +22,6 @@ public class CfgView
     /// Edges in the CFG
     /// </summary>
     public List<CfgEdgeView> Edges { get; } = [];
-    
-    /// <summary>
-    /// Camera position in the visualization
-    /// </summary>
-    public Vector2 CameraPosition { get; set; } = Vector2.Zero;
-    
-    /// <summary>
-    /// Camera zoom level
-    /// </summary>
-    public float Zoom { get; set; } = 1.0f;
-    
-    /// <summary>
-    /// Selected node
-    /// </summary>
-    public CfgNodeView? SelectedNode { get; set; }
 
     /// <summary>
     /// Constructor
@@ -93,7 +78,38 @@ public class CfgView
 
         // Recursively layout the graph
         LayoutNode(entryNode, 0, 0, visited);
+
+        bool changed;
+        do
+        {
+            changed = false;
+            foreach (var node in Nodes)
+            {
+                var sourceBelow = Edges.FirstOrDefault(x => x.Target == node && (x.Source.Position.Y >= node.Position.Y));
+
+                if (sourceBelow != null)
+                {
+                    RecursiveShiftDown(sourceBelow.Target, sourceBelow.Source.Position);
+                    changed = true;
+                }
+            }
+        } while (changed);
     }
+
+    private void RecursiveShiftDown(CfgNodeView nodeWithSourceBelow, Vector2 sourcePosition)
+    {
+        nodeWithSourceBelow.Position = nodeWithSourceBelow.Position with {Y = sourcePosition.Y + nodeHeight + verticalSpacing};
+        foreach (var edge in Edges.Where(x => x.Source == nodeWithSourceBelow))
+        {
+            RecursiveShiftDown(edge.Target, sourcePosition);
+        }
+    }
+
+    // Constants for layout
+    const float nodeWidth = 200.0f;
+    const float nodeHeight = 100.0f;
+    const float horizontalSpacing = 80.0f;
+    const float verticalSpacing = 80.0f;
 
     /// <summary>
     /// Recursively lays out the graph, placing taken branches to the left
@@ -105,12 +121,6 @@ public class CfgView
     /// <param name="visited">Visited nodes</param>
     private void LayoutNode(CfgNodeView node, int x, int y, HashSet<CfgNodeView> visited)
     {
-        // Constants for layout
-        const float nodeWidth = 200.0f;
-        const float nodeHeight = 100.0f;
-        const float horizontalSpacing = 80.0f;
-        const float verticalSpacing = 80.0f;
-
         if (!visited.Add(node))
             return;
 
@@ -136,7 +146,7 @@ public class CfgView
         // Layout fallthrough branch below
         if (fallthroughEdge != null)
         {
-            LayoutNode(fallthroughEdge.Target, x, nextY, visited);
+            LayoutNode(fallthroughEdge.Target, x + 1, nextY, visited);
         }
 
         // Layout any other outgoing edges (e.g. unconditional jumps) to the right
@@ -144,7 +154,7 @@ public class CfgView
         {
             if (edge != takenEdge && edge != fallthroughEdge)
             {
-                LayoutNode(edge.Target, x + 1, nextY, visited);
+                LayoutNode(edge.Target, x, nextY, visited);
             }
         }
     }

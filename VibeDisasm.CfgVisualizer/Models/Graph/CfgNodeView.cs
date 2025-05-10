@@ -50,7 +50,7 @@ public class CfgNodeView
     public CfgNodeView(ControlFlowBlock block)
     {
         Block = block;
-        Id = Block.StartAddress.ToString("X");
+        Id = block.ComputedStartAddressView;
         Position = Vector2.Zero;
         Size = new Vector2(200, 100);
         Color = new Vector4(0.7f, 0.7f, 0.7f, 1.0f);

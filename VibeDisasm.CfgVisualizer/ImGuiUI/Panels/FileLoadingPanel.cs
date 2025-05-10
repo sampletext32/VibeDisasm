@@ -1,4 +1,3 @@
-using System.Numerics;
 using ImGuiNET;
 using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.ViewModels;

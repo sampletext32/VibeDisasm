@@ -18,7 +18,7 @@ public class ControlFlowBlock
     {
         StartAddress = startAddress;
 
-        ComputedStartAddressView = StartAddress.ToString($"0x{StartAddress:X8}");
+        ComputedStartAddressView = StartAddress.ToString("X8");
     }
 
     /// <summary>
