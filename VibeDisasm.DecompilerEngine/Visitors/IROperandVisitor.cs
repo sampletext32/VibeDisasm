@@ -39,6 +39,31 @@ public class IROperandVisitor : BaseOperandVisitor<IRExpression>
         return new IRMemoryAccessExpression(baseReg, operand.Size);
     }
     
+    public override IRExpression VisitDisplacementMemory(DisplacementMemoryOperand operand)
+    {
+        // Base register + displacement like [ebp+0x0C]
+        var baseReg = new IRRegisterExpression(
+            RegisterMapper.GetRegisterName(operand.BaseRegister, operand.Size)
+        );
+        
+        if (operand.Displacement == 0)
+        {
+            // If displacement is 0, just use the base register
+            return new IRMemoryAccessExpression(baseReg, operand.Size);
+        }
+        
+        // Create a binary expression for base + displacement
+        var displacementValue = Math.Abs(operand.Displacement);
+        var displacementExpr = new IRConstantExpression((ulong)displacementValue);
+        var op = operand.Displacement > 0 ? 
+            IRBinaryExpression.BinaryOperator.Add : 
+            IRBinaryExpression.BinaryOperator.Subtract;
+            
+        var addressExpr = new IRBinaryExpression(op, baseReg, displacementExpr);
+        
+        return new IRMemoryAccessExpression(addressExpr, operand.Size);
+    }
+    
     public override IRExpression VisitScaledIndexMemory(ScaledIndexMemoryOperand operand)
     {
         // Complex addressing like [base + index*scale + disp]

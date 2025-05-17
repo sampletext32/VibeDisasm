@@ -16,6 +16,7 @@ public abstract class BaseOperandVisitor<T> : IOperandVisitor<T>
             OperandType.ImmediateValue => operand is ImmediateOperand immOp ? VisitImmediate(immOp) : VisitUnknown(operand),
             OperandType.MemoryDirect => operand is DirectMemoryOperand dirMemOp ? VisitDirectMemory(dirMemOp) : VisitUnknown(operand),
             OperandType.MemoryBaseReg => operand is BaseRegisterMemoryOperand baseRegOp ? VisitBaseRegisterMemory(baseRegOp) : VisitUnknown(operand),
+            OperandType.MemoryBaseRegPlusOffset => operand is DisplacementMemoryOperand dispMemOp ? VisitDisplacementMemory(dispMemOp) : VisitUnknown(operand),
             OperandType.MemoryIndexed => operand is ScaledIndexMemoryOperand scaledIdxOp ? VisitScaledIndexMemory(scaledIdxOp) : VisitUnknown(operand),
             OperandType.RelativeOffset => operand is RelativeOffsetOperand relOffOp ? VisitRelativeOffset(relOffOp) : VisitUnknown(operand),
             _ => VisitUnknown(operand)
@@ -27,6 +28,7 @@ public abstract class BaseOperandVisitor<T> : IOperandVisitor<T>
     public virtual T VisitImmediate(ImmediateOperand operand) => VisitUnknown(operand);
     public virtual T VisitDirectMemory(DirectMemoryOperand operand) => VisitUnknown(operand);
     public virtual T VisitBaseRegisterMemory(BaseRegisterMemoryOperand operand) => VisitUnknown(operand);
+    public virtual T VisitDisplacementMemory(DisplacementMemoryOperand operand) => VisitUnknown(operand);
     public virtual T VisitScaledIndexMemory(ScaledIndexMemoryOperand operand) => VisitUnknown(operand);
     public virtual T VisitRelativeOffset(RelativeOffsetOperand operand) => VisitUnknown(operand);
     
