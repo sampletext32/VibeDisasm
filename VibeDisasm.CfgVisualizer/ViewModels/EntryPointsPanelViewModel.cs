@@ -1,3 +1,5 @@
+using VibeDisasm.Pe.Extractors;
+
 namespace VibeDisasm.CfgVisualizer.ViewModels;
 
 /// <summary>

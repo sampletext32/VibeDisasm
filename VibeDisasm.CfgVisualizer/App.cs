@@ -6,6 +6,7 @@ using Silk.NET.Windowing;
 using Microsoft.Extensions.DependencyInjection;
 using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.Services;
+using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer;
@@ -64,7 +65,7 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
         serviceCollection.AddSingleton(gl);
         serviceCollection.AddSingleton(window);
         serviceCollection.AddSingleton<AppState>();
-        
+
         foreach (var service in Utils.GetAssignableTypes<IService>())
         {
             serviceCollection.AddSingleton(service);
