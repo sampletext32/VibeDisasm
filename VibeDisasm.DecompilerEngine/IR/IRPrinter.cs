@@ -10,7 +10,7 @@ namespace VibeDisasm.DecompilerEngine.IR;
 /// </summary>
 public class IRPrinter : IRVisitor
 {
-    private readonly StringBuilder _sb = new();
+    private StringBuilder _sb = new();
     private int _indentLevel = 0;
     
     public string Print(IRNode node)
@@ -19,6 +19,34 @@ public class IRPrinter : IRVisitor
         _indentLevel = 0;
         Visit(node);
         return _sb.ToString();
+    }
+    
+    public override void Visit(IRNode node)
+    {
+        if (node is IRFunction function)
+        {
+            VisitFunction(function);
+        }
+        else
+        {
+            base.Visit(node);
+        }
+    }
+    
+    protected void VisitFunction(IRFunction function)
+    {
+        _sb.AppendLine($"Function {function.Name}:");
+        
+        // Print blocks in address order for readability
+        foreach (var blockEntry in function.Blocks.OrderBy(x => x.Key))
+        {
+            uint address = blockEntry.Key;
+            IRBlockStatement block = blockEntry.Value;
+            
+            _sb.AppendLine();
+            _sb.AppendLine($"Block_{address:X8}" + (block == function.EntryBlock ? " (Entry)" : "") + ":");
+            VisitBlock(block);
+        }
     }
     
     private void Indent()
@@ -31,12 +59,29 @@ public class IRPrinter : IRVisitor
         _indentLevel = Math.Max(0, _indentLevel - 1);
     }
     
-    private void AppendLine(string text)
+    private void AppendLine(string text, string? comment = null)
     {
         _sb.Append(new string(' ', _indentLevel * 2));
-        _sb.AppendLine(text);
+        _sb.Append(text);
+        
+        if (!string.IsNullOrEmpty(comment))
+        {
+            // Add some spacing before the comment
+            if (text.Length < 30)
+            {
+                _sb.Append(new string(' ', 30 - text.Length));
+            }
+            else
+            {
+                _sb.Append("  ");
+            }
+            
+            _sb.Append("// ").Append(comment);
+        }
+        
+        _sb.AppendLine();
     }
-    
+
     // Expression visitors
     protected override void VisitConstant(IRConstantExpression node)
     {
@@ -67,14 +112,24 @@ public class IRPrinter : IRVisitor
     // Statement visitors
     protected override void VisitAssignment(IRAssignmentStatement node)
     {
+        _sb.Append(new string(' ', _indentLevel * 2));
         Visit(node.Target);
         _sb.Append(" = ");
         Visit(node.Value);
-        _sb.AppendLine(";");
+        _sb.Append(";");
+        
+        if (!string.IsNullOrEmpty(node.Comment))
+        {
+            // Add some spacing before the comment
+            _sb.Append("  // ").Append(node.Comment);
+        }
+        
+        _sb.AppendLine();
     }
     
     protected override void VisitBlock(IRBlockStatement node)
     {
+        Indent();
         AppendLine("{");
         Indent();
         
@@ -85,13 +140,29 @@ public class IRPrinter : IRVisitor
         
         Dedent();
         AppendLine("}");
+        Dedent();
     }
     
     protected override void VisitJump(IRJumpStatement node)
     {
-        _sb.Append("goto ");
-        Visit(node.Target);
-        _sb.AppendLine(";");
+        AppendLine("goto " + FormatJumpTarget(node.Target) + ";", node.Comment);
+    }
+    
+    private string FormatJumpTarget(IRExpression target)
+    {
+        if (target is IRConstantExpression constExpr)
+        {
+            // Format the address as hex
+            return $"0x{constExpr.Value:X8}";
+        }
+        
+        // For other expression types, use the default ToString
+        var sb = new StringBuilder();
+        var originalSb = _sb;
+        _sb = sb;
+        Visit(target);
+        _sb = originalSb;
+        return sb.ToString();
     }
     
     protected override void VisitReturn(IRReturnStatement node)

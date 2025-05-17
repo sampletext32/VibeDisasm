@@ -4,7 +4,22 @@ using VibeDisasm.Disassembler.X86.Operands;
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 /// <summary>
-/// Represents a memory access operation in the IR
+/// Represents a memory access operation in the IR.
+/// <para>
+/// Memory access expressions represent reads from or writes to memory locations. The address
+/// can be a constant, register, or a complex expression involving registers and offsets.
+/// </para>
+/// <para>
+/// Examples:
+/// - Direct memory access: [0x401000]
+/// - Register-based access: [eax]
+/// - Base+offset access: [ebp+8], [ebx-4]
+/// - Complex addressing: [eax+ebx*4+8]
+/// - In x86 instructions: MOV eax, [ebp+8] (the [ebp+8] is represented as an IRMemoryAccessExpression)
+/// </para>
+/// <para>
+/// In IR form: [0x401000], [eax], [ebp+8], [eax+ebx*4+8]
+/// </para>
 /// </summary>
 public class IRMemoryAccessExpression : IRExpression
 {

@@ -28,10 +28,29 @@ var entryPointCodeOffset = codeOffsetsInfo.Offsets.FirstOrDefault(x => x.Source 
 // Disassemble the entry point into basic blocks (control flow function)
 var controlFlowFunction = ControlFlowBlockDisassembler.DisassembleBlock(fileData, entryPointCodeOffset.FileOffset);
 
-var ir = new IRBuilder().BuildFromFunction(controlFlowFunction);
+// Build IR from the control flow function
+var irBuilder = new IRBuilder();
+var irFunction = irBuilder.BuildFromFunction(controlFlowFunction);
+irFunction.Name = "EntryPoint";
 
-var irStr = new IRPrinter().Print(ir);
+// Print the IR
+var irPrinter = new IRPrinter();
+var irStr = irPrinter.Print(irFunction);
 
 Console.WriteLine(irStr);
+
+// Print raw instructions for a specific block (for debugging)
+Console.WriteLine("\nRaw instructions for block 0x5A6F3:");
+if (controlFlowFunction.Blocks.TryGetValue(0x5A6F3, out var block))
+{
+    foreach (var instruction in block.Instructions)
+    {
+        Console.WriteLine($"  {instruction.Address:X8}: {instruction.RawInstruction.Type} {string.Join(", ", instruction.RawInstruction.StructuredOperands)}");
+    }
+}
+else
+{
+    Console.WriteLine("  Block not found");
+}
 
 _ = 5;
