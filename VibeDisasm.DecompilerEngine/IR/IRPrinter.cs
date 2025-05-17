@@ -165,6 +165,45 @@ public class IRPrinter : IRVisitor
         AppendLine("goto " + FormatJumpTarget(node.Target) + ";", node.Comment);
     }
     
+    protected override void VisitCall(IRCallStatement node)
+    {
+        // Format the call target
+        string targetStr;
+        if (node.Target is IRConstantExpression constExpr)
+        {
+            // Format the address as hex
+            targetStr = $"0x{constExpr.Value:X8}";
+        }
+        else
+        {
+            // For other expression types, use a temporary StringBuilder
+            var sb = new StringBuilder();
+            var originalSb = _sb;
+            _sb = sb;
+            Visit(node.Target);
+            _sb = originalSb;
+            targetStr = sb.ToString();
+        }
+        
+        // Format the arguments if any
+        string argsStr = "";
+        if (node.Arguments.Count > 0)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < node.Arguments.Count; i++)
+            {
+                if (i > 0) sb.Append(", ");
+                var originalSb = _sb;
+                _sb = sb;
+                Visit(node.Arguments[i]);
+                _sb = originalSb;
+            }
+            argsStr = sb.ToString();
+        }
+        
+        AppendLine($"call {targetStr}({argsStr});", node.Comment);
+    }
+    
     private string FormatJumpTarget(IRExpression target)
     {
         if (target is IRConstantExpression constExpr)

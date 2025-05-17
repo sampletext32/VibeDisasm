@@ -46,6 +46,9 @@ public abstract class IRVisitor
             case IRReturnStatement ret:
                 VisitReturn(ret);
                 break;
+            case IRCallStatement call:
+                VisitCall(call);
+                break;
                 
             // Structured constructs
             case IRWhileLoop whileLoop:
@@ -76,6 +79,7 @@ public abstract class IRVisitor
     protected virtual void VisitJump(IRJumpStatement node) => VisitChildren(node);
     protected virtual void VisitConditional(IRConditionalStatement node) => VisitChildren(node);
     protected virtual void VisitReturn(IRReturnStatement node) => VisitChildren(node);
+    protected virtual void VisitCall(IRCallStatement node) => VisitChildren(node);
     
     // Structured construct visitors
     protected virtual void VisitWhileLoop(IRWhileLoop node) => VisitChildren(node);
