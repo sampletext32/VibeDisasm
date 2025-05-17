@@ -8,7 +8,7 @@ using VibeDisasm.Pe.Raw;
 using VibeDisasm.TestLand.Printers;
 
 // Path to the PE file to analyze
-const string filePath = @"C:\Program Files (x86)\Nikita\Iron Strategy\Terrain.dll";
+const string filePath = @"./DLLs/Terrain.dll";
 string fileName = Path.GetFileName(filePath);
 
 // Read the file bytes
