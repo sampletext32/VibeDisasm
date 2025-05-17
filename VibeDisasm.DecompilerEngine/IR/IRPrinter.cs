@@ -312,6 +312,15 @@ public class IRPrinter : IRVisitor
         AppendLine("}");
     }
     
+    protected override void VisitUnknown(IRNode node)
+    {
+        // Print a warning for unsupported IR nodes
+        AppendLine($"// UNSUPPORTED IR NODE: {node.GetType().Name}");
+        
+        // Still visit children to ensure we don't miss anything
+        base.VisitUnknown(node);
+    }
+    
     // Helper methods
     private string GetOperatorSymbol(IRBinaryExpression.BinaryOperator op)
     {

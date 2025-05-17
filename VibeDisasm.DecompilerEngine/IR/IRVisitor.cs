@@ -63,6 +63,10 @@ public abstract class IRVisitor
             case IRSwitchStatement switchStmt:
                 VisitSwitch(switchStmt);
                 break;
+                
+            default:
+                VisitUnknown(node);
+                break;
         }
     }
     
@@ -94,5 +98,12 @@ public abstract class IRVisitor
         {
             Visit(child);
         }
+    }
+    
+    // Handler for unknown node types
+    protected virtual void VisitUnknown(IRNode node)
+    {
+        // Default implementation just visits children
+        VisitChildren(node);
     }
 }
