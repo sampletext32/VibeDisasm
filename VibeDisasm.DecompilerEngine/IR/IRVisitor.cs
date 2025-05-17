@@ -26,6 +26,9 @@ public abstract class IRVisitor
             case IRRegisterExpression register:
                 VisitRegister(register);
                 break;
+            case IRMemoryAccessExpression memAccess:
+                VisitMemoryAccess(memAccess);
+                break;
                 
             // Statements
             case IRAssignmentStatement assignment:
@@ -65,6 +68,7 @@ public abstract class IRVisitor
     protected virtual void VisitVariable(IRVariableExpression node) => VisitChildren(node);
     protected virtual void VisitBinary(IRBinaryExpression node) => VisitChildren(node);
     protected virtual void VisitRegister(IRRegisterExpression node) => VisitChildren(node);
+    protected virtual void VisitMemoryAccess(IRMemoryAccessExpression node) => VisitChildren(node);
     
     // Statement visitors
     protected virtual void VisitAssignment(IRAssignmentStatement node) => VisitChildren(node);

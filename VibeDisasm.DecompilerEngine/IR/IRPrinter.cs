@@ -98,6 +98,23 @@ public class IRPrinter : IRVisitor
         _sb.Append(node.RegisterName);
     }
     
+    protected override void VisitMemoryAccess(IRMemoryAccessExpression node)
+    {
+        _sb.Append("[");
+        
+        // Special case for constant addresses - format them in hex
+        if (node.Address is IRConstantExpression constExpr && constExpr.Value is ulong value)
+        {
+            _sb.Append($"0x{value:X}");
+        }
+        else
+        {
+            Visit(node.Address);
+        }
+        
+        _sb.Append("]");
+    }
+    
     protected override void VisitBinary(IRBinaryExpression node)
     {
         _sb.Append("(");
