@@ -1,4 +1,5 @@
 using VibeDisasm.CfgVisualizer.Services;
+using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
@@ -19,18 +20,18 @@ public class CodeSectionsPanelViewModel : IViewModel
     public int SelectedSectionIndex { get; private set; } = -1;
     
     /// <summary>
-    /// Event raised when a section is selected
-    /// </summary>
-    public event Action<SectionDisplayInfo>? SectionSelected;
-    
-    /// <summary>
     /// Constructor
     /// </summary>
-    /// <param name="peFileService">Service for loading PE files</param>
-    public CodeSectionsPanelViewModel(PeFileService peFileService)
+    public CodeSectionsPanelViewModel(AppState state)
     {
+        state.FileLoaded += OnFileLoaded;
     }
-    
+
+    private void OnFileLoaded(PeFileState obj)
+    {
+        this.SetSections(obj.Sections.Select(SectionDisplayInfo.FromSectionInfo).ToList());
+    }
+
     /// <summary>
     /// Sets the sections list
     /// </summary>
@@ -39,22 +40,6 @@ public class CodeSectionsPanelViewModel : IViewModel
     {
         Sections = sections;
         SelectedSectionIndex = -1;
-    }
-    
-    /// <summary>
-    /// Handles the SectionsLoaded event from the PE file service
-    /// </summary>
-    /// <param name="sender">Event sender</param>
-    /// <param name="e">Event arguments</param>
-    private void OnSectionsLoaded(object? sender, SectionsLoadedEventArgs e)
-    {
-        // Convert SectionInfo objects to SectionDisplayInfo objects
-        var sectionDisplayInfos = e.Sections
-            .Select(SectionDisplayInfo.FromSectionInfo)
-            .ToList();
-            
-        // Update the sections list
-        SetSections(sectionDisplayInfos);
     }
     
     /// <summary>
@@ -67,8 +52,7 @@ public class CodeSectionsPanelViewModel : IViewModel
         {
             SelectedSectionIndex = index;
             
-            // Notify that a section has been selected
-            SectionSelected?.Invoke(Sections[index]);
+            // TODO: notify
         }
     }
 }

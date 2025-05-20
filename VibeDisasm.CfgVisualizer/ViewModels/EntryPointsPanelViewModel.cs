@@ -1,3 +1,5 @@
+using VibeDisasm.CfgVisualizer.Services;
+using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
@@ -7,27 +9,33 @@ namespace VibeDisasm.CfgVisualizer.ViewModels;
 /// </summary>
 public class EntryPointsPanelViewModel : IViewModel
 {
+    private readonly AppState _state;
+
     // Entry points list
-    public List<EntryPointInfo> EntryPoints { get; private set; } = [];
+    public IReadOnlyList<EntryPointInfo> EntryPoints { get; private set; } = [];
     
     // Selected entry point index
     public int SelectedEntryPointIndex { get; private set; } = -1;
     
-    // Events
-    public event EventHandler<EntryPointSelectedEventArgs>? EntryPointSelected;
-    
     /// <summary>
     /// Constructor
     /// </summary>
-    public EntryPointsPanelViewModel()
+    public EntryPointsPanelViewModel(AppState state)
     {
+        _state = state;
+        state.FileLoaded += OnFileLoaded;
     }
-    
+
+    private void OnFileLoaded(PeFileState obj)
+    {
+        SetEntryPoints(obj.EntryPoints);
+    }
+
     /// <summary>
     /// Sets the entry points list
     /// </summary>
     /// <param name="entryPoints">Entry points list</param>
-    public void SetEntryPoints(List<EntryPointInfo> entryPoints)
+    public void SetEntryPoints(IReadOnlyList<EntryPointInfo> entryPoints)
     {
         EntryPoints = entryPoints;
         SelectedEntryPointIndex = -1;
@@ -42,28 +50,8 @@ public class EntryPointsPanelViewModel : IViewModel
         if (index >= 0 && index < EntryPoints.Count)
         {
             SelectedEntryPointIndex = index;
-            
-            // Notify that an entry point has been selected
-            EntryPointSelected?.Invoke(this, new EntryPointSelectedEventArgs(EntryPoints[index]));
-        }
-    }
-}
 
-/// <summary>
-/// Event arguments for when an entry point is selected
-/// </summary>
-public class EntryPointSelectedEventArgs : EventArgs
-{
-    /// <summary>
-    /// Selected entry point
-    /// </summary>
-    public EntryPointInfo EntryPoint { get; }
-    
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    public EntryPointSelectedEventArgs(EntryPointInfo entryPoint)
-    {
-        EntryPoint = entryPoint;
+            _state.OnEntryPointSelected(EntryPoints[index]);
+        }
     }
 }

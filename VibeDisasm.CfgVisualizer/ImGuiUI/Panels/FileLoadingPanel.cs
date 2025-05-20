@@ -26,16 +26,17 @@ public class FileLoadingPanel : IImGuiPanel
     /// </summary>
     public void OnImGuiRender()
     {
-        // Begin the panel
-        bool isOpen = ImGui.Begin("File");
-        if (isOpen)
+        if (ImGui.Begin("File"))
         {
             // Display loaded file name
-            ImGui.Text("Loaded: " + (_panelViewModel.LoadedFilePath.Length > 0 ? 
-                Path.GetFileName(_panelViewModel.LoadedFilePath) : "None"));
-            
+            ImGui.Text(
+                "Loaded: " + (!string.IsNullOrEmpty(_panelViewModel.LoadedFilePath)
+                    ? Path.GetFileName(_panelViewModel.LoadedFilePath)
+                    : "None")
+            );
+
             ImGui.SameLine();
-            
+
             // Load file button
             if (ImGui.Button("Load PE File"))
             {
@@ -44,11 +45,10 @@ public class FileLoadingPanel : IImGuiPanel
                 
                 if (result.IsOk)
                 {
-                    _panelViewModel.TryLoadFile(result.Path);
+                    _panelViewModel.LaunchLoad(result.Path);
                 }
             }
             
-            // End the panel only if Begin returned true
             ImGui.End();
         }
     }

@@ -1,5 +1,7 @@
+using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.ViewModels;
+using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.CfgVisualizer.State;
 
@@ -8,32 +10,32 @@ namespace VibeDisasm.CfgVisualizer.State;
 /// </summary>
 public class AppState
 {
-    // Panel view models
-    public FileLoadingPanelViewModel FileLoadingPanelViewModel { get; }
-    public EntryPointsPanelViewModel EntryPointsPanelViewModel { get; }
-    public CfgCanvasPanelViewModel CfgCanvasPanelViewModel { get; }
-    public NodeDetailsPanelViewModel NodeDetailsPanelViewModel { get; }
-
     /// <summary>
     /// Constructor
     /// </summary>
-    public AppState(
-        FileLoadingPanelViewModel fileLoadingPanelViewModel,
-        EntryPointsPanelViewModel entryPointsPanelViewModel,
-        CfgCanvasPanelViewModel cfgCanvasPanelViewModel,
-        NodeDetailsPanelViewModel nodeDetailsPanelViewModel,
-        PeFileService peFileService
-    )
+    public AppState()
     {
-        FileLoadingPanelViewModel = fileLoadingPanelViewModel;
-        EntryPointsPanelViewModel = entryPointsPanelViewModel;
-        CfgCanvasPanelViewModel = cfgCanvasPanelViewModel;
-        NodeDetailsPanelViewModel = nodeDetailsPanelViewModel;
-        
-        peFileService.PeFileLoaded += OnPeFileLoaded;
+    }
+    
+    public event Action<PeFileState>? FileLoaded;
+    public event Action<EntryPointInfo>? EntryPointSelected;
+    public event Action<CfgNodeView?>? CfgNodeSelected;
+
+    public void OnPeFileLoaded(PeFileState state)
+    {
+        OpenedFile = state;
+        FileLoaded?.Invoke(state);
     }
 
-    private void OnPeFileLoaded(PeFileLoadedEventArgs e)
+    public PeFileState? OpenedFile { get; set; }
+
+    public void OnEntryPointSelected(EntryPointInfo entryPoint)
     {
+        EntryPointSelected?.Invoke(entryPoint);
+    }
+
+    public void OnCfgNodeSelected(CfgNodeView? node)
+    {
+        CfgNodeSelected?.Invoke(node);
     }
 }

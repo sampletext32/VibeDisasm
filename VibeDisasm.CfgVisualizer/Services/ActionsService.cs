@@ -1,3 +1,4 @@
+using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.Services;
@@ -8,23 +9,20 @@ namespace VibeDisasm.CfgVisualizer.Services;
 public class ActionsService : IService
 {
     private readonly PeFileService _peFileService;
-    private readonly FileLoadingPanelViewModel _fileLoadingPanelViewModel;
+    private readonly AppState _appState;
 
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="peFileService">Service for loading PE files</param>
-    /// <param name="fileLoadingPanelViewModel">File loading panel view model</param>
-    public ActionsService(PeFileService peFileService, FileLoadingPanelViewModel fileLoadingPanelViewModel)
+    public ActionsService(PeFileService peFileService, AppState appState)
     {
         _peFileService = peFileService;
-        _fileLoadingPanelViewModel = fileLoadingPanelViewModel;
+        _appState = appState;
     }
 
-    /// <summary>
-    /// Tries to load a PE file
-    /// </summary>
-    /// <param name="path">Path to the PE file</param>
-    /// <returns>True if successful, false otherwise</returns>
-    public bool TryLoadFile(string path) => _peFileService.TryLoadFile(path);
+    public bool TryLoadFile(string path)
+    {
+        var peFileState = _peFileService.LoadPeFile(path);
+
+        _appState.OnPeFileLoaded(peFileState);
+        
+        return true;
+    }
 }

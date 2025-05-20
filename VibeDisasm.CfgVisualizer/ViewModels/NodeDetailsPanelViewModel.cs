@@ -1,4 +1,5 @@
 using VibeDisasm.CfgVisualizer.Models.Graph;
+using VibeDisasm.CfgVisualizer.State;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
 
@@ -13,15 +14,12 @@ public class NodeDetailsPanelViewModel : IViewModel
     /// <summary>
     /// Constructor
     /// </summary>
-    public NodeDetailsPanelViewModel()
+    public NodeDetailsPanelViewModel(AppState state)
     {
+        state.CfgNodeSelected += OnCfgNodeSelected;
     }
-    
-    /// <summary>
-    /// Sets the selected node
-    /// </summary>
-    /// <param name="node">Node to select</param>
-    public void SetSelectedNode(CfgNodeView? node)
+
+    private void OnCfgNodeSelected(CfgNodeView? node)
     {
         SelectedNode = node;
     }
