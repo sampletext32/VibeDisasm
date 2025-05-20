@@ -14,13 +14,6 @@ public class ControlFlowBlock
 
     public string ComputedStartAddressView { get; set; }
 
-    public ControlFlowBlock(uint startAddress)
-    {
-        StartAddress = startAddress;
-
-        ComputedStartAddressView = StartAddress.ToString("X8");
-    }
-
     /// <summary>
     /// The list of raw instructions in the block
     /// </summary>
@@ -36,6 +29,13 @@ public class ControlFlowBlock
     /// Indicates if this block is the entry point of the function
     /// </summary>
     public bool IsEntryBlock { get; set; }
+
+    public ControlFlowBlock(uint startAddress)
+    {
+        StartAddress = startAddress;
+
+        ComputedStartAddressView = StartAddress.ToString("X8");
+    }
 
     /// <summary>
     /// Gets a string representation of the block

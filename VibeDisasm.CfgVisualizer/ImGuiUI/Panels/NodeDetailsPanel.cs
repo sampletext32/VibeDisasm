@@ -27,9 +27,7 @@ public class NodeDetailsPanel : IImGuiPanel
     /// </summary>
     public void OnImGuiRender()
     {
-        // Begin the panel
-        bool isOpen = ImGui.Begin("Node Details");
-        if (isOpen)
+        if (ImGui.Begin("Node Details"))
         {
             if (_panelViewModel.SelectedNode == null)
             {
@@ -64,8 +62,6 @@ public class NodeDetailsPanel : IImGuiPanel
                     ImGui.EndTable();
                 }
             }
-            
-            // End the panel only if Begin returned true
             ImGui.End();
         }
     }
