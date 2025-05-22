@@ -35,7 +35,7 @@ window.Load += () =>
         gl = openGl, // load OpenGL
         window, // pass in our window
         inputContext = window.CreateInput(), // create an input context
-        () =>
+        onConfigureIO: () =>
         {
             var io = ImGui.GetIO();
             io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;

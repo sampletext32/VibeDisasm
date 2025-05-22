@@ -14,6 +14,8 @@ public class GraphInputHandler
     private bool _isPanning;
     private Vector2 _lastMousePos;
     private readonly CfgCanvasPanelViewModel _panelViewModel;
+    private Vector2 _dragStartPos;
+    private Vector2 _nodeStartPos;
 
     /// <summary>
     /// Constructor
@@ -38,6 +40,7 @@ public class GraphInputHandler
         HandleKeyboardInput(canvasPos, canvasSize);
         HandleNodeSelection(canvasPos, canvasSize);
         HandleNodeHovering(canvasPos, canvasSize);
+        HandleNodeDragging(canvasPos, canvasSize);
     }
 
     /// <summary>
@@ -200,6 +203,58 @@ public class GraphInputHandler
             
             // Update hovered node in view model
             _panelViewModel.HoverNode(hoveredNode);
+        }
+    }
+
+    private void HandleNodeDragging(Vector2 canvasPos, Vector2 canvasSize)
+    {
+        var io = ImGui.GetIO();
+        var mousePos = io.MousePos;
+        var transform = _panelViewModel.GetTransform(canvasSize);
+
+        // Convert mouse to canvas space
+        var canvasMousePos = mousePos - canvasPos;
+        
+        if (!Matrix3x2.Invert(transform, out var inverseTransform))
+        {
+            return;
+        }
+        
+        var transformedPos = Vector2.Transform(canvasMousePos, inverseTransform);
+        var logicalMousePos = new Vector2(transformedPos.X, transformedPos.Y);
+
+        if (ImGui.IsMouseDown(ImGuiMouseButton.Left))
+        {
+            if (_panelViewModel.SelectedNode is null)
+            {
+                // Find node under mouse
+                foreach (var node in _panelViewModel.CfgViewModel!.Nodes)
+                {
+                    var nodeRect = new Rect(
+                        node.Position.X - node.Size.X / 2,
+                        node.Position.Y - node.Size.Y / 2,
+                        node.Size.X,
+                        node.Size.Y
+                    );
+                    if (nodeRect.Contains(logicalMousePos))
+                    {
+                        _panelViewModel.SelectNode(node);
+                        _dragStartPos = logicalMousePos;
+                        _nodeStartPos = node.Position;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                // Calculate delta movement
+                var delta = (logicalMousePos - _dragStartPos);
+                _panelViewModel.SelectedNode.Position = _nodeStartPos + delta;
+            }
+        }
+        else
+        {
+            _panelViewModel.SelectedNode = null;
         }
     }
 }
