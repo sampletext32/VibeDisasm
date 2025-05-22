@@ -21,8 +21,8 @@ public class CfgCanvasPanelViewModel : IViewModel
     public float Zoom { get; private set; } = 1.0f;
 
     // Node selection
-    public CfgNodeView? SelectedNode { get; private set; }
-    public CfgNodeView? HoveredNode { get; private set; }
+    public CfgNodeView? SelectedNode { get; set; }
+    public CfgNodeView? HoveredNode { get; set; }
 
     // Constants
     public const float MIN_ZOOM = 0.1f;
