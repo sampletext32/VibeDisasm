@@ -21,6 +21,8 @@ public class AppState
     public event Action<EntryPointInfo>? EntryPointSelected;
     public event Action<CfgNodeView?>? CfgNodeSelected;
 
+    public event Action<InstructionInfo>? InstructionSelected;
+
     public void OnPeFileLoaded(PeFileState state)
     {
         OpenedFile = state;
@@ -37,5 +39,10 @@ public class AppState
     public void OnCfgNodeSelected(CfgNodeView? node)
     {
         CfgNodeSelected?.Invoke(node);
+    }
+
+    public void OnInstructionSelected(InstructionInfo instruction)
+    {
+        InstructionSelected?.Invoke(instruction);
     }
 }
