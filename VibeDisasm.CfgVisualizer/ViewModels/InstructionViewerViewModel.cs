@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.DecompilerEngine.ControlFlow;
+using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
@@ -41,7 +42,7 @@ public class InstructionViewerViewModel : IViewModel
         if (_state.OpenedFile == null) return;
         
         // Use the disassembler to get the function's instructions
-        var function = ControlFlowBlockDisassembler.DisassembleBlock(_state.OpenedFile.FileData, entryPoint.FileOffset);
+        var function = AsmFunctionDisassembler.DisassembleFunction(_state.OpenedFile.FileData, entryPoint.FileOffset);
         
         // Convert the instructions to our view model format
         var instructions = new List<InstructionInfo>();

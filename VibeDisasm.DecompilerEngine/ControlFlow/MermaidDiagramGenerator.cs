@@ -1,4 +1,5 @@
 using System.Text;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
@@ -12,7 +13,7 @@ public static class MermaidDiagramGenerator
     /// </summary>
     /// <param name="function">The control flow function to visualize</param>
     /// <returns>A string containing the Mermaid diagram markdown</returns>
-    public static string GenerateDiagram(ControlFlowFunction function, ILookup<uint, ControlFlowEdge> edges)
+    public static string GenerateDiagram(AsmFunction function, ILookup<uint, ControlFlowEdge> edges)
     {
         if (function is null)
         {
@@ -53,7 +54,7 @@ public static class MermaidDiagramGenerator
     // Helper methods
     private static string GetNodeId(uint address) => $"block_{address:X8}";
     
-    private static string GetNodeLabel(ControlFlowBlock block)
+    private static string GetNodeLabel(AsmBlock block)
     {
         var label = new StringBuilder();
         
@@ -79,22 +80,22 @@ public static class MermaidDiagramGenerator
         return label.ToString();
     }
     
-    private static string GetEdgeStyle(ControlFlowJumpType jumpType)
+    private static string GetEdgeStyle(AsmJumpType jumpType)
     {
         return jumpType switch
         {
-            ControlFlowJumpType.Taken => "==>",      // Dashed arrow for taken jumps
-            ControlFlowJumpType.Fallthrough => "-->", // Solid arrow for fallthrough
+            AsmJumpType.Taken => "==>",      // Dashed arrow for taken jumps
+            AsmJumpType.Fallthrough => "-->", // Solid arrow for fallthrough
             _ => "-->"
         };
     }
     
-    private static string GetEdgeLabel(ControlFlowJumpType jumpType)
+    private static string GetEdgeLabel(AsmJumpType jumpType)
     {
         return jumpType switch
         {
-            ControlFlowJumpType.Taken => "taken",
-            ControlFlowJumpType.Fallthrough => "fallthrough",
+            AsmJumpType.Taken => "taken",
+            AsmJumpType.Fallthrough => "fallthrough",
             _ => ""
         };
     }

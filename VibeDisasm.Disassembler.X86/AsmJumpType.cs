@@ -1,6 +1,6 @@
-﻿namespace VibeDisasm.DecompilerEngine.ControlFlow;
+﻿namespace VibeDisasm.Disassembler.X86;
 
-public enum ControlFlowJumpType
+public enum AsmJumpType
 {
     /// <summary>
     /// The jump is taken

@@ -1,4 +1,6 @@
-﻿namespace VibeDisasm.DecompilerEngine.ControlFlow;
+﻿using VibeDisasm.Disassembler.X86;
+
+namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 public class ControlFlowEdge
 {
@@ -6,5 +8,5 @@ public class ControlFlowEdge
 
     public uint ToBlockAddress { get; set; }
 
-    public ControlFlowJumpType JumpType { get; set; }
+    public AsmJumpType JumpType { get; set; }
 }

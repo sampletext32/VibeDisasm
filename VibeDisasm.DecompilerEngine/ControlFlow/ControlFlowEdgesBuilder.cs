@@ -5,11 +5,11 @@ namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
 public static class ControlFlowEdgesBuilder
 {
-    public static ILookup<uint, ControlFlowEdge> Build(ControlFlowFunction function)
+    public static ILookup<uint, ControlFlowEdge> Build(AsmFunction function)
     {
         // build predecessor and successor relation
 
-        Queue<ControlFlowBlock> blockQueue = new Queue<ControlFlowBlock>();
+        Queue<AsmBlock> blockQueue = new Queue<AsmBlock>();
         HashSet<uint> visitedBlockAddresses = [];
 
         List<ControlFlowEdge> edges = [];
@@ -42,7 +42,7 @@ public static class ControlFlowEdgesBuilder
                 {
                     FromBlockAddress = block.StartAddress,
                     ToBlockAddress = lastInstruction.GetJumpTargetAddress()!.Value,
-                    JumpType = ControlFlowJumpType.Taken
+                    JumpType = AsmJumpType.Taken
                 };
                 edges.Add(
                     takenEdge
@@ -52,7 +52,7 @@ public static class ControlFlowEdgesBuilder
                 {
                     FromBlockAddress = block.StartAddress,
                     ToBlockAddress = lastInstruction.GetNextSequentialAddress(),
-                    JumpType = ControlFlowJumpType.Fallthrough
+                    JumpType = AsmJumpType.Fallthrough
                 };
 
                 edges.Add(
@@ -68,7 +68,7 @@ public static class ControlFlowEdgesBuilder
                 {
                     FromBlockAddress = block.StartAddress,
                     ToBlockAddress = lastInstruction.GetJumpTargetAddress()!.Value,
-                    JumpType = ControlFlowJumpType.Taken
+                    JumpType = AsmJumpType.Taken
                 };
                 edges.Add(
                     takenEdge
@@ -88,7 +88,7 @@ public static class ControlFlowEdgesBuilder
                 {
                     FromBlockAddress = block.StartAddress,
                     ToBlockAddress = lastInstruction.GetNextSequentialAddress(),
-                    JumpType = ControlFlowJumpType.Fallthrough
+                    JumpType = AsmJumpType.Fallthrough
                 };
                 edges.Add(
                     takenEdge
