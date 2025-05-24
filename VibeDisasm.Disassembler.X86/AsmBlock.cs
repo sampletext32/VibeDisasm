@@ -1,11 +1,11 @@
 using System.Text;
 
-namespace VibeDisasm.DecompilerEngine.ControlFlow;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Represents a basic block of instructions in the control flow graph
 /// </summary>
-public class ControlFlowBlock
+public class AsmBlock
 {
     /// <summary>
     /// The starting address of the block
@@ -17,12 +17,12 @@ public class ControlFlowBlock
     /// <summary>
     /// The list of raw instructions in the block
     /// </summary>
-    public List<ControlFlowInstruction> Instructions { get; set; } = [];
+    public List<AsmInstruction> Instructions { get; set; } = [];
     
     /// <summary>
-    /// Gets the last instruction in the block as a control flow instruction
+    /// Gets the last instruction in the block
     /// </summary>
-    public ControlFlowInstruction? LastControlFlowInstruction => 
+    public AsmInstruction? LastControlFlowInstruction => 
         Instructions.Count > 0 ? Instructions[^1] : null;
     
     /// <summary>
@@ -30,7 +30,7 @@ public class ControlFlowBlock
     /// </summary>
     public bool IsEntryBlock { get; set; }
 
-    public ControlFlowBlock(uint startAddress)
+    public AsmBlock(uint startAddress)
     {
         StartAddress = startAddress;
 

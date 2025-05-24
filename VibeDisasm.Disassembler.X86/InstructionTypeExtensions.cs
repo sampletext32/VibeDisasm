@@ -1,6 +1,4 @@
-using VibeDisasm.Disassembler.X86;
-
-namespace VibeDisasm.DecompilerEngine;
+namespace VibeDisasm.Disassembler.X86;
 
 public static class InstructionTypeExtensions
 {

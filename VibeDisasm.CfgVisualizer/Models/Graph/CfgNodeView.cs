@@ -1,5 +1,6 @@
 using System.Numerics;
 using VibeDisasm.DecompilerEngine.ControlFlow;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.CfgVisualizer.Models.Graph;
 
@@ -11,7 +12,7 @@ public class CfgNodeView
     /// <summary>
     /// The underlying control flow block
     /// </summary>
-    public ControlFlowBlock Block { get; }
+    public AsmBlock Block { get; }
     
     /// <summary>
     /// Position of the node in the visualization
@@ -47,7 +48,7 @@ public class CfgNodeView
     /// Constructor
     /// </summary>
     /// <param name="block">Control flow block</param>
-    public CfgNodeView(ControlFlowBlock block)
+    public CfgNodeView(AsmBlock block)
     {
         Block = block;
         Id = block.ComputedStartAddressView;

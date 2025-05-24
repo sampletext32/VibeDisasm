@@ -1,13 +1,12 @@
 using System.Diagnostics.Contracts;
-using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Disassembler.X86.Operands;
 
-namespace VibeDisasm.DecompilerEngine.ControlFlow;
+namespace VibeDisasm.Disassembler.X86;
 
 /// <summary>
 /// Provides a higher-level abstraction over x86 instructions for control flow analysis
 /// </summary>
-public class ControlFlowInstruction
+public class AsmInstruction
 {
     /// <summary>
     /// The underlying raw x86 instruction
@@ -35,7 +34,7 @@ public class ControlFlowInstruction
     /// <summary>
     /// Creates a new control flow instruction wrapper
     /// </summary>
-    public ControlFlowInstruction(Instruction instruction)
+    public AsmInstruction(Instruction instruction)
     {
         RawInstruction = instruction;
         ComputedView = instruction.ToString();

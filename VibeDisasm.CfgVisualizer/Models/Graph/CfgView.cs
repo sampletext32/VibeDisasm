@@ -1,5 +1,6 @@
 using System.Numerics;
 using VibeDisasm.DecompilerEngine.ControlFlow;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.CfgVisualizer.Models.Graph;
 
@@ -11,7 +12,7 @@ public class CfgView
     /// <summary>
     /// The underlying control flow function
     /// </summary>
-    public ControlFlowFunction Function { get; }
+    public AsmFunction Function { get; }
     
     /// <summary>
     /// Nodes in the CFG
@@ -27,7 +28,7 @@ public class CfgView
     /// Constructor
     /// </summary>
     /// <param name="function">Control flow function</param>
-    public CfgView(ControlFlowFunction function)
+    public CfgView(AsmFunction function)
     {
         Function = function;
 
@@ -48,7 +49,7 @@ public class CfgView
             if (nodeMap.TryGetValue(edge.FromBlockAddress, out var source) && 
                 nodeMap.TryGetValue(edge.ToBlockAddress, out var target))
             {
-                var isFallthrough = edge.JumpType == ControlFlowJumpType.Fallthrough;
+                var isFallthrough = edge.JumpType == AsmJumpType.Fallthrough;
                 var edgeViewModel = new CfgEdgeView(source, target, isFallthrough);
                 Edges.Add(edgeViewModel);
             }

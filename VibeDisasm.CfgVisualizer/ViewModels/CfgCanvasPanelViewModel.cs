@@ -2,6 +2,7 @@ using System.Numerics;
 using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.DecompilerEngine.ControlFlow;
+using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
@@ -38,7 +39,7 @@ public class CfgCanvasPanelViewModel : IViewModel
 
     private void OnEntryPointSelected(EntryPointInfo obj)
     {
-        var function = ControlFlowBlockDisassembler.DisassembleBlock(_state.OpenedFile!.FileData, obj.FileOffset);
+        var function = AsmFunctionDisassembler.DisassembleFunction(_state.OpenedFile!.FileData, obj.FileOffset);
         var viewModel = new CfgView(function);
         CfgViewModel = viewModel;
         ResetView();
