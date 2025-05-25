@@ -9,7 +9,7 @@ public static class RegisterMapper
     /// Gets the register name based on the register index and size
     /// </summary>
     /// <param name="regIndex">The register index as RegisterIndex enum</param>
-    /// <param name="size">The register size (16, 32, or 64 bits)</param>
+    /// <param name="size">The register size (16, 32 bits)</param>
     /// <returns>The register name</returns>
     public static string GetRegisterName(RegisterIndex regIndex, int size)
     {
@@ -17,8 +17,7 @@ public static class RegisterMapper
         {
             16 => Constants.RegisterNames16[(int)regIndex],
             32 => Constants.RegisterNames32[(int)regIndex],
-            64 => Constants.RegisterNames32[(int)regIndex], // For now, reuse 32-bit names for 64-bit
-            _ => "unknown"
+            _ => throw new InvalidOperationException($"Didn't expect {size} register size"),
         };
     }
     

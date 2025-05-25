@@ -294,7 +294,7 @@ public class InstructionDecoder
     {
         uint targetPosition = _position + offset;
         
-        if (targetPosition >= _length || targetPosition < 0)
+        if (targetPosition >= _length)
         {
             return 0;
         }

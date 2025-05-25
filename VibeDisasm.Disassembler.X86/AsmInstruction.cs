@@ -3,37 +3,17 @@ using VibeDisasm.Disassembler.X86.Operands;
 
 namespace VibeDisasm.Disassembler.X86;
 
-/// <summary>
-/// Provides a higher-level abstraction over x86 instructions for control flow analysis
-/// </summary>
+/// <summary>Higher-level abstraction over x86 instructions for control flow analysis.</summary>
 public class AsmInstruction
 {
-    /// <summary>
-    /// The underlying raw x86 instruction
-    /// </summary>
     public Instruction RawInstruction { get; }
-    
-    /// <summary>
-    /// The address of the instruction
-    /// </summary>
-    public ulong Address => RawInstruction.Address;
-    
-    /// <summary>
-    /// The length of the instruction in bytes
-    /// </summary>
-    public byte Length => (byte)RawInstruction.Length;
-    
-    /// <summary>
-    /// The type of the instruction
-    /// </summary>
-    public InstructionType Type => RawInstruction.Type;
-
     public string ComputedView { get; }
     public string ComputedAddressView { get; }
     
-    /// <summary>
-    /// Creates a new control flow instruction wrapper
-    /// </summary>
+    public ulong Address => RawInstruction.Address;
+    public byte Length => (byte)RawInstruction.Length;
+    public InstructionType Type => RawInstruction.Type;
+
     public AsmInstruction(Instruction instruction)
     {
         RawInstruction = instruction;
@@ -41,61 +21,23 @@ public class AsmInstruction
         ComputedAddressView = instruction.Address.ToString("X8");
     }
     
-    /// <summary>
-    /// Gets the next sequential instruction address
-    /// </summary>
-    [Pure]
-    public uint GetNextSequentialAddress()
-    {
-        return (uint)(Address + Length);
-    }
+    [Pure] public uint GetNextSequentialAddress() => (uint)(Address + Length);
+    [Pure] public bool IsJump() => Type.IsConditionalJump() || Type.IsUnconditionalJump();
+    [Pure] public bool IsConditionalJump() => Type.IsConditionalJump();
+    [Pure] public bool IsUnconditionalJump() => Type.IsUnconditionalJump();
     
-    /// <summary>
-    /// Determines if this instruction is a jump instruction
-    /// </summary>
-    [Pure]
-    public bool IsJump()
-    {
-        return Type.IsConditionalJump() || Type.IsUnconditionalJump();
-    }
-    
-    /// <summary>
-    /// Determines if this instruction is a conditional jump
-    /// </summary>
-    [Pure]
-    public bool IsConditionalJump()
-    {
-        return Type.IsConditionalJump();
-    }
-    
-    /// <summary>
-    /// Determines if this instruction is an unconditional jump
-    /// </summary>
-    [Pure]
-    public bool IsUnconditionalJump()
-    {
-        return Type.IsUnconditionalJump();
-    }
-    
-    /// <summary>
-    /// Gets the jump target address if this is a jump instruction
-    /// </summary>
-    /// <returns>The jump target address, or null if this is not a jump or target cannot be determined</returns>
+    /// <summary>Gets the jump target address if this is a jump instruction.</summary>
     [Pure]
     public uint? GetJumpTargetAddress()
     {
-        if (!IsJump())
-        {
-            return null;
-        }
+        if (!IsJump()) return null;
         
-        // Get the jump target from the first operand if it's an immediate value
         if (RawInstruction.StructuredOperands.Count > 0 && 
             RawInstruction.StructuredOperands[0] is ImmediateOperand imm)
         {
             return (uint)imm.Value;
         }
-        // Get the jump target from the first operand if it's an immediate value
+        
         if (RawInstruction.StructuredOperands.Count > 0 && 
             RawInstruction.StructuredOperands[0] is RelativeOffsetOperand roo)
         {
@@ -105,11 +47,5 @@ public class AsmInstruction
         return null;
     }
     
-    /// <summary>
-    /// String representation of the instruction
-    /// </summary>
-    public override string ToString()
-    {
-        return RawInstruction.ToString();
-    }
+    public override string ToString() => $"{Address:X8}: {ComputedView}";
 }

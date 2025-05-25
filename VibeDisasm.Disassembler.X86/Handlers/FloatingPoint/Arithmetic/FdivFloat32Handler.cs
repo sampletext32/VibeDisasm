@@ -32,8 +32,7 @@ public class FdivFloat32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 6
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
+        byte reg = ModRMDecoder.PeakModRMReg();
         
         return reg == 6;
     }

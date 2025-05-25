@@ -11,3 +11,10 @@ trigger: always_on
 
 Additional rules:
 1. Always inline ImGui windows e.g. `if (ImGui.Begin("..."))`, not `bool isOpen = ImGui.Begin("...")`.
+2. Only when dealing with ImGui prefer deep code nesting instead of early returns.
+3. Always add `[Pure]` attribute to members, that don't alter model state.
+
+Prefer modern C# syntax (>12):
+1. Use collection expression syntax (e.g., `= []`) instead of the `= new()` syntax when initializing collections. 
+2. Pattern matching (e.g., `something is null` over `something == null`)
+3. Prefer extension methods instead of modifying existing types.

@@ -1,10 +1,18 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.ControlFlow;
 
+/// <summary>
+/// Builds control flow edges between basic blocks in a function.
+/// </summary>
 public static class ControlFlowEdgesBuilder
 {
+    /// <summary>
+    /// Builds control flow edges for all basic blocks in the function.
+    /// </summary>
+    /// <param name="function">Function to analyze</param>
+    /// <returns>Lookup of edges by source block address</returns>
     public static ILookup<uint, ControlFlowEdge> Build(AsmFunction function)
     {
         // build predecessor and successor relation

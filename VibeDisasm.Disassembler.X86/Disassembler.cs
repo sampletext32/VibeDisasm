@@ -59,7 +59,7 @@ public class Disassembler
             if (instruction != null)
             {
                 // Adjust the instruction address to include the base address
-                instruction.Address = _baseAddress + (uint)startPosition;
+                instruction.Address = _baseAddress + startPosition;
 
                 // Add the instruction to the list
                 instructions.Add(instruction);
@@ -71,7 +71,7 @@ public class Disassembler
 
                 Instruction dummyInstruction = new Instruction
                 {
-                    Address = _baseAddress + (uint)position,
+                    Address = _baseAddress + position,
                     Type = InstructionType.Unknown,
                     StructuredOperands = [OperandFactory.CreateImmediateOperand(unknownByte, 8),]
                 };
