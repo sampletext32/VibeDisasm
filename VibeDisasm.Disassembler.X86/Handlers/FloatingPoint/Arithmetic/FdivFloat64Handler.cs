@@ -54,9 +54,6 @@ public class FdivFloat64Handler : InstructionHandler
         // Read the ModR/M byte using the specialized FPU method for 64-bit operands
         var (mod, reg, fpuRm, rawOperand) = ModRMDecoder.ReadModRMFpu64();
         
-        // We've already verified reg field is 6 (FDIV) in CanHandle
-        // and we only handle memory operands (mod != 3)
-        
         // Set the instruction type
         instruction.Type = InstructionType.Fdiv;
 

@@ -3,7 +3,7 @@ using VibeDisasm.Disassembler.X86.Operands;
 
 namespace VibeDisasm.Disassembler.X86;
 
-public class AsmFunctionDisassembler
+public static class AsmFunctionDisassembler
 {
     /// <summary>
     /// Disassembles an assembly function from a starting position in the fileBuffer.

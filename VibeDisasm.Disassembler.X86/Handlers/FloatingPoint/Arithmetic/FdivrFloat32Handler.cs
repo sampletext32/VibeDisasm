@@ -23,19 +23,13 @@ public class FdivrFloat32Handler : InstructionHandler
     /// <returns>True if this handler can decode the opcode</returns>
     public override bool CanHandle(byte opcode)
     {
-        // FDIVR is D8 /7
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8) 
+            return false;
 
         if (!Decoder.CanReadByte())
-        {
             return false;
-        }
 
-        // Check if the ModR/M byte has reg field = 7
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        
-        return reg == 7;
+        return ModRMDecoder.PeakModRMReg() == 7;
     }
     
     /// <summary>
