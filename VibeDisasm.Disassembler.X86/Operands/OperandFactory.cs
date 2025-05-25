@@ -13,6 +13,10 @@ public static class OperandFactory
     /// <returns>A register operand</returns>
     public static RegisterOperand CreateRegisterOperand(RegisterIndex register, int size = 32)
     {
+        if (size == 8)
+        {
+            throw new InvalidOperationException();
+        }
         return new RegisterOperand(register, size);
     }
     
