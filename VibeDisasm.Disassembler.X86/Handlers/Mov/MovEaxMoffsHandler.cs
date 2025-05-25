@@ -49,7 +49,10 @@ public class MovEaxMoffsHandler : InstructionHandler
         uint offset = Decoder.ReadUInt32();
 
         // Create the destination register operand (EAX or AL)
-        var destinationOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, operandSize);
+        Operand destinationOperand =
+            operandSize == 8
+                ? OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL)
+                : OperandFactory.CreateRegisterOperand(RegisterIndex.A, operandSize);
         
         // Create the source memory operand
         // For MOV EAX, moffs32 or MOV AL, moffs8, the memory operand is a direct memory reference
