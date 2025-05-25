@@ -31,7 +31,7 @@ public class GraphStatusBar
             return;
             
         // Create status text
-        string statusText = $"Zoom: {_panelViewModel.Zoom:F2}x | Pan: ({_panelViewModel.PanOffset.X:F1}, {_panelViewModel.PanOffset.Y:F1}) | Nodes: {_panelViewModel.CfgViewModel.Nodes.Count} | Edges: {_panelViewModel.CfgViewModel.Edges.Count}";
+        string statusText = _panelViewModel.GetStatusString();
         
         // Calculate text size and position
         var statusTextSize = ImGui.CalcTextSize(statusText);
