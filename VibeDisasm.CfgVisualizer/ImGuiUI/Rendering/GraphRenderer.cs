@@ -47,7 +47,7 @@ public class GraphRenderer
     /// <param name="zoom">Current zoom level</param>
     public void RenderEdges(
         ImDrawListPtr drawList, 
-        IEnumerable<CfgEdgeView> edges, 
+        ICollection<CfgEdgeView> edges, 
         Vector2 canvasPos, 
         Matrix3x2 transform, 
         CfgNodeView? selectedNode, 

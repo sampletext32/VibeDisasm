@@ -45,6 +45,20 @@ public class CfgCanvasPanelViewModel : IViewModel
         ResetView();
     }
 
+    private (float, Vector2, int, int) _statusStringTuple = (0, new(), 0,0);
+    private string StatusString { get; set; }
+    
+    public string GetStatusString()
+    {
+        var state = (Zoom, PanOffset, CfgViewModel.Nodes.Count, CfgViewModel.Edges.Count);
+        if (state != _statusStringTuple)
+        {
+            _statusStringTuple = state;
+            StatusString = $"Zoom: {Zoom:F2}x | Pan: ({PanOffset.X:F1}, {PanOffset.Y:F1}) | Nodes: {CfgViewModel.Nodes.Count} | Edges: {CfgViewModel.Edges.Count}";
+        }
+        return StatusString;
+    }
+
     /// <summary>
     /// Resets the view (pan and zoom)
     /// </summary>
