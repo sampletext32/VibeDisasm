@@ -80,30 +80,30 @@ public class CfgView
         // Recursively layout the graph
         LayoutNode(entryNode, 0, 0, visited);
 
-        bool changed;
-        do
-        {
-            changed = false;
-            foreach (var node in Nodes)
-            {
-                var sourceBelow = Edges.FirstOrDefault(x => x.Target == node && (x.Source.Position.Y >= node.Position.Y));
-
-                if (sourceBelow != null)
-                {
-                    RecursiveShiftDown(sourceBelow.Target, sourceBelow.Source.Position);
-                    changed = true;
-                }
-            }
-        } while (changed);
+        // bool changed;
+        // do
+        // {
+        //     changed = false;
+        //     foreach (var node in Nodes)
+        //     {
+        //         var sourceBelow = Edges.FirstOrDefault(x => x.Target == node && (x.Source.Position.Y >= node.Position.Y));
+        //
+        //         if (sourceBelow != null)
+        //         {
+        //             RecursiveShiftDown(sourceBelow.Target, sourceBelow.Source.Position);
+        //             changed = true;
+        //         }
+        //     }
+        // } while (changed);
     }
 
     private void RecursiveShiftDown(CfgNodeView nodeWithSourceBelow, Vector2 sourcePosition)
     {
-        nodeWithSourceBelow.Position = nodeWithSourceBelow.Position with {Y = sourcePosition.Y + nodeHeight + verticalSpacing};
-        foreach (var edge in Edges.Where(x => x.Source == nodeWithSourceBelow))
-        {
-            RecursiveShiftDown(edge.Target, sourcePosition);
-        }
+        nodeWithSourceBelow.Position = nodeWithSourceBelow.Position with {Y = nodeWithSourceBelow.Position.Y + nodeHeight + verticalSpacing};
+        // foreach (var edge in Edges.Where(x => x.Source == nodeWithSourceBelow && x.Target != nodeWithSourceBelow))
+        // {
+        //     RecursiveShiftDown(edge.Target, nodeWithSourceBelow.Position);
+        // }
     }
 
     // Constants for layout
