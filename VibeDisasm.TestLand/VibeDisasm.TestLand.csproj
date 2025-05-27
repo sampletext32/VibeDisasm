@@ -9,4 +9,16 @@
       <ProjectReference Include="..\VibeDisasm.Pe\VibeDisasm.Pe.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="DLLs\ai.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="DLLs\AniMesh.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="DLLs\ArealMap.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

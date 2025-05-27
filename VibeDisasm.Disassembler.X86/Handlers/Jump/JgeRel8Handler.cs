@@ -35,7 +35,7 @@ public class JgeRel8Handler : InstructionHandler
     public override bool Decode(byte opcode, Instruction instruction)
     {
         // Set the instruction type
-        instruction.Type = InstructionType.Jge;
+        instruction.Type = InstructionType.Jnl;
         
         // Check if we can read the offset byte
         if (!Decoder.CanReadByte())

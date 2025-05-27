@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class RelativeOffsetOperand : Operand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitRelativeOffset(this);
+
     /// <summary>
     /// Gets or sets the target address
     /// </summary>

@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class FPURegisterOperand : Operand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitFPURegister(this);
+
     /// <summary>
     /// Gets the FPU register index (0-7)
     /// </summary>

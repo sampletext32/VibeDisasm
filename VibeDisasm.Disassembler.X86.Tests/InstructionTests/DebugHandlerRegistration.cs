@@ -53,7 +53,7 @@ public class DebugHandlerRegistration
         {
             _output.WriteLine("The following handlers are not registered in the factory:");
             _output.WriteLine(missingHandlers.ToString());
-            Assert.False(true, "Missing handlers detected");
+            Assert.Fail("Missing handlers detected");
         }
         else
         {

@@ -86,7 +86,7 @@ public class CmpInstructionSequenceTests
         
         // Second instruction: JGE +5
         var jgeInstruction = instructions[1];
-        Assert.Equal(InstructionType.Jge, jgeInstruction.Type);
+        Assert.Equal(InstructionType.Jnl, jgeInstruction.Type);
         
         // Check that we have one operand
         Assert.Single((IEnumerable) jgeInstruction.StructuredOperands);
@@ -148,7 +148,7 @@ public class CmpInstructionSequenceTests
         
         // Second instruction: JGE +5
         var jgeInstruction = instructions[1];
-        Assert.Equal(InstructionType.Jge, jgeInstruction.Type);
+        Assert.Equal(InstructionType.Jnl, jgeInstruction.Type);
         
         // Check that we have one operand
         Assert.Single((IEnumerable) jgeInstruction.StructuredOperands);

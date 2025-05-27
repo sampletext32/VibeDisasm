@@ -6,6 +6,7 @@ namespace VibeDisasm.Disassembler.X86;
 /// <summary>Higher-level abstraction over x86 instructions for control flow analysis.</summary>
 public class AsmInstruction
 {
+    public TResult Accept<TResult>(IInstructionVisitor<TResult> visitor) => visitor.Visit(this);
     public Instruction RawInstruction { get; }
     public string ComputedView { get; }
     public string ComputedAddressView { get; }

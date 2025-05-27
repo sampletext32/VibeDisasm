@@ -18,9 +18,9 @@ public class ConditionalJumpHandler : InstructionHandler
     private static readonly InstructionType[] InstructionTypes =
     [
         InstructionType.Jo, InstructionType.Jno, InstructionType.Jb, InstructionType.Jae, 
-        InstructionType.Jz, InstructionType.Jnz, InstructionType.Jbe, InstructionType.Ja,
-        InstructionType.Js, InstructionType.Jns, InstructionType.Jp, InstructionType.Jnp, 
-        InstructionType.Jl, InstructionType.Jge, InstructionType.Jle, InstructionType.Jg
+        InstructionType.Jz, InstructionType.Jnz, InstructionType.Jna, InstructionType.Jnbe,
+        InstructionType.Js, InstructionType.Jns, InstructionType.Jp, InstructionType.Jpo, 
+        InstructionType.Jnge, InstructionType.Jnl, InstructionType.Jng, InstructionType.Jnle
     ];
 
     /// <summary>

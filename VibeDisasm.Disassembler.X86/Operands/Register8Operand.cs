@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class Register8Operand : Operand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitRegister8(this);
+
     /// <summary>
     /// Gets or sets the 8-bit register
     /// </summary>

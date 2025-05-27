@@ -15,4 +15,6 @@ public sealed class IRCallInstruction : IRInstruction
     {
         Target = target;
     }
+
+    public override string ToString() => $"call {Target}";
 }

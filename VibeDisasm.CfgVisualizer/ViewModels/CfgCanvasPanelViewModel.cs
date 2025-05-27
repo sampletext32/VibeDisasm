@@ -46,11 +46,11 @@ public class CfgCanvasPanelViewModel : IViewModel
     }
 
     private (float, Vector2, int, int) _statusStringTuple = (0, new(), 0,0);
-    private string StatusString { get; set; }
+    private string StatusString { get; set; } = null!;
     
     public string GetStatusString()
     {
-        var state = (Zoom, PanOffset, CfgViewModel.Nodes.Count, CfgViewModel.Edges.Count);
+        var state = (Zoom, PanOffset, CfgViewModel!.Nodes.Count, CfgViewModel!.Edges.Count);
         if (state != _statusStringTuple)
         {
             _statusStringTuple = state;

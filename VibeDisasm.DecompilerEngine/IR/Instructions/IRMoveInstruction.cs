@@ -17,4 +17,6 @@ public sealed class IRMoveInstruction : IRInstruction
         Destination = destination;
         Source = source;
     }
+
+    public override string ToString() => $"{Destination} = {Source}";
 }

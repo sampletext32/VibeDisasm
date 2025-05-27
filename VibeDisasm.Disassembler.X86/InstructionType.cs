@@ -48,24 +48,24 @@ public enum InstructionType
     
     // Control flow
     Jmp,        // Jump unconditionally
-    Jg,         // Jump if greater
-    Jge,        // Jump if greater or equal
-    Jl,         // Jump if less
-    Jle,        // Jump if less or equal
-    Ja,         // Jump if above (unsigned)
-    Jae,        // Jump if above or equal (unsigned)
-    Jb,         // Jump if below (unsigned)
-    Jbe,        // Jump if below or equal (unsigned)
-    Jz,         // Jump if zero
-    Jnz,        // Jump if not zero
-    Jo,         // Jump if overflow
-    Jno,        // Jump if not overflow
-    Js,         // Jump if sign
-    Jns,        // Jump if not sign
-    Jp,         // Jump if parity (even)
-    Jnp,        // Jump if not parity (odd)
-    Jcxz,       // Jump if CX zero
-    Jecxz,      // Jump if ECX zero
+    Jnle,       // Jump if greater (ZF=0 and SF=OF)
+    Jnl,        // Jump if greater or equal (SF=O=F)
+    Jnge,       // Jump if less (SF!=OF)
+    Jng,        // Jump if less or equal (ZF=1 or SF!=OF)
+    Jnbe,       // Jump if above (CF=0 and ZF=0)
+    Jae,        // Jump if above or equal (CF=0)
+    Jb,         // Jump if below (CF=1)
+    Jna,        // Jump if below or equal (CF=1 or ZF=1)
+    Jz,         // Jump if zero (ZF=1)
+    Jnz,        // Jump if not zero (ZF=0)
+    Jo,         // Jump if overflow (OF=1)
+    Jno,        // Jump if not overflow (OF=0)
+    Js,         // Jump if sign (SF=1)
+    Jns,        // Jump if not sign (SF=0)
+    Jp,         // Jump if parity (PF=1)
+    Jpo,        // Jump if not parity (PF=0)
+    Jcxz,       // Jump if CX zero (CX=0)
+    Jecxz,      // Jump if ECX zero (ECX=0)
     Loop,       // Loop
     Loope,      // Loop if equal
     Loopne,     // Loop if not equal

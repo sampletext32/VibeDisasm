@@ -10,4 +10,6 @@ public class IRFunction
     public required IRType ReturnType { get; init; }
     public required IReadOnlyList<IRVariable> Parameters { get; init; }
     public required IReadOnlyList<IRBlock> Blocks { get; init; }
+
+    public override string ToString() => $"{ReturnType.Name} {Name}({string.Join(", ", Parameters.Select(p => p.ToString()))})\n" + string.Join("\n\n", Blocks);
 }

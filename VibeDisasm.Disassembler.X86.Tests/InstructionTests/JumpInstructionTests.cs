@@ -144,7 +144,7 @@ public class JumpInstructionTests
         
         // Assert
         Assert.NotNull(instruction);
-        Assert.Equal(InstructionType.Jge, instruction.Type);
+        Assert.Equal(InstructionType.Jnl, instruction.Type);
         
         // Check that we have one operand
         Assert.Single((IEnumerable) instruction.StructuredOperands);
@@ -175,7 +175,7 @@ public class JumpInstructionTests
         
         // Assert
         Assert.Single((IEnumerable) instructions);
-        Assert.Equal(InstructionType.Jge, instructions[0].Type);
+        Assert.Equal(InstructionType.Jnl, instructions[0].Type);
         
         // Check that we have one operand
         Assert.Single((IEnumerable) instructions[0].StructuredOperands);
@@ -211,7 +211,7 @@ public class JumpInstructionTests
         Assert.Equal(4, instructions.Count);
         
         // First instruction: JGE +5
-        Assert.Equal(InstructionType.Jge, instructions[0].Type);
+        Assert.Equal(InstructionType.Jnl, instructions[0].Type);
         
         // Check that we have one operand
         Assert.Single((IEnumerable) instructions[0].StructuredOperands);

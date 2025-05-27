@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class FarPointerOperand : MemoryOperand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitFarPointer(this);
+
     /// <summary>
     /// Gets the base register (if any)
     /// </summary>

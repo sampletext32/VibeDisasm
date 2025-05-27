@@ -10,4 +10,6 @@ public class IRBlock
 {
     public required string Id { get; init; }
     public required IReadOnlyList<IRInstruction> Instructions { get; init; }
+
+    public override string ToString() => $"// Block {Id}\n" + string.Join("\n", Instructions);
 }
