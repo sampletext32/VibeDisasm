@@ -29,7 +29,7 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
     private static ImGuiDockNodeFlags _dockspaceFlags = ImGuiDockNodeFlags.None;
 
     private List<IImGuiPanel> _imGuiPanels = [];
-    private ActionsService _actionsService;
+    private ActionsService _actionsService = null!;
 
     /// <summary>
     /// Constructor

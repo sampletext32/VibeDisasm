@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class DirectMemoryOperand : MemoryOperand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitDirectMemory(this);
+
     /// <summary>
     /// Gets or sets the memory address
     /// </summary>

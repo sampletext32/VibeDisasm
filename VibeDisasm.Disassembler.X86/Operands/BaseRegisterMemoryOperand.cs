@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class BaseRegisterMemoryOperand : MemoryOperand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitBaseRegisterMemory(this);
+
     /// <summary>
     /// Gets or sets the base register
     /// </summary>

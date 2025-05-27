@@ -1,9 +1,10 @@
+using VibeDisasm.DecompilerEngine.IR;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
 
 // Path to the PE file to analyze
-const string filePath = @"./DLLs/Terrain.dll";
+const string filePath = @"./DLLs/ArealMap.dll";
 string fileName = Path.GetFileName(filePath);
 
 // Read the file bytes
@@ -22,5 +23,9 @@ var entryPointCodeOffset = codeOffsetsInfo.Offsets.FirstOrDefault(x => x.Source 
 
 // Disassemble the entry point into basic blocks (control flow function)
 var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, entryPointCodeOffset.FileOffset);
+
+var irFunction = IrFromAsmConverter.Convert(asmFunction);
+
+Console.WriteLine(irFunction);
 
 _ = 5;

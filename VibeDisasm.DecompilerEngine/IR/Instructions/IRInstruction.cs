@@ -10,4 +10,5 @@ public abstract class IRInstruction
 {
     public abstract IRExpression? Result { get; }
     public abstract IReadOnlyList<IRExpression> Operands { get; }
+    public virtual IReadOnlyList<IRFlagEffect> SideEffects => [];
 }

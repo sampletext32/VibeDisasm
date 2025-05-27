@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class ImmediateOperand : Operand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitImmediate(this);
+
     /// <summary>
     /// Gets or sets the immediate value
     /// </summary>

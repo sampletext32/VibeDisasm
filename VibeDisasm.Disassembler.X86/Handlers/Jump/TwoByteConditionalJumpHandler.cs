@@ -7,20 +7,13 @@ namespace VibeDisasm.Disassembler.X86.Handlers.Jump;
 /// </summary>
 public class TwoByteConditionalJumpHandler : InstructionHandler
 {
-    // Mnemonics for conditional jumps
-    private static readonly string[] ConditionalJumpMnemonics =
-    [
-        "jo", "jno", "jb", "jnb", "jz", "jnz", "jbe", "jnbe",
-        "js", "jns", "jp", "jnp", "jl", "jnl", "jle", "jnle"
-    ];
-    
     // Instruction types for conditional jumps
     private static readonly InstructionType[] InstructionTypes =
     [
         InstructionType.Jo, InstructionType.Jno, InstructionType.Jb, InstructionType.Jae, 
-        InstructionType.Jz, InstructionType.Jnz, InstructionType.Jbe, InstructionType.Ja,
-        InstructionType.Js, InstructionType.Jns, InstructionType.Jp, InstructionType.Jnp, 
-        InstructionType.Jl, InstructionType.Jge, InstructionType.Jle, InstructionType.Jg
+        InstructionType.Jz, InstructionType.Jnz, InstructionType.Jna, InstructionType.Jnbe,
+        InstructionType.Js, InstructionType.Jns, InstructionType.Jp, InstructionType.Jpo, 
+        InstructionType.Jnge, InstructionType.Jnl, InstructionType.Jng, InstructionType.Jnle
     ];
 
     /// <summary>

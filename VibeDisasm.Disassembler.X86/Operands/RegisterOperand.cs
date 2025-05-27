@@ -5,6 +5,8 @@ namespace VibeDisasm.Disassembler.X86.Operands;
 /// </summary>
 public class RegisterOperand : Operand
 {
+    public override TResult Accept<TResult>(IOperandVisitor<TResult> visitor) => visitor.VisitRegister(this);
+
     /// <summary>
     /// Gets or sets the register
     /// </summary>

@@ -24,7 +24,7 @@ public class InstructionSequenceTests
         Assert.True(instructions.Count >= 5, $"Expected at least 5 instructions, but got {instructions.Count}");
         
         // First instruction: JGE LAB_10001c51 (JNL is an alternative mnemonic for JGE)
-        Assert.True(instructions[0].Type == InstructionType.Jge, 
+        Assert.True(instructions[0].Type == InstructionType.Jnl, 
             $"Expected 'Jge', but got '{instructions[0].Type}'");
         
         // Check the operand (relative offset for jump target)
@@ -115,7 +115,7 @@ public class InstructionSequenceTests
         Assert.True(instructions.Count >= 7, $"Expected at least 7 instructions, but got {instructions.Count}");
         
         // First instruction should be JGE with relative offset
-        Assert.Equal(InstructionType.Jge, instructions[0].Type);
+        Assert.Equal(InstructionType.Jnl, instructions[0].Type);
         
         // Check the operand (relative offset for jump target)
         var jgeOperand = instructions[0].StructuredOperands[0];

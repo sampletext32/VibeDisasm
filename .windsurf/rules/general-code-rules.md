@@ -18,6 +18,7 @@ CfgVisualizer is an ImGui UI project that is used to display finished and polish
 4. Write only essential comments, e.g. class summary or algorithm outlines.
 5. Strictly place every class in separate files. This is a must.
 6. Don't write extensive comments. Only outline key parts and/or members of a type.
+7. If you notice inconsistency, incompleteness or inaccurasy - outline that in response. Don't edit without command.
 
 Additional rules:
 1. Always inline ImGui windows e.g. `if (ImGui.Begin("..."))`, not `bool isOpen = ImGui.Begin("...")`.
@@ -29,4 +30,3 @@ Prefer modern C# syntax (>12):
 1. Use collection expression syntax (e.g., `= []`) instead of the `= new()` syntax when initializing collections. 
 2. Pattern matching (e.g., `something is null` over `something == null`)
 3. Prefer extension methods instead of modifying existing types.
-
