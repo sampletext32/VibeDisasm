@@ -14,10 +14,10 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         => new IRRegisterExpr(X86RegisterToIrRegister(operand.Register, operand.Size));
 
     public IRExpression VisitImmediate(ImmediateOperand operand)
-        => IRConstantExpr.Ulong(operand.Value);
+        => IRConstantExpr.FromSize(operand.Value, operand.Size);
 
     public IRExpression VisitRelativeOffset(RelativeOffsetOperand operand)
-        => IRConstantExpr.Uint(operand.TargetAddress);
+        => IRConstantExpr.FromSize(operand.TargetAddress, operand.Size);
 
     public IRExpression VisitDisplacementMemory(DisplacementMemoryOperand operand)
         => new IRDerefExpr(
@@ -76,7 +76,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         => new IRMemoryExpr($"{operand.BaseRegister}:{operand.Displacement}");
 
     public IRExpression VisitOperand(Operand operand)
-        => IRConstantExpr.Int(-999999999);
+        => throw new InvalidOperationException($"Unsupported Operand to IR conversion. {operand.GetType().Name}");
 
     private static IRRegister X86RegisterToIrRegister(RegisterIndex registerIndex, int size)
     {
