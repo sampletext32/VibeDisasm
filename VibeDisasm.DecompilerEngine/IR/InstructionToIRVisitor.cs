@@ -272,15 +272,21 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     new IRCompareExpr(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.Equal)
                 );
             default:
-                return new StubIRInstruction();
+                return new StubIRInstruction(instruction.Type);
         }
     }
 
     private sealed class StubIRInstruction : IRInstruction
     {
+        private readonly InstructionType _instructionType;
         public override IRExpression? Result => null;
         public override IReadOnlyList<IRExpression> Operands => [];
 
-        public override string ToString() => "StubIRInstruction - Not implemented";
+        public StubIRInstruction(InstructionType instructionType)
+        {
+            _instructionType = instructionType;
+        }
+
+        public override string ToString() => $"StubIRInstruction - {_instructionType:G} Not implemented";
     }
 }
