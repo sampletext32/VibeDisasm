@@ -15,9 +15,9 @@ public sealed class IROrInstruction : IRInstruction
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
     
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new IRFlagEffect(IRFlag.Zero),
-        new IRFlagEffect(IRFlag.Sign),
-        new IRFlagEffect(IRFlag.Parity)
+        new(IRFlag.Zero),
+        new(IRFlag.Sign),
+        new(IRFlag.Parity)
     ];
 
     public override string ToString() => $"{Left} |= {Right}";

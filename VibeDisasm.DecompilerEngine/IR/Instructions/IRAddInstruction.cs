@@ -15,12 +15,12 @@ public sealed class IRAddInstruction : IRInstruction
     public override IReadOnlyList<IRExpression> Operands => [Destination, Source];
     
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new IRFlagEffect(IRFlag.Zero),
-        new IRFlagEffect(IRFlag.Sign),
-        new IRFlagEffect(IRFlag.Carry),
-        new IRFlagEffect(IRFlag.Overflow),
-        new IRFlagEffect(IRFlag.Parity),
-        new IRFlagEffect(IRFlag.Auxiliary)
+        new(IRFlag.Zero),
+        new(IRFlag.Sign),
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow),
+        new(IRFlag.Parity),
+        new(IRFlag.Auxiliary)
     ];
 
     public override string ToString() => $"{Destination} += {Source}";

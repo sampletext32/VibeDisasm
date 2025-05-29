@@ -16,8 +16,8 @@ public sealed class IRMulInstruction : IRInstruction
     public override IRExpression? Result => Left;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new IRFlagEffect(IRFlag.Carry),
-        new IRFlagEffect(IRFlag.Overflow)
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow)
     ];
     public override string ToString() => $"{Left} *= {Right}";
     public IRMulInstruction(IRExpression left, IRExpression right)

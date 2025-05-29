@@ -12,6 +12,10 @@ public sealed class IRMoveInstruction : IRInstruction
     public IRExpression Source { get; init; }
     public override IRExpression? Result => Destination;
     public override IReadOnlyList<IRExpression> Operands => [Destination, Source];
+    
+    // MOV doesn't affect flags in x86
+    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
+    
     public IRMoveInstruction(IRExpression destination, IRExpression source)
     {
         Destination = destination;

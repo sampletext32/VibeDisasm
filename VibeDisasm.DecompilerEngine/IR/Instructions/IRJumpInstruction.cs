@@ -13,6 +13,9 @@ public sealed class IRJumpInstruction : IRInstruction
     public IRExpression? Condition { get; init; } // null for unconditional
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => Condition is null ? [Target] : [Condition, Target];
+    
+    // Jump instructions don't modify flags in x86
+    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
 
     public IRJumpInstruction(IRExpression target, IRExpression? condition = null)
     {
