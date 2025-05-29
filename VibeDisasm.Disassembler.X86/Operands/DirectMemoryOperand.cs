@@ -18,7 +18,7 @@ public class DirectMemoryOperand : MemoryOperand
     /// <param name="address">The memory address</param>
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public DirectMemoryOperand(long address, int size = 32, string? segmentOverride = null)
+    public DirectMemoryOperand(long address, int size = 32, Segment? segmentOverride = null)
         : base(size, segmentOverride)
     {
         Type = OperandType.MemoryDirect;

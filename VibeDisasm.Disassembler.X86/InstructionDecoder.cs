@@ -106,7 +106,7 @@ public class InstructionDecoder
         {
             // Store the current segment override state
             bool hasSegmentOverride = _prefixDecoder.HasSegmentOverridePrefix();
-            string segmentOverride = _prefixDecoder.GetSegmentOverride();
+            var segmentOverride = _prefixDecoder.GetSegmentOverride();
 
             // Save the position before decoding
 

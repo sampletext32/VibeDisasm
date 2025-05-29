@@ -1,5 +1,6 @@
 using System.Collections;
 using VibeDisasm.Disassembler.X86.Operands;
+using Xunit.Abstractions;
 
 namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 
@@ -8,6 +9,13 @@ namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
 /// </summary>
 public class SegmentOverrideTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public SegmentOverrideTests(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
+
     /// <summary>
     /// Tests that the CS segment override prefix (0x2E) is correctly recognized
     /// </summary>
@@ -23,7 +31,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -43,7 +51,7 @@ public class SegmentOverrideTests
         Assert.IsType<DirectMemoryOperand>(memOperand);
         var memoryOperand = (DirectMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("cs", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Cs, memoryOperand.SegmentOverride);
     }
     
     /// <summary>
@@ -61,7 +69,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -81,7 +89,7 @@ public class SegmentOverrideTests
         Assert.IsType<DirectMemoryOperand>(memOperand);
         var memoryOperand = (DirectMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("ds", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Ds, memoryOperand.SegmentOverride);
     }
     
     /// <summary>
@@ -99,7 +107,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -119,7 +127,7 @@ public class SegmentOverrideTests
         Assert.IsType<DirectMemoryOperand>(memOperand);
         var memoryOperand = (DirectMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("es", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Es, memoryOperand.SegmentOverride);
     }
     
     /// <summary>
@@ -137,7 +145,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -157,7 +165,7 @@ public class SegmentOverrideTests
         Assert.IsType<DirectMemoryOperand>(memOperand);
         var memoryOperand = (DirectMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("fs", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Fs, memoryOperand.SegmentOverride);
     }
     
     /// <summary>
@@ -175,14 +183,14 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Debug output
-        Console.WriteLine($"Number of instructions: {instructions.Count}");
+        _testOutputHelper.WriteLine($"Number of instructions: {instructions.Count}");
         for (int i = 0; i < instructions.Count; i++)
         {
-            Console.WriteLine($"Instruction {i}: Type={instructions[i].Type}, Address={instructions[i].Address:X}");
+            _testOutputHelper.WriteLine($"Instruction {i}: Type={instructions[i].Type}, Address={instructions[i].Address:X}");
         }
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -202,7 +210,7 @@ public class SegmentOverrideTests
         Assert.IsType<DirectMemoryOperand>(memOperand);
         var memoryOperand = (DirectMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("gs", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Gs, memoryOperand.SegmentOverride);
     }
     
     /// <summary>
@@ -220,7 +228,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -240,7 +248,7 @@ public class SegmentOverrideTests
         Assert.IsType<DisplacementMemoryOperand>(memOperand);
         var memoryOperand = (DisplacementMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("ss", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Ss, memoryOperand.SegmentOverride);
         Assert.Equal(RegisterIndex.Bp, memoryOperand.BaseRegister);
         Assert.Equal(-4, memoryOperand.Displacement);
     }
@@ -260,7 +268,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mov, instruction.Type);
@@ -280,7 +288,7 @@ public class SegmentOverrideTests
         Assert.IsType<ScaledIndexMemoryOperand>(memOperand);
         var memoryOperand = (ScaledIndexMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
-        Assert.Equal("fs", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Fs, memoryOperand.SegmentOverride);
         Assert.Equal(RegisterIndex.B, memoryOperand.BaseRegister);
         Assert.Equal(RegisterIndex.C, memoryOperand.IndexRegister);
         Assert.Equal(4, memoryOperand.Scale);
@@ -302,7 +310,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.LodsD, instruction.Type);
@@ -323,7 +331,7 @@ public class SegmentOverrideTests
         var memoryOperand = (BaseRegisterMemoryOperand)memOperand;
         Assert.Equal(32, memoryOperand.Size); // Validate that it's a 32-bit memory reference
         Assert.Equal(RegisterIndex.Si, memoryOperand.BaseRegister);
-        Assert.Equal("es", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Es, memoryOperand.SegmentOverride);
     }
     
     /// <summary>
@@ -341,7 +349,7 @@ public class SegmentOverrideTests
         var instructions = disassembler.Disassemble();
         
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single(instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.RepMovsB, instruction.Type);
@@ -354,7 +362,7 @@ public class SegmentOverrideTests
         Assert.IsType<BaseRegisterMemoryOperand>(memOperand);
         var memoryOperand = (BaseRegisterMemoryOperand)memOperand;
         Assert.Equal(8, memoryOperand.Size); // Validate that it's a byte memory reference
-        Assert.Equal("fs", memoryOperand.SegmentOverride);
+        Assert.Equal(Segment.Fs, memoryOperand.SegmentOverride);
         Assert.Equal(RegisterIndex.Di, memoryOperand.BaseRegister);
         
         // Check the second operand (memory operand with FS segment override)
@@ -362,7 +370,7 @@ public class SegmentOverrideTests
         Assert.IsType<BaseRegisterMemoryOperand>(memOperand2);
         var memoryOperand2 = (BaseRegisterMemoryOperand)memOperand2;
         Assert.Equal(8, memoryOperand2.Size); // Validate that it's a byte memory reference
-        Assert.Equal("fs", memoryOperand2.SegmentOverride);
+        Assert.Equal(Segment.Fs, memoryOperand2.SegmentOverride);
         Assert.Equal(RegisterIndex.Si, memoryOperand2.BaseRegister);
     }
 }

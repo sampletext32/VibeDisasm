@@ -49,7 +49,7 @@ public static class OperandFactory
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A direct memory operand</returns>
-    public static DirectMemoryOperand CreateDirectMemoryOperand(long address, int size = 32, string? segmentOverride = null)
+    public static DirectMemoryOperand CreateDirectMemoryOperand(long address, int size = 32, Segment? segmentOverride = null)
     {
         return new DirectMemoryOperand(address, size, segmentOverride);
     }
@@ -60,7 +60,7 @@ public static class OperandFactory
     /// <param name="address">The memory address</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>An 8-bit direct memory operand</returns>
-    public static DirectMemoryOperand CreateDirectMemoryOperand8(long address, string? segmentOverride = null)
+    public static DirectMemoryOperand CreateDirectMemoryOperand8(long address, Segment? segmentOverride = null)
     {
         return new DirectMemoryOperand(address, 8, segmentOverride);
     }
@@ -71,7 +71,7 @@ public static class OperandFactory
     /// <param name="address">The memory address</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A 16-bit direct memory operand</returns>
-    public static DirectMemoryOperand CreateDirectMemoryOperand16(long address, string? segmentOverride = null)
+    public static DirectMemoryOperand CreateDirectMemoryOperand16(long address, Segment? segmentOverride = null)
     {
         return new DirectMemoryOperand(address, 16, segmentOverride);
     }
@@ -83,7 +83,7 @@ public static class OperandFactory
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A base register memory operand</returns>
-    public static BaseRegisterMemoryOperand CreateBaseRegisterMemoryOperand(RegisterIndex baseRegister, int size = 32, string? segmentOverride = null)
+    public static BaseRegisterMemoryOperand CreateBaseRegisterMemoryOperand(RegisterIndex baseRegister, int size = 32, Segment? segmentOverride = null)
     {
         return new BaseRegisterMemoryOperand(baseRegister, size, segmentOverride);
     }
@@ -94,7 +94,7 @@ public static class OperandFactory
     /// <param name="baseRegister">The base register</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>An 8-bit base register memory operand</returns>
-    public static BaseRegisterMemoryOperand CreateBaseRegisterMemoryOperand8(RegisterIndex baseRegister, string? segmentOverride = null)
+    public static BaseRegisterMemoryOperand CreateBaseRegisterMemoryOperand8(RegisterIndex baseRegister, Segment? segmentOverride = null)
     {
         return new BaseRegisterMemoryOperand(baseRegister, 8, segmentOverride);
     }
@@ -105,7 +105,7 @@ public static class OperandFactory
     /// <param name="baseRegister">The base register</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A 16-bit base register memory operand</returns>
-    public static BaseRegisterMemoryOperand CreateBaseRegisterMemoryOperand16(RegisterIndex baseRegister, string? segmentOverride = null)
+    public static BaseRegisterMemoryOperand CreateBaseRegisterMemoryOperand16(RegisterIndex baseRegister, Segment? segmentOverride = null)
     {
         return new BaseRegisterMemoryOperand(baseRegister, 16, segmentOverride);
     }
@@ -118,7 +118,7 @@ public static class OperandFactory
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A displacement memory operand</returns>
-    public static DisplacementMemoryOperand CreateDisplacementMemoryOperand(RegisterIndex baseRegister, long displacement, int size = 32, string? segmentOverride = null)
+    public static DisplacementMemoryOperand CreateDisplacementMemoryOperand(RegisterIndex baseRegister, long displacement, int size = 32, Segment? segmentOverride = null)
     {
         return new DisplacementMemoryOperand(baseRegister, displacement, size, segmentOverride);
     }
@@ -130,7 +130,7 @@ public static class OperandFactory
     /// <param name="displacement">The displacement value</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>An 8-bit displacement memory operand</returns>
-    public static DisplacementMemoryOperand CreateDisplacementMemoryOperand8(RegisterIndex baseRegister, long displacement, string? segmentOverride = null)
+    public static DisplacementMemoryOperand CreateDisplacementMemoryOperand8(RegisterIndex baseRegister, long displacement, Segment? segmentOverride = null)
     {
         return new DisplacementMemoryOperand(baseRegister, displacement, 8, segmentOverride);
     }
@@ -142,7 +142,7 @@ public static class OperandFactory
     /// <param name="displacement">The displacement value</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A 16-bit displacement memory operand</returns>
-    public static DisplacementMemoryOperand CreateDisplacementMemoryOperand16(RegisterIndex baseRegister, long displacement, string? segmentOverride = null)
+    public static DisplacementMemoryOperand CreateDisplacementMemoryOperand16(RegisterIndex baseRegister, long displacement, Segment? segmentOverride = null)
     {
         return new DisplacementMemoryOperand(baseRegister, displacement, 16, segmentOverride);
     }
@@ -158,7 +158,7 @@ public static class OperandFactory
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A scaled index memory operand</returns>
     public static ScaledIndexMemoryOperand CreateScaledIndexMemoryOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null, 
-                                                                        long displacement = 0, int size = 32, string? segmentOverride = null)
+                                                                        long displacement = 0, int size = 32, Segment? segmentOverride = null)
     {
         return new ScaledIndexMemoryOperand(indexRegister, scale, baseRegister, displacement, size, segmentOverride);
     }
@@ -173,7 +173,7 @@ public static class OperandFactory
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>An 8-bit scaled index memory operand</returns>
     public static ScaledIndexMemoryOperand CreateScaledIndexMemoryOperand8(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null,
-                                                                         long displacement = 0, string? segmentOverride = null)
+                                                                         long displacement = 0, Segment? segmentOverride = null)
     {
         return new ScaledIndexMemoryOperand(indexRegister, scale, baseRegister, displacement, 8, segmentOverride);
     }
@@ -188,7 +188,7 @@ public static class OperandFactory
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A 16-bit scaled index memory operand</returns>
     public static ScaledIndexMemoryOperand CreateScaledIndexMemoryOperand16(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null,
-                                                                          long displacement = 0, string? segmentOverride = null)
+                                                                          long displacement = 0, Segment? segmentOverride = null)
     {
         return new ScaledIndexMemoryOperand(indexRegister, scale, baseRegister, displacement, 16, segmentOverride);
     }
