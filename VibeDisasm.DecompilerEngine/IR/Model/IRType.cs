@@ -13,8 +13,11 @@ public sealed class IRType
         Name = name;
     }
 
-    public static IRType Int => new IRType("number");
+    public static IRType Byte => new IRType("byte");
+    public static IRType Int => new IRType("int");
     public static IRType Uint => new IRType("uint");
+    public static IRType Short => new IRType("short");
+    public static IRType UShort => new IRType("ushort");
     public static IRType Long => new IRType("long");
     public static IRType Ulong => new IRType("ulong");
     public static IRType Bool => new IRType("bool");
