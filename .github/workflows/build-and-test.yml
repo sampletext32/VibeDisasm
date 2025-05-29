@@ -39,27 +39,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        configuration: [Release]
-        include:
-          # Add Windows build if requested via workflow_dispatch or if not a manual trigger
-          - os: windows-latest
-            configuration: Release
-            run_build: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_windows_build == 'true' }}
-          # Add macOS build if requested via workflow_dispatch or if not a manual trigger
-          - os: macos-latest
-            configuration: Release
-            run_build: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_macos_build == 'true' }}
-    
-    # Skip this job if it's a Windows or macOS build that should be skipped
-    if: |
-      matrix.os == 'ubuntu-latest' || 
-      (matrix.os == 'windows-latest' && matrix.run_build) || 
-      (matrix.os == 'macos-latest' && matrix.run_build)
-    runs-on: ${{ matrix.os }}
+  # Ubuntu build - always runs
+  build-ubuntu:
+    runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
@@ -70,7 +52,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Cache NuGet packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         # Include Directory.Packages.props in the cache key since it contains all package versions
@@ -83,26 +65,25 @@ jobs:
       run: dotnet restore
     
     - name: Build
-      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
     
     - name: Test
-      run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
       
-    - name: Upload CfgVisualizer artifacts
-      if: matrix.os == 'windows-latest' && matrix.run_build
+    - name: Upload CfgVisualizer artifacts (Ubuntu)
       uses: actions/upload-artifact@v4
       with:
-        name: cfg-visualizer
+        name: cfg-visualizer-ubuntu
         path: |
           VibeDisasm.CfgVisualizer/bin/Release/**/*.dll
-          VibeDisasm.CfgVisualizer/bin/Release/**/*.exe
-          VibeDisasm.CfgVisualizer/bin/Release/**/*.pdb
           VibeDisasm.CfgVisualizer/bin/Release/**/*.json
         retention-days: 7
-
-  code-coverage:
-    runs-on: ubuntu-latest
-    needs: build
+  
+  # Windows build - conditional
+  build-windows:
+    # Only run on push/PR or when explicitly requested
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.run_windows_build == 'true'
+    runs-on: windows-latest
     
     steps:
     - uses: actions/checkout@v4
@@ -113,7 +94,92 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Cache NuGet packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        # Include Directory.Packages.props in the cache key since it contains all package versions
+        key: ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-${{ hashFiles('Directory.Build.props') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-
+          ${{ runner.os }}-nuget-
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+    
+    - name: Test
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
+      
+    - name: Upload CfgVisualizer artifacts (macOS)
+      uses: actions/upload-artifact@v4
+      with:
+        name: cfg-visualizer-macos
+        path: |
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.dll
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.dylib
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.json
+        retention-days: 7
+  
+  # macOS build - conditional
+  build-macos:
+    # Only run on push/PR or when explicitly requested
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.run_macos_build == 'true'
+    runs-on: macos-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        # Include Directory.Packages.props in the cache key since it contains all package versions
+        key: ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-${{ hashFiles('Directory.Build.props') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-
+          ${{ runner.os }}-nuget-
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+    
+    - name: Test
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
+      
+    - name: Upload CfgVisualizer artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: cfg-visualizer-macos
+        path: |
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.dll
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.exe
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.pdb
+          VibeDisasm.CfgVisualizer/bin/Release/**/*.json
+        retention-days: 7
+
+  code-coverage:
+    runs-on: ubuntu-latest
+    needs: build-ubuntu
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         # Include Directory.Packages.props in the cache key since it contains all package versions
@@ -128,7 +194,7 @@ jobs:
     - name: Test with coverage
       run: |
         dotnet restore
-        dotnet test --configuration ${{ env.CONFIGURATION }} --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+        dotnet test --configuration ${{ env.CONFIGURATION }} --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:ExcludeByAttribute="Obsolete,GeneratedCode,CompilerGenerated"
     
     - name: Generate coverage report
       run: reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"./CoverageReport" -reporttypes:"HtmlInline_AzurePipelines;Cobertura;Badges"
@@ -145,7 +211,7 @@ jobs:
     # Only run when explicitly requested via workflow_dispatch input
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_code_analysis == 'true'
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-ubuntu
     
     steps:
     - uses: actions/checkout@v4
@@ -156,7 +222,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
     - name: Cache NuGet packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.nuget/packages
         # Include Directory.Packages.props in the cache key since it contains all package versions
@@ -170,3 +236,9 @@ jobs:
       
     - name: Run dotnet format
       run: dotnet format --verify-no-changes --verbosity diagnostic
+      
+    - name: Install .NET analyzers
+      run: dotnet add package Microsoft.CodeAnalysis.NetAnalyzers --version 8.0.0 --package-directory ./analyzers
+      
+    - name: Run code analysis
+      run: dotnet build --configuration ${{ env.CONFIGURATION }} /p:EnforceCodeStyleInBuild=true /p:AnalysisLevel=8.0
