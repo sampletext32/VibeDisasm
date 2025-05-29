@@ -8,14 +8,14 @@ public abstract class MemoryOperand : Operand
     /// <summary>
     /// Gets or sets the segment override (if any)
     /// </summary>
-    public string? SegmentOverride { get; set; }
+    public Segment? SegmentOverride { get; set; }
     
     /// <summary>
     /// Initializes a new instance of the MemoryOperand class
     /// </summary>
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    protected MemoryOperand(int size = 32, string? segmentOverride = null)
+    protected MemoryOperand(int size = 32, Segment? segmentOverride = null)
     {
         Size = size;
         SegmentOverride = segmentOverride;
@@ -41,7 +41,7 @@ public abstract class MemoryOperand : Operand
         // If we have a segment override, include it in the format "dword ptr es:[reg]"
         if (SegmentOverride != null)
         {
-            return $"{sizePrefix}{SegmentOverride}:";
+            return $"{sizePrefix}{SegmentOverride?.ToString("G").ToLower()}:";
         }
         
         return sizePrefix;

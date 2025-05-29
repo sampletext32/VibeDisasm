@@ -12,7 +12,7 @@ public class PrefixDecoder
     private bool _lockPrefix;
     private bool _repPrefix;
     private bool _repnePrefix;
-    private string _segmentOverride = string.Empty;
+    private Segment? _segmentOverride = null;
     
     /// <summary>
     /// Initializes a new instance of the PrefixDecoder class
@@ -33,7 +33,7 @@ public class PrefixDecoder
         _lockPrefix = false;
         _repPrefix = false;
         _repnePrefix = false;
-        _segmentOverride = string.Empty;
+        _segmentOverride = null;
     }
     
     /// <summary>
@@ -58,12 +58,12 @@ public class PrefixDecoder
             _segmentOverridePrefix = true;
             switch (prefix)
             {
-                case 0x26: _segmentOverride = "es"; break;
-                case 0x2E: _segmentOverride = "cs"; break;
-                case 0x36: _segmentOverride = "ss"; break;
-                case 0x3E: _segmentOverride = "ds"; break;
-                case 0x64: _segmentOverride = "fs"; break;
-                case 0x65: _segmentOverride = "gs"; break;
+                case 0x26: _segmentOverride = Segment.Es; break;
+                case 0x2E: _segmentOverride = Segment.Cs; break;
+                case 0x36: _segmentOverride = Segment.Ss; break;
+                case 0x3E: _segmentOverride = Segment.Ds; break;
+                case 0x64: _segmentOverride = Segment.Fs; break;
+                case 0x65: _segmentOverride = Segment.Gs; break;
             }
             return true;
         }
@@ -117,7 +117,7 @@ public class PrefixDecoder
     /// Gets the segment override prefix
     /// </summary>
     /// <returns>The segment override prefix, or an empty string if none is present</returns>
-    public string GetSegmentOverride()
+    public Segment? GetSegmentOverride()
     {
         return _segmentOverride;
     }

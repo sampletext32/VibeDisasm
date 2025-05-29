@@ -37,7 +37,7 @@ public class FarPointerOperand : MemoryOperand
     /// </summary>
     /// <param name="baseRegister">The base register</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public FarPointerOperand(RegisterIndex baseRegister, string? segmentOverride = null)
+    public FarPointerOperand(RegisterIndex baseRegister, Segment? segmentOverride = null)
         : base(48, segmentOverride)
     {
         Type = OperandType.MemoryBaseReg;
@@ -54,7 +54,7 @@ public class FarPointerOperand : MemoryOperand
     /// <param name="baseRegister">The base register</param>
     /// <param name="displacement">The displacement value</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public FarPointerOperand(RegisterIndex baseRegister, long displacement, string? segmentOverride = null)
+    public FarPointerOperand(RegisterIndex baseRegister, long displacement, Segment? segmentOverride = null)
         : base(48, segmentOverride)
     {
         Type = OperandType.MemoryBaseRegPlusOffset;
@@ -73,7 +73,7 @@ public class FarPointerOperand : MemoryOperand
     /// <param name="baseRegister">The optional base register</param>
     /// <param name="displacement">The displacement value</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public FarPointerOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null, long displacement = 0, string? segmentOverride = null)
+    public FarPointerOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null, long displacement = 0, Segment? segmentOverride = null)
         : base(48, segmentOverride)
     {
         Type = OperandType.MemoryIndexed;
@@ -89,7 +89,7 @@ public class FarPointerOperand : MemoryOperand
     /// </summary>
     /// <param name="address">The memory address</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public FarPointerOperand(long address, string? segmentOverride = null)
+    public FarPointerOperand(long address, Segment? segmentOverride = null)
         : base(48, segmentOverride)
     {
         Type = OperandType.MemoryDirect;

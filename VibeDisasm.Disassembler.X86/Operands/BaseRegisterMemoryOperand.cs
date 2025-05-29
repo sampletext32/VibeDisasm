@@ -18,7 +18,7 @@ public class BaseRegisterMemoryOperand : MemoryOperand
     /// <param name="baseRegister">The base register</param>
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public BaseRegisterMemoryOperand(RegisterIndex baseRegister, int size = 32, string? segmentOverride = null)
+    public BaseRegisterMemoryOperand(RegisterIndex baseRegister, int size = 32, Segment? segmentOverride = null)
         : base(size, segmentOverride)
     {
         Type = OperandType.MemoryBaseReg;

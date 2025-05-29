@@ -37,7 +37,7 @@ public class ScaledIndexMemoryOperand : MemoryOperand
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
     public ScaledIndexMemoryOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null, 
-                                   long displacement = 0, int size = 32, string? segmentOverride = null)
+                                   long displacement = 0, int size = 32, Segment? segmentOverride = null)
         : base(size, segmentOverride)
     {
         Type = OperandType.MemoryIndexed;

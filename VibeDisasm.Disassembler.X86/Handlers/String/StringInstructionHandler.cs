@@ -14,36 +14,36 @@ public class StringInstructionHandler : InstructionHandler
         // MOVS instructions
         { 0xA4, (InstructionType.MovsB, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es"),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es),
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, Segment.Ds)
         ]) },  // MOVSB
         { 0xA5, (InstructionType.MovsD, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, "es"),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 32, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, Segment.Es),
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 32, Segment.Ds)
         ]) },  // MOVSD
         
         // CMPS instructions
         { 0xA6, (InstructionType.CmpsB, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, "ds"),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, Segment.Ds),
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es)
         ]) },  // CMPSB
         { 0xA7, (InstructionType.CmpsD, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 32, "ds"),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 32, Segment.Ds),
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, Segment.Es)
         ]) },  // CMPSD
         
         // STOS instructions
         { 0xAA, (InstructionType.StosB, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es"),
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es),
             OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL)
         ]) },  // STOSB
         { 0xAB, (InstructionType.StosD, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, "es"),
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, Segment.Es),
             OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32)
         ]) },  // STOSD
         
@@ -51,24 +51,24 @@ public class StringInstructionHandler : InstructionHandler
         { 0xAC, (InstructionType.LodsB, () =>
         [
             OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, Segment.Ds)
         ]) },  // LODSB
         { 0xAD, (InstructionType.LodsD, () =>
         [
             OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 32, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 32, Segment.Ds)
         ]) },  // LODSD
         
         // SCAS instructions
         { 0xAE, (InstructionType.ScasB, () =>
         [
             OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es)
         ]) },  // SCASB
         { 0xAF, (InstructionType.ScasD, () =>
         [
             OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, Segment.Es)
         ]) }   // SCASD
     };
     
@@ -78,36 +78,36 @@ public class StringInstructionHandler : InstructionHandler
         // MOVS instructions
         { 0xA4, (InstructionType.MovsB, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es"),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es),
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, Segment.Ds)
         ]) },  // MOVSB (same for 16-bit)
         { 0xA5, (InstructionType.MovsW, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, "es"),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 16, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, Segment.Es),
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 16, Segment.Ds)
         ]) },  // MOVSW
         
         // CMPS instructions
         { 0xA6, (InstructionType.CmpsB, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, "ds"),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, Segment.Ds),
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es)
         ]) },  // CMPSB (same for 16-bit)
         { 0xA7, (InstructionType.CmpsW, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 16, "ds"),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 16, Segment.Ds),
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, Segment.Es)
         ]) },  // CMPSW
         
         // STOS instructions
         { 0xAA, (InstructionType.StosB, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es"),
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es),
             OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL)
         ]) },  // STOSB (same for 16-bit)
         { 0xAB, (InstructionType.StosW, () =>
         [
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, "es"),
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, Segment.Es),
             OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16)
         ]) },  // STOSW
         
@@ -115,24 +115,24 @@ public class StringInstructionHandler : InstructionHandler
         { 0xAC, (InstructionType.LodsB, () =>
         [
             OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Si, Segment.Ds)
         ]) },  // LODSB (same for 16-bit)
         { 0xAD, (InstructionType.LodsW, () =>
         [
             OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 16, "ds")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Si, 16, Segment.Ds)
         ]) },  // LODSW
         
         // SCAS instructions
         { 0xAE, (InstructionType.ScasB, () =>
         [
             OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL),
-            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand8(RegisterIndex.Di, Segment.Es)
         ]) },  // SCASB (same for 16-bit)
         { 0xAF, (InstructionType.ScasW, () =>
         [
             OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16),
-            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, "es")
+            OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 16, Segment.Es)
         ]) }   // SCASW
     };
 
