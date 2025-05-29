@@ -16,7 +16,7 @@ public static class IrFromAsmConverter
         var blockMap = new Dictionary<uint, IRBlock>();
         var irBlocks = new List<IRBlock>();
 
-        foreach (var asmBlock in asmFunction.Blocks.Values)
+        foreach (var asmBlock in asmFunction.Blocks.Values.OrderBy(x => x.StartAddress))
         {
             var irBlock = new IRBlock
             {
@@ -31,8 +31,8 @@ public static class IrFromAsmConverter
 
         var irFunction = new IRFunction
         {
-            Name = $"Function_0x{asmFunction.Blocks.Keys.FirstOrDefault():X8}",
-            ReturnType = new IRType { Name = "int" },
+            Name = $"Function_0x{asmFunction.Blocks.Values.First(x => x.IsEntryBlock).StartAddress:X8}",
+            ReturnType = IRType.Int,
             Parameters = [],
             Blocks = irBlocks
         };

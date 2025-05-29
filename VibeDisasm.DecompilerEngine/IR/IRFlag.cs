@@ -1,4 +1,4 @@
-namespace VibeDisasm.DecompilerEngine.IR.Instructions;
+namespace VibeDisasm.DecompilerEngine.IR;
 
 /// <summary>
 /// Represents processor flags in the IR system.

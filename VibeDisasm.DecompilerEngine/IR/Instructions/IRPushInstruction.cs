@@ -16,5 +16,5 @@ public sealed class IRPushInstruction : IRInstruction
         Value = value;
     }
 
-    public override string ToString() => $"push {Value}";
+    public override string ToString() => $"push({Value})";
 }
