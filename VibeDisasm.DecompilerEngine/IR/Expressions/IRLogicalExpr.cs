@@ -13,6 +13,8 @@ public class IRLogicalExpr : IRExpression
         Operand2 = operand2;
         Operation = operation;
     }
+
+    public override string ToString() => $"{Operand1} {Operation.ToLangString()} {Operand2}";
 }
 
 public enum IRLogicalOperation
