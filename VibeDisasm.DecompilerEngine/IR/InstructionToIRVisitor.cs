@@ -177,6 +177,16 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     OperandToIR(operands[0]),
                     new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.Equal)
                 );
+                
+            case InstructionType.Jng:
+                return new IRJumpInstruction(
+                    OperandToIR(operands[0]),
+                    new IRLogicalExpr(
+                        new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(true), IRComparisonType.Equal),
+                        new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.NotEqual),
+                        IRLogicalOperation.Or
+                    )
+                );
 
             // Unsigned comparison jumps
             case InstructionType.Jnbe:
