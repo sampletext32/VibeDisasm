@@ -18,8 +18,8 @@ public sealed class IRDivInstruction : IRInstruction
     public override IReadOnlyList<IRExpression> Operands => [Dividend, Divisor];
     
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new IRFlagEffect(IRFlag.Carry),
-        new IRFlagEffect(IRFlag.Overflow)
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow)
     ];
 
     public override string ToString() => $"{DestQuotient} = {Dividend} / {Divisor}; {DestRemainder} = {Dividend} % {Divisor}";

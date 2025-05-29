@@ -14,6 +14,9 @@ public sealed class IRReturnInstruction : IRInstruction
     public override IRExpression? Result => null;
 
     public override IReadOnlyList<IRExpression> Operands => Value is not null ? [Value] : [];
+    
+    // RET doesn't affect flags in x86
+    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
 
     public IRReturnInstruction() {}
     public IRReturnInstruction(IRExpression? value) => Value = value;

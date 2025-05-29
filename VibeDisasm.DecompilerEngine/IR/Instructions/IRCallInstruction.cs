@@ -11,6 +11,10 @@ public sealed class IRCallInstruction : IRInstruction
     public IRExpression Target { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Target];
+    
+    // Call instructions don't modify flags in x86
+    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
+    
     public IRCallInstruction(IRExpression target)
     {
         Target = target;

@@ -11,6 +11,10 @@ public sealed class IRPushInstruction : IRInstruction
     public IRExpression Value { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Value];
+    
+    // PUSH doesn't affect flags in x86
+    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
+    
     public IRPushInstruction(IRExpression value)
     {
         Value = value;

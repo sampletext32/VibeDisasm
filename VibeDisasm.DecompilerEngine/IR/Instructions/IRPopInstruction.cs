@@ -11,6 +11,10 @@ public sealed class IRPopInstruction : IRInstruction
     public IRExpression Target { get; init; }
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
+    
+    // POP doesn't affect flags in x86
+    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
+    
     public IRPopInstruction(IRExpression target)
     {
         Target = target;
