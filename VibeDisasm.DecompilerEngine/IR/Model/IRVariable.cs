@@ -4,7 +4,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 /// Represents a variable in IR.
 /// Example: int x -> IRVariable(Name="x", Type=int)
 /// </summary>
-public partial class IRVariable
+public class IRVariable
 {
     public override string ToString() => $"{Type?.Name ?? "var"} {Name}";
     

@@ -1,5 +1,3 @@
-using VibeDisasm.DecompilerEngine.IR.Instructions;
-
 namespace VibeDisasm.DecompilerEngine.IR;
 
 /// <summary>

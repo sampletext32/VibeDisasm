@@ -14,16 +14,16 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         => new IRRegisterExpr(X86RegisterToIrRegister(operand.Register, operand.Size));
 
     public IRExpression VisitImmediate(ImmediateOperand operand)
-        => new IRConstantExpr { Value = operand.Value, Type = new IRType { Name = $"i{operand.Size}" } };
+        => IRConstantExpr.Ulong(operand.Value);
 
     public IRExpression VisitRelativeOffset(RelativeOffsetOperand operand)
-        => new IRConstantExpr { Value = operand.TargetAddress, Type = new IRType { Name = "address" } };
+        => IRConstantExpr.Uint(operand.TargetAddress);
 
     public IRExpression VisitDisplacementMemory(DisplacementMemoryOperand operand)
         => new IRDerefExpr(
             new IRAddExpr(
                 new IRRegisterExpr(X86RegisterToIrRegister(operand.BaseRegister, operand.Size)),
-                new IRConstantExpr { Value = operand.Displacement, Type = new IRType { Name = "int" } }
+                IRConstantExpr.Long(operand.Displacement)
             )
         );
 
@@ -33,12 +33,13 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
 
     public IRExpression VisitScaledIndexMemory(ScaledIndexMemoryOperand operand)
     {
+        var indexExpr = new IRRegisterExpr(X86RegisterToIrRegister(operand.IndexRegister, operand.Size));
+        var scaleExpr = IRConstantExpr.Int(operand.Scale);
+        var dispExpr = IRConstantExpr.Long(operand.Displacement);
         if (operand.BaseRegister is not null)
         {
             var baseExpr = new IRRegisterExpr(X86RegisterToIrRegister(operand.BaseRegister.Value, operand.Size));
-            var indexExpr = new IRRegisterExpr(X86RegisterToIrRegister(operand.IndexRegister, operand.Size));
-            var scaleExpr = new IRConstantExpr {Value = operand.Scale, Type = new IRType {Name = "int"}};
-            var dispExpr = new IRConstantExpr {Value = operand.Displacement, Type = new IRType {Name = "int"}};
+
             // *(base + (index * scale) + displacement)
             return new IRDerefExpr(
                 new IRAddExpr(
@@ -52,9 +53,6 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         }
         else
         {
-            var indexExpr = new IRRegisterExpr(X86RegisterToIrRegister(operand.IndexRegister, operand.Size));
-            var scaleExpr = new IRConstantExpr {Value = operand.Scale, Type = new IRType {Name = "int"}};
-            var dispExpr = new IRConstantExpr {Value = operand.Displacement, Type = new IRType {Name = "int"}};
             // *((index * scale) + displacement)
             return new IRDerefExpr(
                 new IRAddExpr(
@@ -66,7 +64,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
     }
 
     public IRExpression VisitDirectMemory(DirectMemoryOperand operand)
-        => new IRDerefExpr(new IRConstantExpr { Value = operand.Address, Type = new IRType { Name = "address" } });
+        => new IRDerefExpr(IRConstantExpr.Long(operand.Address));
 
     public IRExpression VisitFPURegister(FPURegisterOperand operand)
         => new IRRegisterExpr(X86RegisterToIrRegister(operand.RegisterIndex, operand.Size));
@@ -78,7 +76,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         => new IRMemoryExpr($"{operand.BaseRegister}:{operand.Displacement}");
 
     public IRExpression VisitOperand(Operand operand)
-        => new IRConstantExpr { Value = operand.ToString(), Type = new IRType { Name = "unknown" } };
+        => IRConstantExpr.Int(-999999999);
 
     private static IRRegister X86RegisterToIrRegister(RegisterIndex registerIndex, int size)
     {
