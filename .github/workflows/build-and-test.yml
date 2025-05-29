@@ -22,6 +22,16 @@ on:
         required: false
         default: false
         type: boolean
+      run_windows_build:
+        description: 'Run Windows build'
+        required: false
+        default: false
+        type: boolean
+      run_macos_build:
+        description: 'Run macOS build'
+        required: false
+        default: false
+        type: boolean
 
 # Prevent concurrent builds of the same branch to save resources
 concurrency:
@@ -32,15 +42,27 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         configuration: [Release]
+        include:
+          # Add Windows build if requested via workflow_dispatch or if not a manual trigger
+          - os: windows-latest
+            configuration: Release
+            run_build: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_windows_build == 'true' }}
+          # Add macOS build if requested via workflow_dispatch or if not a manual trigger
+          - os: macos-latest
+            configuration: Release
+            run_build: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_macos_build == 'true' }}
     
+    # Skip this job if it's a Windows or macOS build that should be skipped
+    if: |
+      matrix.os == 'ubuntu-latest' || 
+      (matrix.os == 'windows-latest' && matrix.run_build) || 
+      (matrix.os == 'macos-latest' && matrix.run_build)
     runs-on: ${{ matrix.os }}
     
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0 # Fetch all history for proper versioning
     
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
@@ -67,7 +89,7 @@ jobs:
       run: dotnet test --configuration ${{ matrix.configuration }} --no-build --verbosity normal
       
     - name: Upload CfgVisualizer artifacts
-      if: matrix.os == 'windows-latest'
+      if: matrix.os == 'windows-latest' && matrix.run_build
       uses: actions/upload-artifact@v4
       with:
         name: cfg-visualizer
@@ -127,8 +149,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
     
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
