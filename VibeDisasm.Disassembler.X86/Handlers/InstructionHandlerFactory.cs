@@ -317,9 +317,8 @@ public class InstructionHandlerFactory
     private void RegisterIncHandlers()
     {
         // Add Inc handlers
-        _handlers.Add(new IncRegHandler(_decoder)); // INC r/m8 (opcode FE)
-
-        // _handlers.Add(new IncMem8Handler(_decoder)); // INC r/m16 (opcode FF /0) and INC r/m32 (opcode FF /0)
+        _handlers.Add(new IncRegHandler(_decoder)); // INC r32 (opcodes 0x40-0x47)
+        _handlers.Add(new IncRm32Handler(_decoder)); // INC r/m32 (opcode FF /0)
     }
 
     /// <summary>

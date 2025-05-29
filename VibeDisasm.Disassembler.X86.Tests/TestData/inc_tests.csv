@@ -1,0 +1,50 @@
+# INC instruction tests
+# Format: RawBytes;Instructions
+RawBytes;Instructions
+
+# INC r32 (opcodes 0x40-0x47)
+40;[{ "Type": "Inc", "Operands": ["eax"] }]
+41;[{ "Type": "Inc", "Operands": ["ecx"] }]
+42;[{ "Type": "Inc", "Operands": ["edx"] }]
+43;[{ "Type": "Inc", "Operands": ["ebx"] }]
+44;[{ "Type": "Inc", "Operands": ["esp"] }]
+45;[{ "Type": "Inc", "Operands": ["ebp"] }]
+46;[{ "Type": "Inc", "Operands": ["esi"] }]
+47;[{ "Type": "Inc", "Operands": ["edi"] }]
+
+# INC r/m32 (opcode FF /0)
+# Memory operands with different addressing modes
+
+# Basic addressing modes
+FF00;[{ "Type": "Inc", "Operands": ["dword ptr [eax]"] }]
+FF01;[{ "Type": "Inc", "Operands": ["dword ptr [ecx]"] }]
+FF02;[{ "Type": "Inc", "Operands": ["dword ptr [edx]"] }]
+FF03;[{ "Type": "Inc", "Operands": ["dword ptr [ebx]"] }]
+
+# Displacement addressing modes
+FF4010;[{ "Type": "Inc", "Operands": ["dword ptr [eax+0x10]"] }]
+FF4310;[{ "Type": "Inc", "Operands": ["dword ptr [ebx+0x10]"] }]
+FF4510;[{ "Type": "Inc", "Operands": ["dword ptr [ebp+0x10]"] }]
+FF45E4;[{ "Type": "Inc", "Operands": ["dword ptr [ebp-0x1C]"] }]
+
+# 32-bit displacement
+FF8010000000;[{ "Type": "Inc", "Operands": ["dword ptr [eax+0x10]"] }]
+FF8310000000;[{ "Type": "Inc", "Operands": ["dword ptr [ebx+0x10]"] }]
+FF8510000000;[{ "Type": "Inc", "Operands": ["dword ptr [ebp+0x10]"] }]
+
+# SIB addressing modes
+FF04B5A0A0A0A0;[{ "Type": "Inc", "Operands": ["dword ptr [esi*4-0x5F5F5F60]"] }]
+FF448510;[{ "Type": "Inc", "Operands": ["dword ptr [ebp+eax*4+0x10]"] }]
+
+# Direct memory addressing
+FF05A0A0A0A0;[{ "Type": "Inc", "Operands": ["dword ptr [0xA0A0A0A0]"] }]
+
+# Register operands using the ModR/M encoding
+FFC0;[{ "Type": "Inc", "Operands": ["eax"] }]
+FFC1;[{ "Type": "Inc", "Operands": ["ecx"] }]
+FFC2;[{ "Type": "Inc", "Operands": ["edx"] }]
+FFC3;[{ "Type": "Inc", "Operands": ["ebx"] }]
+FFC4;[{ "Type": "Inc", "Operands": ["esp"] }]
+FFC5;[{ "Type": "Inc", "Operands": ["ebp"] }]
+FFC6;[{ "Type": "Inc", "Operands": ["esi"] }]
+FFC7;[{ "Type": "Inc", "Operands": ["edi"] }]
