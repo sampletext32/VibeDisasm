@@ -81,7 +81,7 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     OperandToIR(operands[1])
                 );
             case InstructionType.Ret:
-                return new IRReturnInstruction(OperandToIR(operands[0]));
+                return operands.Count > 0 ? new IRReturnInstruction(OperandToIR(operands[0])) : new IRReturnInstruction();
             case InstructionType.Push:
                 return new IRPushInstruction(
                     OperandToIR(operands[0])

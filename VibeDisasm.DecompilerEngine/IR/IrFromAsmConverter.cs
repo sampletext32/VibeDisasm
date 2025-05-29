@@ -12,8 +12,6 @@ public static class IrFromAsmConverter
 {
     public static IRFunction Convert(AsmFunction asmFunction)
     {
-        var edges = ControlFlowEdgesBuilder.Build(asmFunction);
-        var blockMap = new Dictionary<uint, IRBlock>();
         var irBlocks = new List<IRBlock>();
 
         foreach (var asmBlock in asmFunction.Blocks.Values.OrderBy(x => x.StartAddress))
@@ -25,7 +23,6 @@ public static class IrFromAsmConverter
                     .Select(Lift)
                     .ToList()
             };
-            blockMap[asmBlock.StartAddress] = irBlock;
             irBlocks.Add(irBlock);
         }
 
