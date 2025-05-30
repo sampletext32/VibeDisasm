@@ -127,7 +127,19 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         }
         else
         {
-            throw new ArgumentOutOfRangeException(nameof(registerIndex), registerIndex, null);
+            // by default assume 32-bit registers
+            return registerIndex switch
+            {
+                RegisterIndex.A => IRRegister.EAX,
+                RegisterIndex.B => IRRegister.EBX,
+                RegisterIndex.C => IRRegister.ECX,
+                RegisterIndex.D => IRRegister.EDX,
+                RegisterIndex.Si => IRRegister.ESI,
+                RegisterIndex.Di => IRRegister.EDI,
+                RegisterIndex.Bp => IRRegister.EBP,
+                RegisterIndex.Sp => IRRegister.ESP,
+                _ => throw new ArgumentOutOfRangeException(nameof(registerIndex), registerIndex, null)
+            };
         }
     }
     private static IRRegister X86RegisterToIrRegister(RegisterIndex8 registerIndex, int size)

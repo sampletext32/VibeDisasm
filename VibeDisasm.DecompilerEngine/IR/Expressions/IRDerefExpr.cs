@@ -8,6 +8,9 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 public sealed class IRDerefExpr : IRExpression
 {
     public IRExpression Address { get; init; }
+
+    public override List<IRExpression> SubExpressions => [Address];
+
     public IRDerefExpr(IRExpression address) => Address = address;
 
     [Pure]

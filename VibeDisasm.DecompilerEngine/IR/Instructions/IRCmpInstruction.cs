@@ -23,7 +23,7 @@ public sealed class IRCmpInstruction : IRInstruction
         new(IRFlag.Auxiliary)
     ];
 
-    public override string ToString() => $"{Left} == {Right}";
+    public override string ToString() => $"Compare({Left}, {Right})";
     
     public IRCmpInstruction(IRExpression left, IRExpression right)
     {

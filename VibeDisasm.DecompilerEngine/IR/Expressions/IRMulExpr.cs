@@ -7,6 +7,7 @@ public sealed class IRMulExpr : IRExpression
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
+    public override List<IRExpression> SubExpressions => [Left, Right];
     public IRMulExpr(IRExpression left, IRExpression right)
     {
         Left = left;

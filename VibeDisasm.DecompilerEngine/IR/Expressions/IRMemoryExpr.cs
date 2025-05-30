@@ -7,6 +7,10 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 public sealed class IRMemoryExpr : IRExpression
 {
     public string Address { get; init; }
+
+    public override List<IRExpression> SubExpressions => [];
+
     public IRMemoryExpr(string address) => Address = address;
+
     public override string ToString() => $"[{Address}]";
 }

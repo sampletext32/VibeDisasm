@@ -2,9 +2,11 @@
 
 public class IRCompareExpr : IRExpression
 {
-    public  IRExpression Left { get; set; }
-    public  IRExpression Right { get; set; }
-    public  IRComparisonType Comparison { get; set; }
+    public IRExpression Left { get; set; }
+    public IRExpression Right { get; set; }
+    public IRComparisonType Comparison { get; set; }
+
+    public override List<IRExpression> SubExpressions => [Left, Right];
 
     public IRCompareExpr(IRExpression left, IRExpression right, IRComparisonType comparison)
     {
