@@ -7,6 +7,8 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 public sealed class IRSegmentExpr : IRExpression
 {
     public IRSegment Segment { get; init; }
+    
+    public override List<IRExpression> SubExpressions => [];
 
     public IRSegmentExpr(IRSegment segment)
     {

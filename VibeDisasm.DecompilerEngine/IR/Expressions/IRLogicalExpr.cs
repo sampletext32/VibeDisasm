@@ -1,4 +1,6 @@
-﻿namespace VibeDisasm.DecompilerEngine.IR.Expressions;
+﻿using VibeDisasm.Disassembler.X86;
+
+namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 public class IRLogicalExpr : IRExpression
 {
@@ -6,6 +8,8 @@ public class IRLogicalExpr : IRExpression
     public IRExpression Operand2 { get; init; }
     
     public IRLogicalOperation Operation { get; init; }
+
+    public override List<IRExpression> SubExpressions => [Operand1, Operand2];
 
     public IRLogicalExpr(IRExpression operand1, IRExpression operand2, IRLogicalOperation operation)
     {

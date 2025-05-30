@@ -1,4 +1,5 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 
@@ -9,6 +10,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// </summary>
 public sealed class IRJumpInstruction : IRInstruction
 {
+    private readonly AsmInstruction _underlyingInstruction;
     public IRExpression Target { get; init; }
     public IRExpression? Condition { get; init; } // null for unconditional
     public override IRExpression? Result => null;
@@ -17,8 +19,9 @@ public sealed class IRJumpInstruction : IRInstruction
     // Jump instructions don't modify flags in x86
     public override IReadOnlyList<IRFlagEffect> SideEffects => [];
 
-    public IRJumpInstruction(IRExpression target, IRExpression? condition = null)
+    public IRJumpInstruction(AsmInstruction underlyingInstruction, IRExpression target, IRExpression? condition = null)
     {
+        _underlyingInstruction = underlyingInstruction;
         Target = target;
         Condition = condition;
     }

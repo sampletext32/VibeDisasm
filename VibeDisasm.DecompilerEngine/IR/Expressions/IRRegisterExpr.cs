@@ -7,6 +7,8 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 public sealed class IRRegisterExpr : IRExpression
 {
     public IRRegister Register { get; init; }
+    
+    public override List<IRExpression> SubExpressions => [];
 
     public IRRegisterExpr(IRRegister register)
     {

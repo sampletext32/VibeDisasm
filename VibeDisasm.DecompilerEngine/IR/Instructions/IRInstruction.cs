@@ -11,4 +11,17 @@ public abstract class IRInstruction
     public abstract IRExpression? Result { get; }
     public abstract IReadOnlyList<IRExpression> Operands { get; }
     public virtual IReadOnlyList<IRFlagEffect> SideEffects => [];
+
+    public IEnumerable<T> EnumerateAllExpressionsOfType<T>()
+        where T : IRExpression
+    {
+        foreach (var operand in Operands)
+        {
+            if (operand is T t)
+                yield return t;
+
+            foreach (var subExpr in operand.SubExpressions.SelectMany(x => x.EnumerateExpressionOfType<T>()))
+                yield return subExpr;
+        }
+    }
 }

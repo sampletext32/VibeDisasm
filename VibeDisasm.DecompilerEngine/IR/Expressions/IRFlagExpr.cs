@@ -3,10 +3,13 @@
 public class IRFlagExpr : IRExpression
 {
     public IRFlag Flag { get; init; }
-    public override string ToString() => Flag.ToString();
+
+    public override List<IRExpression> SubExpressions => [];
 
     public IRFlagExpr(IRFlag flag)
     {
         Flag = flag;
     }
+
+    public override string ToString() => Flag.ToString();
 }

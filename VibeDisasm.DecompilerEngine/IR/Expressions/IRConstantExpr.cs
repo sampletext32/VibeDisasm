@@ -12,6 +12,8 @@ public sealed class IRConstantExpr : IRExpression
     public object Value { get; init; }
     public IRType Type { get; init; }
     
+    public override List<IRExpression> SubExpressions => [];
+    
     private IRConstantExpr(object value, IRType type)
     {
         Value = value;
