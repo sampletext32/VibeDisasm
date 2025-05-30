@@ -1,0 +1,53 @@
+# DEC instruction tests
+# Format: RawBytes;Instructions
+RawBytes;Instructions
+
+# DEC r32 (opcodes 0x48-0x4F)
+48;[{ "Type": "Dec", "Operands": ["eax"] }]
+49;[{ "Type": "Dec", "Operands": ["ecx"] }]
+4A;[{ "Type": "Dec", "Operands": ["edx"] }]
+4B;[{ "Type": "Dec", "Operands": ["ebx"] }]
+4C;[{ "Type": "Dec", "Operands": ["esp"] }]
+4D;[{ "Type": "Dec", "Operands": ["ebp"] }]
+4E;[{ "Type": "Dec", "Operands": ["esi"] }]
+4F;[{ "Type": "Dec", "Operands": ["edi"] }]
+
+# DEC r/m32 (opcode FF /1)
+# Memory operands with different addressing modes
+
+# Basic addressing modes
+FF08;[{ "Type": "Dec", "Operands": ["dword ptr [eax]"] }]
+FF09;[{ "Type": "Dec", "Operands": ["dword ptr [ecx]"] }]
+FF0A;[{ "Type": "Dec", "Operands": ["dword ptr [edx]"] }]
+FF0B;[{ "Type": "Dec", "Operands": ["dword ptr [ebx]"] }]
+
+# Displacement addressing modes
+FF4810;[{ "Type": "Dec", "Operands": ["dword ptr [eax+0x10]"] }]
+FF4B10;[{ "Type": "Dec", "Operands": ["dword ptr [ebx+0x10]"] }]
+FF4D10;[{ "Type": "Dec", "Operands": ["dword ptr [ebp+0x10]"] }]
+FF4DE4;[{ "Type": "Dec", "Operands": ["dword ptr [ebp-0x1C]"] }]
+
+# 32-bit displacement
+FF8810000000;[{ "Type": "Dec", "Operands": ["dword ptr [eax+0x10]"] }]
+FF8B10000000;[{ "Type": "Dec", "Operands": ["dword ptr [ebx+0x10]"] }]
+FF8D10000000;[{ "Type": "Dec", "Operands": ["dword ptr [ebp+0x10]"] }]
+
+# SIB addressing modes
+FF0CB5A0A0A0A0;[{ "Type": "Dec", "Operands": ["dword ptr [esi*4-0x5F5F5F60]"] }]
+FF4C8510;[{ "Type": "Dec", "Operands": ["dword ptr [ebp+eax*4+0x10]"] }]
+
+# Direct memory addressing
+FF0DA0A0A0A0;[{ "Type": "Dec", "Operands": ["dword ptr [0xA0A0A0A0]"] }]
+
+# Register operands using the ModR/M encoding
+FFC8;[{ "Type": "Dec", "Operands": ["eax"] }]
+FFC9;[{ "Type": "Dec", "Operands": ["ecx"] }]
+FFCA;[{ "Type": "Dec", "Operands": ["edx"] }]
+FFCB;[{ "Type": "Dec", "Operands": ["ebx"] }]
+FFCC;[{ "Type": "Dec", "Operands": ["esp"] }]
+FFCD;[{ "Type": "Dec", "Operands": ["ebp"] }]
+FFCE;[{ "Type": "Dec", "Operands": ["esi"] }]
+FFCF;[{ "Type": "Dec", "Operands": ["edi"] }]
+
+# The specific case mentioned by the user
+FF4DE4;[{ "Type": "Dec", "Operands": ["dword ptr [ebp-0x1C]"] }]

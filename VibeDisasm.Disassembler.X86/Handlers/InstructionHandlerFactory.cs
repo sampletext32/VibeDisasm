@@ -306,9 +306,8 @@ public class InstructionHandlerFactory
     private void RegisterDecHandlers()
     {
         // Add Dec handlers
-        _handlers.Add(new DecRegHandler(_decoder)); // DEC r/m8 (opcode FE)
-        
-        // _handlers.Add(new DecMem8Handler(_decoder)); // DEC r/m16 (opcode FF /1) and DEC r/m32 (opcode FF /1)
+        _handlers.Add(new DecRegHandler(_decoder)); // DEC r32 (opcodes 0x48-0x4F)
+        _handlers.Add(new DecRm32Handler(_decoder)); // DEC r/m32 (opcode FF /1)
     }
 
     /// <summary>
