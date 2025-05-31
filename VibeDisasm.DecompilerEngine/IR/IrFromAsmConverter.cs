@@ -26,13 +26,12 @@ public static class IrFromAsmConverter
             irBlocks.Add(irBlock);
         }
 
-        var irFunction = new IRFunction
-        {
-            Name = $"Function_0x{asmFunction.Blocks.Values.First(x => x.IsEntryBlock).StartAddress:X8}",
-            ReturnType = IRType.Int,
-            Parameters = [],
-            Blocks = irBlocks
-        };
+        var irFunction = new IRFunction(
+            name: $"Function_0x{asmFunction.Blocks.Values.First(x => x.IsEntryBlock).StartAddress:X8}",
+            returnType: IRType.Int,
+            parameters: [],
+            blocks: irBlocks
+        );
         return irFunction;
     }
 
