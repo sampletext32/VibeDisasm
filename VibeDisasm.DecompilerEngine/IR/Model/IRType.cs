@@ -4,7 +4,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 /// Represents a type in IR.
 /// Example: int, float*, struct S
 /// </summary>
-public sealed class IRType
+public sealed class IRType : IRNode
 {
     public string Name { get; init; }
 

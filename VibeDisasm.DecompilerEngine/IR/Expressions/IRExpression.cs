@@ -1,10 +1,12 @@
+using VibeDisasm.DecompilerEngine.IR.Model;
+
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 /// <summary>
 /// Base class for all IR expressions.
 /// Example: eax, 42, eax + 1
 /// </summary>
-public abstract class IRExpression
+public abstract class IRExpression : IRNode
 {
     public abstract List<IRExpression> SubExpressions { get; }
     

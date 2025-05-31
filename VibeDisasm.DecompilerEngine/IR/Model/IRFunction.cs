@@ -4,7 +4,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 /// Represents a function in IR form.
 /// Example: int add(int a, int b) { return a + b; } -> IRFunction(Name="add", ...)
 /// </summary>
-public class IRFunction
+public class IRFunction : IRNode
 {
     public  string Name { get; init; }
     public  IRType ReturnType { get; init; }

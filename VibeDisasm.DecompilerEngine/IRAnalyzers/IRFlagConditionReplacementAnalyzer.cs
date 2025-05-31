@@ -15,7 +15,7 @@ public class IRFlagConditionReplacementAnalyzer
     /// </summary>
     /// <param name="function">The IR function to process</param>
     /// <returns>The transformed function with semantic conditions</returns>
-    public IRFunction Handle(IRFunction function)
+    public void Handle(IRFunction function)
     {
         // For each block in the function
         foreach (var block in function.Blocks)
@@ -25,6 +25,7 @@ public class IRFlagConditionReplacementAnalyzer
             {
                 var instruction = block.Instructions[i];
 
+                // find only wired jumps, there is no need to transform other instructions
                 if (instruction is IRWiredJumpInstruction {Condition: not null} wiredJump)
                 {
                     var transformedCondition = IRFlagConditionTransformer.TransformCondition(
@@ -52,7 +53,5 @@ public class IRFlagConditionReplacementAnalyzer
                 }
             }
         }
-
-        return function;
     }
 }
