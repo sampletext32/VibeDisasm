@@ -11,11 +11,11 @@ public class AndImmToRm16Handler : InstructionHandler
     /// Initializes a new instance of the AndImmToRm16Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AndImmToRm16Handler(InstructionDecoder decoder) 
+    public AndImmToRm16Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -45,7 +45,7 @@ public class AndImmToRm16Handler : InstructionHandler
         var reg = ModRMDecoder.PeakModRMReg();
         return reg == 4; // 4 = AND
     }
-    
+
     /// <summary>
     /// Decodes an AND r/m16, imm16 instruction
     /// </summary>
@@ -67,13 +67,13 @@ public class AndImmToRm16Handler : InstructionHandler
         }
 
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Create the immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

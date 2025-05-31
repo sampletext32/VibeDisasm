@@ -24,7 +24,6 @@ public sealed class IRPushInstruction : IRInstruction
 
     public override string ToString() => $"push({Value})";
 
-
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
     public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);

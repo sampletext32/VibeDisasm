@@ -16,19 +16,19 @@ public class CallRm32Tests
     {
         // Arrange
         byte[] code = { 0xFF, 0xD3 }; // CALL EBX
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Call, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (EBX)
         var ebxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ebxOperand);
@@ -36,7 +36,7 @@ public class CallRm32Tests
         Assert.Equal(RegisterIndex.B, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (EBX)
     }
-    
+
     /// <summary>
     /// Tests the CALL m32 instruction (0xFF /2) with memory operand
     /// </summary>
@@ -45,19 +45,19 @@ public class CallRm32Tests
     {
         // Arrange
         byte[] code = { 0xFF, 0x10 }; // CALL DWORD PTR [EAX]
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Call, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (memory operand)
         var memoryOperand = instruction.StructuredOperands[0];
         Assert.IsType<BaseRegisterMemoryOperand>(memoryOperand);

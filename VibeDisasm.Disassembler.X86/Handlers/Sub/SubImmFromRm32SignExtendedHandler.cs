@@ -24,11 +24,15 @@ public class SubImmFromRm32SignExtendedHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x83)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 5 (SUB)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -62,13 +66,13 @@ public class SubImmFromRm32SignExtendedHandler : InstructionHandler
         }
 
         // Read the immediate value as a signed byte and sign-extend it to 32 bits
-        int imm32 = (sbyte) Decoder.ReadByte();
-        
+        int imm32 = (sbyte)Decoder.ReadByte();
+
         // Create the source immediate operand with the sign-extended value
         var sourceOperand = OperandFactory.CreateImmediateOperand((uint)imm32, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

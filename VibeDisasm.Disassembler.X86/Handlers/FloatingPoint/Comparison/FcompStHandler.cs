@@ -24,7 +24,10 @@ public class FcompStHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCOMP ST(i) is D8 D8-DF (compares ST(0) with ST(i) and pops the register stack)
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -35,11 +38,13 @@ public class FcompStHandler : InstructionHandler
 
         // this is a special case of a handler, only handling FCOMP with ST(i)
         if (opcodeSecond is < 0xD8 or > 0xDF)
+        {
             return false;
+        }
 
         return true;
     }
-    
+
     /// <summary>
     /// Decodes a FCOMP ST(i) instruction - compares ST(0) with ST(i) and pops the register stack
     /// </summary>
@@ -52,17 +57,17 @@ public class FcompStHandler : InstructionHandler
         {
             return false;
         }
-        
+
         var stIndex = (FpuRegisterIndex)(Decoder.ReadByte() - 0xD8);
 
         // Set the instruction type
         instruction.Type = InstructionType.Fcomp;
-        
+
         // Create the FPU register operands
         var stiOperand = OperandFactory.CreateFPURegisterOperand(stIndex);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             stiOperand  // The instruction is FCOMP ST(i), which compares ST(0) with ST(i) and pops the register stack
         ];

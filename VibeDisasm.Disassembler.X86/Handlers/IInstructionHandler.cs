@@ -11,7 +11,7 @@ public interface IInstructionHandler
     /// <param name="opcode">The opcode to check</param>
     /// <returns>True if this handler can decode the opcode</returns>
     bool CanHandle(byte opcode);
-    
+
     /// <summary>
     /// Decodes an instruction
     /// </summary>

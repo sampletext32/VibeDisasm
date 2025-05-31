@@ -22,7 +22,10 @@ public class FchsHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCHS is D9 E0
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FchsHandler : InstructionHandler
         }
 
         // Check if the next byte is E0
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xE0;
     }
-    
+
     /// <summary>
     /// Decodes a FCHS instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FchsHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fchs;
 

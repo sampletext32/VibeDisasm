@@ -1,6 +1,5 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
-using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 
@@ -20,10 +19,14 @@ public abstract class IRInstruction : IRNode
         foreach (var operand in Operands)
         {
             if (operand is T t)
+            {
                 yield return t;
+            }
 
             foreach (var subExpr in operand.SubExpressions.SelectMany(x => x.EnumerateExpressionOfType<T>()))
+            {
                 yield return subExpr;
+            }
         }
     }
 }

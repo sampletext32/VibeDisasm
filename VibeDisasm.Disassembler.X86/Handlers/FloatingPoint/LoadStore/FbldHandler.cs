@@ -24,7 +24,10 @@ public class FbldHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FBLD is DF /4
-        if (opcode != 0xDF) return false;
+        if (opcode != 0xDF)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,14 +35,14 @@ public class FbldHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 4
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3) with reg = 4
         return reg == 4 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FBLD packed BCD instruction
     /// </summary>
@@ -55,13 +58,13 @@ public class FbldHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, rawMemoryOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fbld;
 
         // Create an 80-bit memory operand for packed BCD
         Operand memoryOperand;
-        
+
         if (rawMemoryOperand is DirectMemoryOperand directMemory)
         {
             memoryOperand = OperandFactory.CreateDirectMemoryOperand(directMemory.Address, 80);
@@ -84,7 +87,7 @@ public class FbldHandler : InstructionHandler
         }
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             memoryOperand
         ];

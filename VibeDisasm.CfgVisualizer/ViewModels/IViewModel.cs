@@ -1,3 +1,3 @@
-﻿namespace VibeDisasm.CfgVisualizer.ViewModels;
+namespace VibeDisasm.CfgVisualizer.ViewModels;
 
 public interface IViewModel;

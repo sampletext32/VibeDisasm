@@ -1,4 +1,4 @@
-﻿using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.CfgVisualizer.Services;
 

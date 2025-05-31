@@ -25,11 +25,15 @@ public class SarRm8By1Handler : InstructionHandler
     {
         // SAR r/m8, 1 is encoded as 0xD0 /7
         if (opcode != 0xD0)
+        {
             return false;
+        }
 
         // Check if we can read the ModR/M byte
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 7 (SAR)
         var reg = ModRMDecoder.PeakModRMReg();
@@ -54,7 +58,7 @@ public class SarRm8By1Handler : InstructionHandler
         var immOperand = OperandFactory.CreateImmediateOperand(1);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand,
             immOperand

@@ -11,7 +11,7 @@ public enum InstructionType
     Pop,
     Xchg,
     Lea,        // Load Effective Address
-    
+
     // Arithmetic
     Add,
     Sub,
@@ -24,7 +24,7 @@ public enum InstructionType
     Neg,
     Adc,        // Add with carry
     Sbb,        // Subtract with borrow
-    
+
     // Logical
     And,
     Or,
@@ -45,7 +45,7 @@ public enum InstructionType
     Btc,        // Bit test and complement
     Bsf,        // Bit scan forward
     Bsr,        // Bit scan reverse
-    
+
     // Control flow
     Jmp,        // Jump unconditionally
     Jnle,       // Jump if greater (ZF=0 and SF=OF)
@@ -76,7 +76,7 @@ public enum InstructionType
     Int3,       // Breakpoint interrupt
     Into,       // Interrupt if overflow
     Iret,       // Interrupt return
-    
+
     // String operations
     MovsB,      // Move string byte
     MovsW,      // Move string word
@@ -96,8 +96,8 @@ public enum InstructionType
     LodsB,      // Load string byte
     LodsW,      // Load string word
     LodsD,      // Load string dword
-    // Lods = LodsD, // Alias for LodsD - removed alias to avoid switch expression issues
-    
+                // Lods = LodsD, // Alias for LodsD - removed alias to avoid switch expression issues
+
     // REP prefixed instructions
     // RepneScas = RepNE, // Alias for RepNE - removed alias to avoid switch expression issues
     RepMovsB,   // REP MOVSB
@@ -125,7 +125,7 @@ public enum InstructionType
     RepneCmpsB, // REPNE CMPSB
     RepneCmpsD, // REPNE CMPSD
     RepneCmpsW,  // REPNE CMPSW
-    
+
     // Floating point
     Fld,        // Load floating point value
     Fst,        // Store floating point value
@@ -182,7 +182,7 @@ public enum InstructionType
     Frstor,     // Restore FPU state
     Fnsave,     // Save FPU state without checking for pending unmasked exceptions
     Fsave,      // Save FPU state
-    
+
     // Flag control instructions
     Stc,        // Set Carry Flag
     Clc,        // Clear Carry Flag
@@ -215,7 +215,7 @@ public enum InstructionType
     Fsqrt,      // Square root
     Fnop,       // No operation
     Fwait,      // Wait for FPU
-    
+
     // Floating point conditional moves
     Fcmovb,     // FP conditional move if below
     Fcmove,     // FP conditional move if equal
@@ -225,7 +225,7 @@ public enum InstructionType
     Fcmovne,    // FP conditional move if not equal
     Fcmovnbe,   // FP conditional move if not below or equal
     Fcmovnu,    // FP conditional move if not unordered
-    
+
     // System instructions
     Hlt,        // Halt
     Cpuid,      // CPU identification
@@ -234,7 +234,7 @@ public enum InstructionType
     Lock,       // Lock prefix
     In,         // Input from port
     Out,        // Output to port
-    
+
     // Stack-related instructions
     Pushad,     // Push all general-purpose registers
     Popad,      // Pop all general-purpose registers
@@ -242,7 +242,7 @@ public enum InstructionType
     Popfd,      // Pop stack into EFLAGS register
     Enter,      // Make stack frame for procedure parameters
     Leave,      // High level procedure exit
-    
+
     // Other
     Nop,        // No operation
     Cdq,        // Convert doubleword to quadword
@@ -253,7 +253,7 @@ public enum InstructionType
     Movzx,      // Move with zero-extend
     Setcc,      // Set byte on condition
     Cmov,       // Conditional move
-    
+
     // Unknown
     Unknown
 }

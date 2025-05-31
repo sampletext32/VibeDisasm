@@ -35,7 +35,7 @@ public class IretHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Iret;
-        
+
         // IRET/IRETD has no operands
         instruction.StructuredOperands = [];
 

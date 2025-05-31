@@ -1,6 +1,3 @@
-using System.IO;
-using VibeDisasm.Pe.Raw.Structures;
-
 namespace VibeDisasm.Pe.Raw;
 
 /// <summary>
@@ -46,7 +43,7 @@ public class RawPeParser
 
         // Parse Section Headers
         ParseSectionHeaders(reader, rawPeFile);
-        
+
         // Parse additional directories if requested
         ParseDirectories(reader, rawPeFile);
 
@@ -81,7 +78,7 @@ public class RawPeParser
         dosHeader.OverlayNumber = reader.ReadUInt16();
 
         dosHeader.Reserved1 = new ushort[4];
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
         {
             dosHeader.Reserved1[i] = reader.ReadUInt16();
         }
@@ -90,7 +87,7 @@ public class RawPeParser
         dosHeader.OemInformation = reader.ReadUInt16();
 
         dosHeader.Reserved2 = new ushort[10];
-        for (int i = 0; i < 10; i++)
+        for (var i = 0; i < 10; i++)
         {
             dosHeader.Reserved2[i] = reader.ReadUInt16();
         }
@@ -183,10 +180,10 @@ public class RawPeParser
         optionalHeader.NumberOfRvaAndSizes = reader.ReadUInt32();
 
         // Data directories
-        int numDirectories = (int)Math.Min(optionalHeader.NumberOfRvaAndSizes, 16);
+        var numDirectories = (int)Math.Min(optionalHeader.NumberOfRvaAndSizes, 16);
         optionalHeader.DataDirectories = new RawDataDirectory[16];
 
-        for (int i = 0; i < numDirectories; i++)
+        for (var i = 0; i < numDirectories; i++)
         {
             var dataDir = new RawDataDirectory
             {
@@ -197,7 +194,7 @@ public class RawPeParser
         }
 
         // Initialize any remaining directories to empty
-        for (int i = numDirectories; i < 16; i++)
+        for (var i = numDirectories; i < 16; i++)
         {
             optionalHeader.DataDirectories[i] = new RawDataDirectory();
         }
@@ -211,7 +208,7 @@ public class RawPeParser
         int numSections = rawPeFile.FileHeader.NumberOfSections;
         rawPeFile.SectionHeaders = new RawSectionHeader[numSections];
 
-        for (int i = 0; i < numSections; i++)
+        for (var i = 0; i < numSections; i++)
         {
             var sectionHeader = new RawSectionHeader();
 
@@ -231,7 +228,7 @@ public class RawPeParser
             rawPeFile.SectionHeaders[i] = sectionHeader;
         }
     }
-    
+
     /// <summary>
     /// Parses all the additional PE directories
     /// </summary>
@@ -239,7 +236,7 @@ public class RawPeParser
     {
         // Create a directory parser
         var directoryParser = new RawPeDirectoryParser(rawPeFile);
-        
+
         // Parse each directory
         rawPeFile.ExportDirectory = directoryParser.ParseExportDirectory(reader);
         rawPeFile.ImportDescriptors = directoryParser.ParseImportDescriptors(reader);
@@ -260,6 +257,7 @@ public class RawPeParser
         {
             rawPeFile.ImportAddressTableDirectory = rawPeFile.OptionalHeader.DataDirectories[12].VirtualAddress;
         }
+
         rawPeFile.DelayImportDirectory = directoryParser.ParseDelayImportDirectory(reader);
         rawPeFile.ClrDirectory = directoryParser.ParseClrDirectory(reader);
     }

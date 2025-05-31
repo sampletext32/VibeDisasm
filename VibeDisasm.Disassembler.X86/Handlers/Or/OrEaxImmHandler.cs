@@ -36,23 +36,23 @@ public class OrEaxImmHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Or;
-        
+
         if (!Decoder.CanReadUInt())
         {
             return false;
         }
 
         // Read the immediate dword (little-endian)
-        uint imm32 = Decoder.ReadUInt32();
+        var imm32 = Decoder.ReadUInt32();
 
         // Create the register operand for EAX
         var eaxOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A);
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             eaxOperand,
             immOperand

@@ -49,7 +49,7 @@ public class AddEaxImmHandler : InstructionHandler
         }
 
         // Read the 32-bit immediate value
-        uint imm32 = Decoder.ReadUInt32();
+        var imm32 = Decoder.ReadUInt32();
 
         instruction.StructuredOperands =
         [

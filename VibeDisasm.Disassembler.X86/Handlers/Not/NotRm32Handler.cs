@@ -23,11 +23,15 @@ public class NotRm32Handler : InstructionHandler
     {
         // This handler only handles opcode 0xF7
         if (opcode != 0xF7)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 2 (NOT)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -59,7 +63,7 @@ public class NotRm32Handler : InstructionHandler
 
         // Set the structured operands
         // NOT has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

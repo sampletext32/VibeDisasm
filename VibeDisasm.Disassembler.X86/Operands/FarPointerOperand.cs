@@ -11,27 +11,27 @@ public class FarPointerOperand : MemoryOperand
     /// Gets the base register (if any)
     /// </summary>
     public RegisterIndex? BaseRegister { get; }
-    
+
     /// <summary>
     /// Gets the index register (if any)
     /// </summary>
     public RegisterIndex? IndexRegister { get; }
-    
+
     /// <summary>
     /// Gets the scale factor (if using an index register)
     /// </summary>
     public int Scale { get; }
-    
+
     /// <summary>
     /// Gets the displacement value (if any)
     /// </summary>
     public long Displacement { get; }
-    
+
     /// <summary>
     /// Gets the direct memory address (if any)
     /// </summary>
     public long? Address { get; }
-    
+
     /// <summary>
     /// Initializes a new instance of the FarPointerOperand class for base register memory operands
     /// </summary>
@@ -47,7 +47,7 @@ public class FarPointerOperand : MemoryOperand
         Displacement = 0;
         Address = null;
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the FarPointerOperand class for displacement memory operands
     /// </summary>
@@ -64,7 +64,7 @@ public class FarPointerOperand : MemoryOperand
         Displacement = displacement;
         Address = null;
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the FarPointerOperand class for scaled index memory operands
     /// </summary>
@@ -83,7 +83,7 @@ public class FarPointerOperand : MemoryOperand
         Displacement = displacement;
         Address = null;
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the FarPointerOperand class for direct memory operands
     /// </summary>
@@ -99,7 +99,7 @@ public class FarPointerOperand : MemoryOperand
         Displacement = 0;
         Address = address;
     }
-    
+
     /// <summary>
     /// Creates a FarPointerOperand from an existing memory operand
     /// </summary>
@@ -124,52 +124,52 @@ public class FarPointerOperand : MemoryOperand
         {
             return new FarPointerOperand(sibMemOperand.IndexRegister, sibMemOperand.Scale, sibMemOperand.BaseRegister, sibMemOperand.Displacement, memoryOperand.SegmentOverride);
         }
-        
+
         // Default case - shouldn't happen if all memory operand types are handled above
         throw new System.ArgumentException("Unsupported memory operand type", nameof(memoryOperand));
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>
     public override string ToString()
     {
-        string prefix = "fword ptr ";
-        
+        var prefix = "fword ptr ";
+
         // Add segment override if present
         if (SegmentOverride != null)
         {
             prefix = $"{prefix}{SegmentOverride}:";
         }
-        
+
         // Format based on operand type
         return Type switch
         {
             OperandType.MemoryBaseReg => $"{prefix}[{RegisterMapper.GetRegisterName(BaseRegister!.Value, 32)}]",
-            
+
             OperandType.MemoryBaseRegPlusOffset => $"{prefix}[{RegisterMapper.GetRegisterName(BaseRegister!.Value, 32)}+0x{Displacement:X}]",
-            
+
             OperandType.MemoryDirect => $"{prefix}[0x{Address!.Value:X}]",
-            
+
             OperandType.MemoryIndexed => FormatSIBString(prefix),
-            
+
             _ => $"{prefix}[unknown]"
         };
     }
-    
+
     /// <summary>
     /// Formats the string representation for SIB addressing mode
     /// </summary>
     private string FormatSIBString(string prefix)
     {
-        string result = prefix + "[";
-        
+        var result = prefix + "[";
+
         // Add base register if present
         if (BaseRegister.HasValue)
         {
             result += RegisterMapper.GetRegisterName(BaseRegister.Value, 32);
         }
-        
+
         // Add index register with scale if present
         if (IndexRegister.HasValue)
         {
@@ -178,16 +178,16 @@ public class FarPointerOperand : MemoryOperand
             {
                 result += "+";
             }
-            
+
             result += RegisterMapper.GetRegisterName(IndexRegister.Value, 32);
-            
+
             // Add scale if not 1
             if (Scale > 1)
             {
                 result += $"*{Scale}";
             }
         }
-        
+
         // Add displacement if non-zero
         if (Displacement != 0)
         {
@@ -201,7 +201,7 @@ public class FarPointerOperand : MemoryOperand
                 result += $"-0x{-Displacement:X}";
             }
         }
-        
+
         result += "]";
         return result;
     }

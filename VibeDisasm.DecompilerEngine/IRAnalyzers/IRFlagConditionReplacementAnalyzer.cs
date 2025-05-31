@@ -1,4 +1,3 @@
-using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
@@ -21,12 +20,12 @@ public class IRFlagConditionReplacementAnalyzer
         foreach (var block in function.Blocks)
         {
             // For each instruction in the block
-            for (int i = 0; i < block.Instructions.Count; i++)
+            for (var i = 0; i < block.Instructions.Count; i++)
             {
                 var instruction = block.Instructions[i];
 
                 // find only wired jumps, there is no need to transform other instructions
-                if (instruction is IRWiredJumpInstruction {Condition: not null} wiredJump)
+                if (instruction is IRWiredJumpInstruction { Condition: not null } wiredJump)
                 {
                     var transformedCondition = IRFlagConditionTransformer.TransformCondition(
                         wiredJump.Condition,
@@ -39,7 +38,7 @@ public class IRFlagConditionReplacementAnalyzer
 
                         // Replace the wired jump with the new high-level jump
                         block.Instructions[i] = newJump;
-                        
+
                         Console.WriteLine(
                             $"IR replaced flag jump {wiredJump} with condition {newJump}."
                         );

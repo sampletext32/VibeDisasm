@@ -1,4 +1,3 @@
-using System.IO;
 using System.Text;
 using VibeDisasm.Pe.Raw.Structures;
 
@@ -35,8 +34,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[0].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[0].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the export directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -75,8 +74,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[1].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[1].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the import directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -122,8 +121,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[2].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[2].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the resource directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -150,10 +149,10 @@ public class RawPeDirectoryParser
     /// <returns>An array of resource directory entries</returns>
     public RawResourceDirectoryEntry[] ParseResourceDirectoryEntries(BinaryReader reader, RawResourceDirectory resourceDir)
     {
-        int totalEntries = resourceDir.NumberOfNamedEntries + resourceDir.NumberOfIdEntries;
+        var totalEntries = resourceDir.NumberOfNamedEntries + resourceDir.NumberOfIdEntries;
         var entries = new RawResourceDirectoryEntry[totalEntries];
 
-        for (int i = 0; i < totalEntries; i++)
+        for (var i = 0; i < totalEntries; i++)
         {
             entries[i] = new RawResourceDirectoryEntry
             {
@@ -203,20 +202,20 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[3].VirtualAddress;
-        uint size = _rawPeFile.OptionalHeader.DataDirectories[3].Size;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[3].VirtualAddress;
+        var size = _rawPeFile.OptionalHeader.DataDirectories[3].Size;
+        var offset = RvaToOffset(rva);
 
         // Seek to the exception directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
 
         // Calculate the number of entries
-        int numEntries = (int)(size / 12); // Each entry is 12 bytes
+        var numEntries = (int)(size / 12); // Each entry is 12 bytes
 
         // Parse the exception directory entries
         var entries = new RawExceptionDirectory[numEntries];
 
-        for (int i = 0; i < numEntries; i++)
+        for (var i = 0; i < numEntries; i++)
         {
             entries[i] = new RawExceptionDirectory
             {
@@ -244,8 +243,8 @@ public class RawPeDirectoryParser
         }
 
         // For security directory, VirtualAddress is actually a file offset, not an RVA
-        uint offset = _rawPeFile.OptionalHeader.DataDirectories[4].VirtualAddress;
-        uint size = _rawPeFile.OptionalHeader.DataDirectories[4].Size;
+        var offset = _rawPeFile.OptionalHeader.DataDirectories[4].VirtualAddress;
+        var size = _rawPeFile.OptionalHeader.DataDirectories[4].Size;
 
         // Seek to the security directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -269,9 +268,9 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[5].VirtualAddress;
-        uint size = _rawPeFile.OptionalHeader.DataDirectories[5].Size;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[5].VirtualAddress;
+        var size = _rawPeFile.OptionalHeader.DataDirectories[5].Size;
+        var offset = RvaToOffset(rva);
 
         // Seek to the base relocation directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -318,20 +317,20 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[6].VirtualAddress;
-        uint size = _rawPeFile.OptionalHeader.DataDirectories[6].Size;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[6].VirtualAddress;
+        var size = _rawPeFile.OptionalHeader.DataDirectories[6].Size;
+        var offset = RvaToOffset(rva);
 
         // Seek to the debug directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
 
         // Calculate the number of entries
-        int numEntries = (int)(size / 28); // Each entry is 28 bytes
+        var numEntries = (int)(size / 28); // Each entry is 28 bytes
 
         // Parse the debug directory entries
         var entries = new RawDebugDirectory[numEntries];
 
-        for (int i = 0; i < numEntries; i++)
+        for (var i = 0; i < numEntries; i++)
         {
             entries[i] = new RawDebugDirectory
             {
@@ -364,8 +363,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[9].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[9].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the TLS directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -411,8 +410,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[10].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[10].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the load config directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -485,7 +484,7 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset (for bound imports, the RVA is actually a file offset)
-        uint offset = _rawPeFile.OptionalHeader.DataDirectories[11].VirtualAddress;
+        var offset = _rawPeFile.OptionalHeader.DataDirectories[11].VirtualAddress;
 
         // Seek to the bound import directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -535,8 +534,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[13].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[13].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the delay import directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -585,8 +584,8 @@ public class RawPeDirectoryParser
         }
 
         // Get the RVA and convert to file offset
-        uint rva = _rawPeFile.OptionalHeader.DataDirectories[14].VirtualAddress;
-        uint offset = RvaToOffset(rva);
+        var rva = _rawPeFile.OptionalHeader.DataDirectories[14].VirtualAddress;
+        var offset = RvaToOffset(rva);
 
         // Seek to the CLR directory
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
@@ -642,7 +641,7 @@ public class RawPeDirectoryParser
             if (rva >= section.VirtualAddress && rva < section.VirtualAddress + section.VirtualSize)
             {
                 // Calculate the offset within the section
-                uint offsetInSection = rva - section.VirtualAddress;
+                var offsetInSection = rva - section.VirtualAddress;
 
                 // Make sure we don't exceed the raw data size
                 if (offsetInSection < section.SizeOfRawData)
@@ -668,7 +667,7 @@ public class RawPeDirectoryParser
             return string.Empty;
         }
 
-        uint offset = RvaToOffset(rva);
+        var offset = RvaToOffset(rva);
         reader.BaseStream.Seek(offset, SeekOrigin.Begin);
 
         var bytes = new List<byte>();

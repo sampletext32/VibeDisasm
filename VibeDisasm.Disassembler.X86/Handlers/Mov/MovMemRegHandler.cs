@@ -25,8 +25,10 @@ public class MovMemRegHandler : InstructionHandler
     {
         // For 8-bit operations (0x88), no prefix check needed
         if (opcode == 0x88)
+        {
             return true;
-            
+        }
+
         // For 32-bit operations (0x89), only handle when operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode == 0x89 && !Decoder.HasOperandSizePrefix();
@@ -50,8 +52,8 @@ public class MovMemRegHandler : InstructionHandler
         }
 
         // Determine operand size (0 = 8-bit, 1 = 32-bit)
-        bool operandSize32 = (opcode & 0x01) != 0;
-        int operandSize = operandSize32 ? 32 : 8;
+        var operandSize32 = (opcode & 0x01) != 0;
+        var operandSize = operandSize32 ? 32 : 8;
 
         // Read the ModR/M byte
         // For MOV r/m32, r32 (0x89) or MOV r/m8, r8 (0x88):
@@ -59,7 +61,7 @@ public class MovMemRegHandler : InstructionHandler
         // - The reg field specifies the source register
         Operand destinationOperand;
         Operand sourceOperand;
-        
+
         if (operandSize == 8)
         {
             // For 8-bit operands, use the 8-bit ModR/M decoder and factory methods
@@ -74,9 +76,9 @@ public class MovMemRegHandler : InstructionHandler
             destinationOperand = destOperandStd;
             sourceOperand = OperandFactory.CreateRegisterOperand(regStd, operandSize);
         }
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

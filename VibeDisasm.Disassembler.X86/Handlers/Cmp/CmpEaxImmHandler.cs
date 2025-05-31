@@ -45,11 +45,11 @@ public class CmpEaxImmHandler : InstructionHandler
         }
 
         // Read the immediate value
-        uint imm32 = Decoder.ReadUInt32();
+        var imm32 = Decoder.ReadUInt32();
 
         // Set the structured operands
         // CMP EAX, imm32 has two operands: EAX and the immediate value
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             OperandFactory.CreateRegisterOperand(RegisterIndex.A),
             OperandFactory.CreateImmediateOperand(imm32)

@@ -26,7 +26,7 @@ public class PopRm32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -34,7 +34,7 @@ public class PopRm32Handler : InstructionHandler
         }
 
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // POP r/m32 is encoded as 8F /0 (reg field = 0)
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
@@ -51,7 +51,7 @@ public class PopRm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Pop;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -65,7 +65,7 @@ public class PopRm32Handler : InstructionHandler
 
         // Set the structured operands
         // POP has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

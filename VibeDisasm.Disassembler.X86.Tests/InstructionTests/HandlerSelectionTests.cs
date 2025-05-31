@@ -15,7 +15,7 @@ public class HandlerSelectionTests
     public void InstructionHandlerFactory_DoesNotSelectIncRegHandler_For0x83Opcode()
     {
         // Arrange
-        byte[] codeBuffer = new byte[] {0x83, 0xC1, 0x04}; // ADD ecx, 0x04
+        var codeBuffer = new byte[] { 0x83, 0xC1, 0x04 }; // ADD ecx, 0x04
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
         var factory = new InstructionHandlerFactory(decoder);
 

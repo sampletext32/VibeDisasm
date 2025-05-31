@@ -18,13 +18,13 @@ public static class ResourceDirectoryExtractor
         {
             throw new ArgumentNullException(nameof(rawPeFile));
         }
-            
+
         // Check if the PE file has a resource directory
         if (rawPeFile.ResourceDirectory == null)
         {
             return null;
         }
-            
+
         // Create and populate the resource directory info
         var resourceDirectoryInfo = new ResourceDirectoryInfo
         {
@@ -35,7 +35,7 @@ public static class ResourceDirectoryExtractor
             NumberOfNamedEntries = rawPeFile.ResourceDirectory.NumberOfNamedEntries,
             NumberOfIdEntries = rawPeFile.ResourceDirectory.NumberOfIdEntries
         };
-            
+
         return resourceDirectoryInfo;
     }
 }

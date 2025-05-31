@@ -24,7 +24,10 @@ public class FcomipHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCOMIP ST(0), ST(i) is DF F0-F7
-        if (opcode != 0xDF) return false;
+        if (opcode != 0xDF)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FcomipHandler : InstructionHandler
         }
 
         // Check second opcode byte
-        byte secondOpcode = Decoder.PeakByte();
-        
+        var secondOpcode = Decoder.PeakByte();
+
         // Only handle F0-F7
         return secondOpcode is >= 0xF0 and <= 0xF7;
     }
-    
+
     /// <summary>
     /// Decodes a FCOMIP ST(0), ST(i) instruction
     /// </summary>
@@ -53,15 +56,15 @@ public class FcomipHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRMFpu();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fcomip;
-        
+
         // Create the FPU register operands
         var srcOperand = OperandFactory.CreateFPURegisterOperand(rm);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             srcOperand
         ];

@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-using VibeDisasm.DecompilerEngine.IR;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -20,10 +18,10 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRCompareExpr(
-            new IRFlagExpr(IRFlag.Zero), 
-            IRConstantExpr.Bool(true), 
+            new IRFlagExpr(IRFlag.Zero),
+            IRConstantExpr.Bool(true),
             IRComparisonType.Equal
         );
 
@@ -45,7 +43,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRCompareExpr(
             new IRFlagExpr(IRFlag.Sign),
             new IRFlagExpr(IRFlag.Overflow),
@@ -70,7 +68,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRCompareExpr(
             new IRFlagExpr(IRFlag.Sign),
             new IRFlagExpr(IRFlag.Overflow),
@@ -96,7 +94,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRLogicalExpr(
             new IRCompareExpr(
                 new IRFlagExpr(IRFlag.Zero),
@@ -130,7 +128,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRLogicalExpr(
             new IRCompareExpr(
                 new IRFlagExpr(IRFlag.Zero),
@@ -162,7 +160,7 @@ public class IRFlagConditionTransformerTests
         // Arrange - Test instruction with same pattern as JLE
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var flagSetter = new IRTestInstruction(varA, varA);
-        
+
         // Zero == true OR Sign != Overflow (same as JLE pattern)
         var condition = new IRLogicalExpr(
             new IRCompareExpr(
@@ -186,7 +184,7 @@ public class IRFlagConditionTransformerTests
         var compareExpr = Assert.IsType<IRCompareExpr>(result);
         Assert.Equal(IRComparisonType.LessThanOrEqual, compareExpr.Comparison);
         Assert.Same(varA, compareExpr.Left);
-        
+
         var rightConst = Assert.IsType<IRConstantExpr>(compareExpr.Right);
         Assert.Equal(0, rightConst.Value);
     }
@@ -198,7 +196,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRCompareExpr(
             new IRFlagExpr(IRFlag.Carry),
             IRConstantExpr.Bool(true),
@@ -223,7 +221,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRLogicalExpr(
             new IRCompareExpr(
                 new IRFlagExpr(IRFlag.Carry),
@@ -255,7 +253,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
-        
+
         var condition = new IRLogicalExpr(
             // Zero == true (Equal)
             new IRCompareExpr(
@@ -279,10 +277,10 @@ public class IRFlagConditionTransformerTests
         Assert.NotNull(result);
         var logicalExpr = Assert.IsType<IRLogicalExpr>(result);
         Assert.Equal(IRLogicalOperation.Or, logicalExpr.Operation);
-        
+
         var leftCmp = Assert.IsType<IRCompareExpr>(logicalExpr.Operand1);
         var rightCmp = Assert.IsType<IRCompareExpr>(logicalExpr.Operand2);
-        
+
         Assert.Equal(IRComparisonType.Equal, leftCmp.Comparison);
         Assert.Equal(IRComparisonType.GreaterThanOrEqual, rightCmp.Comparison);
     }
@@ -293,7 +291,7 @@ public class IRFlagConditionTransformerTests
         // Arrange - Test instruction with same operand on both sides (TEST EAX, EAX)
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var flagSetter = new IRTestInstruction(varA, varA);
-        
+
         // Zero flag comparison (similar to JZ after TEST)
         var condition = new IRCompareExpr(
             new IRFlagExpr(IRFlag.Zero),
@@ -309,7 +307,7 @@ public class IRFlagConditionTransformerTests
         var compareExpr = Assert.IsType<IRCompareExpr>(result);
         Assert.Equal(IRComparisonType.Equal, compareExpr.Comparison);
         Assert.Same(varA, compareExpr.Left);
-        
+
         var rightConst = Assert.IsType<IRConstantExpr>(compareExpr.Right);
         Assert.Equal(0, rightConst.Value);
     }
@@ -321,7 +319,7 @@ public class IRFlagConditionTransformerTests
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = IRConstantExpr.Int(42); // Use a constant instead of register to avoid direct match
         var flagSetter = new IRTestInstruction(varA, varB); // Use TEST instead of CMP
-        
+
         // Use a parity flag which isn't handled in our patterns with test instructions
         var condition = new IRCompareExpr(
             new IRFlagExpr(IRFlag.Parity),

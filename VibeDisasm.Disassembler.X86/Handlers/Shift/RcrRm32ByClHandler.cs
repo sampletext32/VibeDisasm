@@ -25,11 +25,15 @@ public class RcrRm32ByClHandler : InstructionHandler
     {
         // RCR r/m32, CL is encoded as 0xD3 /3
         if (opcode != 0xD3)
+        {
             return false;
+        }
 
         // Check if we can read the ModR/M byte
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 3 (RCR)
         var reg = ModRMDecoder.PeakModRMReg();
@@ -54,7 +58,7 @@ public class RcrRm32ByClHandler : InstructionHandler
         var clOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.CL);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand,
             clOperand

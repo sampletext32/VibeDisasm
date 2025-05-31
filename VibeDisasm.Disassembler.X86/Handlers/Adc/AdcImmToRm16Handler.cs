@@ -11,7 +11,7 @@ public class AdcImmToRm16Handler : InstructionHandler
     /// Initializes a new instance of the AdcImmToRm16Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AdcImmToRm16Handler(InstructionDecoder decoder) 
+    public AdcImmToRm16Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
@@ -65,13 +65,13 @@ public class AdcImmToRm16Handler : InstructionHandler
         }
 
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Create the immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm16, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

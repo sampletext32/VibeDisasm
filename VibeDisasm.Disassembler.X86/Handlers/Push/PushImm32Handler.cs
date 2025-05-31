@@ -11,11 +11,11 @@ public class PushImm32Handler : InstructionHandler
     /// Initializes a new instance of the PushImm32Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public PushImm32Handler(InstructionDecoder decoder) 
+    public PushImm32Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class PushImm32Handler : InstructionHandler
     {
         return opcode == 0x68;
     }
-    
+
     /// <summary>
     /// Decodes a PUSH imm32 instruction
     /// </summary>
@@ -37,19 +37,19 @@ public class PushImm32Handler : InstructionHandler
         // Set the instruction type
         instruction.Type = InstructionType.Push;
 
-        if(!Decoder.CanReadUInt())
+        if (!Decoder.CanReadUInt())
         {
             return false;
         }
 
         // Read the immediate value
-        uint imm32 = Decoder.ReadUInt32();
-        
+        var imm32 = Decoder.ReadUInt32();
+
         // Create an immediate operand
         var immOperand = new ImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             immOperand
         ];

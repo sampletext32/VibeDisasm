@@ -36,7 +36,7 @@ public class XorR8Rm8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xor;
-        
+
         // Read the ModR/M byte, specifying that we're dealing with 8-bit operands
         var (_, reg, _, sourceOperand) = ModRMDecoder.ReadModRM8();
 
@@ -44,9 +44,9 @@ public class XorR8Rm8Handler : InstructionHandler
 
         // Create the destination register operand using the 8-bit register type
         var destinationOperand = OperandFactory.CreateRegisterOperand8(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

@@ -9,12 +9,14 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 public abstract class IRExpression : IRNode
 {
     public abstract List<IRExpression> SubExpressions { get; }
-    
+
     public IEnumerable<T> EnumerateExpressionOfType<T>()
         where T : IRExpression
     {
         if (this is T t)
+        {
             yield return t;
+        }
 
         foreach (var subExpr in SubExpressions)
         {

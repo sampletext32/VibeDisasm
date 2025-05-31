@@ -11,12 +11,12 @@ public interface IKeyPressReceiver
     /// Called when a key is pressed
     /// </summary>
     void OnKeyPressed(Key key);
-    
+
     /// <summary>
     /// Called when a key is held down
     /// </summary>
     void OnKeyDown(Key key);
-    
+
     /// <summary>
     /// Called when a key is released
     /// </summary>

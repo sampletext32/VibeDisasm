@@ -26,13 +26,13 @@ public class GraphToolbar
     public void Render()
     {
         ImGui.PushStyleVar(ImGuiStyleVar.ItemSpacing, new Vector2(4, 4));
-        
+
         // Zoom controls
         RenderZoomControls();
-        
+
         // Layout controls
         RenderLayoutControls();
-        
+
         ImGui.PopStyleVar();
     }
 
@@ -44,31 +44,31 @@ public class GraphToolbar
         // Zoom out button
         if (ImGui.Button("-"))
         {
-            float newZoom = _panelViewModel.Zoom * (1 - CfgCanvasPanelViewModel.ZOOM_SPEED * 2);
+            var newZoom = _panelViewModel.Zoom * (1 - CfgCanvasPanelViewModel.ZOOM_SPEED * 2);
             _panelViewModel.SetZoom(newZoom);
         }
-        
+
         ImGui.SameLine();
-        
+
         // Zoom slider
         ImGui.SetNextItemWidth(100);
-        float zoom = _panelViewModel.Zoom;
+        var zoom = _panelViewModel.Zoom;
         if (ImGui.SliderFloat("##Zoom", ref zoom, CfgCanvasPanelViewModel.MIN_ZOOM, CfgCanvasPanelViewModel.MAX_ZOOM, "Zoom: %.2fx"))
         {
             _panelViewModel.SetZoom(zoom);
         }
-        
+
         ImGui.SameLine();
-        
+
         // Zoom in button
         if (ImGui.Button("+"))
         {
-            float newZoom = _panelViewModel.Zoom * (1 + CfgCanvasPanelViewModel.ZOOM_SPEED * 2);
+            var newZoom = _panelViewModel.Zoom * (1 + CfgCanvasPanelViewModel.ZOOM_SPEED * 2);
             _panelViewModel.SetZoom(newZoom);
         }
-        
+
         ImGui.SameLine();
-        
+
         // Reset view button
         if (ImGui.Button("Reset View"))
         {
@@ -82,7 +82,7 @@ public class GraphToolbar
     private void RenderLayoutControls()
     {
         ImGui.SameLine();
-        
+
         // Auto layout button
         if (ImGui.Button("Auto Layout"))
         {

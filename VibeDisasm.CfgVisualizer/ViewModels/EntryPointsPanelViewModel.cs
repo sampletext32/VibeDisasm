@@ -13,10 +13,10 @@ public class EntryPointsPanelViewModel : IViewModel
 
     // Entry points list
     public IReadOnlyList<EntryPointInfo> EntryPoints { get; private set; } = [];
-    
+
     // Selected entry point index
     public int SelectedEntryPointIndex { get; private set; } = -1;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -40,7 +40,7 @@ public class EntryPointsPanelViewModel : IViewModel
         EntryPoints = entryPoints;
         SelectedEntryPointIndex = -1;
     }
-    
+
     /// <summary>
     /// Selects an entry point by index
     /// </summary>

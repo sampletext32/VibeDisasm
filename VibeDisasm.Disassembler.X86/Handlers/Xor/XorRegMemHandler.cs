@@ -13,11 +13,11 @@ public class XorRegMemHandler : InstructionHandler
     /// <param name="codeBuffer">The buffer containing the code to decode</param>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
     /// <param name="length">The length of the buffer</param>
-    public XorRegMemHandler(InstructionDecoder decoder) 
+    public XorRegMemHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -29,7 +29,7 @@ public class XorRegMemHandler : InstructionHandler
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode == 0x33 && !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes an XOR r32, r/m32 instruction
     /// </summary>
@@ -51,14 +51,14 @@ public class XorRegMemHandler : InstructionHandler
 
         // Create the destination register operand
         var destOperand = OperandFactory.CreateRegisterOperand(reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             srcOperand
         ];
-        
+
         return true;
     }
 }

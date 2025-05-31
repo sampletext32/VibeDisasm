@@ -19,14 +19,33 @@ public class SectionInfoPrinter
 
         foreach (var section in sections)
         {
-            string properties = string.Empty;
-            if (section.IsExecutable) properties += "X";
-            if (section.IsReadable) properties += "R";
-            if (section.IsWritable) properties += "W";
-            if (section.ContainsCode) properties += " Code";
-            if (section.ContainsInitializedData) properties += " Data";
-            
-            Console.WriteLine("{0,-10} 0x{1:X8} 0x{2:X8} 0x{3:X8} {4,-15}", 
+            var properties = string.Empty;
+            if (section.IsExecutable)
+            {
+                properties += "X";
+            }
+
+            if (section.IsReadable)
+            {
+                properties += "R";
+            }
+
+            if (section.IsWritable)
+            {
+                properties += "W";
+            }
+
+            if (section.ContainsCode)
+            {
+                properties += " Code";
+            }
+
+            if (section.ContainsInitializedData)
+            {
+                properties += " Data";
+            }
+
+            Console.WriteLine("{0,-10} 0x{1:X8} 0x{2:X8} 0x{3:X8} {4,-15}",
                 section.Name,
                 section.VirtualAddress,
                 section.VirtualSize,

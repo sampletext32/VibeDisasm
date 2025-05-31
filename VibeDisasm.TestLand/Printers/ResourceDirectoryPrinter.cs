@@ -14,7 +14,7 @@ public class ResourceDirectoryPrinter
     public static void Print(ResourceDirectoryInfo? resourceDirectoryInfo)
     {
         System.Console.WriteLine("\r\nResource Directory Information:");
-        
+
         if (resourceDirectoryInfo != null)
         {
             System.Console.WriteLine($"  Resource Directory Found: Yes");

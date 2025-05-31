@@ -22,7 +22,10 @@ public class FisubInt16Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FISUB int16 is DE /4
-        if (opcode != 0xDE) return false;
+        if (opcode != 0xDE)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FisubInt16Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 4
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3) with reg = 4
         return reg == 4 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FISUB int16 instruction
     /// </summary>
@@ -53,12 +56,12 @@ public class FisubInt16Handler : InstructionHandler
 
         // Read the ModR/M byte, specifying that we're dealing with 16-bit operands
         var (mod, reg, rm, memoryOperand) = ModRMDecoder.ReadModRM16();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fisub;
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             memoryOperand
         ];

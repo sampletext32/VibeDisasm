@@ -20,11 +20,12 @@ public class RawSectionHeader : IRawStructure
         get
         {
             // Convert the name bytes to a string, stopping at the first null byte
-            int length = 0;
+            var length = 0;
             while (length < NameBytes.Length && NameBytes[length] != 0)
             {
                 length++;
             }
+
             return Encoding.ASCII.GetString(NameBytes, 0, length);
         }
     }

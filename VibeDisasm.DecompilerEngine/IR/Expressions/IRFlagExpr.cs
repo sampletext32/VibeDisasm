@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
@@ -26,8 +26,12 @@ public class IRFlagExpr : IRExpression
         return false;
     }
 
-
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
     public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }

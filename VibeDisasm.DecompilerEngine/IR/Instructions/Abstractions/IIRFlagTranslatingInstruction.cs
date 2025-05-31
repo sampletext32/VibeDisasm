@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;

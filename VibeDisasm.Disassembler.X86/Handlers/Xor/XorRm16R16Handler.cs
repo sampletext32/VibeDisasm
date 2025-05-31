@@ -45,14 +45,14 @@ public class XorRm16R16Handler : InstructionHandler
 
         // Read the ModR/M byte, specifying that we're dealing with 16-bit operands
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM16();
-        
+
         // Create the source register operand with 16-bit size
         var sourceOperand = OperandFactory.CreateRegisterOperand(reg, 16);
-        
+
         // Note: The operand size is already set to 16-bit by the ReadModRM16 method
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

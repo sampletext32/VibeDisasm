@@ -50,41 +50,45 @@ public class OutHandler : InstructionHandler
             case 0xE6: // OUT imm8, AL
                 // Check if we can read the immediate byte
                 if (!Decoder.CanReadByte())
+                {
                     return false;
-                
+                }
+
                 // Read the immediate byte (port number)
-                byte imm8 = Decoder.ReadByte();
+                var imm8 = Decoder.ReadByte();
                 destOperand = OperandFactory.CreateImmediateOperand(imm8);
                 srcOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
                 break;
-                
+
             case 0xE7: // OUT imm8, EAX
                 // Check if we can read the immediate byte
                 if (!Decoder.CanReadByte())
+                {
                     return false;
-                
+                }
+
                 // Read the immediate byte (port number)
                 imm8 = Decoder.ReadByte();
                 destOperand = OperandFactory.CreateImmediateOperand(imm8);
                 srcOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32);
                 break;
-                
+
             case 0xEE: // OUT DX, AL
                 destOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.D, 16);
                 srcOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
                 break;
-                
+
             case 0xEF: // OUT DX, EAX
                 destOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.D, 16);
                 srcOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32);
                 break;
-                
+
             default:
                 return false;
         }
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             srcOperand

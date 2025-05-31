@@ -1,4 +1,3 @@
-using VibeDisasm.DecompilerEngine.IR;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -170,7 +169,6 @@ public class WireJumpWithConditionAnalyzerTests
             )
         ];
 
-
         var targetBlock = new IRBlock
         {
             Id = "target",
@@ -182,7 +180,6 @@ public class WireJumpWithConditionAnalyzerTests
             Id = "main",
             Instructions = mainInstructions
         };
-
 
         var irFunction = new IRFunction(
             "test_function",

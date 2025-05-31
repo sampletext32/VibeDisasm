@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
 

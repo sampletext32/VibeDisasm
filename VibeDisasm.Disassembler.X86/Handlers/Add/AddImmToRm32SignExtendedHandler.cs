@@ -24,11 +24,15 @@ public class AddImmToRm32SignExtendedHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x83)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 0 (ADD)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -60,11 +64,11 @@ public class AddImmToRm32SignExtendedHandler : InstructionHandler
         }
 
         // Read the immediate value as a signed byte and automatically sign-extend it to int
-        sbyte imm = (sbyte) Decoder.ReadByte();
+        var imm = (sbyte)Decoder.ReadByte();
 
         instruction.StructuredOperands = [
             destOperand,
-            OperandFactory.CreateImmediateOperand((uint)imm), 
+            OperandFactory.CreateImmediateOperand((uint)imm),
         ];
 
         return true;

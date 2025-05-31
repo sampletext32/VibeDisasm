@@ -24,7 +24,10 @@ public class FldFloat32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FLD is D9 /0
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FldFloat32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 0
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+
         return reg == 0;
     }
-    
+
     /// <summary>
     /// Decodes an FLD float32 instruction
     /// </summary>
@@ -59,7 +62,7 @@ public class FldFloat32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fld;
 
@@ -67,7 +70,7 @@ public class FldFloat32Handler : InstructionHandler
         if (mod != 3) // Memory operand
         {
             // Set the structured operands - the operand already has the correct size from ReadModRM
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rawOperand
             ];
@@ -76,9 +79,9 @@ public class FldFloat32Handler : InstructionHandler
         {
             // For register operands with mod=3, this is FLD ST(i)
             var stiOperand = OperandFactory.CreateFPURegisterOperand(fpuRm); // ST(i)
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 stiOperand
             ];

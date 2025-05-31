@@ -53,15 +53,15 @@ public class LeaR32MHandler : InstructionHandler
 
         // Set the instruction type
         instruction.Type = InstructionType.Lea;
-        
+
         // Create the destination register operand
         var destinationOperand = OperandFactory.CreateRegisterOperand((RegisterIndex)reg, 32);
-        
+
         // For LEA, we don't care about the size of the memory operand
         // as we're only interested in the effective address calculation
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

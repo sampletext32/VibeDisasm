@@ -1,5 +1,4 @@
 using System.Numerics;
-using VibeDisasm.DecompilerEngine.ControlFlow;
 using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.CfgVisualizer.Models.Graph;
@@ -13,32 +12,32 @@ public class CfgNodeView
     /// The underlying control flow block
     /// </summary>
     public AsmBlock Block { get; }
-    
+
     /// <summary>
     /// Position of the node in the visualization
     /// </summary>
     public Vector2 Position { get; set; }
-    
+
     /// <summary>
     /// Size of the node in the visualization
     /// </summary>
     public Vector2 Size { get; set; }
-    
+
     /// <summary>
     /// Color of the node
     /// </summary>
     public Vector4 Color { get; set; }
-    
+
     /// <summary>
     /// Whether the node is selected
     /// </summary>
     public bool IsSelected { get; set; }
-    
+
     /// <summary>
     /// Whether the node is highlighted
     /// </summary>
     public bool IsHighlighted { get; set; }
-    
+
     /// <summary>
     /// Unique identifier for the node
     /// </summary>

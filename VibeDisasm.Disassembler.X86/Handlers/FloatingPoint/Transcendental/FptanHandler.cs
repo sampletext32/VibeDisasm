@@ -22,7 +22,10 @@ public class FptanHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FPTAN is D9 F2
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FptanHandler : InstructionHandler
         }
 
         // Check if the next byte is F2
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xF2;
     }
-    
+
     /// <summary>
     /// Decodes a FPTAN instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FptanHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fptan;
 

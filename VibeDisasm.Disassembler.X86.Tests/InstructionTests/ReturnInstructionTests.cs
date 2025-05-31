@@ -16,22 +16,22 @@ public class ReturnInstructionTests
     {
         // Arrange
         // RET (C3) - Return from procedure
-        byte[] codeBuffer = new byte[] { 0xC3 };
+        var codeBuffer = new byte[] { 0xC3 };
         var disassembler = new Disassembler(codeBuffer, 0);
-        
+
         // Act
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Ret, instruction.Type);
-        
+
         // Check that we have no operands
         Assert.Empty(instruction.StructuredOperands);
     }
-    
+
     /// <summary>
     /// Tests the RetImmHandler for decoding RET imm16 instruction
     /// </summary>
@@ -40,21 +40,21 @@ public class ReturnInstructionTests
     {
         // Arrange
         // RET 0x1234 (C2 34 12) - Return from procedure and pop 0x1234 bytes
-        byte[] codeBuffer = new byte[] { 0xC2, 0x34, 0x12 };
+        var codeBuffer = new byte[] { 0xC2, 0x34, 0x12 };
         var disassembler = new Disassembler(codeBuffer, 0);
-        
+
         // Act
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Ret, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (immediate value)
         var immOperand = instruction.StructuredOperands[0];
         Assert.IsType<ImmediateOperand>(immOperand);

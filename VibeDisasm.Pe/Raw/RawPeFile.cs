@@ -39,77 +39,77 @@ public class RawPeFile
     public RawSectionHeader[] SectionHeaders { get; set; } = Array.Empty<RawSectionHeader>();
 
     // Optional directory structures
-    
+
     /// <summary>
     /// The export directory
     /// </summary>
     public RawExportDirectory? ExportDirectory { get; set; }
-    
+
     /// <summary>
     /// The import descriptors
     /// </summary>
     public RawImportDescriptor[]? ImportDescriptors { get; set; }
-    
+
     /// <summary>
     /// The resource directory
     /// </summary>
     public RawResourceDirectory? ResourceDirectory { get; set; }
-    
+
     /// <summary>
     /// The exception directory entries
     /// </summary>
     public RawExceptionDirectory[]? ExceptionDirectory { get; set; }
-    
+
     /// <summary>
     /// The security directory data
     /// </summary>
     public byte[]? SecurityDirectory { get; set; }
-    
+
     /// <summary>
     /// The base relocation blocks
     /// </summary>
     public RawBaseRelocation[]? BaseRelocationDirectory { get; set; }
-    
+
     /// <summary>
     /// The debug directory entries
     /// </summary>
     public RawDebugDirectory[]? DebugDirectory { get; set; }
-    
+
     /// <summary>
     /// The architecture-specific data (unused)
     /// </summary>
     public byte[]? ArchitectureDirectory { get; set; }
-    
+
     /// <summary>
     /// The global pointer directory (unused)
     /// </summary>
     public uint GlobalPointerDirectory { get; set; }
-    
+
     /// <summary>
     /// The TLS directory
     /// </summary>
     public RawTlsDirectory? TlsDirectory { get; set; }
-    
+
     /// <summary>
     /// The load config directory
     /// </summary>
     public RawLoadConfigDirectory? LoadConfigDirectory { get; set; }
-    
+
     /// <summary>
     /// The bound import descriptors
     /// </summary>
     public RawBoundImportDescriptor[]? BoundImportDirectory { get; set; }
-    
+
     /// <summary>
     /// The import address table (IAT)
     /// </summary>
     public uint ImportAddressTableDirectory { get; set; }
-    
+
     /// <summary>
     /// The delay import descriptors
     /// </summary>
     public RawDelayLoadDescriptor[]? DelayImportDirectory { get; set; }
-    
+
     /// <summary>
     /// The CLR runtime header
     /// </summary>
@@ -151,7 +151,7 @@ public class RawPeFile
             throw new ArgumentException("Section data exceeds file bounds");
         }
 
-        byte[] sectionData = new byte[sectionHeader.SizeOfRawData];
+        var sectionData = new byte[sectionHeader.SizeOfRawData];
         Array.Copy(RawData, sectionHeader.PointerToRawData, sectionData, 0, sectionHeader.SizeOfRawData);
         return sectionData;
     }
@@ -169,7 +169,7 @@ public class RawPeFile
             throw new ArgumentException("Data at offset exceeds file bounds");
         }
 
-        byte[] data = new byte[size];
+        var data = new byte[size];
         Array.Copy(RawData, offset, data, 0, size);
         return data;
     }

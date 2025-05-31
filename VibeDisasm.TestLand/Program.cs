@@ -6,19 +6,19 @@ using VibeDisasm.Pe.Raw;
 
 // Path to the PE file to analyze
 const string filePath = @"./DLLs/ArealMap.dll";
-string fileName = Path.GetFileName(filePath);
+var fileName = Path.GetFileName(filePath);
 
 // Read the file bytes
-byte[] fileData = File.ReadAllBytes(filePath);
+var fileData = File.ReadAllBytes(filePath);
 
 // Parse the PE file using the raw parser
-RawPeFile rawPeFile = RawPeFactory.FromBytes(fileData);
+var rawPeFile = RawPeFactory.FromBytes(fileData);
 
 // Extract basic PE information
-PeInfo peInfo = PeInfoExtractor.Extract(rawPeFile);
+var peInfo = PeInfoExtractor.Extract(rawPeFile);
 
 // Extract all definite code offsets
-CodeOffsetsInfo codeOffsetsInfo = CodeOffsetsExtractor.Extract(rawPeFile);
+var codeOffsetsInfo = CodeOffsetsExtractor.Extract(rawPeFile);
 
 var entryPointCodeOffset = codeOffsetsInfo.Offsets.FirstOrDefault(x => x.Source == "Entry Point")!;
 

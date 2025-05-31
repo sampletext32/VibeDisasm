@@ -23,14 +23,14 @@ public static class NamedSectionExtractor
         {
             throw new ArgumentNullException(nameof(rawPeFile));
         }
-        
+
         var sectionHeader = Array.Find(rawPeFile.SectionHeaders, s => s.Name.Equals(sectionName, StringComparison.OrdinalIgnoreCase));
-        
+
         if (sectionHeader == null)
         {
             return null;
         }
-        
+
         return BaseSectionExtractor.CreateSectionInfo(rawPeFile, sectionHeader);
     }
 }

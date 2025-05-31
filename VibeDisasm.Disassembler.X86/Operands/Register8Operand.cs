@@ -11,7 +11,7 @@ public class Register8Operand : Operand
     /// Gets or sets the 8-bit register
     /// </summary>
     public RegisterIndex8 Register { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the Register8Operand class
     /// </summary>
@@ -22,7 +22,7 @@ public class Register8Operand : Operand
         Register = register;
         Size = 8; // Always 8 bits for this operand type
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>

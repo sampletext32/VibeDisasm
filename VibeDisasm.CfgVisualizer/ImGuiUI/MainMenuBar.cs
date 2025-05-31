@@ -29,43 +29,43 @@ public class MainMenuBar : IImGuiPanel
                 {
                     // Open file dialog using NativeFileDialogSharp
                     var result = NativeFileDialogSharp.Dialog.FileOpen();
-                    
+
                     if (result.IsOk)
                     {
                         _actionsService.TryLoadFile(result.Path);
                     }
                 }
-                
+
                 ImGui.Separator();
-                
+
                 if (ImGui.MenuItem("Exit", "Alt+F4"))
                 {
                     App.Instance.Window.Close();
                 }
-                
+
                 ImGui.EndMenu();
             }
-            
+
             if (ImGui.BeginMenu("View"))
             {
                 if (ImGui.MenuItem("Reset Layout"))
                 {
                     // TODO: Implement layout reset
                 }
-                
+
                 ImGui.EndMenu();
             }
-            
+
             if (ImGui.BeginMenu("Help"))
             {
                 if (ImGui.MenuItem("About"))
                 {
                     // TODO: Implement about dialog
                 }
-                
+
                 ImGui.EndMenu();
             }
-            
+
             ImGui.EndMainMenuBar();
         }
     }

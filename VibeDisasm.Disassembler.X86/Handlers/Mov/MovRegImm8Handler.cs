@@ -38,7 +38,7 @@ public class MovRegImm8Handler : InstructionHandler
         instruction.Type = InstructionType.Mov;
 
         // Register is encoded in the low 3 bits of the opcode
-        RegisterIndex8 reg = (RegisterIndex8)(opcode & 0x07);
+        var reg = (RegisterIndex8)(opcode & 0x07);
 
         // Read the immediate value
         if (!Decoder.CanReadByte())
@@ -46,16 +46,16 @@ public class MovRegImm8Handler : InstructionHandler
             return false;
         }
 
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the destination register operand
         var destinationOperand = OperandFactory.CreateRegisterOperand8(reg);
-        
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

@@ -46,12 +46,12 @@ public class SubRm32R32Handler : InstructionHandler
 
         // Read the ModR/M byte
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Create the source register operand (32-bit)
         var sourceOperand = OperandFactory.CreateRegisterOperand((RegisterIndex)reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

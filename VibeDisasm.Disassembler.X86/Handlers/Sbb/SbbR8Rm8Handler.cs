@@ -53,7 +53,7 @@ public class SbbR8Rm8Handler : InstructionHandler
         var destinationOperand = OperandFactory.CreateRegisterOperand8(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

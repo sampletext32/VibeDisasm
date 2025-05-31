@@ -11,7 +11,7 @@ public class DirectMemoryOperand : MemoryOperand
     /// Gets or sets the memory address
     /// </summary>
     public long Address { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the DirectMemoryOperand class
     /// </summary>
@@ -24,7 +24,7 @@ public class DirectMemoryOperand : MemoryOperand
         Type = OperandType.MemoryDirect;
         Address = address;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>

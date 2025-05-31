@@ -35,10 +35,10 @@ public class NopHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Nop;
-        
+
         // NOP has no operands
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

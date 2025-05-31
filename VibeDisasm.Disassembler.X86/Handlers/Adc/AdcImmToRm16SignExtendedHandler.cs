@@ -11,7 +11,7 @@ public class AdcImmToRm16SignExtendedHandler : InstructionHandler
     /// Initializes a new instance of the AdcImmToRm16SignExtendedHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AdcImmToRm16SignExtendedHandler(InstructionDecoder decoder) 
+    public AdcImmToRm16SignExtendedHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
@@ -73,7 +73,7 @@ public class AdcImmToRm16SignExtendedHandler : InstructionHandler
         var sourceOperand = OperandFactory.CreateImmediateOperand((ushort)imm16, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

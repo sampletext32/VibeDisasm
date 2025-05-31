@@ -11,22 +11,22 @@ public struct Rect
     /// X coordinate of the top-left corner
     /// </summary>
     public float X;
-    
+
     /// <summary>
     /// Y coordinate of the top-left corner
     /// </summary>
     public float Y;
-    
+
     /// <summary>
     /// Width of the rectangle
     /// </summary>
     public float Width;
-    
+
     /// <summary>
     /// Height of the rectangle
     /// </summary>
     public float Height;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -37,7 +37,7 @@ public struct Rect
         Width = width;
         Height = height;
     }
-    
+
     /// <summary>
     /// Checks if a point is contained within the rectangle
     /// </summary>

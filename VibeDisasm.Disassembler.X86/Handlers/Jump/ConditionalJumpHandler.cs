@@ -17,9 +17,9 @@ public class ConditionalJumpHandler : InstructionHandler
     // Instruction types for conditional jumps
     private static readonly InstructionType[] InstructionTypes =
     [
-        InstructionType.Jo, InstructionType.Jno, InstructionType.Jb, InstructionType.Jae, 
+        InstructionType.Jo, InstructionType.Jno, InstructionType.Jb, InstructionType.Jae,
         InstructionType.Jz, InstructionType.Jnz, InstructionType.Jna, InstructionType.Jnbe,
-        InstructionType.Js, InstructionType.Jns, InstructionType.Jp, InstructionType.Jpo, 
+        InstructionType.Js, InstructionType.Jns, InstructionType.Jp, InstructionType.Jpo,
         InstructionType.Jnge, InstructionType.Jnl, InstructionType.Jng, InstructionType.Jnle
     ];
 
@@ -27,11 +27,11 @@ public class ConditionalJumpHandler : InstructionHandler
     /// Initializes a new instance of the ConditionalJumpHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public ConditionalJumpHandler(InstructionDecoder decoder) 
+    public ConditionalJumpHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -42,7 +42,7 @@ public class ConditionalJumpHandler : InstructionHandler
         // Conditional jumps are in the range 0x70-0x7F
         return opcode >= 0x70 && opcode <= 0x7F;
     }
-    
+
     /// <summary>
     /// Decodes a conditional jump instruction
     /// </summary>
@@ -52,31 +52,31 @@ public class ConditionalJumpHandler : InstructionHandler
     public override bool Decode(byte opcode, Instruction instruction)
     {
         // Get the index from the opcode
-        int index = opcode - 0x70;
-        
+        var index = opcode - 0x70;
+
         // Set the instruction type
         instruction.Type = InstructionTypes[index];
-        
+
         // Check if we can read the offset byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the offset and calculate target address
-        uint position = Decoder.GetPosition();
-        sbyte offset = (sbyte)Decoder.ReadByte();
-        uint targetAddress = (uint) (position + 1 + offset);
-        
+        var position = Decoder.GetPosition();
+        var offset = (sbyte)Decoder.ReadByte();
+        var targetAddress = (uint)(position + 1 + offset);
+
         // Create the target address operand
         var targetOperand = OperandFactory.CreateRelativeOffsetOperand(targetAddress);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             targetOperand
         ];
-        
+
         return true;
     }
 }

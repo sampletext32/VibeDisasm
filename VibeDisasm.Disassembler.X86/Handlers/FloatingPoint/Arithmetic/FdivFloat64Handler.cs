@@ -22,7 +22,10 @@ public class FdivFloat64Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FDIV is DC /6
-        if (opcode != 0xDC) return false;
+        if (opcode != 0xDC)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FdivFloat64Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 6 and mod != 3 (memory operand)
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3) with reg = 6
         return reg == 6 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FDIV float64 instruction
     /// </summary>
@@ -53,12 +56,12 @@ public class FdivFloat64Handler : InstructionHandler
 
         // Read the ModR/M byte using the specialized FPU method for 64-bit operands
         var (mod, reg, fpuRm, rawOperand) = ModRMDecoder.ReadModRMFpu64();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fdiv;
 
         // Set the structured operands - the operand already has the correct size from ReadModRMFpu64
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             rawOperand
         ];

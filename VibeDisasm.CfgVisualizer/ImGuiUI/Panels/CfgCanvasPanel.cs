@@ -32,14 +32,14 @@ public class CfgCanvasPanel : IImGuiPanel
         _toolbar = new GraphToolbar(panelViewModel);
         _statusBar = new GraphStatusBar(panelViewModel);
     }
-    
+
     /// <summary>
     /// Renders the CFG canvas panel
     /// </summary>
     public void OnImGuiRender()
     {
         // Begin the panel
-        bool isOpen = ImGui.Begin("CFG Canvas");
+        var isOpen = ImGui.Begin("CFG Canvas");
         if (!isOpen)
         {
             ImGui.End();
@@ -55,43 +55,43 @@ public class CfgCanvasPanel : IImGuiPanel
 
         // Create a toolbar for zoom controls
         _toolbar.Render();
-        
+
         // Get canvas size and position
         var canvasPos = ImGui.GetCursorScreenPos();
         var canvasSize = ImGui.GetContentRegionAvail();
         var drawList = ImGui.GetWindowDrawList();
-        
+
         // Handle input
         _inputHandler.HandleInput(canvasPos, canvasSize);
-        
+
         // Calculate transform
         var transform = _panelViewModel.GetTransform(canvasSize);
-        
+
         // Draw edges
         _renderer.RenderEdges(
-            drawList, 
-            _panelViewModel.CfgViewModel.Edges, 
-            canvasPos, 
-            transform, 
-            _panelViewModel.SelectedNode, 
-            _panelViewModel.HoveredNode, 
+            drawList,
+            _panelViewModel.CfgViewModel.Edges,
+            canvasPos,
+            transform,
+            _panelViewModel.SelectedNode,
+            _panelViewModel.HoveredNode,
             _panelViewModel.Zoom
         );
-        
+
         // Draw nodes
         _renderer.RenderNodes(
-            drawList, 
-            _panelViewModel.CfgViewModel.Nodes, 
-            canvasPos, 
-            transform, 
-            _panelViewModel.SelectedNode, 
-            _panelViewModel.HoveredNode, 
+            drawList,
+            _panelViewModel.CfgViewModel.Nodes,
+            canvasPos,
+            transform,
+            _panelViewModel.SelectedNode,
+            _panelViewModel.HoveredNode,
             _panelViewModel.Zoom
         );
-        
+
         // Render status bar
         _statusBar.Render(canvasPos, canvasSize, drawList);
-        
+
         // End the panel
         ImGui.End();
     }

@@ -53,7 +53,7 @@ public class AdcAlImmHandler : InstructionHandler
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

@@ -11,11 +11,11 @@ public class XorAlImmHandler : InstructionHandler
     /// Initializes a new instance of the XorAlImmHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public XorAlImmHandler(InstructionDecoder decoder) 
+    public XorAlImmHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class XorAlImmHandler : InstructionHandler
     {
         return opcode == 0x34;
     }
-    
+
     /// <summary>
     /// Decodes a XOR AL, imm8 instruction
     /// </summary>
@@ -36,28 +36,28 @@ public class XorAlImmHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xor;
-        
+
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the immediate value using the decoder
-        byte imm8 = Decoder.ReadByte();
-        
+        var imm8 = Decoder.ReadByte();
+
         // Create the register operand for AL
         var alOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             alOperand,
             immOperand
         ];
-        
+
         return true;
     }
 }

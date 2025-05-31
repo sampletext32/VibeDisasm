@@ -22,7 +22,10 @@ public class FtstHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FTST is D9 E4
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FtstHandler : InstructionHandler
         }
 
         // Check if the next byte is E4
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xE4;
     }
-    
+
     /// <summary>
     /// Decodes a FTST instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FtstHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Ftst;
 

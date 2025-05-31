@@ -1,4 +1,3 @@
-using System.Text;
 using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
@@ -37,29 +36,29 @@ public static class ExportExtractor
         // Get the DLL name
         if (rawPeFile.ExportDirectory.NameRva != 0)
         {
-            uint nameOffset = Util.RvaToOffset(rawPeFile, rawPeFile.ExportDirectory.NameRva);
+            var nameOffset = Util.RvaToOffset(rawPeFile, rawPeFile.ExportDirectory.NameRva);
             exportInfo.Name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
         }
 
         // Process exported functions
         if (rawPeFile.ExportDirectory.NumberOfFunctions > 0)
         {
-            uint functionsRva = rawPeFile.ExportDirectory.AddressOfFunctions;
-            uint namesRva = rawPeFile.ExportDirectory.AddressOfNames;
-            uint ordinalsRva = rawPeFile.ExportDirectory.AddressOfNameOrdinals;
+            var functionsRva = rawPeFile.ExportDirectory.AddressOfFunctions;
+            var namesRva = rawPeFile.ExportDirectory.AddressOfNames;
+            var ordinalsRva = rawPeFile.ExportDirectory.AddressOfNameOrdinals;
 
             // Create a mapping of ordinals to names
             var ordinalToName = new Dictionary<uint, string>();
             for (uint i = 0; i < rawPeFile.ExportDirectory.NumberOfNames; i++)
             {
-                uint nameRvaOffset = Util.RvaToOffset(rawPeFile, namesRva + (i * 4));
-                uint nameRva = BitConverter.ToUInt32(rawPeFile.RawData, (int)nameRvaOffset);
+                var nameRvaOffset = Util.RvaToOffset(rawPeFile, namesRva + (i * 4));
+                var nameRva = BitConverter.ToUInt32(rawPeFile.RawData, (int)nameRvaOffset);
 
-                uint ordinalOffset = Util.RvaToOffset(rawPeFile, ordinalsRva + (i * 2));
-                ushort ordinal = BitConverter.ToUInt16(rawPeFile.RawData, (int)ordinalOffset);
+                var ordinalOffset = Util.RvaToOffset(rawPeFile, ordinalsRva + (i * 2));
+                var ordinal = BitConverter.ToUInt16(rawPeFile.RawData, (int)ordinalOffset);
 
-                uint nameOffset = Util.RvaToOffset(rawPeFile, nameRva);
-                string name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
+                var nameOffset = Util.RvaToOffset(rawPeFile, nameRva);
+                var name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
 
                 ordinalToName[ordinal] = name;
             }
@@ -76,8 +75,8 @@ public static class ExportExtractor
             // Process each function
             for (uint i = 0; i < rawPeFile.ExportDirectory.NumberOfFunctions; i++)
             {
-                uint functionRvaOffset = Util.RvaToOffset(rawPeFile, functionsRva + (i * 4));
-                uint functionRva = BitConverter.ToUInt32(rawPeFile.RawData, (int)functionRvaOffset);
+                var functionRvaOffset = Util.RvaToOffset(rawPeFile, functionsRva + (i * 4));
+                var functionRva = BitConverter.ToUInt32(rawPeFile.RawData, (int)functionRvaOffset);
 
                 // Skip functions with RVA = 0 (not exported)
                 if (functionRva == 0)
@@ -92,7 +91,7 @@ public static class ExportExtractor
                 };
 
                 // Set the function name if available
-                if (ordinalToName.TryGetValue(i, out string? name))
+                if (ordinalToName.TryGetValue(i, out var name))
                 {
                     function.Name = name;
                 }
@@ -101,7 +100,7 @@ public static class ExportExtractor
                 if (exportDirRva <= functionRva && functionRva < exportDirRva + exportDirSize)
                 {
                     function.IsForwarded = true;
-                    uint forwardOffset = Util.RvaToOffset(rawPeFile, functionRva);
+                    var forwardOffset = Util.RvaToOffset(rawPeFile, functionRva);
                     function.ForwardedName = Util.ReadAsciiString(rawPeFile.RawData, forwardOffset);
                 }
 

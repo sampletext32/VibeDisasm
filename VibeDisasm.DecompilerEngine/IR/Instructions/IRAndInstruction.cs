@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -16,7 +15,7 @@ public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruct
     public IRExpression Right { get; init; }
     public override IRExpression? Result => Left;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-    
+
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
@@ -24,7 +23,7 @@ public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruct
     ];
 
     public override string ToString() => $"{Left} &= {Right}";
-    
+
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
         return flag switch
@@ -34,23 +33,22 @@ public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruct
                 new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-            
+
             // Sign flag: MSB of result is set (result is negative)
             IRFlag.Sign => new IRCompareExpr(
                 new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-                
+
             _ => null // Other flags not directly mappable
         };
     }
-    
+
     public IRAndInstruction(IRExpression left, IRExpression right)
     {
         Left = left;
         Right = right;
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

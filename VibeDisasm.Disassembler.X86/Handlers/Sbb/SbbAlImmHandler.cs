@@ -47,13 +47,13 @@ public class SbbAlImmHandler : InstructionHandler
         }
 
         // Read the immediate value
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             alOperand,
             immOperand

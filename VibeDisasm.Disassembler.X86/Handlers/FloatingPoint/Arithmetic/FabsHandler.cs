@@ -22,7 +22,10 @@ public class FabsHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FABS is D9 E1
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FabsHandler : InstructionHandler
         }
 
         // Check if the next byte is E1
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xE1;
     }
-    
+
     /// <summary>
     /// Decodes a FABS instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FabsHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fabs;
 

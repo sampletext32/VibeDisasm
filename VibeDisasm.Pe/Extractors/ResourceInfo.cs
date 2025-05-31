@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace VibeDisasm.Pe.Extractors;
 
 /// <summary>
@@ -11,16 +9,15 @@ public class ResourceInfo
     /// Gets or sets the list of resources
     /// </summary>
     public List<ResourceEntryInfo> Resources { get; set; } = new();
-    
+
     /// <summary>
     /// Gets or sets the resource directory RVA
     /// </summary>
     public uint DirectoryRVA { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the resource directory size
     /// </summary>
     public uint DirectorySize { get; set; }
-    
 
 }

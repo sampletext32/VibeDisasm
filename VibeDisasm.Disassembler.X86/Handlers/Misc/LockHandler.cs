@@ -35,7 +35,7 @@ public class LockHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Lock;
-        
+
         // LOCK prefix has no operands
         instruction.StructuredOperands = [];
 

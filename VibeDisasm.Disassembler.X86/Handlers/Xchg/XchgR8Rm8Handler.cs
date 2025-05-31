@@ -27,7 +27,7 @@ public class XchgR8Rm8Handler : InstructionHandler
         // XCHG r8, r/m8 is 0x86
         return opcode == 0x86;
     }
-    
+
     /// <summary>
     /// Decodes an XCHG r8, r/m8 instruction
     /// </summary>
@@ -38,29 +38,29 @@ public class XchgR8Rm8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xchg;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the ModR/M byte
         // For XCHG r8, r/m8 (0x86):
         // - The reg field specifies the first register operand
         // - The r/m field with mod specifies the second operand (register or memory)
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Create the source register operand from the reg field
         var sourceOperand = OperandFactory.CreateRegisterOperand8(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

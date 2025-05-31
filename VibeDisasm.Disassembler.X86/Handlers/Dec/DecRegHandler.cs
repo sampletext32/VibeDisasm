@@ -38,20 +38,20 @@ public class DecRegHandler : InstructionHandler
     public override bool Decode(byte opcode, Instruction instruction)
     {
         // Calculate the register index (0 for EAX, 1 for ECX, etc.)
-        RegisterIndex reg = (RegisterIndex)(opcode - 0x48);
-        
+        var reg = (RegisterIndex)(opcode - 0x48);
+
         // Set the instruction type
         instruction.Type = InstructionType.Dec;
-        
+
         // Create the register operand
         var regOperand = OperandFactory.CreateRegisterOperand(reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             regOperand
         ];
-        
+
         return true;
     }
 }

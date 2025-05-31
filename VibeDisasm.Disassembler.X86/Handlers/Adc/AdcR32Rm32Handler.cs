@@ -55,7 +55,7 @@ public class AdcR32Rm32Handler : InstructionHandler
         var destinationOperand = OperandFactory.CreateRegisterOperand(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

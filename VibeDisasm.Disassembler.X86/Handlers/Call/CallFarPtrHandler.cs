@@ -28,16 +28,16 @@ public class CallFarPtrHandler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Extract the reg field (bits 3-5)
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // CALL m16:32 is encoded as FF /3 (reg field = 3)
         return reg == 3;
     }
@@ -79,12 +79,12 @@ public class CallFarPtrHandler : InstructionHandler
         {
             return false;
         }
-        
+
         var farPtrOperand = OperandFactory.CreateFarPointerOperand(memOperand);
 
         // Set the structured operands
         // CALL has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             farPtrOperand
         ];

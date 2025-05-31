@@ -22,11 +22,15 @@ public class ImulRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0xF6)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 5 (IMUL)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -53,10 +57,10 @@ public class ImulRm8Handler : InstructionHandler
         // For IMUL r/m8 (0xF6 /5):
         // - The r/m field with mod specifies the operand (register or memory)
         var (_, _, _, operand) = ModRMDecoder.ReadModRM8();
-        
+
         // Set the structured operands
         // IMUL has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

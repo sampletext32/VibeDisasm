@@ -22,7 +22,10 @@ public class FninitHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FNINIT is DB E3
-        if (opcode != 0xDB) return false;
+        if (opcode != 0xDB)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FninitHandler : InstructionHandler
         }
 
         // Check if the next byte is E3
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xE3;
     }
-    
+
     /// <summary>
     /// Decodes a FNINIT instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FninitHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fninit;
 

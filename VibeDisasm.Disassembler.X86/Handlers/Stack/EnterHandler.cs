@@ -27,7 +27,7 @@ public class EnterHandler : InstructionHandler
         // ENTER is 0xC8
         return opcode == 0xC8;
     }
-    
+
     /// <summary>
     /// Decodes an ENTER instruction
     /// </summary>
@@ -44,26 +44,26 @@ public class EnterHandler : InstructionHandler
         }
 
         // Read the size operand (16-bit immediate value)
-        ushort size = Decoder.ReadUInt16();
-        
+        var size = Decoder.ReadUInt16();
+
         // Check if we can read the nesting level byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the nesting level (8-bit immediate value)
-        byte nestingLevel = Decoder.ReadByte();
-        
+        var nestingLevel = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Enter;
-        
+
         // Create immediate operands for size and nesting level
         var sizeOperand = OperandFactory.CreateImmediateOperand(size);
         var nestingLevelOperand = OperandFactory.CreateImmediateOperand(nestingLevel);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             sizeOperand,
             nestingLevelOperand

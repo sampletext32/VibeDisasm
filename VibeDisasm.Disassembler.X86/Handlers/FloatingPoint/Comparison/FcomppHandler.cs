@@ -22,7 +22,10 @@ public class FcomppHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCOMPP is DE D9
-        if (opcode != 0xDE) return false;
+        if (opcode != 0xDE)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FcomppHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte is exactly D9 (reg = 3, rm = 1, mod = 3)
-        byte modRm = Decoder.PeakByte();
+        var modRm = Decoder.PeakByte();
         return modRm == 0xD9;
     }
-    
+
     /// <summary>
     /// Decodes a FCOMPP instruction
     /// </summary>
@@ -49,7 +52,7 @@ public class FcomppHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fcompp;
 

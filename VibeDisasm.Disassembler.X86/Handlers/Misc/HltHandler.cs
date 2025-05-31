@@ -35,7 +35,7 @@ public class HltHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Hlt;
-        
+
         // HLT has no operands
         instruction.StructuredOperands = [];
 

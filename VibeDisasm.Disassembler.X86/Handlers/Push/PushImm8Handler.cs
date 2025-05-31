@@ -37,19 +37,19 @@ public class PushImm8Handler : InstructionHandler
         // Set the instruction type
         instruction.Type = InstructionType.Push;
 
-        if(!Decoder.CanReadByte())
+        if (!Decoder.CanReadByte())
         {
             return false;
         }
 
         // Read the immediate value
-        sbyte imm8 = (sbyte)Decoder.ReadByte();
+        var imm8 = (sbyte)Decoder.ReadByte();
 
         // Create an 8-bit immediate operand to ensure it's displayed without leading zeros
         var immOperand = new ImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             immOperand
         ];

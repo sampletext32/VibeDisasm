@@ -26,16 +26,16 @@ public class JmpRm32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Extract the reg field (bits 3-5)
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // JMP r/m32 is encoded as FF /4 (reg field = 4)
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
@@ -66,7 +66,7 @@ public class JmpRm32Handler : InstructionHandler
 
         // Set the structured operands
         // JMP has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

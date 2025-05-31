@@ -24,7 +24,7 @@ public class LahfHandler : InstructionHandler
         // LAHF is 9F
         return opcode == 0x9F;
     }
-    
+
     /// <summary>
     /// Decodes a LAHF instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class LahfHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Lahf;
-        
+
         // LAHF has no operands
         instruction.StructuredOperands = [];
 

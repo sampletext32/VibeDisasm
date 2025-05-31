@@ -15,7 +15,7 @@ public sealed class CsvJsonConverter<T> : DefaultTypeConverter
         PropertyNameCaseInsensitive = true,
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
     };
-    
+
     public override object? ConvertFromString(string? text, IReaderRow row, MemberMapData memberMapData)
     {
         if (text is null)

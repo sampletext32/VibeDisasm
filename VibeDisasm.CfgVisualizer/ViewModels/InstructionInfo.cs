@@ -9,22 +9,22 @@ public class InstructionInfo
     /// Memory address of the instruction
     /// </summary>
     public ulong Address { get; }
-    
+
     /// <summary>
     /// Instruction opcode (e.g., MOV, PUSH, CALL)
     /// </summary>
     public string Opcode { get; }
-    
+
     /// <summary>
     /// Instruction operands
     /// </summary>
     public string Operands { get; }
-    
+
     /// <summary>
     /// Raw bytes of the instruction
     /// </summary>
     public byte[] Bytes { get; }
-    
+
     /// <summary>
     /// Constructor
     /// </summary>

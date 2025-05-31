@@ -1,6 +1,4 @@
-using System;
 using System.Globalization;
-using System.Linq;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.TestLand.Printers;
@@ -17,13 +15,13 @@ public static class VersionInfoPrinter
     public static void Print(System.Collections.Generic.IEnumerable<VersionInfo> versionInfos)
     {
         Console.WriteLine("\r\n  Version Information:");
-        
+
         foreach (var versionInfo in versionInfos)
         {
             // Get the language name using CultureInfo
-            string languageName = "Unknown";
-            string languageCode = $"0x{versionInfo.LanguageId:X4}";
-            
+            var languageName = "Unknown";
+            var languageCode = $"0x{versionInfo.LanguageId:X4}";
+
             try
             {
                 var culture = new CultureInfo((int)versionInfo.LanguageId);
@@ -34,60 +32,84 @@ public static class VersionInfoPrinter
                 // If CultureInfo fails, just use the numeric code
                 languageName = $"Language {languageCode}";
             }
-            
+
             // Print basic version info
             Console.WriteLine($"\r\n  Language: {languageCode} ({languageName})");
             Console.WriteLine($"  Code Page: 0x{versionInfo.CodePage:X4}");
             Console.WriteLine($"  File Version: {versionInfo.FileVersion}");
             Console.WriteLine($"  Product Version: {versionInfo.ProductVersion}");
-            
+
             // Print file flags
             Console.WriteLine($"  File Flags: 0x{versionInfo.FileFlags:X8}");
             if (versionInfo.FileFlags != 0)
             {
                 Console.Write("    ");
-                if ((versionInfo.FileFlags & 0x00000001) != 0) Console.Write("DEBUG ");
-                if ((versionInfo.FileFlags & 0x00000002) != 0) Console.Write("PRERELEASE ");
-                if ((versionInfo.FileFlags & 0x00000004) != 0) Console.Write("PATCHED ");
-                if ((versionInfo.FileFlags & 0x00000008) != 0) Console.Write("PRIVATEBUILD ");
-                if ((versionInfo.FileFlags & 0x00000010) != 0) Console.Write("INFOINFERRED ");
-                if ((versionInfo.FileFlags & 0x00000020) != 0) Console.Write("SPECIALBUILD ");
+                if ((versionInfo.FileFlags & 0x00000001) != 0)
+                {
+                    Console.Write("DEBUG ");
+                }
+
+                if ((versionInfo.FileFlags & 0x00000002) != 0)
+                {
+                    Console.Write("PRERELEASE ");
+                }
+
+                if ((versionInfo.FileFlags & 0x00000004) != 0)
+                {
+                    Console.Write("PATCHED ");
+                }
+
+                if ((versionInfo.FileFlags & 0x00000008) != 0)
+                {
+                    Console.Write("PRIVATEBUILD ");
+                }
+
+                if ((versionInfo.FileFlags & 0x00000010) != 0)
+                {
+                    Console.Write("INFOINFERRED ");
+                }
+
+                if ((versionInfo.FileFlags & 0x00000020) != 0)
+                {
+                    Console.Write("SPECIALBUILD ");
+                }
+
                 Console.WriteLine();
             }
-            
+
             // Print file OS
             Console.WriteLine($"  File OS: 0x{versionInfo.FileOS:X8}");
             Console.WriteLine($"    {GetFileOSString(versionInfo.FileOS)}");
-            
+
             // Print file type
             Console.WriteLine($"  File Type: 0x{versionInfo.FileType:X8}");
             Console.WriteLine($"    {GetFileTypeString(versionInfo.FileType, versionInfo.FileSubtype)}");
-            
+
             // Print string file info
             if (versionInfo.StringFileInfo.Count > 0)
             {
                 Console.WriteLine("\r\n  String File Info:");
                 Console.WriteLine("  {0,-20} {1}", "Key", "Value");
                 Console.WriteLine("  " + new string('-', 60));
-                
+
                 foreach (var entry in versionInfo.StringFileInfo.OrderBy(e => e.Key))
                 {
                     // Format the string value for display
-                    string displayValue = entry.Value;
+                    var displayValue = entry.Value;
                     if (displayValue.Length > 50)
                     {
                         displayValue = displayValue.Substring(0, 47) + "...";
                     }
-                    
+
                     // Replace control characters for better display
                     displayValue = displayValue.Replace('\r', '⏎').Replace('\n', '⏎');
-                    
+
                     Console.WriteLine("  {0,-20} {1}", entry.Key, displayValue);
                 }
             }
         }
     }
-    
+
     /// <summary>
     /// Gets a string representation of the file OS
     /// </summary>
@@ -115,10 +137,10 @@ public static class VersionInfoPrinter
             _ => $"Unknown OS (0x{fileOS:X8})"
         };
     }
-    
+
     private static string GetFileTypeString(uint fileType, uint fileSubtype)
     {
-        string typeString = fileType switch
+        var typeString = fileType switch
         {
             0x00000000 => "VFT_UNKNOWN",
             0x00000001 => "VFT_APP",
@@ -129,11 +151,11 @@ public static class VersionInfoPrinter
             0x00000007 => "VFT_STATIC_LIB",
             _ => $"Unknown Type (0x{fileType:X8})"
         };
-        
+
         // Add subtype information for certain file types
         if (fileType == 0x00000003) // VFT_DRV
         {
-            string subtypeString = fileSubtype switch
+            var subtypeString = fileSubtype switch
             {
                 0x00000000 => "VFT2_UNKNOWN",
                 0x00000001 => "VFT2_DRV_PRINTER",
@@ -154,7 +176,7 @@ public static class VersionInfoPrinter
         }
         else if (fileType == 0x00000004) // VFT_FONT
         {
-            string subtypeString = fileSubtype switch
+            var subtypeString = fileSubtype switch
             {
                 0x00000000 => "VFT2_UNKNOWN",
                 0x00000001 => "VFT2_FONT_RASTER",
@@ -164,7 +186,7 @@ public static class VersionInfoPrinter
             };
             return $"{typeString} ({subtypeString})";
         }
-        
+
         return typeString;
     }
 }

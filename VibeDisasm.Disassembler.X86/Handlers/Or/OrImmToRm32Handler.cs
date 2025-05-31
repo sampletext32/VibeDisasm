@@ -24,11 +24,15 @@ public class OrImmToRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 1 (OR)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -61,13 +65,13 @@ public class OrImmToRm32Handler : InstructionHandler
         }
 
         // Read the immediate value
-        uint imm32 = Decoder.ReadUInt32();
-        
+        var imm32 = Decoder.ReadUInt32();
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             immOperand

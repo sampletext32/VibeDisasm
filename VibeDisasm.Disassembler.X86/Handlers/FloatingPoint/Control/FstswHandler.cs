@@ -24,11 +24,16 @@ public class FstswHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FSTSW AX starts with the WAIT prefix (0x9B)
-        if (opcode != 0x9B) return false;
+        if (opcode != 0x9B)
+        {
+            return false;
+        }
 
         // Check if we can read the next two bytes
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the next bytes are 0xDF 0xE0 (for FSTSW AX)
         var (nextByte, thirdByte) = Decoder.PeakTwoBytes();
@@ -36,7 +41,7 @@ public class FstswHandler : InstructionHandler
         // The sequence must be 9B DF E0 for FSTSW AX
         return nextByte == 0xDF && thirdByte == 0xE0;
     }
-    
+
     /// <summary>
     /// Decodes an FSTSW AX instruction
     /// </summary>
@@ -47,33 +52,41 @@ public class FstswHandler : InstructionHandler
     {
         // Skip the WAIT prefix (0x9B) - we already read it in CanHandle
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Read the second byte (0xDF)
-        byte secondByte = Decoder.ReadByte();
+        var secondByte = Decoder.ReadByte();
         if (secondByte != 0xDF)
+        {
             return false;
-            
+        }
+
         // Read the third byte (0xE0)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
-        byte thirdByte = Decoder.ReadByte();
+        var thirdByte = Decoder.ReadByte();
         if (thirdByte != 0xE0)
+        {
             return false;
-        
+        }
+
         // Set the instruction type
         instruction.Type = InstructionType.Fstsw;
-        
+
         // Create the AX register operand
         var axOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             axOperand
         ];
-        
+
         return true;
     }
 }

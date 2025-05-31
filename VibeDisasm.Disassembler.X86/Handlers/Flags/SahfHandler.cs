@@ -24,7 +24,7 @@ public class SahfHandler : InstructionHandler
         // SAHF is 9E
         return opcode == 0x9E;
     }
-    
+
     /// <summary>
     /// Decodes a SAHF instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class SahfHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Sahf;
-        
+
         // SAHF has no operands
         instruction.StructuredOperands = [];
 

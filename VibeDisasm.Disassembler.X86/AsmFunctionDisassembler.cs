@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using VibeDisasm.Disassembler.X86.Operands;
 
 namespace VibeDisasm.Disassembler.X86;
@@ -15,21 +15,21 @@ public static class AsmFunctionDisassembler
         Queue<uint> offsetQueue = [];
 
         Dictionary<uint, AsmBlock> instructionBlocks = [];
-        
+
         offsetQueue.Enqueue(startPosition);
 
         // while we have some blocks to disassemble
         while (offsetQueue.Count > 0)
         {
             var position = offsetQueue.Dequeue();
-            
+
             // if this jump was already disassembled
             if (instructionBlocks.ContainsKey(position))
             {
                 Debug.WriteLine($"AsmFunctionDisassembler stepped onto already visited block {position:X8}");
                 continue;
             }
-            
+
             // if this jump was already disassembled
             var existingBlock = instructionBlocks.Values.FirstOrDefault(x => x.Instructions.Any(y => y.Address == position));
             if (existingBlock is not null)
@@ -50,9 +50,9 @@ public static class AsmFunctionDisassembler
                 existingBlock.Instructions = existingBlock.Instructions.Take(firstInstructionOfNestedBlockIndex).ToList();
 
                 instructionBlocks[position] = innerBlock;
-                
+
                 Debug.WriteLine($"Split block at {existingBlock.StartAddress:X8}. Created block {innerBlock.StartAddress:X8}.");
-                
+
                 continue;
             }
 
@@ -76,14 +76,14 @@ public static class AsmFunctionDisassembler
                 }
 
                 var controlFlowInstruction = new AsmInstruction(instruction);
-                
+
                 blockInstructions.Add(controlFlowInstruction);
 
                 if (instruction.Type.IsRet())
                 {
                     block.Instructions = blockInstructions;
                     instructionBlocks[position] = block;
-                    
+
                     Debug.WriteLine($"Block at {position:X8} reached RET");
                     break;
                 }
@@ -107,6 +107,7 @@ public static class AsmFunctionDisassembler
                     {
                         throw new InvalidOperationException($"AsmFunctionDisassembler failed to determine jump target of: {instruction}");
                     }
+
                     break;
                 }
                 else if (instruction.Type.IsUnconditionalJump())
@@ -126,25 +127,26 @@ public static class AsmFunctionDisassembler
                     {
                         throw new InvalidOperationException($"AsmFunctionDisassembler failed to determine jump target of: {instruction}");
                     }
+
                     break;
                 }
                 else if (instructionBlocks.ContainsKey(decoder.GetPosition()))
                 {
                     // reached another block start
-                    
+
                     block.Instructions = blockInstructions;
                     instructionBlocks[position] = block;
                     Debug.WriteLine($"Block at {position:X8} reached another block at {decoder.GetPosition():X8}.");
                     break;
                 }
             }
-            
+
             Debug.WriteLine($"Finished disassembling asm block at {block.StartAddress:X8}.");
         }
 
         // explicitly set the starting block as an entry block
         instructionBlocks[startPosition].IsEntryBlock = true;
-        
+
         return new AsmFunction()
         {
             Blocks = instructionBlocks

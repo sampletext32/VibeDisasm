@@ -24,7 +24,10 @@ public class FildInt32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FILD is DB /0
-        if (opcode != 0xDB) return false;
+        if (opcode != 0xDB)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,14 +35,14 @@ public class FildInt32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 0
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3)
         return reg == 0 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FILD int32 instruction
     /// </summary>
@@ -55,13 +58,13 @@ public class FildInt32Handler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, rawOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fild;
 
         // Create a 32-bit memory operand for integer operations
         Operand memoryOperand;
-        
+
         if (rawOperand is DirectMemoryOperand directMemory)
         {
             memoryOperand = OperandFactory.CreateDirectMemoryOperand(directMemory.Address, 32);
@@ -84,7 +87,7 @@ public class FildInt32Handler : InstructionHandler
         }
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             memoryOperand
         ];

@@ -22,7 +22,10 @@ public class Fyl2xHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FYL2X is D9 F1
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class Fyl2xHandler : InstructionHandler
         }
 
         // Check if the next byte is F1
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xF1;
     }
-    
+
     /// <summary>
     /// Decodes a FYL2X instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class Fyl2xHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fyl2x;
 

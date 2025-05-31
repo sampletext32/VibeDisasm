@@ -24,11 +24,15 @@ public class AddImmToRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 0 (ADD)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -64,7 +68,7 @@ public class AddImmToRm32Handler : InstructionHandler
         var imm = Decoder.ReadUInt32();
 
         instruction.StructuredOperands = [
-            destOperand, 
+            destOperand,
             OperandFactory.CreateImmediateOperand(imm)
         ];
 

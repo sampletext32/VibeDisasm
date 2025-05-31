@@ -53,7 +53,7 @@ public class AdcRm8R8Handler : InstructionHandler
         var sourceOperand = OperandFactory.CreateRegisterOperand8(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

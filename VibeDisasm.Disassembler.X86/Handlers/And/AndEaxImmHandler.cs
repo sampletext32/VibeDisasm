@@ -11,11 +11,11 @@ public class AndEaxImmHandler : InstructionHandler
     /// Initializes a new instance of the AndEaxImmHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AndEaxImmHandler(InstructionDecoder decoder) 
+    public AndEaxImmHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -32,7 +32,7 @@ public class AndEaxImmHandler : InstructionHandler
         // Only handle when the operand size prefix is NOT present
         return !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes an AND EAX, imm32 instruction
     /// </summary>
@@ -52,20 +52,20 @@ public class AndEaxImmHandler : InstructionHandler
         {
             return false;
         }
-        
+
         // Read immediate value
-        uint imm32 = Decoder.ReadUInt32();
-        
+        var imm32 = Decoder.ReadUInt32();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm32, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

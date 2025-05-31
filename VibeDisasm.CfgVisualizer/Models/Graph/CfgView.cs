@@ -13,12 +13,12 @@ public class CfgView
     /// The underlying control flow function
     /// </summary>
     public AsmFunction Function { get; }
-    
+
     /// <summary>
     /// Nodes in the CFG
     /// </summary>
     public List<CfgNodeView> Nodes { get; } = [];
-    
+
     /// <summary>
     /// Edges in the CFG
     /// </summary>
@@ -33,7 +33,7 @@ public class CfgView
         Function = function;
 
         var edges = ControlFlowEdgesBuilder.Build(function);
-        
+
         // Create node view models
         var nodeMap = new Dictionary<uint, CfgNodeView>();
         foreach (var block in function.Blocks)
@@ -42,11 +42,11 @@ public class CfgView
             Nodes.Add(nodeViewModel);
             nodeMap[block.Key] = nodeViewModel;
         }
-        
+
         // Create edge view models
         foreach (var edge in edges.SelectMany(x => x))
         {
-            if (nodeMap.TryGetValue(edge.FromBlockAddress, out var source) && 
+            if (nodeMap.TryGetValue(edge.FromBlockAddress, out var source) &&
                 nodeMap.TryGetValue(edge.ToBlockAddress, out var target))
             {
                 var isFallthrough = edge.JumpType == AsmJumpType.Fallthrough;
@@ -54,11 +54,11 @@ public class CfgView
                 Edges.Add(edgeViewModel);
             }
         }
-        
+
         // Perform initial layout
         PerformLayout();
     }
-    
+
     /// <summary>
     /// Performs improved layout of the nodes for better control flow visualization.
     /// For conditional jumps, the taken branch is always to the left, fallthrough below.
@@ -67,7 +67,9 @@ public class CfgView
     {
         // Reset all node positions
         foreach (var node in Nodes)
+        {
             node.Position = Vector2.Zero;
+        }
 
         // Track visited nodes to avoid cycles
         var visited = new HashSet<CfgNodeView>();
@@ -75,7 +77,9 @@ public class CfgView
         // Start with the entry node
         var entryNode = Nodes.FirstOrDefault(n => n.Block.IsEntryBlock);
         if (entryNode == null)
+        {
             return;
+        }
 
         // Recursively layout the graph
         LayoutNode(entryNode, 0, 0, visited);
@@ -99,7 +103,7 @@ public class CfgView
 
     private void RecursiveShiftDown(CfgNodeView nodeWithSourceBelow, Vector2 sourcePosition)
     {
-        nodeWithSourceBelow.Position = nodeWithSourceBelow.Position with {Y = nodeWithSourceBelow.Position.Y + nodeHeight + verticalSpacing};
+        nodeWithSourceBelow.Position = nodeWithSourceBelow.Position with { Y = nodeWithSourceBelow.Position.Y + nodeHeight + verticalSpacing };
         // foreach (var edge in Edges.Where(x => x.Source == nodeWithSourceBelow && x.Target != nodeWithSourceBelow))
         // {
         //     RecursiveShiftDown(edge.Target, nodeWithSourceBelow.Position);
@@ -107,10 +111,10 @@ public class CfgView
     }
 
     // Constants for layout
-    const float nodeWidth = 200.0f;
-    const float nodeHeight = 100.0f;
-    const float horizontalSpacing = 80.0f;
-    const float verticalSpacing = 80.0f;
+    private const float nodeWidth = 200.0f;
+    private const float nodeHeight = 100.0f;
+    private const float horizontalSpacing = 80.0f;
+    private const float verticalSpacing = 80.0f;
 
     /// <summary>
     /// Recursively lays out the graph, placing taken branches to the left
@@ -123,7 +127,9 @@ public class CfgView
     private void LayoutNode(CfgNodeView node, int x, int y, HashSet<CfgNodeView> visited)
     {
         if (!visited.Add(node))
+        {
             return;
+        }
 
         // Set node position
         node.Position = new Vector2(x * (nodeWidth + horizontalSpacing), y * (nodeHeight + verticalSpacing));
@@ -131,13 +137,15 @@ public class CfgView
         // Get outgoing edges
         var outgoing = Edges.Where(e => e.Source == node).ToList();
         if (outgoing.Count == 0)
+        {
             return;
+        }
 
         // Classify edges
         var takenEdge = outgoing.FirstOrDefault(e => !e.IsFallthrough);
         var fallthroughEdge = outgoing.FirstOrDefault(e => e.IsFallthrough);
 
-        int nextY = y + 1;
+        var nextY = y + 1;
 
         // Layout taken branch to the left
         if (takenEdge != null)

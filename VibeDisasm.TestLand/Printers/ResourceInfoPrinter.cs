@@ -1,6 +1,4 @@
-using System;
 using System.Globalization;
-using System.Text;
 using VibeDisasm.Pe.Extractors;
 
 namespace VibeDisasm.TestLand.Printers;
@@ -22,21 +20,21 @@ public class ResourceInfoPrinter
             Console.WriteLine($"  Resource Directory RVA: 0x{resourceInfo.DirectoryRVA:X8}");
             Console.WriteLine($"  Resource Directory Size: 0x{resourceInfo.DirectorySize:X8}");
             Console.WriteLine($"  Number of Resources: {resourceInfo.Resources.Count}");
-            
+
             if (resourceInfo.Resources.Count > 0)
             {
                 Console.WriteLine("\r\n  Resources:");
-                Console.WriteLine("  {0,-10} {1,-8} {2,-10} {3,-10} {4,-8} {5,-10} {6}", 
+                Console.WriteLine("  {0,-10} {1,-8} {2,-10} {3,-10} {4,-8} {5,-10} {6}",
                     "Type", "ID", "Language", "Size", "RVA", "FileOffset", "Data");
                 Console.WriteLine("  " + new string('-', 70));
-                
+
                 foreach (var resource in resourceInfo.Resources)
                 {
-                    string dataPreview = "";
+                    var dataPreview = "";
                     if (resource.Data.Length > 0)
                     {
                         // Show a preview of the data if available
-                        if (resource.Type == ResourceType.StringTable || 
+                        if (resource.Type == ResourceType.StringTable ||
                             resource.Type == ResourceType.RcData ||
                             resource.Type == ResourceType.HTML ||
                             resource.Type == ResourceType.Manifest)
@@ -44,11 +42,12 @@ public class ResourceInfoPrinter
                             // Try to show as text for text-based resources
                             try
                             {
-                                string text = System.Text.Encoding.UTF8.GetString(resource.Data);
+                                var text = System.Text.Encoding.UTF8.GetString(resource.Data);
                                 if (text.Length > 20)
                                 {
                                     text = text.Substring(0, 17) + "...";
                                 }
+
                                 dataPreview = text.Replace('\r', ' ').Replace('\n', ' ');
                             }
                             catch
@@ -59,7 +58,7 @@ public class ResourceInfoPrinter
                         else
                         {
                             // Show as hex for binary resources
-                            int previewLength = Math.Min(8, resource.Data.Length);
+                            var previewLength = Math.Min(8, resource.Data.Length);
                             dataPreview = BitConverter.ToString(resource.Data, 0, previewLength).Replace("-", " ");
                             if (resource.Data.Length > 8)
                             {
@@ -71,17 +70,17 @@ public class ResourceInfoPrinter
                     {
                         dataPreview = "[No data loaded]";
                     }
-                    
+
                     // Try to get language name for display
-                    string languageDisplay = resource.LanguageId.ToString();
+                    var languageDisplay = resource.LanguageId.ToString();
                     try
                     {
                         var culture = new CultureInfo((int)resource.LanguageId);
                         languageDisplay = culture.Name.Split('-')[0]; // Just use the language code, not the region
                     }
                     catch { /* Use default numeric value */ }
-                    
-                    Console.WriteLine("  {0,-10} {1,-8} {2,-10} 0x{3,-8:X} 0x{4,-6:X} 0x{5,-8:X} {6}", 
+
+                    Console.WriteLine("  {0,-10} {1,-8} {2,-10} 0x{3,-8:X} 0x{4,-6:X} 0x{5,-8:X} {6}",
                         resource.Type,
                         resource.Id,
                         languageDisplay,
@@ -90,7 +89,7 @@ public class ResourceInfoPrinter
                         resource.FileOffset,
                         dataPreview);
                 }
-                
+
                 // String tables are printed separately via the PrintStringTables method
             }
         }
@@ -99,7 +98,7 @@ public class ResourceInfoPrinter
             Console.WriteLine("  No resource information found.");
         }
     }
-    
+
     /// <summary>
     /// Prints string tables to the console
     /// </summary>
@@ -107,13 +106,13 @@ public class ResourceInfoPrinter
     public static void PrintStringTables(IEnumerable<StringTableInfo> stringTables)
     {
         Console.WriteLine("\r\n  String Tables:");
-        
+
         foreach (var table in stringTables)
         {
             // Get the language name using CultureInfo
-            string languageName = "Unknown";
-            string languageCode = $"0x{table.LanguageId:X4}";
-            
+            var languageName = "Unknown";
+            var languageCode = $"0x{table.LanguageId:X4}";
+
             try
             {
                 var culture = new CultureInfo((int)table.LanguageId);
@@ -124,32 +123,32 @@ public class ResourceInfoPrinter
                 // If CultureInfo fails, just use the numeric code
                 languageName = $"Language {languageCode}";
             }
-            
+
             // Format the language ID in hexadecimal for display
-            string languageHex = $"0x{table.LanguageId:X4}";
+            var languageHex = $"0x{table.LanguageId:X4}";
             Console.WriteLine($"\r\n  String Table ID: {table.Id}, Language: {languageHex} ({languageName}), FileOffset: 0x{table.FileOffset:X8}");
             Console.WriteLine("  {0,-6} {1,-12} {2}", "ID", "FileOffset", "String");
             Console.WriteLine("  " + new string('-', 60));
-            
+
             foreach (var entry in table.Strings.OrderBy(s => s.Key))
             {
                 // Format the string value for display
-                string displayValue = entry.Value;
+                var displayValue = entry.Value;
                 if (displayValue.Length > 50)
                 {
                     displayValue = displayValue.Substring(0, 47) + "...";
                 }
-                
+
                 // Replace control characters for better display
                 displayValue = displayValue.Replace('\r', '⏎').Replace('\n', '⏎');
-                
+
                 // Get the file offset for this string, if available
-                string fileOffsetDisplay = "N/A";
-                if (table.StringFileOffsets.TryGetValue(entry.Key, out uint offset))
+                var fileOffsetDisplay = "N/A";
+                if (table.StringFileOffsets.TryGetValue(entry.Key, out var offset))
                 {
                     fileOffsetDisplay = $"0x{offset:X8}";
                 }
-                
+
                 Console.WriteLine("  {0,-6} {1,-12} {2}", entry.Key, fileOffsetDisplay, displayValue);
             }
         }

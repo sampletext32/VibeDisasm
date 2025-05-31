@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using System.Reflection;
 using ImGuiNET;
 
@@ -9,13 +9,17 @@ namespace VibeDisasm.CfgVisualizer
         public static bool IsDirectory(this FileSystemInfo info)
         {
             // get the file attributes for file or directory
-            FileAttributes attr = info.Attributes;
+            var attr = info.Attributes;
 
             //detect whether its a directory or file
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
                 return true;
+            }
             else
+            {
                 return false;
+            }
         }
 
         public static bool IsDirectoryPath(this string path)
@@ -39,7 +43,7 @@ namespace VibeDisasm.CfgVisualizer
         public static IEnumerable<Type> GetAssignableTypesFromAssembly<T>(Assembly assembly)
         {
             return assembly.ExportedTypes
-                .Where(t => t.IsAssignableTo(typeof(T)) && t is {IsAbstract: false, IsInterface: false});
+                .Where(t => t.IsAssignableTo(typeof(T)) && t is { IsAbstract: false, IsInterface: false });
         }
 
         public static IList<Type> GetAssignableTypes<T>()

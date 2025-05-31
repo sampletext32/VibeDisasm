@@ -15,7 +15,7 @@ public sealed class IRCmpInstruction : IRInstruction, IIRFlagTranslatingInstruct
     public IRExpression Right { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-    
+
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
@@ -26,32 +26,31 @@ public sealed class IRCmpInstruction : IRInstruction, IIRFlagTranslatingInstruct
     ];
 
     public override string ToString() => $"Compare({Left}, {Right})";
-    
+
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
         return flag switch
         {
-            IRFlag.Zero => new IRCompareExpr(Left, Right, 
+            IRFlag.Zero => new IRCompareExpr(Left, Right,
                 expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-            
+
             IRFlag.Sign => new IRCompareExpr(
                 new IRSubExpr(Left, Right),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-            
+
             IRFlag.Carry => new IRCompareExpr(Left, Right,
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-            
+
             _ => null // Other flags not directly mappable
         };
     }
-    
+
     public IRCmpInstruction(IRExpression left, IRExpression right)
     {
         Left = left;
         Right = right;
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

@@ -20,7 +20,7 @@ public static class RegisterMapper
             _ => throw new InvalidOperationException($"Didn't expect {size} register size"),
         };
     }
-    
+
     /// <summary>
     /// Gets the 8-bit register name based on the RegisterIndex8 enum value
     /// </summary>

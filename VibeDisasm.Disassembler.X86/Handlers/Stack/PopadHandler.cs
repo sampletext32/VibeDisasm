@@ -25,7 +25,7 @@ public class PopadHandler : InstructionHandler
         // POPAD is 0x61
         return opcode == 0x61;
     }
-    
+
     /// <summary>
     /// Decodes a POPAD instruction
     /// </summary>
@@ -36,7 +36,7 @@ public class PopadHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Popad;
-        
+
         // POPAD has no operands
         instruction.StructuredOperands = [];
 

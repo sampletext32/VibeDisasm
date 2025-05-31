@@ -22,7 +22,10 @@ public class FimulInt16Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FIMUL int16 is DE /1
-        if (opcode != 0xDE) return false;
+        if (opcode != 0xDE)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FimulInt16Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 1
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3) with reg = 1
         return reg == 1 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FIMUL int16 instruction
     /// </summary>
@@ -53,12 +56,12 @@ public class FimulInt16Handler : InstructionHandler
 
         // Read the ModR/M byte, specifying that we're dealing with 16-bit operands
         var (mod, reg, rm, memoryOperand) = ModRMDecoder.ReadModRM16();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fimul;
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             memoryOperand
         ];

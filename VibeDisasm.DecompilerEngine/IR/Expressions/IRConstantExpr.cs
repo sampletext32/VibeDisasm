@@ -1,4 +1,3 @@
-using System.Numerics;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
@@ -12,9 +11,9 @@ public sealed class IRConstantExpr : IRExpression
 {
     public object Value { get; init; }
     public IRType Type { get; init; }
-    
+
     public override List<IRExpression> SubExpressions => [];
-    
+
     private IRConstantExpr(object value, IRType type)
     {
         Value = value;
@@ -31,7 +30,6 @@ public sealed class IRConstantExpr : IRExpression
         return false;
     }
 
-
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
     public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
@@ -45,7 +43,8 @@ public sealed class IRConstantExpr : IRExpression
     public static IRConstantExpr Long(long value) => new(value, IRType.Long);
     public static IRConstantExpr Ulong(ulong value) => new(value, IRType.Ulong);
     public static IRConstantExpr Bool(bool value) => new(value, IRType.Bool);
-    public static IRConstantExpr FromSize(ulong value, int size) => size switch {
+    public static IRConstantExpr FromSize(ulong value, int size) => size switch
+    {
         8 => Byte((byte)value),
         16 => UShort((ushort)value),
         32 => Uint((uint)value),
@@ -73,8 +72,8 @@ public sealed class IRConstantExpr : IRExpression
 
     private static string FormatNumber(long number)
     {
-        long abs = Math.Abs(number);
-        string sign = number >= 0 ? "+" : "-";
+        var abs = Math.Abs(number);
+        var sign = number >= 0 ? "+" : "-";
         string format;
 
         if (abs == 0)
@@ -99,7 +98,7 @@ public sealed class IRConstantExpr : IRExpression
 
     private static string FormatNumber(ulong number)
     {
-        ulong abs = number;
+        var abs = number;
         string format;
 
         if (abs == 0)
@@ -120,5 +119,10 @@ public sealed class IRConstantExpr : IRExpression
         }
 
         return $"+0x{abs.ToString(format)}";
+    }
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
     }
 }

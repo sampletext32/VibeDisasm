@@ -8,7 +8,7 @@ namespace VibeDisasm.Disassembler.X86;
 public class SIBDecoder
 {
     private readonly InstructionDecoder _decoder;
-    
+
     /// <summary>
     /// Initializes a new instance of the SIBDecoder class
     /// </summary>
@@ -17,7 +17,7 @@ public class SIBDecoder
     {
         _decoder = decoder;
     }
-    
+
     /// <summary>
     /// Decodes a SIB byte
     /// </summary>
@@ -29,13 +29,13 @@ public class SIBDecoder
     public Operand DecodeSIB(byte sib, uint displacement, int operandSize, byte mod = 0)
     {
         // Extract fields from SIB byte
-        byte scale = (byte)((sib & Constants.SIB_SCALE_MASK) >> 6);
+        var scale = (byte)((sib & Constants.SIB_SCALE_MASK) >> 6);
         var index = (RegisterIndex)((sib & Constants.SIB_INDEX_MASK) >> 3);
         var @base = (RegisterIndex)(sib & Constants.SIB_BASE_MASK);
-        
+
         // Calculate scale factor once
-        int scaleFactor = 1 << scale; // 1, 2, 4, or 8
-        
+        var scaleFactor = 1 << scale; // 1, 2, 4, or 8
+
         // Handle special case: no index register (index = ESP/SP)
         if (index == RegisterIndex.Sp)
         {

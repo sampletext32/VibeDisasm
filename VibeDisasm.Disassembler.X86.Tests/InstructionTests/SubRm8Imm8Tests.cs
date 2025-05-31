@@ -16,28 +16,28 @@ public class SubRm8Imm8Tests
     {
         // Arrange
         // SUB BL, 0x42
-        byte[] codeBuffer = new byte[] { 0x80, 0xeb, 0x42 };
+        var codeBuffer = new byte[] { 0x80, 0xeb, 0x42 };
         var disassembler = new Disassembler(codeBuffer, 0x1000);
-        
+
         // Act
         var instructions = disassembler.Disassemble();
 
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Sub, instruction.Type);
-        
+
         // Check that we have two operands
         Assert.Equal(2, instruction.StructuredOperands.Count);
-        
+
         // Check the first operand (BL)
         var blOperand = instruction.StructuredOperands[0];
         Assert.IsType<Register8Operand>(blOperand);
         var registerOperand = (Register8Operand)blOperand;
         Assert.Equal(RegisterIndex8.BL, registerOperand.Register);
         Assert.Equal(8, registerOperand.Size); // Validate that it's an 8-bit register (BL)
-        
+
         // Check the second operand (immediate value)
         var immOperand = instruction.StructuredOperands[1];
         Assert.IsType<ImmediateOperand>(immOperand);

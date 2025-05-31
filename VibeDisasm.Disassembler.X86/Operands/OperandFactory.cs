@@ -17,9 +17,10 @@ public static class OperandFactory
         {
             throw new InvalidOperationException();
         }
+
         return new RegisterOperand(register, size);
     }
-    
+
     /// <summary>
     /// Creates an 8-bit register operand using RegisterIndex8 enum
     /// </summary>
@@ -30,7 +31,7 @@ public static class OperandFactory
         // Create a new Register8Operand with the 8-bit register
         return new Register8Operand(register8);
     }
-    
+
     /// <summary>
     /// Creates an immediate value operand
     /// </summary>
@@ -41,7 +42,7 @@ public static class OperandFactory
     {
         return new ImmediateOperand(value, size);
     }
-    
+
     /// <summary>
     /// Creates a direct memory operand
     /// </summary>
@@ -53,7 +54,7 @@ public static class OperandFactory
     {
         return new DirectMemoryOperand(address, size, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates an 8-bit direct memory operand
     /// </summary>
@@ -64,7 +65,7 @@ public static class OperandFactory
     {
         return new DirectMemoryOperand(address, 8, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a 16-bit direct memory operand
     /// </summary>
@@ -75,7 +76,7 @@ public static class OperandFactory
     {
         return new DirectMemoryOperand(address, 16, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a base register memory operand
     /// </summary>
@@ -87,7 +88,7 @@ public static class OperandFactory
     {
         return new BaseRegisterMemoryOperand(baseRegister, size, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates an 8-bit base register memory operand
     /// </summary>
@@ -98,7 +99,7 @@ public static class OperandFactory
     {
         return new BaseRegisterMemoryOperand(baseRegister, 8, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a 16-bit base register memory operand
     /// </summary>
@@ -109,7 +110,7 @@ public static class OperandFactory
     {
         return new BaseRegisterMemoryOperand(baseRegister, 16, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a displacement memory operand
     /// </summary>
@@ -122,7 +123,7 @@ public static class OperandFactory
     {
         return new DisplacementMemoryOperand(baseRegister, displacement, size, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates an 8-bit displacement memory operand
     /// </summary>
@@ -134,7 +135,7 @@ public static class OperandFactory
     {
         return new DisplacementMemoryOperand(baseRegister, displacement, 8, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a 16-bit displacement memory operand
     /// </summary>
@@ -146,7 +147,7 @@ public static class OperandFactory
     {
         return new DisplacementMemoryOperand(baseRegister, displacement, 16, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a scaled index memory operand
     /// </summary>
@@ -157,12 +158,12 @@ public static class OperandFactory
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
     /// <returns>A scaled index memory operand</returns>
-    public static ScaledIndexMemoryOperand CreateScaledIndexMemoryOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null, 
+    public static ScaledIndexMemoryOperand CreateScaledIndexMemoryOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null,
                                                                         long displacement = 0, int size = 32, Segment? segmentOverride = null)
     {
         return new ScaledIndexMemoryOperand(indexRegister, scale, baseRegister, displacement, size, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates an 8-bit scaled index memory operand
     /// </summary>
@@ -177,7 +178,7 @@ public static class OperandFactory
     {
         return new ScaledIndexMemoryOperand(indexRegister, scale, baseRegister, displacement, 8, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a 16-bit scaled index memory operand
     /// </summary>
@@ -192,7 +193,7 @@ public static class OperandFactory
     {
         return new ScaledIndexMemoryOperand(indexRegister, scale, baseRegister, displacement, 16, segmentOverride);
     }
-    
+
     /// <summary>
     /// Creates a relative offset operand
     /// </summary>
@@ -213,7 +214,7 @@ public static class OperandFactory
     {
         return new FPURegisterOperand(registerIndex);
     }
-    
+
     /// <summary>
     /// Creates a far pointer operand from an existing memory operand
     /// </summary>

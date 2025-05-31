@@ -24,11 +24,15 @@ public class OrImmToRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x80)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 1 (OR)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -56,7 +60,7 @@ public class OrImmToRm8Handler : InstructionHandler
         // - The r/m field with mod specifies the destination operand (register or memory)
         // - The immediate value is the source operand
         var (_, _, _, destinationOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
 
         // Read the immediate value
@@ -66,13 +70,13 @@ public class OrImmToRm8Handler : InstructionHandler
         }
 
         // Read the immediate value
-        byte imm8 = Decoder.ReadByte();
-        
+        var imm8 = Decoder.ReadByte();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

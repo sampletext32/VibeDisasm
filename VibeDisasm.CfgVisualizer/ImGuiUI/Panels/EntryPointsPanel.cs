@@ -12,7 +12,7 @@ public class EntryPointsPanel : IImGuiPanel
 {
     // View model
     private readonly EntryPointsPanelViewModel _panelViewModel;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -21,14 +21,14 @@ public class EntryPointsPanel : IImGuiPanel
     {
         _panelViewModel = panelViewModel;
     }
-    
+
     /// <summary>
     /// Renders the entry points panel
     /// </summary>
     public void OnImGuiRender()
     {
         // Begin the panel
-        bool isOpen = ImGui.Begin("Entry Points");
+        var isOpen = ImGui.Begin("Entry Points");
         if (isOpen)
         {
             if (_panelViewModel.EntryPoints.Count == 0)
@@ -38,31 +38,31 @@ public class EntryPointsPanel : IImGuiPanel
             else
             {
                 // Calculate a good height for the list box
-                float listBoxHeight = ImGui.GetContentRegionAvail().Y - ImGui.GetFrameHeightWithSpacing();
-                
+                var listBoxHeight = ImGui.GetContentRegionAvail().Y - ImGui.GetFrameHeightWithSpacing();
+
                 if (ImGui.BeginListBox("##EntryPoints", new Vector2(-1, listBoxHeight)))
                 {
-                    for (int i = 0; i < _panelViewModel.EntryPoints.Count; i++)
+                    for (var i = 0; i < _panelViewModel.EntryPoints.Count; i++)
                     {
                         var entryPoint = _panelViewModel.EntryPoints[i];
-                        string label = entryPoint.ComputedView;
-                        
-                        bool isSelected = i == _panelViewModel.SelectedEntryPointIndex;
+                        var label = entryPoint.ComputedView;
+
+                        var isSelected = i == _panelViewModel.SelectedEntryPointIndex;
                         if (ImGui.Selectable(label, isSelected))
                         {
                             _panelViewModel.SelectEntryPoint(i);
                         }
-                        
+
                         if (isSelected)
                         {
                             ImGui.SetItemDefaultFocus();
                         }
                     }
-                    
+
                     ImGui.EndListBox();
                 }
             }
-            
+
             // End the panel only if Begin returned true
             ImGui.End();
         }

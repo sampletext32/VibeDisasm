@@ -12,12 +12,12 @@ public class RawFromFileDisassemblyTests(ITestOutputHelper output)
     public void RunTests(string f, int idx, TestFromFileEntry test)
     {
         Printer.WriteLine = output.WriteLine;
-        
+
         // Convert hex string to byte array
-        byte[] code = HexStringToByteArray(test.RawBytes);
+        var code = HexStringToByteArray(test.RawBytes);
 
         // Create a disassembler with the code
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
 
         // Disassemble the code
         var disassembledInstructions = disassembler.Disassemble();
@@ -35,7 +35,7 @@ public class RawFromFileDisassemblyTests(ITestOutputHelper output)
         }
 
         // Verify each instruction
-        for (int i = 0; i < test.Instructions.Count; i++)
+        for (var i = 0; i < test.Instructions.Count; i++)
         {
             var expected = test.Instructions[i];
             var actual = disassembledInstructions[i];
@@ -80,7 +80,7 @@ public class RawFromFileDisassemblyTests(ITestOutputHelper output)
         }
 
         // Initialize result to true and set to false if any operand doesn't match
-        bool result = true;
+        var result = true;
 
         // Compare each operand
         for (var i = 0; i < expectedOperands.Length; i++)
@@ -88,7 +88,10 @@ public class RawFromFileDisassemblyTests(ITestOutputHelper output)
             var expected = expectedOperands[i];
             var actual = actualOperands[i];
 
-            if (expected == actual.ToString()) continue;
+            if (expected == actual.ToString())
+            {
+                continue;
+            }
 
             result = false;
             break;
@@ -106,11 +109,13 @@ public class RawFromFileDisassemblyTests(ITestOutputHelper output)
         {
             output.WriteLine($"  {instruction.Type:G} {string.Join(",", instruction.Operands)}");
         }
+
         output.WriteLine("Actual instructions:");
         foreach (var instruction in disassembledInstructions)
         {
             output.WriteLine($"  {instruction.Type} {string.Join(", ", instruction.StructuredOperands)}");
         }
+
         Assert.Fail(reason);
     }
 
@@ -123,10 +128,10 @@ public class RawFromFileDisassemblyTests(ITestOutputHelper output)
         hex = hex.Replace(" ", "").Replace("-", "").Replace("0x", "");
 
         // Create a byte array that will hold the converted hex string
-        byte[] bytes = new byte[hex.Length / 2];
+        var bytes = new byte[hex.Length / 2];
 
         // Convert each pair of hex characters to a byte
-        for (int i = 0; i < hex.Length; i += 2)
+        for (var i = 0; i < hex.Length; i += 2)
         {
             bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
         }

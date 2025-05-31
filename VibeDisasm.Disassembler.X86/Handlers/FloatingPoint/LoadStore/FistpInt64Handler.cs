@@ -22,7 +22,10 @@ public class FistpInt64Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FISTP int64 is DF /7
-        if (opcode != 0xDF) return false;
+        if (opcode != 0xDF)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FistpInt64Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 7
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3) with reg = 7
         return reg == 7 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FISTP int64 instruction
     /// </summary>
@@ -53,12 +56,12 @@ public class FistpInt64Handler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, operand) = ModRMDecoder.ReadModRM64();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fistp;
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

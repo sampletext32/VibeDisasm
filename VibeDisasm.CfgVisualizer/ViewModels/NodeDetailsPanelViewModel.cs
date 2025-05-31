@@ -10,7 +10,7 @@ public class NodeDetailsPanelViewModel : IViewModel
 {
     // Selected node
     public CfgNodeView? SelectedNode { get; private set; }
-    
+
     /// <summary>
     /// Constructor
     /// </summary>

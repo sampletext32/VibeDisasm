@@ -36,23 +36,23 @@ public class OrAlImmHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Or;
-        
+
         if (!Decoder.CanReadByte())
         {
             return false;
         }
 
         // Read the immediate byte
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the register operand for AL
         var alOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             alOperand,
             immOperand

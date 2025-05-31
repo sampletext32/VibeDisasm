@@ -22,26 +22,33 @@ public class FstswMemHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FSTSW m2byte starts with the WAIT prefix (0x9B)
-        if (opcode != 0x9B) return false;
+        if (opcode != 0x9B)
+        {
+            return false;
+        }
 
         // Check if we can read the next two bytes
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the next bytes are 0xDD followed by ModR/M with reg field = 7
         var (nextByte, modRM) = Decoder.PeakTwoBytes();
 
         // The first byte must be 0xDD for FSTSW m2byte
         if (nextByte != 0xDD)
+        {
             return false;
-            
+        }
+
         // Check if ModR/M byte has reg field = 7
-        byte regField = ModRMDecoder.GetRegFromModRM(modRM);
-        
+        var regField = ModRMDecoder.GetRegFromModRM(modRM);
+
         // The reg field must be 7 for FSTSW m2byte
         return regField == 7;
     }
-    
+
     /// <summary>
     /// Decodes an FSTSW m2byte instruction
     /// </summary>
@@ -52,25 +59,29 @@ public class FstswMemHandler : InstructionHandler
     {
         // Skip the WAIT prefix (0x9B) - we already read it in CanHandle
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Read the second byte (0xDD)
-        byte secondByte = Decoder.ReadByte();
+        var secondByte = Decoder.ReadByte();
         if (secondByte != 0xDD)
+        {
             return false;
-            
+        }
+
         // Set the instruction type
         instruction.Type = InstructionType.Fstsw;
-        
+
         // Use ModRMDecoder to read and decode the ModR/M byte for 16-bit memory operand
         var (mod, reg, rm, memoryOperand) = ModRMDecoder.ReadModRM16();
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             memoryOperand
         ];
-        
+
         return true;
     }
 }

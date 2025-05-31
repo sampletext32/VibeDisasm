@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace VibeDisasm.Pe.Extractors;
 
 /// <summary>

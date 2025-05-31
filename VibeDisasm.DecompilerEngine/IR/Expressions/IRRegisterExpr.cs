@@ -9,7 +9,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 public sealed class IRRegisterExpr : IRExpression
 {
     public IRRegister Register { get; init; }
-    
+
     public override List<IRExpression> SubExpressions => [];
 
     public IRRegisterExpr(IRRegister register)
@@ -18,7 +18,7 @@ public sealed class IRRegisterExpr : IRExpression
     }
 
     public override string ToString() => $"{Register}";
-    
+
     public override bool Equals(object? obj)
     {
         if (obj is IRRegisterExpr other)
@@ -29,10 +29,14 @@ public sealed class IRRegisterExpr : IRExpression
         return false;
     }
 
-
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
     public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public enum IRRegister

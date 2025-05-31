@@ -15,7 +15,7 @@ public class AndAlImmHandler : InstructionHandler
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class AndAlImmHandler : InstructionHandler
     {
         return opcode == 0x24;
     }
-    
+
     /// <summary>
     /// Decodes an AND AL, imm8 instruction
     /// </summary>
@@ -45,20 +45,20 @@ public class AndAlImmHandler : InstructionHandler
         {
             return false;
         }
-        
+
         // Read immediate value
-        byte imm8 = Decoder.ReadByte();
-        
+        var imm8 = Decoder.ReadByte();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

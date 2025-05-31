@@ -11,11 +11,11 @@ public class AndR16Rm16Handler : InstructionHandler
     /// Initializes a new instance of the AndR16Rm16Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AndR16Rm16Handler(InstructionDecoder decoder) 
+    public AndR16Rm16Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -32,7 +32,7 @@ public class AndR16Rm16Handler : InstructionHandler
         // Only handle when the operand size prefix is present
         return Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes an AND r16, r/m16 instruction
     /// </summary>
@@ -59,7 +59,7 @@ public class AndR16Rm16Handler : InstructionHandler
         var destinationOperand = OperandFactory.CreateRegisterOperand(reg, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

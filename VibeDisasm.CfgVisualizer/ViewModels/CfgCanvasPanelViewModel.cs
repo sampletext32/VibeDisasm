@@ -1,7 +1,6 @@
 using System.Numerics;
 using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.CfgVisualizer.State;
-using VibeDisasm.DecompilerEngine.ControlFlow;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
 
@@ -45,9 +44,9 @@ public class CfgCanvasPanelViewModel : IViewModel
         ResetView();
     }
 
-    private (float, Vector2, int, int) _statusStringTuple = (0, new(), 0,0);
+    private (float, Vector2, int, int) _statusStringTuple = (0, new(), 0, 0);
     private string StatusString { get; set; } = null!;
-    
+
     public string GetStatusString()
     {
         var state = (Zoom, PanOffset, CfgViewModel!.Nodes.Count, CfgViewModel!.Edges.Count);
@@ -56,6 +55,7 @@ public class CfgCanvasPanelViewModel : IViewModel
             _statusStringTuple = state;
             StatusString = $"Zoom: {Zoom:F2}x | Pan: ({PanOffset.X:F1}, {PanOffset.Y:F1}) | Nodes: {CfgViewModel.Nodes.Count} | Edges: {CfgViewModel.Edges.Count}";
         }
+
         return StatusString;
     }
 
@@ -88,8 +88,8 @@ public class CfgCanvasPanelViewModel : IViewModel
     public Vector2 AdjustZoom(float delta, Vector2 mouseWorldPos)
     {
         // Apply zoom
-        float zoomDelta = delta * ZOOM_SPEED;
-        float newZoom = Zoom * (1 + zoomDelta);
+        var zoomDelta = delta * ZOOM_SPEED;
+        var newZoom = Zoom * (1 + zoomDelta);
         Zoom = Math.Clamp(newZoom, MIN_ZOOM, MAX_ZOOM);
 
         // Calculate mouse position in world space after zoom

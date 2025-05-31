@@ -18,15 +18,15 @@ public static class CharacteristicsSectionExtractor
         {
             throw new ArgumentNullException(nameof(rawPeFile));
         }
-        
+
         var matchingSections = Array.FindAll(rawPeFile.SectionHeaders, s => (s.Characteristics & characteristicsMask) != 0);
         var sectionInfos = new SectionInfo[matchingSections.Length];
-        
-        for (int i = 0; i < matchingSections.Length; i++)
+
+        for (var i = 0; i < matchingSections.Length; i++)
         {
             sectionInfos[i] = BaseSectionExtractor.CreateSectionInfo(rawPeFile, matchingSections[i]);
         }
-        
+
         return sectionInfos;
     }
 }

@@ -53,9 +53,9 @@ public class XorR16Rm16Handler : InstructionHandler
 
         // Create the destination register operand
         var destinationOperand = OperandFactory.CreateRegisterOperand(reg, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

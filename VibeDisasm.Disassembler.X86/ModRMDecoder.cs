@@ -9,7 +9,7 @@ public class ModRMDecoder
 {
     // The instruction decoder that owns this ModRM decoder
     private readonly InstructionDecoder _decoder;
-    
+
     // The SIB decoder for handling SIB bytes
     private readonly SIBDecoder _sibDecoder;
 
@@ -59,7 +59,7 @@ public class ModRMDecoder
                 {
                     if (_decoder.CanReadUInt())
                     {
-                        uint disp32 = _decoder.ReadUInt32();
+                        var disp32 = _decoder.ReadUInt32();
                         return OperandFactory.CreateDirectMemoryOperand(disp32, operandSize);
                     }
 
@@ -76,7 +76,7 @@ public class ModRMDecoder
                     // Handle SIB byte
                     if (_decoder.CanReadByte())
                     {
-                        byte sib = _decoder.ReadByte();
+                        var sib = _decoder.ReadByte();
                         return _sibDecoder.DecodeSIB(sib, 0, operandSize, mod);
                     }
 
@@ -93,8 +93,8 @@ public class ModRMDecoder
                     // Handle SIB byte
                     if (_decoder.CanReadByte())
                     {
-                        byte sib = _decoder.ReadByte();
-                        sbyte disp8 = (sbyte)(_decoder.CanReadByte() ? _decoder.ReadByte() : 0);
+                        var sib = _decoder.ReadByte();
+                        var disp8 = (sbyte)(_decoder.CanReadByte() ? _decoder.ReadByte() : 0);
                         return _sibDecoder.DecodeSIB(sib, (uint)disp8, operandSize, mod);
                     }
 
@@ -105,7 +105,7 @@ public class ModRMDecoder
                 {
                     if (_decoder.CanReadByte())
                     {
-                        sbyte disp8 = (sbyte)_decoder.ReadByte();
+                        var disp8 = (sbyte)_decoder.ReadByte();
 
                         // Always create a displacement memory operand for mod=1, even if displacement is 0
                         // This ensures we show exactly what's encoded in the ModR/M byte
@@ -122,8 +122,8 @@ public class ModRMDecoder
                     // Handle SIB byte
                     if (_decoder.CanReadUInt())
                     {
-                        byte sib = _decoder.ReadByte();
-                        uint disp32 = _decoder.ReadUInt32();
+                        var sib = _decoder.ReadByte();
+                        var disp32 = _decoder.ReadUInt32();
                         return _sibDecoder.DecodeSIB(sib, disp32, operandSize, mod);
                     }
 
@@ -134,7 +134,7 @@ public class ModRMDecoder
                 {
                     if (_decoder.CanReadUInt())
                     {
-                        uint disp32 = _decoder.ReadUInt32();
+                        var disp32 = _decoder.ReadUInt32();
 
                         // For EBP (BP), always create a displacement memory operand, even if displacement is 0
                         // This is because [EBP] with no displacement is encoded as [EBP+disp]
@@ -174,10 +174,10 @@ public class ModRMDecoder
             return 0;
         }
 
-        byte modRM = _decoder.PeakByte();
+        var modRM = _decoder.PeakByte();
 
         // Extract fields from ModR/M byte
-        byte regIndex = (byte)((modRM & Constants.REG_MASK) >> 3);  // Middle 3 bits (bits 3-5)
+        var regIndex = (byte)((modRM & Constants.REG_MASK) >> 3);  // Middle 3 bits (bits 3-5)
 
         return regIndex;
     }
@@ -189,7 +189,7 @@ public class ModRMDecoder
     public static byte GetRegFromModRM(byte modRm)
     {
         // Extract fields from ModR/M byte
-        byte regIndex = (byte)((modRm & Constants.REG_MASK) >> 3);  // Middle 3 bits (bits 3-5)
+        var regIndex = (byte)((modRm & Constants.REG_MASK) >> 3);  // Middle 3 bits (bits 3-5)
 
         return regIndex;
     }
@@ -205,7 +205,7 @@ public class ModRMDecoder
     /// </summary>
     /// <returns>A tuple containing the mod, reg, rm fields and the decoded operand</returns>
     public (byte mod, RegisterIndex reg, RegisterIndex rm, Operand operand) ReadModRM64() => ReadModRMInternal(true);
-    
+
     /// <summary>
     /// Reads and decodes a ModR/M byte for FPU instructions with 32-bit memory operands
     /// </summary>
@@ -213,14 +213,14 @@ public class ModRMDecoder
     public (byte mod, FpuRegisterIndex reg, FpuRegisterIndex rm, Operand operand) ReadModRMFpu()
     {
         var (mod, reg, rm, operand) = ReadModRMInternal(false);
-        
+
         // Convert the RegisterIndex rm to FpuRegisterIndex
-        FpuRegisterIndex regIndex = (FpuRegisterIndex)reg;
-        FpuRegisterIndex rmIndex = (FpuRegisterIndex)rm;
-        
+        var regIndex = (FpuRegisterIndex)reg;
+        var rmIndex = (FpuRegisterIndex)rm;
+
         return (mod, regIndex, rmIndex, operand);
     }
-    
+
     /// <summary>
     /// Reads and decodes a ModR/M byte for FPU instructions with 64-bit memory operands
     /// </summary>
@@ -228,11 +228,11 @@ public class ModRMDecoder
     public (byte mod, FpuRegisterIndex reg, FpuRegisterIndex rm, Operand operand) ReadModRMFpu64()
     {
         var (mod, reg, rm, operand) = ReadModRMInternal(true); // Use is64Bit=true for 64-bit operands
-        
+
         // Convert the RegisterIndex rm to FpuRegisterIndex
-        FpuRegisterIndex regIndex = (FpuRegisterIndex)reg;
-        FpuRegisterIndex rmIndex = (FpuRegisterIndex)rm;
-        
+        var regIndex = (FpuRegisterIndex)reg;
+        var rmIndex = (FpuRegisterIndex)rm;
+
         return (mod, regIndex, rmIndex, operand);
     }
 
@@ -249,7 +249,7 @@ public class ModRMDecoder
     public (byte mod, RegisterIndex reg, RegisterIndex rm, Operand operand) ReadModRM16()
     {
         var (mod, reg, rm, operand) = ReadModRMInternal(false);
-        
+
         // Create a new operand with 16-bit size using the appropriate factory method
         if (operand is RegisterOperand registerOperand)
         {
@@ -277,7 +277,7 @@ public class ModRMDecoder
                 operand = OperandFactory.CreateScaledIndexMemoryOperand16(scaledMemory.IndexRegister, scaledMemory.Scale, scaledMemory.BaseRegister, scaledMemory.Displacement);
             }
         }
-        
+
         return (mod, reg, rm, operand);
     }
 
@@ -293,23 +293,23 @@ public class ModRMDecoder
             return (0, RegisterIndex.A, RegisterIndex.A, OperandFactory.CreateRegisterOperand(RegisterIndex.A, is64Bit ? 64 : 32));
         }
 
-        byte modRM = _decoder.ReadByte();
+        var modRM = _decoder.ReadByte();
 
         // Extract fields from ModR/M byte
-        byte mod = (byte)((modRM & Constants.MOD_MASK) >> 6);
-        byte regIndex = (byte)((modRM & Constants.REG_MASK) >> 3);
-        byte rmIndex = (byte)(modRM & Constants.RM_MASK);
-        
+        var mod = (byte)((modRM & Constants.MOD_MASK) >> 6);
+        var regIndex = (byte)((modRM & Constants.REG_MASK) >> 3);
+        var rmIndex = (byte)(modRM & Constants.RM_MASK);
+
         // Map the ModR/M register indices to RegisterIndex enum values
-        RegisterIndex reg = (RegisterIndex)regIndex;
-        RegisterIndex rm = (RegisterIndex)rmIndex;
+        var reg = (RegisterIndex)regIndex;
+        var rm = (RegisterIndex)rmIndex;
 
         // Create the operand based on the mod and rm fields
-        Operand operand = DecodeModRM(mod, rm, is64Bit);
+        var operand = DecodeModRM(mod, rm, is64Bit);
 
         return (mod, reg, rm, operand);
     }
-    
+
     /// <summary>
     /// Internal implementation for reading and decoding a ModR/M byte for 8-bit operands
     /// </summary>
@@ -321,20 +321,20 @@ public class ModRMDecoder
             return (0, RegisterIndex8.AL, RegisterIndex8.AL, OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL));
         }
 
-        byte modRM = _decoder.ReadByte();
+        var modRM = _decoder.ReadByte();
 
         // Extract fields from ModR/M byte
-        byte mod = (byte)((modRM & Constants.MOD_MASK) >> 6);
-        byte regIndex = (byte)((modRM & Constants.REG_MASK) >> 3);
-        byte rmIndex = (byte)(modRM & Constants.RM_MASK);
-        
+        var mod = (byte)((modRM & Constants.MOD_MASK) >> 6);
+        var regIndex = (byte)((modRM & Constants.REG_MASK) >> 3);
+        var rmIndex = (byte)(modRM & Constants.RM_MASK);
+
         // Map the ModR/M register indices to RegisterIndex8 enum values
-        RegisterIndex8 reg = (RegisterIndex8)regIndex;
-        RegisterIndex8 rm = (RegisterIndex8)rmIndex;
+        var reg = (RegisterIndex8)regIndex;
+        var rm = (RegisterIndex8)rmIndex;
 
         // Create the operand based on the mod and rm fields
         Operand operand;
-        
+
         if (mod == 3) // Register operand
         {
             // For register operands, create an 8-bit register operand
@@ -345,8 +345,8 @@ public class ModRMDecoder
             // For memory operands, we need to map the RegisterIndex8 to RegisterIndex for base registers
             // The rmIndex is the raw value from the ModR/M byte, not the mapped RegisterIndex8
             // This is important because we need to check if it's 4 (ESP) for SIB byte
-            RegisterIndex rmRegIndex = (RegisterIndex)rmIndex;
-            
+            var rmRegIndex = (RegisterIndex)rmIndex;
+
             // Use the DecodeModRM8 method to get an 8-bit memory operand
             operand = DecodeModRM8(mod, rmRegIndex);
         }

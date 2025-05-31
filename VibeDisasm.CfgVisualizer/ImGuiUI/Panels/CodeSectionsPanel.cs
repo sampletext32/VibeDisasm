@@ -12,7 +12,7 @@ public class CodeSectionsPanel : IImGuiPanel
 {
     // View model
     private readonly CodeSectionsPanelViewModel _panelViewModel;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -21,14 +21,14 @@ public class CodeSectionsPanel : IImGuiPanel
     {
         _panelViewModel = panelViewModel;
     }
-    
+
     /// <summary>
     /// Renders the code sections panel
     /// </summary>
     public void OnImGuiRender()
     {
         // Begin the panel
-        bool isOpen = ImGui.Begin("Code Sections");
+        var isOpen = ImGui.Begin("Code Sections");
         if (isOpen)
         {
             if (_panelViewModel.Sections.Count == 0)
@@ -38,33 +38,33 @@ public class CodeSectionsPanel : IImGuiPanel
             else
             {
                 // Calculate a good height for the list box
-                float listBoxHeight = ImGui.GetContentRegionAvail().Y - ImGui.GetFrameHeightWithSpacing();
-                
+                var listBoxHeight = ImGui.GetContentRegionAvail().Y - ImGui.GetFrameHeightWithSpacing();
+
                 if (ImGui.BeginListBox("##CodeSections", new Vector2(-1, listBoxHeight)))
                 {
-                    for (int i = 0; i < _panelViewModel.Sections.Count; i++)
+                    for (var i = 0; i < _panelViewModel.Sections.Count; i++)
                     {
                         var section = _panelViewModel.Sections[i];
-                        string label = section.ComputedView;
-                        
+                        var label = section.ComputedView;
+
                         // Color-code sections based on their characteristics
-                        Vector4 textColor = GetSectionColor(section);
-                        
-                        bool isSelected = i == _panelViewModel.SelectedSectionIndex;
+                        var textColor = GetSectionColor(section);
+
+                        var isSelected = i == _panelViewModel.SelectedSectionIndex;
                         ImGui.PushStyleColor(ImGuiCol.Text, textColor);
-                        
+
                         if (ImGui.Selectable(label, isSelected))
                         {
                             _panelViewModel.SelectSection(i);
                         }
-                        
+
                         ImGui.PopStyleColor();
-                        
+
                         if (isSelected)
                         {
                             ImGui.SetItemDefaultFocus();
                         }
-                        
+
                         // Show tooltip with additional information when hovering
                         if (ImGui.IsItemHovered())
                         {
@@ -75,28 +75,51 @@ public class CodeSectionsPanel : IImGuiPanel
                             ImGui.Text($"Raw Data Address: 0x{section.RawDataAddress:X8}");
                             ImGui.Text($"Raw Data Size: 0x{section.RawDataSize:X} bytes");
                             ImGui.Text("Characteristics:");
-                            
+
                             // Display section characteristics
-                            if (section.IsExecutable) ImGui.BulletText("Executable");
-                            if (section.IsReadable) ImGui.BulletText("Readable");
-                            if (section.IsWritable) ImGui.BulletText("Writable");
-                            if (section.ContainsCode) ImGui.BulletText("Contains Code");
-                            if (section.ContainsInitializedData) ImGui.BulletText("Contains Initialized Data");
-                            if (section.ContainsUninitializedData) ImGui.BulletText("Contains Uninitialized Data");
-                            
+                            if (section.IsExecutable)
+                            {
+                                ImGui.BulletText("Executable");
+                            }
+
+                            if (section.IsReadable)
+                            {
+                                ImGui.BulletText("Readable");
+                            }
+
+                            if (section.IsWritable)
+                            {
+                                ImGui.BulletText("Writable");
+                            }
+
+                            if (section.ContainsCode)
+                            {
+                                ImGui.BulletText("Contains Code");
+                            }
+
+                            if (section.ContainsInitializedData)
+                            {
+                                ImGui.BulletText("Contains Initialized Data");
+                            }
+
+                            if (section.ContainsUninitializedData)
+                            {
+                                ImGui.BulletText("Contains Uninitialized Data");
+                            }
+
                             ImGui.EndTooltip();
                         }
                     }
-                    
+
                     ImGui.EndListBox();
                 }
             }
-            
+
             // End the panel only if Begin returned true
             ImGui.End();
         }
     }
-    
+
     /// <summary>
     /// Gets a color for a section based on its characteristics
     /// </summary>
@@ -140,7 +163,7 @@ public class CodeSectionsPanel : IImGuiPanel
             // Relocation sections - pink
             return new Vector4(1.0f, 0.4f, 0.7f, 1.0f);
         }
-        
+
         // Default color for other sections - white
         return new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
     }

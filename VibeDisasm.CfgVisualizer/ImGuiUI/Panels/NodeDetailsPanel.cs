@@ -12,7 +12,7 @@ public class NodeDetailsPanel : IImGuiPanel
 {
     // View model
     private readonly NodeDetailsPanelViewModel _panelViewModel;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -21,7 +21,7 @@ public class NodeDetailsPanel : IImGuiPanel
     {
         _panelViewModel = panelViewModel;
     }
-    
+
     /// <summary>
     /// Renders the node details panel
     /// </summary>
@@ -38,30 +38,31 @@ public class NodeDetailsPanel : IImGuiPanel
                 // Display basic node information
                 ImGui.Text($"Address: 0x{_panelViewModel.SelectedNode.Block.StartAddress:X8}");
                 ImGui.Text($"Instructions: {_panelViewModel.SelectedNode.Block.Instructions.Count}");
-                
+
                 ImGui.Separator();
-                
+
                 // Display instructions in a table
                 if (ImGui.BeginTable("Instructions", 2, ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg))
                 {
                     ImGui.TableSetupColumn("Address");
                     ImGui.TableSetupColumn("Instruction");
                     ImGui.TableHeadersRow();
-                    
+
                     foreach (var instruction in _panelViewModel.SelectedNode.Block.Instructions)
                     {
                         ImGui.TableNextRow();
-                        
+
                         ImGui.TableNextColumn();
                         ImGui.Text(instruction.ComputedAddressView);
-                        
+
                         ImGui.TableNextColumn();
                         ImGui.Text(instruction.ComputedView);
                     }
-                    
+
                     ImGui.EndTable();
                 }
             }
+
             ImGui.End();
         }
     }

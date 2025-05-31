@@ -52,9 +52,9 @@ public class OrR8Rm8Handler : InstructionHandler
 
         // Create the destination register operand using the 8-bit register type
         var destinationOperand = OperandFactory.CreateRegisterOperand8(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

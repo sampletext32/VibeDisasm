@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Visitors;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Model;
 

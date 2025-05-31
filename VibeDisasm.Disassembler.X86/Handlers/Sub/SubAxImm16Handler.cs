@@ -45,15 +45,15 @@ public class SubAxImm16Handler : InstructionHandler
 
         // Read the immediate value (16-bit)
         var immediate = Decoder.ReadUInt16();
-        
+
         // Create the destination register operand (AX)
         var destinationOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16);
-        
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(immediate, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

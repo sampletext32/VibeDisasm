@@ -25,7 +25,7 @@ public class PushadHandler : InstructionHandler
         // PUSHAD is 0x60
         return opcode == 0x60;
     }
-    
+
     /// <summary>
     /// Decodes a PUSHAD instruction
     /// </summary>
@@ -36,7 +36,7 @@ public class PushadHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Pushad;
-        
+
         // PUSHAD has no operands
         instruction.StructuredOperands = [];
 

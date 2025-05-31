@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Pe.Extractors;
+namespace VibeDisasm.Pe.Extractors;
 
 public class Translation
 {

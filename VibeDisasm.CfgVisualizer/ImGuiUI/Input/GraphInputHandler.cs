@@ -50,7 +50,7 @@ public class GraphInputHandler
     {
         var mousePos = ImGui.GetMousePos() - canvasPos;
         var io = ImGui.GetIO();
-        
+
         // Start panning when middle mouse button is pressed
         if (ImGui.IsWindowHovered() && ImGui.IsMouseClicked(ImGuiMouseButton.Middle))
         {
@@ -58,14 +58,14 @@ public class GraphInputHandler
             _lastMousePos = mousePos;
             ImGui.SetMouseCursor(ImGuiMouseCursor.ResizeAll);
         }
-        
+
         // Stop panning when middle mouse button is released
         if (ImGui.IsMouseReleased(ImGuiMouseButton.Middle))
         {
             _isPanning = false;
             ImGui.SetMouseCursor(ImGuiMouseCursor.Arrow);
         }
-        
+
         // Apply panning
         if (_isPanning)
         {
@@ -85,13 +85,13 @@ public class GraphInputHandler
     {
         var io = ImGui.GetIO();
         var mousePos = ImGui.GetMousePos() - canvasPos;
-        
+
         // Handle mouse wheel zooming
         if (ImGui.IsWindowHovered() && io.MouseWheel != 0)
         {
             // Calculate mouse position in world space before zoom
             var mouseWorldPos = _panelViewModel.ScreenToWorld(mousePos, canvasSize);
-            
+
             // Apply zoom
             _panelViewModel.AdjustZoom(io.MouseWheel, mouseWorldPos);
         }
@@ -107,30 +107,45 @@ public class GraphInputHandler
             // Zoom in with + key
             if (ImGui.IsKeyPressed(ImGuiKey.Equal) || ImGui.IsKeyPressed(ImGuiKey.KeypadAdd))
             {
-                float newZoom = _panelViewModel.Zoom * (1 + CfgCanvasPanelViewModel.ZOOM_SPEED);
+                var newZoom = _panelViewModel.Zoom * (1 + CfgCanvasPanelViewModel.ZOOM_SPEED);
                 _panelViewModel.SetZoom(newZoom);
             }
-            
+
             // Zoom out with - key
             if (ImGui.IsKeyPressed(ImGuiKey.Minus) || ImGui.IsKeyPressed(ImGuiKey.KeypadSubtract))
             {
-                float newZoom = _panelViewModel.Zoom * (1 - CfgCanvasPanelViewModel.ZOOM_SPEED);
+                var newZoom = _panelViewModel.Zoom * (1 - CfgCanvasPanelViewModel.ZOOM_SPEED);
                 _panelViewModel.SetZoom(newZoom);
             }
-            
+
             // Reset view with 0 key
             if (ImGui.IsKeyPressed(ImGuiKey._0) || ImGui.IsKeyPressed(ImGuiKey.Keypad0))
             {
                 _panelViewModel.ResetView();
             }
-            
+
             // Pan with arrow keys
             var keyPanDelta = Vector2.Zero;
-            if (ImGui.IsKeyDown(ImGuiKey.LeftArrow)) keyPanDelta.X += 10.0f / _panelViewModel.Zoom;
-            if (ImGui.IsKeyDown(ImGuiKey.RightArrow)) keyPanDelta.X -= 10.0f / _panelViewModel.Zoom;
-            if (ImGui.IsKeyDown(ImGuiKey.UpArrow)) keyPanDelta.Y += 10.0f / _panelViewModel.Zoom;
-            if (ImGui.IsKeyDown(ImGuiKey.DownArrow)) keyPanDelta.Y -= 10.0f / _panelViewModel.Zoom;
-            
+            if (ImGui.IsKeyDown(ImGuiKey.LeftArrow))
+            {
+                keyPanDelta.X += 10.0f / _panelViewModel.Zoom;
+            }
+
+            if (ImGui.IsKeyDown(ImGuiKey.RightArrow))
+            {
+                keyPanDelta.X -= 10.0f / _panelViewModel.Zoom;
+            }
+
+            if (ImGui.IsKeyDown(ImGuiKey.UpArrow))
+            {
+                keyPanDelta.Y += 10.0f / _panelViewModel.Zoom;
+            }
+
+            if (ImGui.IsKeyDown(ImGuiKey.DownArrow))
+            {
+                keyPanDelta.Y -= 10.0f / _panelViewModel.Zoom;
+            }
+
             if (keyPanDelta != Vector2.Zero)
             {
                 _panelViewModel.AdjustPan(keyPanDelta);
@@ -149,7 +164,7 @@ public class GraphInputHandler
             var mousePos = ImGui.GetMousePos() - canvasPos;
             var worldPos = _panelViewModel.ScreenToWorld(mousePos, canvasSize);
             CfgNodeView? selectedNode = null;
-            
+
             // Check if a node was clicked
             foreach (var node in _panelViewModel.CfgViewModel?.Nodes ?? [])
             {
@@ -159,14 +174,14 @@ public class GraphInputHandler
                     node.Size.X,
                     node.Size.Y
                 );
-                
+
                 if (nodeRect.Contains(worldPos))
                 {
                     selectedNode = node;
                     break;
                 }
             }
-            
+
             // Update selected node in view model
             _panelViewModel.SelectNode(selectedNode);
         }
@@ -183,7 +198,7 @@ public class GraphInputHandler
             var mousePos = ImGui.GetMousePos() - canvasPos;
             var worldPos = _panelViewModel.ScreenToWorld(mousePos, canvasSize);
             CfgNodeView? hoveredNode = null;
-            
+
             // Check if a node is hovered
             foreach (var node in _panelViewModel.CfgViewModel?.Nodes ?? [])
             {
@@ -193,14 +208,14 @@ public class GraphInputHandler
                     node.Size.X,
                     node.Size.Y
                 );
-                
+
                 if (nodeRect.Contains(worldPos))
                 {
                     hoveredNode = node;
                     break;
                 }
             }
-            
+
             // Update hovered node in view model
             _panelViewModel.HoverNode(hoveredNode);
         }
@@ -214,12 +229,12 @@ public class GraphInputHandler
 
         // Convert mouse to canvas space
         var canvasMousePos = mousePos - canvasPos;
-        
+
         if (!Matrix3x2.Invert(transform, out var inverseTransform))
         {
             return;
         }
-        
+
         var transformedPos = Vector2.Transform(canvasMousePos, inverseTransform);
         var logicalMousePos = new Vector2(transformedPos.X, transformedPos.Y);
 

@@ -1,7 +1,7 @@
-using VibeDisasm.Disassembler.X86;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.IR;
 
@@ -208,8 +208,8 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                         IRLogicalOperation.Or
                     )
                 );
-                
-            case InstructionType.Jnle: 
+
+            case InstructionType.Jnle:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),

@@ -37,7 +37,7 @@ public class BtR32Rm32Handler : InstructionHandler
 
         // Check if the second byte is A3
         var secondByte = Decoder.PeakByte();
-        
+
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
         return secondByte == 0xA3 && !Decoder.HasOperandSizePrefix();
@@ -53,7 +53,7 @@ public class BtR32Rm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Bt;
-        
+
         // Read the second opcode byte (A3)
         Decoder.ReadByte();
 
@@ -73,7 +73,7 @@ public class BtR32Rm32Handler : InstructionHandler
         var bitIndexOperand = OperandFactory.CreateRegisterOperand(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             bitIndexOperand

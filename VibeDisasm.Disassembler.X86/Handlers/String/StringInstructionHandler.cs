@@ -71,7 +71,7 @@ public class StringInstructionHandler : InstructionHandler
             OperandFactory.CreateBaseRegisterMemoryOperand(RegisterIndex.Di, 32, Segment.Es)
         ]) }   // SCASD
     };
-    
+
     // Dictionary mapping opcodes to their instruction types and operand factories for 16-bit mode (with operand size prefix)
     private static readonly Dictionary<byte, (InstructionType Type, Func<Operand[]> CreateOperands)> StringInstructions16 = new()
     {
@@ -140,11 +140,11 @@ public class StringInstructionHandler : InstructionHandler
     /// Initializes a new instance of the StringInstructionHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public StringInstructionHandler(InstructionDecoder decoder) 
+    public StringInstructionHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can handle the given opcode
     /// </summary>
@@ -155,7 +155,7 @@ public class StringInstructionHandler : InstructionHandler
         // Check if the opcode is a string instruction in either 16-bit or 32-bit mode
         return StringInstructions32.ContainsKey(opcode);
     }
-    
+
     /// <summary>
     /// Decodes a string instruction
     /// </summary>
@@ -165,10 +165,10 @@ public class StringInstructionHandler : InstructionHandler
     public override bool Decode(byte opcode, Instruction instruction)
     {
         // Select the appropriate dictionary based on operand size prefix
-        var instructionsDict = Decoder.HasOperandSizePrefix() 
-            ? StringInstructions16 
+        var instructionsDict = Decoder.HasOperandSizePrefix()
+            ? StringInstructions16
             : StringInstructions32;
-        
+
         // Get the instruction type and operands for the string instruction
         if (instructionsDict.TryGetValue(opcode, out var instructionInfo))
         {

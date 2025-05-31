@@ -55,7 +55,7 @@ public class SbbRm32R32Handler : InstructionHandler
         var sourceOperand = OperandFactory.CreateRegisterOperand(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

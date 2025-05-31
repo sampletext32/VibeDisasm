@@ -67,7 +67,7 @@ public class InstructionHandlerFactory
         RegisterXorHandlers();        // XOR instructions
         RegisterCmpHandlers();        // CMP instructions
         RegisterTestHandlers();       // TEST instructions
-        
+
         // Register arithmetic unary instructions
         RegisterNotHandlers();       // NOT instructions
         RegisterNegHandlers();       // NEG instructions
@@ -128,7 +128,7 @@ public class InstructionHandlerFactory
         // SBB accumulator handlers
         _handlers.Add(new SbbAccumulatorImmHandler(_decoder));     // SBB AX/EAX, imm16/32 (opcode 1D)
     }
-    
+
     /// <summary>
     /// Registers all ADC instruction handlers
     /// </summary>
@@ -146,11 +146,11 @@ public class InstructionHandlerFactory
         // Register-to-register ADC handlers (8-bit)
         _handlers.Add(new AdcR8Rm8Handler(_decoder));      // ADC r8, r/m8 (opcode 12)
         _handlers.Add(new AdcRm8R8Handler(_decoder));      // ADC r/m8, r8 (opcode 10)
-        
+
         // Register-to-register ADC handlers (16-bit)
         _handlers.Add(new AdcR16Rm16Handler(_decoder));    // ADC r16, r/m16 (opcode 13 with 0x66 prefix)
         _handlers.Add(new AdcRm16R16Handler(_decoder));    // ADC r/m16, r16 (opcode 11 with 0x66 prefix)
-        
+
         // Register-to-register ADC handlers (32-bit)
         _handlers.Add(new AdcR32Rm32Handler(_decoder));    // ADC r32, r/m32 (opcode 13)
         _handlers.Add(new AdcRm32R32Handler(_decoder));    // ADC r/m32, r32 (opcode 11)
@@ -194,10 +194,10 @@ public class InstructionHandlerFactory
         // JMP handlers for relative jumps
         _handlers.Add(new JmpRel32Handler(_decoder));  // JMP rel32 (opcode E9)
         _handlers.Add(new JmpRel8Handler(_decoder));   // JMP rel8 (opcode EB)
-        
+
         // JMP handler for register/memory operands
         _handlers.Add(new JmpRm32Handler(_decoder));   // JMP r/m32 (opcode FF /4)
-        
+
         // Conditional jump handlers
         _handlers.Add(new JgeRel8Handler(_decoder));   // JGE rel8 (opcode 0F 8D)
         _handlers.Add(new ConditionalJumpHandler(_decoder)); // Short conditional jumps
@@ -228,7 +228,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new XorR16Rm16Handler(_decoder));              // XOR r16, r/m16 (opcode 33)
         _handlers.Add(new XorImmWithRm16Handler(_decoder));          // XOR r/m16, imm16 (opcode 81 /6)
         _handlers.Add(new XorImmWithRm16SignExtendedHandler(_decoder)); // XOR r/m16, imm8 (opcode 83 /6)
-        
+
         // 32-bit handlers
         _handlers.Add(new XorMemRegHandler(_decoder));               // XOR r/m32, r32 (opcode 31)
         _handlers.Add(new XorRegMemHandler(_decoder));               // XOR r32, r/m32 (opcode 33)
@@ -262,7 +262,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new OrRm8R8Handler(_decoder));                // OR r/m8, r8 (opcode 08)
         _handlers.Add(new OrR32Rm32Handler(_decoder));              // OR r32, r/m32 (opcode 0B)
         _handlers.Add(new OrRm32R32Handler(_decoder));              // OR r/m32, r32 (opcode 09)
-        
+
         // Add OR immediate with accumulator handlers
         _handlers.Add(new OrAlImmHandler(_decoder));                // OR AL, imm8 (opcode 0C)
         _handlers.Add(new OrEaxImmHandler(_decoder));               // OR EAX, imm32 (opcode 0D)
@@ -285,11 +285,11 @@ public class InstructionHandlerFactory
         // Add Cmp handlers for 32-bit operands
         _handlers.Add(new CmpR32Rm32Handler(_decoder));  // CMP r32, r/m32 (opcode 3B)
         _handlers.Add(new CmpRm32R32Handler(_decoder));  // CMP r/m32, r32 (opcode 39)
-        
+
         // Add Cmp handlers for 8-bit operands
         _handlers.Add(new CmpRm8R8Handler(_decoder));  // CMP r/m8, r8 (opcode 38)
         _handlers.Add(new CmpR8Rm8Handler(_decoder));  // CMP r8, r/m8 (opcode 3A)
-        
+
         // Add Cmp handlers for immediate operands
         _handlers.Add(new CmpImmWithRm8Handler(_decoder)); // CMP r/m8, imm8 (opcode 80 /7)
         _handlers.Add(new CmpAlImmHandler(_decoder));  // CMP AL, imm8 (opcode 3C)
@@ -330,11 +330,11 @@ public class InstructionHandlerFactory
         _handlers.Add(new AddRm32R32Handler(_decoder));    // ADD r/m32, r32 (opcode 01)
         _handlers.Add(new AddEaxImmHandler(_decoder));     // ADD EAX, imm32 (opcode 05 without 0x66 prefix)
         _handlers.Add(new AddAxImmHandler(_decoder));      // ADD AX, imm16 (opcode 05 with 0x66 prefix)
-        
+
         // Add ADD register-to-register handlers (16-bit)
         _handlers.Add(new AddR16Rm16Handler(_decoder));    // ADD r16, r/m16 (opcode 03 with 0x66 prefix)
         _handlers.Add(new AddRm16R16Handler(_decoder));    // ADD r/m16, r16 (opcode 01 with 0x66 prefix)
-        
+
         // Add ADD register-to-register handlers (8-bit)
         _handlers.Add(new AddRm8R8Handler(_decoder));      // ADD r/m8, r8 (opcode 00)
         _handlers.Add(new AddR8Rm8Handler(_decoder));      // ADD r8, r/m8 (opcode 02)
@@ -356,7 +356,7 @@ public class InstructionHandlerFactory
         // Special case for XCHG with EAX (single-byte opcodes)
         _handlers.Add(new Xchg.XchgEaxRegHandler(_decoder)); // XCHG EAX, r32 (opcode 90 + register)
         _handlers.Add(new Xchg.XchgEaxReg16Handler(_decoder)); // XCHG EAX, r16 with 0x66 prefix (opcode 66 90 + register)
-        
+
         // General XCHG handlers
         _handlers.Add(new Xchg.XchgR32Rm32Handler(_decoder)); // XCHG r32, r/m32 (opcode 87)
         _handlers.Add(new Xchg.XchgR8Rm8Handler(_decoder));   // XCHG r8, r/m8 (opcode 86)
@@ -368,7 +368,7 @@ public class InstructionHandlerFactory
     private void RegisterFloatingPointHandlers()
     {
         // Add specialized Floating Point handlers
-        
+
         // D8 opcode handlers (float32 operations)
         _handlers.Add(new FloatingPoint.Arithmetic.FaddFloat32Handler(_decoder));  // FADD float32 (D8 /0)
         _handlers.Add(new FloatingPoint.Arithmetic.FmulFloat32Handler(_decoder));  // FMUL float32 (D8 /1)
@@ -378,7 +378,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FsubrFloat32Handler(_decoder)); // FSUBR float32 (D8 /5)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivFloat32Handler(_decoder));  // FDIV float32 (D8 /6)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivrFloat32Handler(_decoder)); // FDIVR float32 (D8 /7)
-        
+
         // D9 opcode handlers (load/store float32 and control operations)
         _handlers.Add(new FloatingPoint.LoadStore.FldFloat32Handler(_decoder));   // FLD float32 (D9 /0)
         _handlers.Add(new FloatingPoint.LoadStore.FstFloat32Handler(_decoder));   // FST float32 (D9 /2)
@@ -387,7 +387,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Control.FldcwHandler(_decoder));          // FLDCW (D9 /5)
         _handlers.Add(new FloatingPoint.Control.FnstenvHandler(_decoder));        // FNSTENV (D9 /6)
         _handlers.Add(new FloatingPoint.Control.FnstcwHandler(_decoder));         // FNSTCW (D9 /7)
-        
+
         // DA opcode handlers (int32 operations)
         _handlers.Add(new FloatingPoint.Arithmetic.FiaddInt32Handler(_decoder));   // FIADD int32 (DA /0)
         _handlers.Add(new FloatingPoint.Arithmetic.FimulInt32Handler(_decoder));   // FIMUL int32 (DA /1)
@@ -397,21 +397,21 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FisubrInt32Handler(_decoder));  // FISUBR int32 (DA /5)
         _handlers.Add(new FloatingPoint.Arithmetic.FidivInt32Handler(_decoder));   // FIDIV int32 (DA /6)
         _handlers.Add(new FloatingPoint.Arithmetic.FidivrInt32Handler(_decoder));  // FIDIVR int32 (DA /7)
-        
+
         // DD opcode handlers (load/store float64 operations)
         _handlers.Add(new FloatingPoint.LoadStore.FldFloat64Handler(_decoder));   // FLD float64 (DD /0)
         _handlers.Add(new FloatingPoint.LoadStore.FstFloat64Handler(_decoder));   // FST float64 (DD /2)
         _handlers.Add(new FloatingPoint.LoadStore.FstpFloat64Handler(_decoder));  // FSTP float64 (DD /3)
-        
+
         // Register-register operations
         _handlers.Add(new FloatingPoint.Control.FxchHandler(_decoder));           // FXCH (D9 C8-CF)
-        
+
         // Special floating point instructions
         _handlers.Add(new FloatingPoint.Arithmetic.FchsHandler(_decoder));        // FCHS (D9 E0)
         _handlers.Add(new FloatingPoint.Arithmetic.FabsHandler(_decoder));        // FABS (D9 E1)
         _handlers.Add(new FloatingPoint.Comparison.FtstHandler(_decoder));        // FTST (D9 E4)
         _handlers.Add(new FloatingPoint.Control.FxamHandler(_decoder));           // FXAM (D9 E5)
-        
+
         // Transcendental functions
         _handlers.Add(new FloatingPoint.Transcendental.F2xm1Handler(_decoder));   // F2XM1 (D9 F0)
         _handlers.Add(new FloatingPoint.Transcendental.Fyl2xHandler(_decoder));   // FYL2X (D9 F1)
@@ -419,31 +419,31 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Transcendental.FpatanHandler(_decoder));  // FPATAN (D9 F3)
         _handlers.Add(new FloatingPoint.Arithmetic.FxtractHandler(_decoder));    // FXTRACT (D9 F4)
         _handlers.Add(new FloatingPoint.Arithmetic.Fprem1Handler(_decoder));     // FPREM1 (D9 F5)
-        
+
         // Other floating point handlers
         _handlers.Add(new FloatingPoint.Control.FnstswHandler(_decoder));         // FNSTSW AX (DF E0)
         _handlers.Add(new FloatingPoint.Control.FstswHandler(_decoder));           // FSTSW AX (9B DF E0)
         _handlers.Add(new FloatingPoint.Control.FstswMemHandler(_decoder));        // FSTSW m2byte (9B DD /7)
-        
+
         // DB opcode handlers (int32 operations and extended precision)
         _handlers.Add(new FloatingPoint.LoadStore.FildInt32Handler(_decoder));     // FILD int32 (DB /0)
         _handlers.Add(new FloatingPoint.LoadStore.FistInt32Handler(_decoder));     // FIST int32 (DB /2)
         _handlers.Add(new FloatingPoint.LoadStore.FistpInt32Handler(_decoder));    // FISTP int32 (DB /3)
         _handlers.Add(new FloatingPoint.LoadStore.FldExtendedHandler(_decoder));   // FLD extended-precision (DB /5)
         _handlers.Add(new FloatingPoint.LoadStore.FstpExtendedHandler(_decoder));  // FSTP extended-precision (DB /7)
-        
+
         // DB opcode handlers (conditional move instructions)
         _handlers.Add(new FloatingPoint.Conditional.FcmovnbHandler(_decoder));     // FCMOVNB (DB C0-C7)
         _handlers.Add(new FloatingPoint.Conditional.FcmovneHandler(_decoder));     // FCMOVNE (DB C8-CF)
         _handlers.Add(new FloatingPoint.Conditional.FcmovnbeHandler(_decoder));    // FCMOVNBE (DB D0-D7)
         _handlers.Add(new FloatingPoint.Conditional.FcmovnuHandler(_decoder));     // FCMOVNU (DB D8-DF)
-        
+
         // DB opcode handlers (control instructions)
         _handlers.Add(new FloatingPoint.Control.FnclexHandler(_decoder));          // FNCLEX (DB E2)
         _handlers.Add(new FloatingPoint.Control.FclexHandler(_decoder));           // FCLEX (9B DB E2)
         _handlers.Add(new FloatingPoint.Control.FninitHandler(_decoder));          // FNINIT (DB E3)
         _handlers.Add(new FloatingPoint.Control.FinitHandler(_decoder));           // FINIT (9B DB E3)
-        
+
         // DB opcode handlers (comparison instructions)
         _handlers.Add(new FloatingPoint.Comparison.FucomiHandler(_decoder));       // FUCOMI (DB E8-EF)
         _handlers.Add(new FloatingPoint.Comparison.FcomiHandler(_decoder));        // FCOMI (DB F0-F7)
@@ -457,7 +457,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FsubrStStiHandler(_decoder));        // FSUBR ST, ST(i) (D8 E8-EF)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivStStiHandler(_decoder));         // FDIV ST, ST(i) (D8 F0-F7)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivrStStiHandler(_decoder));        // FDIVR ST, ST(i) (D8 F8-FF)
-        
+
         // DC opcode handlers (memory operations - float64)
         _handlers.Add(new FloatingPoint.Arithmetic.FaddFloat64Handler(_decoder));      // FADD float64 (DC /0)
         _handlers.Add(new FloatingPoint.Arithmetic.FmulFloat64Handler(_decoder));      // FMUL float64 (DC /1)
@@ -467,7 +467,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FsubrFloat64Handler(_decoder));     // FSUBR float64 (DC /5)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivFloat64Handler(_decoder));      // FDIV float64 (DC /6)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivrFloat64Handler(_decoder));     // FDIVR float64 (DC /7)
-        
+
         // DC opcode handlers (register operations)
         _handlers.Add(new FloatingPoint.Arithmetic.FaddStiStHandler(_decoder));        // FADD ST(i), ST (DC C0-C7)
         _handlers.Add(new FloatingPoint.Arithmetic.FmulStiStHandler(_decoder));        // FMUL ST(i), ST (DC C8-CF)
@@ -477,19 +477,19 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FdivrStiStHandler(_decoder));        // FDIVR ST(i), ST (DC F0-F7)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivStiStHandler(_decoder));       // FDIV ST(i), ST (DC F8-FF)
         _handlers.Add(new FloatingPoint.Comparison.FcompRegisterHandler(_decoder));    // FCOMP ST(i), ST(0) (DC D8-DF)
-        
+
         // DD opcode handlers (register operations)
         _handlers.Add(new FloatingPoint.Control.FfreeHandler(_decoder));           // FFREE ST(i) (DD C0-C7)
         _handlers.Add(new FloatingPoint.LoadStore.FstRegisterHandler(_decoder));    // FST ST(i) (DD D0-D7)
         _handlers.Add(new FloatingPoint.LoadStore.FstpRegisterHandler(_decoder));   // FSTP ST(i) (DD D8-DF)
         _handlers.Add(new FloatingPoint.Comparison.FucomHandler(_decoder));        // FUCOM ST(i) (DD E0-E7)
         _handlers.Add(new FloatingPoint.Comparison.FucompHandler(_decoder));       // FUCOMP ST(i) (DD E8-EF)
-        
+
         // DD opcode handlers (memory operations)
         _handlers.Add(new FloatingPoint.Control.FrstorHandler(_decoder));          // FRSTOR (DD /4)
         _handlers.Add(new FloatingPoint.Control.FnsaveHandler(_decoder));          // FNSAVE (DD /6)
         _handlers.Add(new FloatingPoint.Control.FnstswMemoryHandler(_decoder));    // FNSTSW memory (DD /7)
-        
+
         // DE opcode handlers (memory operations)
         _handlers.Add(new FloatingPoint.Arithmetic.FiaddInt16Handler(_decoder));    // FIADD int16 (DE /0)
         _handlers.Add(new FloatingPoint.Arithmetic.FimulInt16Handler(_decoder));    // FIMUL int16 (DE /1)
@@ -499,7 +499,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FisubrInt16Handler(_decoder));   // FISUBR int16 (DE /5)
         _handlers.Add(new FloatingPoint.Arithmetic.FidivInt16Handler(_decoder));    // FIDIV int16 (DE /6)
         _handlers.Add(new FloatingPoint.Arithmetic.FidivrInt16Handler(_decoder));   // FIDIVR int16 (DE /7)
-        
+
         // DE opcode handlers (register operations)
         _handlers.Add(new FloatingPoint.Arithmetic.FaddpStiStHandler(_decoder));     // FADDP ST(i), ST (DE C0-C7)
         _handlers.Add(new FloatingPoint.Arithmetic.FmulpStiStHandler(_decoder));     // FMULP ST(i), ST (DE C8-CF)
@@ -508,7 +508,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.Arithmetic.FsubrpStiStHandler(_decoder));    // FSUBP ST(i), ST (DE E8-EF)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivrpStiStHandler(_decoder));     // FDIVRP ST(i), ST (DE F0-F7)
         _handlers.Add(new FloatingPoint.Arithmetic.FdivpStiStHandler(_decoder));    // FDIVP ST(i), ST (DE F8-FF)
-        
+
         // DF opcode handlers (memory operations)
         _handlers.Add(new FloatingPoint.LoadStore.FildInt16Handler(_decoder));     // FILD int16 (DF /0)
         _handlers.Add(new FloatingPoint.LoadStore.FisttpInt16Handler(_decoder));   // FISTTP int16 (DF /1)
@@ -518,7 +518,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new FloatingPoint.LoadStore.FildInt64Handler(_decoder));     // FILD int64 (DF /5)
         _handlers.Add(new FloatingPoint.LoadStore.FbstpHandler(_decoder));         // FBSTP packed BCD (DF /6)
         _handlers.Add(new FloatingPoint.LoadStore.FistpInt64Handler(_decoder));    // FISTP int64 (DF /7)
-        
+
         // DF opcode handlers (register operations)
         _handlers.Add(new FloatingPoint.Control.FfreepHandler(_decoder));          // FFREEP ST(i) (DF C0-C7)
         _handlers.Add(new FloatingPoint.LoadStore.FxchDfHandler(_decoder));        // FXCH (DF C8)
@@ -544,13 +544,13 @@ public class InstructionHandlerFactory
         // Add MOV register/memory handlers
         _handlers.Add(new MovRegMemHandler(_decoder));       // MOV r32, r/m32 (opcode 8B)
         _handlers.Add(new MovMemRegHandler(_decoder));       // MOV r/m32, r32 (opcode 89)
-        
+
         // Add MOV immediate handlers
         _handlers.Add(new MovRegImm32Handler(_decoder));     // MOV r32, imm32 (opcode B8+r)
         _handlers.Add(new MovRegImm8Handler(_decoder));      // MOV r8, imm8 (opcode B0+r)
         _handlers.Add(new MovRm32Imm32Handler(_decoder));    // MOV r/m32, imm32 (opcode C7 /0)
         _handlers.Add(new MovRm8Imm8Handler(_decoder));      // MOV r/m8, imm8 (opcode C6 /0)
-        
+
         // Add MOV memory offset handlers
         _handlers.Add(new MovEaxMoffsHandler(_decoder));     // MOV EAX, moffs32 (opcode A1)
         _handlers.Add(new MovMoffsEaxHandler(_decoder));     // MOV moffs32, EAX (opcode A3)
@@ -564,7 +564,7 @@ public class InstructionHandlerFactory
         // Add PUSH register handlers
         _handlers.Add(new PushRegHandler(_decoder));      // PUSH r32 (opcode 50+r)
         _handlers.Add(new PushRm32Handler(_decoder));     // PUSH r/m32 (opcode FF /6)
-        
+
         // Add PUSH immediate handlers
         // Note: Order matters! PushImm16Handler must be registered before PushImm32Handler
         // since both check for opcode 68h but PushImm16Handler also checks for operand size prefix
@@ -594,13 +594,13 @@ public class InstructionHandlerFactory
         _handlers.Add(new AndImmToRm16SignExtendedHandler(_decoder)); // AND r/m16, imm8 (opcode 83 /4 with 0x66 prefix)
         _handlers.Add(new AndRm16R16Handler(_decoder));              // AND r/m16, r16 (opcode 21 with 0x66 prefix)
         _handlers.Add(new AndR16Rm16Handler(_decoder));              // AND r16, r/m16 (opcode 23 with 0x66 prefix)
-        
+
         // 8-bit handlers
         _handlers.Add(new AndAlImmHandler(_decoder));                // AND AL, imm8 (opcode 24)
         _handlers.Add(new AndR8Rm8Handler(_decoder));                // AND r8, r/m8 (opcode 22)
         _handlers.Add(new AndRm8R8Handler(_decoder));                // AND r/m8, r8 (opcode 20)
         _handlers.Add(new AndImmToRm8Handler(_decoder));              // AND r/m8, imm8 (opcode 80 /4)
-        
+
         // 32-bit handlers
         _handlers.Add(new AndEaxImmHandler(_decoder));               // AND EAX, imm32 (opcode 25 without 0x66 prefix)
         _handlers.Add(new AndR32Rm32Handler(_decoder));              // AND r32, r/m32 (opcode 23)
@@ -615,14 +615,14 @@ public class InstructionHandlerFactory
     private void RegisterSubHandlers()
     {
         // Register SUB handlers
-        
+
         // 16-bit handlers with operand size prefix (must come first)
         _handlers.Add(new SubAxImm16Handler(_decoder));              // SUB AX, imm16 (opcode 0x66 0x83 /5)
         _handlers.Add(new SubImmFromRm16Handler(_decoder));          // SUB r/m16, imm16 (opcode 0x66 0x81 /5)
         _handlers.Add(new SubImmFromRm16SignExtendedHandler(_decoder)); // SUB r/m16, imm8 (opcode 0x66 0x83 /5)
         _handlers.Add(new SubRm16R16Handler(_decoder));              // SUB r/m16, r16 (opcode 0x66 0x29)
         _handlers.Add(new SubR16Rm16Handler(_decoder));              // SUB r16, r/m16 (opcode 0x66 0x2B)
-        
+
         // 32-bit handlers
         _handlers.Add(new SubRm32R32Handler(_decoder));              // SUB r/m32, r32 (opcode 0x29)
         _handlers.Add(new SubR32Rm32Handler(_decoder));              // SUB r32, r/m32 (opcode 0x2B)
@@ -726,7 +726,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new RcrRm32ByClHandler(_decoder));     // RCR r/m32, CL (0xD3 /3)
         _handlers.Add(new RcrRm32ByImmHandler(_decoder));    // RCR r/m32, imm8 (0xC1 /3)
     }
-    
+
     /// <summary>
     /// Registers all Flag manipulation instruction handlers
     /// </summary>
@@ -752,25 +752,23 @@ public class InstructionHandlerFactory
         // BT (Bit Test) handlers
         _handlers.Add(new BtR32Rm32Handler(_decoder));    // BT r32, r/m32 (0F A3)
         _handlers.Add(new BtRm32ImmHandler(_decoder));    // BT r/m32, imm8 (0F BA /4)
-        
+
         // BTS (Bit Test and Set) handlers
         _handlers.Add(new BtsR32Rm32Handler(_decoder));   // BTS r32, r/m32 (0F AB)
         _handlers.Add(new BtsRm32ImmHandler(_decoder));   // BTS r/m32, imm8 (0F BA /5)
-        
+
         // BTR (Bit Test and Reset) handlers
         _handlers.Add(new BtrR32Rm32Handler(_decoder));   // BTR r32, r/m32 (0F B3)
         _handlers.Add(new BtrRm32ImmHandler(_decoder));   // BTR r/m32, imm8 (0F BA /6)
-        
+
         // BTC (Bit Test and Complement) handlers
         _handlers.Add(new BtcR32Rm32Handler(_decoder));   // BTC r32, r/m32 (0F BB)
         _handlers.Add(new BtcRm32ImmHandler(_decoder));   // BTC r/m32, imm8 (0F BA /7)
-        
+
         // BSF and BSR (Bit Scan) handlers
         _handlers.Add(new BsfR32Rm32Handler(_decoder));   // BSF r32, r/m32 (0F BC)
         _handlers.Add(new BsrR32Rm32Handler(_decoder));   // BSR r32, r/m32 (0F BD)
     }
-
-
 
     /// <summary>
     /// Registers all NEG instruction handlers

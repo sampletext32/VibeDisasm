@@ -22,16 +22,21 @@ public class FxtractHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FXTRACT is D9 F4
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the next byte is F4
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xF4;
     }
-    
+
     /// <summary>
     /// Decodes an FXTRACT instruction
     /// </summary>
@@ -41,21 +46,25 @@ public class FxtractHandler : InstructionHandler
     public override bool Decode(byte opcode, Instruction instruction)
     {
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Verify the opcode is correct
         if (secondByte != 0xF4)
+        {
             return false;
-        
+        }
+
         // Set the instruction type
         instruction.Type = InstructionType.Fxtract;
-        
+
         // FXTRACT has no operands
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

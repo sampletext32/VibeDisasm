@@ -22,7 +22,10 @@ public class FxamHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FXAM is D9 E5
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FxamHandler : InstructionHandler
         }
 
         // Check if the next byte is E5
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xE5;
     }
-    
+
     /// <summary>
     /// Decodes a FXAM instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FxamHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fxam;
 

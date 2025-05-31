@@ -24,7 +24,7 @@ public class CliHandler : InstructionHandler
         // CLI is FA
         return opcode == 0xFA;
     }
-    
+
     /// <summary>
     /// Decodes a CLI instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class CliHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Cli;
-        
+
         // CLI has no operands
         instruction.StructuredOperands = [];
 

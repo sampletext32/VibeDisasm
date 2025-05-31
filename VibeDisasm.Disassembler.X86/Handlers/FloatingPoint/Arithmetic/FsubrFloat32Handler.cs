@@ -24,7 +24,10 @@ public class FsubrFloat32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FSUBR is D8 /5
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FsubrFloat32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 5
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+
         return reg == 5;
     }
-    
+
     /// <summary>
     /// Decodes a FSUBR float32 instruction
     /// </summary>
@@ -53,7 +56,7 @@ public class FsubrFloat32Handler : InstructionHandler
 
         // Read the ModR/M byte using the specialized FPU method
         var (mod, reg, fpuRm, rawOperand) = ModRMDecoder.ReadModRMFpu();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fsubr;
 
@@ -61,7 +64,7 @@ public class FsubrFloat32Handler : InstructionHandler
         if (mod != 3) // Memory operand
         {
             // Set the structured operands - the operand already has the correct size from ReadModRM
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rawOperand
             ];
@@ -71,9 +74,9 @@ public class FsubrFloat32Handler : InstructionHandler
             // For register operands, we need to handle the stack registers
             var st0Operand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0); // ST(0)
             var stiOperand = OperandFactory.CreateFPURegisterOperand(fpuRm); // ST(i)
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 st0Operand,
                 stiOperand
