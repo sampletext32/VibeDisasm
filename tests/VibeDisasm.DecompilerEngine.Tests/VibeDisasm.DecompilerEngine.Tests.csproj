@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VibeDisasm.DecompilerEngine\VibeDisasm.DecompilerEngine.csproj" />
+      <ProjectReference Include="..\..\VibeDisasm.DecompilerEngine\VibeDisasm.DecompilerEngine.csproj" />
     </ItemGroup>
 
 </Project>
