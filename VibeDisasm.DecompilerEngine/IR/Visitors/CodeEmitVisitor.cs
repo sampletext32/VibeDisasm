@@ -127,4 +127,6 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
     public override string? VisitShl(IRShlInstruction instr) => $"{Visit(instr.Value)} <<= {Visit(instr.ShiftCount)}";
 
     public override string? VisitShr(IRShrInstruction instr) => $"{Visit(instr.Value)} >>= {Visit(instr.ShiftCount)}";
+    
+    public override string? VisitMovzx(IRMovzxInstruction instr) => $"{Visit(instr.Destination)} = (uint){Visit(instr.Source)}";
 }

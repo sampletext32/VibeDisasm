@@ -111,4 +111,5 @@ public abstract class BaseIRNodeReturningVisitor<TReturn> : IIRNodeReturningVisi
 
     public virtual TReturn? VisitShl(IRShlInstruction instr) => _defaultReturn(instr);
     public virtual TReturn? VisitShr(IRShrInstruction instr) => _defaultReturn(instr);
+    public virtual TReturn? VisitMovzx(IRMovzxInstruction instr) => _defaultReturn(instr);
 }

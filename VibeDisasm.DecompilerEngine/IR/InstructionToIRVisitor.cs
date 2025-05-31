@@ -334,6 +334,11 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     OperandToIR(operands[0]),
                     OperandToIR(operands[1])
                 );
+            case InstructionType.Movzx:
+                return new IRMovzxInstruction(
+                    OperandToIR(operands[1]), // Source (smaller operand)
+                    OperandToIR(operands[0])  // Destination (larger operand)
+                );
             default:
                 return new StubIRInstruction(instruction.Type);
         }
