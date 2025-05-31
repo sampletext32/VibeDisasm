@@ -1,5 +1,4 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
-using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Disassembler.X86.Operands;
 
@@ -29,7 +28,6 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
 
     public IRExpression VisitBaseRegisterMemory(BaseRegisterMemoryOperand operand)
         => new IRDerefExpr(new IRRegisterExpr(X86RegisterToIrRegister(operand.BaseRegister, operand.Size)));
-
 
     public IRExpression VisitScaledIndexMemory(ScaledIndexMemoryOperand operand)
     {
@@ -95,7 +93,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
                 _ => throw new ArgumentOutOfRangeException(nameof(registerIndex), registerIndex, null)
             };
         }
-        else if(size == 32)
+        else if (size == 32)
         {
             return registerIndex switch
             {
@@ -110,7 +108,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
                 _ => throw new ArgumentOutOfRangeException(nameof(registerIndex), registerIndex, null)
             };
         }
-        else if(size == 64)
+        else if (size == 64)
         {
             return registerIndex switch
             {

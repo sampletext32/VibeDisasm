@@ -11,7 +11,7 @@ public class AddImmToRm16Handler : InstructionHandler
     /// Initializes a new instance of the AddImmToRm16Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AddImmToRm16Handler(InstructionDecoder decoder) 
+    public AddImmToRm16Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
@@ -31,11 +31,15 @@ public class AddImmToRm16Handler : InstructionHandler
 
         // Only handle when the operand size prefix is present
         if (!Decoder.HasOperandSizePrefix())
+        {
             return false;
-            
+        }
+
         // Check if the reg field of the ModR/M byte is 0 (ADD)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -69,10 +73,10 @@ public class AddImmToRm16Handler : InstructionHandler
         }
 
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             OperandFactory.CreateImmediateOperand(imm16)

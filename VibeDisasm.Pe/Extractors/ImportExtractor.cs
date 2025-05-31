@@ -1,4 +1,3 @@
-using System.Text;
 using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
@@ -36,21 +35,21 @@ public static class ImportExtractor
             // Get the module name
             if (descriptor.Name != 0)
             {
-                uint nameOffset = Util.RvaToOffset(rawPeFile, descriptor.Name);
+                var nameOffset = Util.RvaToOffset(rawPeFile, descriptor.Name);
                 moduleInfo.Name = Util.ReadAsciiString(rawPeFile.RawData, nameOffset);
             }
 
             // Process the imported functions
-            uint thunkRva = descriptor.OriginalFirstThunk != 0 ? descriptor.OriginalFirstThunk : descriptor.FirstThunk;
-            uint iatRva = descriptor.FirstThunk;
+            var thunkRva = descriptor.OriginalFirstThunk != 0 ? descriptor.OriginalFirstThunk : descriptor.FirstThunk;
+            var iatRva = descriptor.FirstThunk;
 
             if (thunkRva != 0)
             {
-                uint thunkOffset = Util.RvaToOffset(rawPeFile, thunkRva);
-                uint iatOffset = Util.RvaToOffset(rawPeFile, iatRva);
-                int thunkSize = rawPeFile.IsPe32Plus ? 8 : 4;
+                var thunkOffset = Util.RvaToOffset(rawPeFile, thunkRva);
+                var iatOffset = Util.RvaToOffset(rawPeFile, iatRva);
+                var thunkSize = rawPeFile.IsPe32Plus ? 8 : 4;
 
-                for (int i = 0; ; i++)
+                for (var i = 0; ; i++)
                 {
                     // Read the thunk value
                     ulong thunkValue;
@@ -60,6 +59,7 @@ public static class ImportExtractor
                         {
                             break;
                         }
+
                         thunkValue = BitConverter.ToUInt64(rawPeFile.RawData, (int)thunkOffset + (i * thunkSize));
                     }
                     else
@@ -68,6 +68,7 @@ public static class ImportExtractor
                         {
                             break;
                         }
+
                         thunkValue = BitConverter.ToUInt32(rawPeFile.RawData, (int)thunkOffset + (i * thunkSize));
                     }
 
@@ -83,7 +84,7 @@ public static class ImportExtractor
                     };
 
                     // Check if the import is by ordinal
-                    bool isByOrdinal = rawPeFile.IsPe32Plus
+                    var isByOrdinal = rawPeFile.IsPe32Plus
                         ? (thunkValue & 0x8000000000000000UL) != 0
                         : (thunkValue & 0x80000000UL) != 0;
                     functionInfo.IsByOrdinal = isByOrdinal;
@@ -97,8 +98,8 @@ public static class ImportExtractor
                     else
                     {
                         // Import by name
-                        uint hintNameRva = (uint)(thunkValue & (rawPeFile.IsPe32Plus ? 0x7FFFFFFFFFFFFFFFUL : 0x7FFFFFFFUL));
-                        uint hintNameOffset = Util.RvaToOffset(rawPeFile, hintNameRva);
+                        var hintNameRva = (uint)(thunkValue & (rawPeFile.IsPe32Plus ? 0x7FFFFFFFFFFFFFFFUL : 0x7FFFFFFFUL));
+                        var hintNameOffset = Util.RvaToOffset(rawPeFile, hintNameRva);
 
                         // Read the hint
                         functionInfo.Hint = BitConverter.ToUInt16(rawPeFile.RawData, (int)hintNameOffset);

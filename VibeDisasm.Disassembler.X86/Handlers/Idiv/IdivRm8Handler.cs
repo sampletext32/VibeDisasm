@@ -22,11 +22,15 @@ public class IdivRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0xF6)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 7 (IDIV)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -56,7 +60,7 @@ public class IdivRm8Handler : InstructionHandler
 
         // Set the structured operands
         // IDIV has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

@@ -11,7 +11,7 @@ public class RegisterOperand : Operand
     /// Gets or sets the register
     /// </summary>
     public RegisterIndex Register { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the RegisterOperand class
     /// </summary>
@@ -23,7 +23,7 @@ public class RegisterOperand : Operand
         Register = register;
         Size = size;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>

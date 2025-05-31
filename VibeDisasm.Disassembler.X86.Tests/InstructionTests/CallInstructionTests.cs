@@ -16,23 +16,23 @@ public class CallInstructionTests
     {
         // Arrange
         // CALL +0x12345678 (E8 78 56 34 12) - Call to address 0x12345678 bytes forward
-        byte[] codeBuffer = new byte[] { 0xE8, 0x78, 0x56, 0x34, 0x12 };
+        var codeBuffer = new byte[] { 0xE8, 0x78, 0x56, 0x34, 0x12 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Call, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check that the operand is a relative offset operand
         var operand = instruction.StructuredOperands[0];
         Assert.IsType<RelativeOffsetOperand>(operand);
-        
+
         // Check the target address
         var relativeOffsetOperand = (RelativeOffsetOperand)operand;
         Assert.Equal(0x1234567DUL, relativeOffsetOperand.TargetAddress); // Current position (5) + offset (0x12345678) = 0x1234567D

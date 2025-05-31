@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using VibeDisasm.Disassembler.X86.Handlers;
 
 namespace VibeDisasm.Disassembler.X86.Tests.InstructionTests;
@@ -8,10 +8,10 @@ public class InstructionHandlerFactoryTests
     [Fact]
     public void Factory_ShouldNotContainDuplicates()
     {
-        byte[] code = new byte[] {0xCC, 0xCC, 0xCC};
+        var code = new byte[] { 0xCC, 0xCC, 0xCC };
         var sut = new InstructionHandlerFactory(new InstructionDecoder(code, code.Length));
 
-        var handlers = (List<IInstructionHandler>) sut.GetType()
+        var handlers = (List<IInstructionHandler>)sut.GetType()
             .GetField("_handlers", BindingFlags.Instance | BindingFlags.NonPublic)!
             .GetValue(sut)!;
 
@@ -24,17 +24,17 @@ public class InstructionHandlerFactoryTests
     [Fact]
     public void Factory_ShouldContainAllKnownHandlers()
     {
-        byte[] code = new byte[] {0xCC, 0xCC, 0xCC};
+        var code = new byte[] { 0xCC, 0xCC, 0xCC };
         var sut = new InstructionHandlerFactory(new InstructionDecoder(code, code.Length));
 
-        var handlers = (List<IInstructionHandler>) sut.GetType()
+        var handlers = (List<IInstructionHandler>)sut.GetType()
             .GetField("_handlers", BindingFlags.Instance | BindingFlags.NonPublic)!
             .GetValue(sut)!;
 
         var handlerTypes = typeof(InstructionHandler).Assembly.GetExportedTypes()
-            .Where(x => x.IsAssignableTo(typeof(InstructionHandler)) && x is {IsAbstract: false, IsInterface: false})
+            .Where(x => x.IsAssignableTo(typeof(InstructionHandler)) && x is { IsAbstract: false, IsInterface: false })
             .ToList();
-        
+
         foreach (var handlerType in handlerTypes)
         {
             if (handlers.All(x => x.GetType() != handlerType))

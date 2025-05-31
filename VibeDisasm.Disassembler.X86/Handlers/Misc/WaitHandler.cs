@@ -35,7 +35,7 @@ public class WaitHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Wait;
-        
+
         // WAIT/FWAIT has no operands
         instruction.StructuredOperands = [];
 

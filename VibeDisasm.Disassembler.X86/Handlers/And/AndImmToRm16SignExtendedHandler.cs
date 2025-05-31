@@ -11,11 +11,11 @@ public class AndImmToRm16SignExtendedHandler : InstructionHandler
     /// Initializes a new instance of the AndImmToRm16SignExtendedHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AndImmToRm16SignExtendedHandler(InstructionDecoder decoder) 
+    public AndImmToRm16SignExtendedHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -45,7 +45,7 @@ public class AndImmToRm16SignExtendedHandler : InstructionHandler
         var reg = ModRMDecoder.PeakModRMReg();
         return reg == 4; // 4 = AND
     }
-    
+
     /// <summary>
     /// Decodes an AND r/m16, imm8 instruction
     /// </summary>
@@ -59,7 +59,7 @@ public class AndImmToRm16SignExtendedHandler : InstructionHandler
 
         // Read the ModR/M byte to get the destination operand
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM16();
-        
+
         // Check if we have enough bytes for the immediate value
         if (!Decoder.CanReadByte())
         {
@@ -67,15 +67,15 @@ public class AndImmToRm16SignExtendedHandler : InstructionHandler
         }
 
         // Read the immediate value and sign-extend it to 16 bits
-        sbyte imm8 = (sbyte)Decoder.ReadByte();
+        var imm8 = (sbyte)Decoder.ReadByte();
         short signExtendedImm = imm8;
-        ushort imm16 = (ushort)signExtendedImm;
+        var imm16 = (ushort)signExtendedImm;
 
         // Create the immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

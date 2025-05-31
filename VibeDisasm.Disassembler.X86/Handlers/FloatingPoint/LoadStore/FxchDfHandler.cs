@@ -24,7 +24,10 @@ public class FxchDfHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FXCH with DF opcode is DF C8
-        if (opcode != 0xDF) return false;
+        if (opcode != 0xDF)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,10 +35,10 @@ public class FxchDfHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte is exactly C8 (reg = 1, rm = 0, mod = 3)
-        byte modRm = Decoder.PeakByte();
+        var modRm = Decoder.PeakByte();
         return modRm == 0xC8;
     }
-    
+
     /// <summary>
     /// Decodes a FXCH instruction with DF opcode
     /// </summary>
@@ -51,15 +54,15 @@ public class FxchDfHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fxch;
 
         // Create the FPU register operand
         var fpuRegisterOperand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             fpuRegisterOperand
         ];

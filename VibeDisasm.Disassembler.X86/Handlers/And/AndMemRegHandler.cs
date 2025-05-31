@@ -52,9 +52,9 @@ public class AndMemRegHandler : InstructionHandler
 
         // Create the source register operand
         var sourceOperand = OperandFactory.CreateRegisterOperand(reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

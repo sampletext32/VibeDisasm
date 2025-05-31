@@ -24,7 +24,10 @@ public class FnstcwHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FNSTCW is D9 /7
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,14 +35,14 @@ public class FnstcwHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 7
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3)
         return reg == 7 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FNSTCW instruction
     /// </summary>
@@ -55,13 +58,13 @@ public class FnstcwHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, rawOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fnstcw;
 
         // Create a 16-bit memory operand for control word operations
         Operand memoryOperand;
-        
+
         if (rawOperand is DirectMemoryOperand directMemory)
         {
             memoryOperand = OperandFactory.CreateDirectMemoryOperand16(directMemory.Address);
@@ -84,7 +87,7 @@ public class FnstcwHandler : InstructionHandler
         }
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             memoryOperand
         ];

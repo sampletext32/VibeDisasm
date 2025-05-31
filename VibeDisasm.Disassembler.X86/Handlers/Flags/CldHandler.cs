@@ -24,7 +24,7 @@ public class CldHandler : InstructionHandler
         // CLD is FC
         return opcode == 0xFC;
     }
-    
+
     /// <summary>
     /// Decodes a CLD instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class CldHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Cld;
-        
+
         // CLD has no operands
         instruction.StructuredOperands = [];
 

@@ -22,11 +22,16 @@ public class FclexHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCLEX with WAIT prefix starts with 0x9B
-        if (opcode != 0x9B) return false;
+        if (opcode != 0x9B)
+        {
+            return false;
+        }
 
         // Check if we can read the next two bytes
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the next bytes are 0xDB 0xE2 (for FCLEX with WAIT)
         var (nextByte, thirdByte) = Decoder.PeakTwoBytes();
@@ -34,7 +39,7 @@ public class FclexHandler : InstructionHandler
         // The sequence must be 9B DB E2 for FCLEX with WAIT
         return nextByte == 0xDB && thirdByte == 0xE2;
     }
-    
+
     /// <summary>
     /// Decodes a FCLEX instruction with WAIT prefix
     /// </summary>
@@ -45,27 +50,35 @@ public class FclexHandler : InstructionHandler
     {
         // Skip the WAIT prefix (0x9B) - we already read it in CanHandle
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Read the second byte (0xDB)
-        byte secondByte = Decoder.ReadByte();
+        var secondByte = Decoder.ReadByte();
         if (secondByte != 0xDB)
+        {
             return false;
-            
+        }
+
         // Read the third byte (0xE2)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
-        byte thirdByte = Decoder.ReadByte();
+        var thirdByte = Decoder.ReadByte();
         if (thirdByte != 0xE2)
+        {
             return false;
-        
+        }
+
         // Set the instruction type
         instruction.Type = InstructionType.Fclex;
-        
+
         // FCLEX has no operands
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

@@ -25,7 +25,7 @@ public class PushfdHandler : InstructionHandler
         // PUSHFD is 0x9C
         return opcode == 0x9C;
     }
-    
+
     /// <summary>
     /// Decodes a PUSHFD instruction
     /// </summary>
@@ -36,7 +36,7 @@ public class PushfdHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Pushfd;
-        
+
         // PUSHFD has no operands
         instruction.StructuredOperands = [];
 

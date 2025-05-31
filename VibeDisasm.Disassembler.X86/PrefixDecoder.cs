@@ -13,7 +13,7 @@ public class PrefixDecoder
     private bool _repPrefix;
     private bool _repnePrefix;
     private Segment? _segmentOverride = null;
-    
+
     /// <summary>
     /// Initializes a new instance of the PrefixDecoder class
     /// </summary>
@@ -21,7 +21,7 @@ public class PrefixDecoder
     {
         Reset();
     }
-    
+
     /// <summary>
     /// Resets all prefix flags
     /// </summary>
@@ -35,7 +35,7 @@ public class PrefixDecoder
         _repnePrefix = false;
         _segmentOverride = null;
     }
-    
+
     /// <summary>
     /// Decodes a prefix byte
     /// </summary>
@@ -65,6 +65,7 @@ public class PrefixDecoder
                 case 0x64: _segmentOverride = Segment.Fs; break;
                 case 0x65: _segmentOverride = Segment.Gs; break;
             }
+
             return true;
         }
         else if (prefix == 0xF0) // LOCK prefix
@@ -82,10 +83,10 @@ public class PrefixDecoder
             _repnePrefix = true;
             return true;
         }
-        
+
         return false;
     }
-    
+
     /// <summary>
     /// Checks if the operand size prefix is present
     /// </summary>
@@ -94,7 +95,7 @@ public class PrefixDecoder
     {
         return _operandSizePrefix;
     }
-    
+
     /// <summary>
     /// Checks if the address size prefix is present
     /// </summary>
@@ -103,7 +104,7 @@ public class PrefixDecoder
     {
         return _addressSizePrefix;
     }
-    
+
     /// <summary>
     /// Checks if a segment override prefix is present
     /// </summary>
@@ -112,7 +113,7 @@ public class PrefixDecoder
     {
         return _segmentOverridePrefix;
     }
-    
+
     /// <summary>
     /// Gets the segment override prefix
     /// </summary>
@@ -121,7 +122,7 @@ public class PrefixDecoder
     {
         return _segmentOverride;
     }
-    
+
     /// <summary>
     /// Checks if the LOCK prefix is present
     /// </summary>
@@ -130,7 +131,7 @@ public class PrefixDecoder
     {
         return _lockPrefix;
     }
-    
+
     /// <summary>
     /// Checks if the REP prefix is present
     /// </summary>
@@ -139,7 +140,7 @@ public class PrefixDecoder
     {
         return _repPrefix;
     }
-    
+
     /// <summary>
     /// Checks if the REPNE prefix is present
     /// </summary>

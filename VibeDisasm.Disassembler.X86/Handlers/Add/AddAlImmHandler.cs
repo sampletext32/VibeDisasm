@@ -45,7 +45,7 @@ public class AddAlImmHandler : InstructionHandler
         }
 
         // Read the immediate value
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the destination register operand (AL)
         var destinationOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
@@ -54,7 +54,7 @@ public class AddAlImmHandler : InstructionHandler
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

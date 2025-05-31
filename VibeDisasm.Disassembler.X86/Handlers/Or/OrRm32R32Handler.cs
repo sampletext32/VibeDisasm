@@ -38,7 +38,7 @@ public class OrRm32R32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Or;
-        
+
         if (!Decoder.CanReadByte())
         {
             return false;
@@ -52,15 +52,15 @@ public class OrRm32R32Handler : InstructionHandler
 
         // Create the register operand for the reg field
         var regOperand = OperandFactory.CreateRegisterOperand(reg);
-        
+
         // Set the structured operands based on addressing mode
         if (mod == 3) // Direct register addressing
         {
             // Create the register operand for the r/m field
             var rmOperand = OperandFactory.CreateRegisterOperand(rm);
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rmOperand,  // Destination is r/m
                 regOperand  // Source is reg
@@ -69,7 +69,7 @@ public class OrRm32R32Handler : InstructionHandler
         else // Memory addressing
         {
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 destOperand, // Destination is r/m (memory)
                 regOperand   // Source is reg

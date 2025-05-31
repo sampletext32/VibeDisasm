@@ -28,7 +28,7 @@ public class FPURegisterOperand : Operand
     public override string ToString()
     {
         // Convert RegisterIndex to a numerical index (0-7)
-        int index = (int)RegisterIndex;
+        var index = (int)RegisterIndex;
         return $"ST({index})";
     }
 }

@@ -24,7 +24,7 @@ public class ClcHandler : InstructionHandler
         // CLC is F8
         return opcode == 0xF8;
     }
-    
+
     /// <summary>
     /// Decodes a CLC instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class ClcHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Clc;
-        
+
         // CLC has no operands
         instruction.StructuredOperands = [];
 

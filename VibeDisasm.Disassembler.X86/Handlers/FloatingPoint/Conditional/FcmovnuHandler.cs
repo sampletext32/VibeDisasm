@@ -24,7 +24,10 @@ public class FcmovnuHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCMOVNU is DB D8-DF
-        if (opcode != 0xDB) return false;
+        if (opcode != 0xDB)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,14 +35,14 @@ public class FcmovnuHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 3 and mod = 3
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle register operands (mod = 3) with reg = 3
         return reg == 3 && mod == 3;
     }
-    
+
     /// <summary>
     /// Decodes a FCMOVNU instruction
     /// </summary>
@@ -55,12 +58,12 @@ public class FcmovnuHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fcmovnu;
 
         // Map rm field to FPU register index
-        FpuRegisterIndex stIndex = rm switch
+        var stIndex = rm switch
         {
             RegisterIndex.A => FpuRegisterIndex.ST0,
             RegisterIndex.C => FpuRegisterIndex.ST1,
@@ -72,13 +75,13 @@ public class FcmovnuHandler : InstructionHandler
             RegisterIndex.Di => FpuRegisterIndex.ST7,
             _ => FpuRegisterIndex.ST0 // Default case, should not happen
         };
-        
+
         // Create the FPU register operands
         var destOperand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0);
         var srcOperand = OperandFactory.CreateFPURegisterOperand(stIndex);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             srcOperand

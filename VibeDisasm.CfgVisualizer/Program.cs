@@ -39,7 +39,7 @@ window.Load += () =>
         {
             var io = ImGui.GetIO();
             io.ConfigFlags |= ImGuiConfigFlags.DockingEnable;
-            
+
             // Load font if available, otherwise use default
             try
             {
@@ -56,7 +56,7 @@ window.Load += () =>
             }
         }
     );
-    
+
     app.Init(window, openGl, mainFont);
 
     // Setup keyboard event handlers
@@ -76,7 +76,7 @@ window.FramebufferResize += s =>
 };
 
 // Handle file drops
-window.FileDrop += paths => 
+window.FileDrop += paths =>
 {
     app.OnFileDrop(paths);
 };
@@ -115,7 +115,7 @@ window.Closing += () =>
     app.Exit();
 
     ImGui.SaveIniSettingsToDisk("imgui.ini");
-    
+
     // Dispose our controller first
     controller?.Dispose();
 

@@ -24,7 +24,10 @@ public class FucomiHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FUCOMI is DB E8-EF
-        if (opcode != 0xDB) return false;
+        if (opcode != 0xDB)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FucomiHandler : InstructionHandler
         }
 
         // Check second opcode byte
-        byte secondOpcode = Decoder.PeakByte();
-        
+        var secondOpcode = Decoder.PeakByte();
+
         // Only handle F0-F7
         return secondOpcode is >= 0xE8 and <= 0xEF;
     }
-    
+
     /// <summary>
     /// Decodes a FUCOMI instruction
     /// </summary>
@@ -53,16 +56,16 @@ public class FucomiHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRMFpu();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fucomi;
-        
+
         // Create the FPU register operands
         var destOperand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0);
         var srcOperand = OperandFactory.CreateFPURegisterOperand(rm);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             srcOperand

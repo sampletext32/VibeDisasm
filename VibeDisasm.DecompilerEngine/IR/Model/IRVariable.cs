@@ -9,7 +9,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 public class IRVariable : IRNode
 {
     public override string ToString() => $"{Type?.Name ?? "var"} {Name}";
-    
+
     public required string Name { get; init; }
     public required IRType Type { get; init; }
     public bool IsArgument { get; init; }

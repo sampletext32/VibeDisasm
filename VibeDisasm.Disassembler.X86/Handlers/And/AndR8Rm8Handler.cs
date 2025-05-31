@@ -53,9 +53,9 @@ public class AndR8Rm8Handler : InstructionHandler
         {
             // Create a register operand for the r/m field using the 8-bit register type
             var rmOperand = OperandFactory.CreateRegisterOperand8(rm);
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 destOperand,
                 rmOperand
@@ -64,9 +64,9 @@ public class AndR8Rm8Handler : InstructionHandler
         else // Memory operand
         {
             // Note: The operand size is already set to 8-bit by the ReadModRM8 method
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 destOperand,
                 srcOperand

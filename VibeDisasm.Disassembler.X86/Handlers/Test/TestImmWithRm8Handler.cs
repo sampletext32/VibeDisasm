@@ -28,16 +28,16 @@ public class TestImmWithRm8Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Check if the reg field is 0 (TEST operation)
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         return reg == 0; // 0 = TEST
     }
 
@@ -51,7 +51,7 @@ public class TestImmWithRm8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Test;
-        
+
         // Read the ModR/M byte, specifying that we're dealing with 8-bit operands
         var (_, _, _, destinationOperand) = ModRMDecoder.ReadModRM8();
 
@@ -62,13 +62,13 @@ public class TestImmWithRm8Handler : InstructionHandler
         }
 
         // Read the immediate value
-        byte imm8 = Decoder.ReadByte();
-        
+        var imm8 = Decoder.ReadByte();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

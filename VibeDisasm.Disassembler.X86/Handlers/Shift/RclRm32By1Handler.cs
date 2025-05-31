@@ -25,11 +25,15 @@ public class RclRm32By1Handler : InstructionHandler
     {
         // RCL r/m32, 1 is encoded as 0xD1 /2
         if (opcode != 0xD1)
+        {
             return false;
+        }
 
         // Check if we can read the ModR/M byte
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 2 (RCL)
         var reg = ModRMDecoder.PeakModRMReg();
@@ -54,7 +58,7 @@ public class RclRm32By1Handler : InstructionHandler
         var immOperand = OperandFactory.CreateImmediateOperand(1);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand,
             immOperand

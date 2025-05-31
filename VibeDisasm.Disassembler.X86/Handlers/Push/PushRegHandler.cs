@@ -38,13 +38,13 @@ public class PushRegHandler : InstructionHandler
         instruction.Type = InstructionType.Push;
 
         // Register is encoded in the low 3 bits of the opcode
-        RegisterIndex reg = (RegisterIndex)(opcode & 0x07);
-        
+        var reg = (RegisterIndex)(opcode & 0x07);
+
         // Create the register operand
         var regOperand = OperandFactory.CreateRegisterOperand(reg, 32);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             regOperand
         ];

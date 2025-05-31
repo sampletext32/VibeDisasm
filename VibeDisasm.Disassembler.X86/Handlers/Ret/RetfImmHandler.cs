@@ -42,16 +42,18 @@ public class RetfImmHandler : InstructionHandler
 
         // Check if we can read the immediate word
         if (!Decoder.CanReadUShort())
+        {
             return false;
+        }
 
         // Read the immediate word (number of bytes to pop from stack)
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Create an immediate operand for the pop count
         var immOperand = OperandFactory.CreateImmediateOperand(imm16, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             immOperand
         ];

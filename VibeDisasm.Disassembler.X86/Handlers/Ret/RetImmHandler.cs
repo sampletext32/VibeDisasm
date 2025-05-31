@@ -11,11 +11,11 @@ public class RetImmHandler : InstructionHandler
     /// Initializes a new instance of the RetImmHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public RetImmHandler(InstructionDecoder decoder) 
+    public RetImmHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -27,7 +27,7 @@ public class RetImmHandler : InstructionHandler
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode == 0xC2 && !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes a RET instruction with immediate operand
     /// </summary>
@@ -38,24 +38,24 @@ public class RetImmHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Ret;
-        
+
         if (!Decoder.CanReadUShort())
         {
             return false;
         }
-        
+
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
-        
+        var imm16 = Decoder.ReadUInt16();
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm16, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             immOperand
         ];
-        
+
         return true;
     }
 }

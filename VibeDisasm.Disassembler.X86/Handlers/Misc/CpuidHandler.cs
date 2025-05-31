@@ -23,14 +23,18 @@ public class CpuidHandler : InstructionHandler
     {
         // CPUID is encoded as 0x0F 0xA2
         if (opcode != 0x0F)
+        {
             return false;
+        }
 
         // Check if we can read the second byte
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the second byte is 0xA2
-        byte secondByte = Decoder.PeakByte();
+        var secondByte = Decoder.PeakByte();
         return secondByte == 0xA2;
     }
 
@@ -44,13 +48,15 @@ public class CpuidHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Cpuid;
-        
+
         // Read and discard the second byte (0xA2)
         if (!Decoder.CanReadByte())
+        {
             return false;
-            
+        }
+
         Decoder.ReadByte();
-        
+
         // CPUID has no operands
         instruction.StructuredOperands = [];
 

@@ -61,7 +61,7 @@ public class AdcRm16R16Handler : InstructionHandler
         var sourceOperand = OperandFactory.CreateRegisterOperand(reg, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

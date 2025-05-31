@@ -52,9 +52,9 @@ public class AndR32Rm32Handler : InstructionHandler
 
         // Create the destination register operand
         var destinationOperand = OperandFactory.CreateRegisterOperand(reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

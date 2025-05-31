@@ -22,11 +22,15 @@ public class NegRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0xF6)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 3 (NEG)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -53,7 +57,7 @@ public class NegRm8Handler : InstructionHandler
 
         // Set the structured operands
         // NEG has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

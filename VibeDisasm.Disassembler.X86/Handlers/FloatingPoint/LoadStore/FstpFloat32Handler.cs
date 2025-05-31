@@ -24,7 +24,10 @@ public class FstpFloat32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FSTP is D9 /3
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FstpFloat32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 3
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+
         return reg == 3;
     }
-    
+
     /// <summary>
     /// Decodes an FSTP float32 instruction
     /// </summary>
@@ -53,7 +56,7 @@ public class FstpFloat32Handler : InstructionHandler
 
         // Read the ModR/M byte using the specialized FPU method
         var (mod, reg, fpuRm, rawOperand) = ModRMDecoder.ReadModRMFpu();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fstp;
 
@@ -61,7 +64,7 @@ public class FstpFloat32Handler : InstructionHandler
         if (mod != 3) // Memory operand
         {
             // Set the structured operands - the operand already has the correct size from ReadModRM
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rawOperand
             ];
@@ -70,9 +73,9 @@ public class FstpFloat32Handler : InstructionHandler
         {
             // For register operands with mod=3, this is FSTP ST(i)
             var stiOperand = OperandFactory.CreateFPURegisterOperand(fpuRm); // ST(i)
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 stiOperand
             ];

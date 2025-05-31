@@ -14,7 +14,7 @@ public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruct
     public IRExpression Operand { get; init; }
     public override IRExpression? Result => Operand;
     public override IReadOnlyList<IRExpression> Operands => [Operand];
-    
+
     // NOT instruction clears OF and CF flags, and affects SF, ZF, and PF
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Overflow),
@@ -23,14 +23,14 @@ public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruct
         new(IRFlag.Zero),
         new(IRFlag.Parity)
     ];
-    
+
     public IRNotInstruction(IRExpression operand)
     {
         Operand = operand;
     }
 
     public override string ToString() => $"{Operand} = ~{Operand}";
-    
+
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
         return flag switch
@@ -40,27 +40,26 @@ public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruct
                 Operand,
                 IRConstantExpr.Int(-1),
                 expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-            
+
             // Sign flag: result is negative (highest bit is set)
             IRFlag.Sign => new IRCompareExpr(
                 new IRNotExpr(Operand),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-                
+
             // Carry flag: always cleared to 0 by NOT instruction
-            IRFlag.Carry => expectedValue ? 
+            IRFlag.Carry => expectedValue ?
                 IRConstantExpr.Bool(false) : // If expected true, never happens
                 IRConstantExpr.Bool(true),   // If expected false, always happens
-                
+
             // Overflow flag: always cleared to 0 by NOT instruction
-            IRFlag.Overflow => expectedValue ? 
+            IRFlag.Overflow => expectedValue ?
                 IRConstantExpr.Bool(false) : // If expected true, never happens
                 IRConstantExpr.Bool(true),   // If expected false, always happens
-                
+
             _ => null // Other flags not directly mappable
         };
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

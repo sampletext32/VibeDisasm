@@ -24,11 +24,15 @@ public class SubImmFromRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x80)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 5 (SUB)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -45,10 +49,10 @@ public class SubImmFromRm8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Sub;
-        
+
         // Read the ModR/M byte, specifying that we're dealing with 8-bit operands
         var (_, _, _, destinationOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
 
         // Read the immediate byte
@@ -57,13 +61,13 @@ public class SubImmFromRm8Handler : InstructionHandler
             return false;
         }
 
-        byte imm8 = Decoder.ReadByte();
-        
+        var imm8 = Decoder.ReadByte();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

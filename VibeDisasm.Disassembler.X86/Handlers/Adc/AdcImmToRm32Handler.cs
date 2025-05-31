@@ -24,11 +24,15 @@ public class AdcImmToRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 2 (ADC)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -66,7 +70,7 @@ public class AdcImmToRm32Handler : InstructionHandler
         var immOperand = OperandFactory.CreateImmediateOperand(imm32, 32);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             immOperand

@@ -24,7 +24,10 @@ public class FdivrStStiHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FDIVR ST, ST(i) is D8 F8-FF
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FdivrStStiHandler : InstructionHandler
         }
 
         // Check second opcode byte
-        byte secondOpcode = Decoder.PeakByte();
-        
+        var secondOpcode = Decoder.PeakByte();
+
         // Only handle F8-FF
         return secondOpcode is >= 0xF8 and <= 0xFF;
     }
-    
+
     /// <summary>
     /// Decodes a FDIVR ST, ST(i) instruction
     /// </summary>
@@ -53,16 +56,16 @@ public class FdivrStStiHandler : InstructionHandler
 
         // Read the ModR/M byte and calculate ST(i) index
         var stIndex = (FpuRegisterIndex)(Decoder.ReadByte() - 0xF8);
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fdivr;
-        
+
         // Create the FPU register operands
         var st0Operand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0);
         var stiOperand = OperandFactory.CreateFPURegisterOperand(stIndex);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             st0Operand,
             stiOperand

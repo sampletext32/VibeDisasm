@@ -20,43 +20,45 @@ public static class ExceptionExtractor
         }
 
         // Check if the PE file has an exception directory
-        if (rawPeFile.OptionalHeader.DataDirectories.Length <= 3 || 
+        if (rawPeFile.OptionalHeader.DataDirectories.Length <= 3 ||
             rawPeFile.OptionalHeader.DataDirectories[3].VirtualAddress == 0)
         {
             return null;
         }
 
-        uint exceptionDirectoryRva = rawPeFile.OptionalHeader.DataDirectories[3].VirtualAddress;
-        uint exceptionDirectorySize = rawPeFile.OptionalHeader.DataDirectories[3].Size;
-        uint exceptionDirectoryOffset = Util.RvaToOffset(rawPeFile, exceptionDirectoryRva);
-        
+        var exceptionDirectoryRva = rawPeFile.OptionalHeader.DataDirectories[3].VirtualAddress;
+        var exceptionDirectorySize = rawPeFile.OptionalHeader.DataDirectories[3].Size;
+        var exceptionDirectoryOffset = Util.RvaToOffset(rawPeFile, exceptionDirectoryRva);
+
         var exceptionInfo = new ExceptionInfo();
-        
+
         // Exception directory contains an array of runtime function entries
         // Each entry is 12 bytes (3 DWORDs)
-        int entryCount = (int)(exceptionDirectorySize / 12);
-        
-        for (int i = 0; i < entryCount; i++)
+        var entryCount = (int)(exceptionDirectorySize / 12);
+
+        for (var i = 0; i < entryCount; i++)
         {
-            uint entryOffset = exceptionDirectoryOffset + (uint)(i * 12);
-            
+            var entryOffset = exceptionDirectoryOffset + (uint)(i * 12);
+
             // Make sure we don't read past the end of the file
             if (entryOffset + 12 > rawPeFile.RawData.Length)
+            {
                 break;
-                
+            }
+
             // Read the function start RVA (first DWORD)
-            uint beginAddress = BitConverter.ToUInt32(rawPeFile.RawData, (int)entryOffset);
-            
+            var beginAddress = BitConverter.ToUInt32(rawPeFile.RawData, (int)entryOffset);
+
             // Read the function end RVA (second DWORD)
-            uint endAddress = BitConverter.ToUInt32(rawPeFile.RawData, (int)entryOffset + 4);
-            
+            var endAddress = BitConverter.ToUInt32(rawPeFile.RawData, (int)entryOffset + 4);
+
             // Read the unwind info RVA (third DWORD)
-            uint unwindInfoAddress = BitConverter.ToUInt32(rawPeFile.RawData, (int)entryOffset + 8);
-            
+            var unwindInfoAddress = BitConverter.ToUInt32(rawPeFile.RawData, (int)entryOffset + 8);
+
             // Convert RVAs to file offsets
-            uint beginAddressOffset = Util.RvaToOffset(rawPeFile, beginAddress);
-            uint unwindInfoOffset = Util.RvaToOffset(rawPeFile, unwindInfoAddress);
-            
+            var beginAddressOffset = Util.RvaToOffset(rawPeFile, beginAddress);
+            var unwindInfoOffset = Util.RvaToOffset(rawPeFile, unwindInfoAddress);
+
             exceptionInfo.Functions.Add(new RuntimeFunctionInfo
             {
                 Index = i,
@@ -67,7 +69,7 @@ public static class ExceptionExtractor
                 UnwindInfoFileOffset = unwindInfoOffset
             });
         }
-        
+
         return exceptionInfo;
     }
 }

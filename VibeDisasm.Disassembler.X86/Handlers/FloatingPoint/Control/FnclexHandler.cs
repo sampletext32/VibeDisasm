@@ -22,7 +22,10 @@ public class FnclexHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FNCLEX is DB E2
-        if (opcode != 0xDB) return false;
+        if (opcode != 0xDB)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class FnclexHandler : InstructionHandler
         }
 
         // Check if the next byte is E2
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xE2;
     }
-    
+
     /// <summary>
     /// Decodes a FNCLEX instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class FnclexHandler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.Fnclex;
 

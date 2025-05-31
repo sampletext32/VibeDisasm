@@ -37,7 +37,7 @@ public class BtsR32Rm32Handler : InstructionHandler
 
         // Check if the second byte is AB
         var secondByte = Decoder.PeakByte();
-        
+
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
         return secondByte == 0xAB && !Decoder.HasOperandSizePrefix();
@@ -73,7 +73,7 @@ public class BtsR32Rm32Handler : InstructionHandler
         var bitIndexOperand = OperandFactory.CreateRegisterOperand(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             bitIndexOperand

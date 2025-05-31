@@ -61,7 +61,7 @@ public class AddR16Rm16Handler : InstructionHandler
         var destinationOperand = OperandFactory.CreateRegisterOperand(reg, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

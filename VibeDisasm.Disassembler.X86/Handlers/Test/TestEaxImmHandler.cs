@@ -47,12 +47,12 @@ public class TestEaxImmHandler : InstructionHandler
 
         // Create the register operand for EAX
         var eaxOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A);
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             eaxOperand,
             immOperand

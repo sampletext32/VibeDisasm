@@ -11,7 +11,7 @@ public class AddImmToRm16SignExtendedHandler : InstructionHandler
     /// Initializes a new instance of the AddImmToRm16SignExtendedHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AddImmToRm16SignExtendedHandler(InstructionDecoder decoder) 
+    public AddImmToRm16SignExtendedHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
@@ -31,11 +31,15 @@ public class AddImmToRm16SignExtendedHandler : InstructionHandler
 
         // Only handle when the operand size prefix is present
         if (!Decoder.HasOperandSizePrefix())
+        {
             return false;
-            
+        }
+
         // Check if the reg field of the ModR/M byte is 0 (ADD)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -69,12 +73,12 @@ public class AddImmToRm16SignExtendedHandler : InstructionHandler
         }
 
         // Read the immediate value (sign-extended from 8-bit to 16-bit)
-        sbyte imm8 = (sbyte)Decoder.ReadByte();
+        var imm8 = (sbyte)Decoder.ReadByte();
         short signExtendedImm = imm8;
         uint immValue = (ushort)signExtendedImm; // Convert to uint for the operand factory
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             OperandFactory.CreateImmediateOperand(immValue)

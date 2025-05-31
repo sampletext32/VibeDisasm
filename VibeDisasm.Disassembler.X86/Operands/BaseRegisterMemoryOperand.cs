@@ -11,7 +11,7 @@ public class BaseRegisterMemoryOperand : MemoryOperand
     /// Gets or sets the base register
     /// </summary>
     public RegisterIndex BaseRegister { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the BaseRegisterMemoryOperand class
     /// </summary>
@@ -24,7 +24,7 @@ public class BaseRegisterMemoryOperand : MemoryOperand
         Type = OperandType.MemoryBaseReg;
         BaseRegister = baseRegister;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>

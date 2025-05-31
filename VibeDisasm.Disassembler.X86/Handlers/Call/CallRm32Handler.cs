@@ -26,16 +26,16 @@ public class CallRm32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Extract the reg field (bits 3-5)
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // CALL r/m32 is encoded as FF /2 (reg field = 2)
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
@@ -66,7 +66,7 @@ public class CallRm32Handler : InstructionHandler
 
         // Set the structured operands
         // CALL has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

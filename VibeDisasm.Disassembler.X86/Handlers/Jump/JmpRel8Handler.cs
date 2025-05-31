@@ -15,7 +15,7 @@ public class JmpRel8Handler : InstructionHandler
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class JmpRel8Handler : InstructionHandler
     {
         return opcode == 0xEB;
     }
-    
+
     /// <summary>
     /// Decodes a JMP rel8 instruction
     /// </summary>
@@ -36,27 +36,27 @@ public class JmpRel8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Jmp;
-        
+
         // Check if we can read the offset byte
         if (!Decoder.CanReadByte())
         {
             return true;
         }
 
-        sbyte offset = (sbyte)Decoder.ReadByte();
-        
+        var offset = (sbyte)Decoder.ReadByte();
+
         // Calculate target address (instruction address + instruction length + offset)
-        ulong targetAddress = instruction.Address + 2UL + (uint)offset;
-        
+        var targetAddress = instruction.Address + 2UL + (uint)offset;
+
         // Create the target address operand
         var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             targetOperand
         ];
-        
+
         return true;
     }
 }

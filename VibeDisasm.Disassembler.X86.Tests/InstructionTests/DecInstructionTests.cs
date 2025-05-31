@@ -16,19 +16,19 @@ public class DecInstructionTests
     {
         // Arrange
         byte[] code = { 0x48 }; // DEC EAX
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Dec, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (EAX)
         var eaxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(eaxOperand);
@@ -36,7 +36,7 @@ public class DecInstructionTests
         Assert.Equal(RegisterIndex.A, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (EAX)
     }
-    
+
     /// <summary>
     /// Tests the DEC ECX instruction (0x49)
     /// </summary>
@@ -45,19 +45,19 @@ public class DecInstructionTests
     {
         // Arrange
         byte[] code = { 0x49 }; // DEC ECX
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Dec, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
@@ -65,7 +65,7 @@ public class DecInstructionTests
         Assert.Equal(RegisterIndex.C, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (ECX)
     }
-    
+
     /// <summary>
     /// Tests the DEC EDI instruction (0x4F)
     /// </summary>
@@ -74,19 +74,19 @@ public class DecInstructionTests
     {
         // Arrange
         byte[] code = { 0x4F }; // DEC EDI
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Dec, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (EDI)
         var ediOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ediOperand);

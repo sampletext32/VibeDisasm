@@ -11,11 +11,11 @@ public class XorAxImm16Handler : InstructionHandler
     /// Initializes a new instance of the XorAxImm16Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public XorAxImm16Handler(InstructionDecoder decoder) 
+    public XorAxImm16Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -26,7 +26,7 @@ public class XorAxImm16Handler : InstructionHandler
         // Check if the opcode is 0x35 and there's an operand size prefix (0x66)
         return opcode == 0x35 && Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes a XOR AX, imm16 instruction
     /// </summary>
@@ -42,23 +42,23 @@ public class XorAxImm16Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Read the immediate value using the decoder
-        ushort imm16 = Decoder.ReadUInt16();
-        
+        var imm16 = Decoder.ReadUInt16();
+
         // Create the register operand for AX
         var axOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16);
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm16, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             axOperand,
             immOperand
         ];
-        
+
         return true;
     }
 }

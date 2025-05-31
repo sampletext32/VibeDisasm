@@ -24,7 +24,10 @@ public class FcompFloat64Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FCOMP is DC /3
-        if (opcode != 0xDC) return false;
+        if (opcode != 0xDC)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FcompFloat64Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 3
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+
         return reg == 3;
     }
-    
+
     /// <summary>
     /// Decodes a FCOMP float64 instruction
     /// </summary>
@@ -53,7 +56,7 @@ public class FcompFloat64Handler : InstructionHandler
 
         // Read the ModR/M byte using the specialized FPU method
         var (mod, reg, fpuRm, rawOperand) = ModRMDecoder.ReadModRMFpu64();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fcomp;
 
@@ -61,7 +64,7 @@ public class FcompFloat64Handler : InstructionHandler
         if (mod != 3) // Memory operand
         {
             // Set the structured operands - the operand already has the correct size from ReadModRM
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rawOperand
             ];
@@ -71,9 +74,9 @@ public class FcompFloat64Handler : InstructionHandler
             // For register operands, we need to handle the stack registers
             var st0Operand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0); // ST(0)
             var stiOperand = OperandFactory.CreateFPURegisterOperand(fpuRm); // ST(i)
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 st0Operand,
                 stiOperand

@@ -24,7 +24,7 @@ public class StiHandler : InstructionHandler
         // STI is FB
         return opcode == 0xFB;
     }
-    
+
     /// <summary>
     /// Decodes a STI instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class StiHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Sti;
-        
+
         // STI has no operands
         instruction.StructuredOperands = [];
 

@@ -24,15 +24,21 @@ public class SbbImmFromRm16Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
+        }
 
         // Must have operand size prefix for 16-bit operation
         if (!Decoder.HasOperandSizePrefix())
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 3 (SBB)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -68,13 +74,13 @@ public class SbbImmFromRm16Handler : InstructionHandler
         }
 
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Create the immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm16, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

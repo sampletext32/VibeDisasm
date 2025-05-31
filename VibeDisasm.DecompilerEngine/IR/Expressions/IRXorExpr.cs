@@ -19,7 +19,7 @@ public sealed class IRXorExpr : IRExpression
     }
 
     public override string ToString() => $"{Left} ^ {Right}";
-    
+
     public override bool Equals(object? obj)
     {
         if (obj is IRXorExpr other)
@@ -30,8 +30,12 @@ public sealed class IRXorExpr : IRExpression
         return false;
     }
 
-
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
     public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }

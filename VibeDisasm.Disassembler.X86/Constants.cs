@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Disassembler.X86;
+namespace VibeDisasm.Disassembler.X86;
 
 public class Constants
 {
@@ -13,7 +13,7 @@ public class Constants
     public const byte SIB_BASE_MASK = 0x07; // 00000111b
 
     // Register names for different sizes
-    public static readonly string[] RegisterNames16 = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
-    public static readonly string[] RegisterNames32 = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+    public static readonly string[] RegisterNames16 = { "ax", "cx", "dx", "bx", "sp", "bp", "si", "di" };
+    public static readonly string[] RegisterNames32 = { "eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi" };
 
 }

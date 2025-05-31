@@ -35,7 +35,7 @@ public class IntoHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Into;
-        
+
         // INTO has no operands
         instruction.StructuredOperands = [];
 

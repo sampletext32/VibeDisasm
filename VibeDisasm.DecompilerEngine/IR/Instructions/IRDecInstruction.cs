@@ -12,7 +12,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 public sealed class IRDecInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Target { get; init; }
-    
+
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
@@ -29,12 +29,12 @@ public sealed class IRDecInstruction : IRInstruction, IIRFlagTranslatingInstruct
     {
         return flag switch
         {
-            IRFlag.Zero => new IRCompareExpr(Target, IRConstantExpr.Int(1), 
+            IRFlag.Zero => new IRCompareExpr(Target, IRConstantExpr.Int(1),
                 expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-            
+
             IRFlag.Sign => new IRCompareExpr(Target, IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-            
+
             _ => null // Other flags not directly mappable
         };
     }
@@ -43,7 +43,6 @@ public sealed class IRDecInstruction : IRInstruction, IIRFlagTranslatingInstruct
     {
         Target = target;
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

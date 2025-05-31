@@ -1,8 +1,8 @@
- using VibeDisasm.Disassembler.X86.Operands;
+using VibeDisasm.Disassembler.X86.Operands;
 
- namespace VibeDisasm.Disassembler.X86.Handlers.Bit;
+namespace VibeDisasm.Disassembler.X86.Handlers.Bit;
 
- /// <summary>
+/// <summary>
 /// Handler for BTC r/m32, imm8 instruction (0F BA /7)
 /// </summary>
 public class BtcRm32ImmHandler : InstructionHandler
@@ -45,7 +45,7 @@ public class BtcRm32ImmHandler : InstructionHandler
 
         // Check if the reg field of the ModR/M byte is 7 (BTC)
         var reg = ModRMDecoder.GetRegFromModRM(modRm);
-        
+
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
         return reg == 7 && !Decoder.HasOperandSizePrefix();
@@ -61,7 +61,7 @@ public class BtcRm32ImmHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Btc;
-        
+
         // Read the second opcode byte (BA)
         Decoder.ReadByte();
 
@@ -84,13 +84,13 @@ public class BtcRm32ImmHandler : InstructionHandler
         }
 
         // Read the immediate byte for the bit position
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the immediate operand
         var bitIndexOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             bitIndexOperand

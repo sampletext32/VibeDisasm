@@ -11,11 +11,11 @@ public class PopRegHandler : InstructionHandler
     /// Initializes a new instance of the PopRegHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public PopRegHandler(InstructionDecoder decoder) 
+    public PopRegHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -27,7 +27,7 @@ public class PopRegHandler : InstructionHandler
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode >= 0x58 && opcode <= 0x5F && !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes a POP r32 instruction
     /// </summary>
@@ -38,19 +38,19 @@ public class PopRegHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Pop;
-        
+
         // Register is encoded in the low 3 bits of the opcode
-        RegisterIndex reg = (RegisterIndex)(opcode & 0x07);
-        
+        var reg = (RegisterIndex)(opcode & 0x07);
+
         // Create the register operand
         var regOperand = OperandFactory.CreateRegisterOperand(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             regOperand
         ];
-        
+
         return true;
     }
 }

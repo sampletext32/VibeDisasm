@@ -24,7 +24,10 @@ public class FaddStStiHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FADD ST, ST(i) is D8 C0-C7
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FaddStStiHandler : InstructionHandler
         }
 
         // Check second opcode byte
-        byte secondOpcode = Decoder.PeakByte();
-        
+        var secondOpcode = Decoder.PeakByte();
+
         // Only handle C0-C7
         return secondOpcode is >= 0xC0 and <= 0xC7;
     }
-    
+
     /// <summary>
     /// Decodes a FADD ST, ST(i) instruction
     /// </summary>
@@ -53,16 +56,16 @@ public class FaddStStiHandler : InstructionHandler
 
         // Read the ModR/M byte and calculate ST(i) index
         var stIndex = (FpuRegisterIndex)(Decoder.ReadByte() - 0xC0);
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fadd;
-        
+
         // Create the FPU register operands
         var st0Operand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0);
         var stiOperand = OperandFactory.CreateFPURegisterOperand(stIndex);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             st0Operand,
             stiOperand

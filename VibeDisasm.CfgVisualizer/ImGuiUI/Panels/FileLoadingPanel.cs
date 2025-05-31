@@ -11,7 +11,7 @@ public class FileLoadingPanel : IImGuiPanel
 {
     // View model
     private readonly FileLoadingPanelViewModel _panelViewModel;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -20,7 +20,7 @@ public class FileLoadingPanel : IImGuiPanel
     {
         _panelViewModel = panelViewModel;
     }
-    
+
     /// <summary>
     /// Renders the file loading panel
     /// </summary>
@@ -42,13 +42,13 @@ public class FileLoadingPanel : IImGuiPanel
             {
                 // Open file dialog using NativeFileDialogSharp
                 var result = NativeFileDialogSharp.Dialog.FileOpen();
-                
+
                 if (result.IsOk)
                 {
                     _panelViewModel.LaunchLoad(result.Path);
                 }
             }
-            
+
             ImGui.End();
         }
     }

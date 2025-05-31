@@ -51,7 +51,7 @@ public class AddAxImmHandler : InstructionHandler
         }
 
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Create the AX register operand
         var axOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16);
@@ -60,7 +60,7 @@ public class AddAxImmHandler : InstructionHandler
         var immOperand = OperandFactory.CreateImmediateOperand(imm16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             axOperand,
             immOperand

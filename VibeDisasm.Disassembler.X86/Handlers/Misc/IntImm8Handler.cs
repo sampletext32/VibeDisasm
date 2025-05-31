@@ -45,13 +45,13 @@ public class IntImm8Handler : InstructionHandler
         }
 
         // Read the immediate byte (interrupt vector)
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create an immediate operand for the interrupt vector
         var operand = OperandFactory.CreateImmediateOperand(imm8);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

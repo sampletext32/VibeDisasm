@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -16,7 +15,7 @@ public sealed class IRAddInstruction : IRInstruction, IIRFlagTranslatingInstruct
     public IRExpression Source { get; init; }
     public override IRExpression? Result => Destination;
     public override IReadOnlyList<IRExpression> Operands => [Destination, Source];
-    
+
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
@@ -27,7 +26,7 @@ public sealed class IRAddInstruction : IRInstruction, IIRFlagTranslatingInstruct
     ];
 
     public override string ToString() => $"{Destination} += {Source}";
-    
+
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
         return flag switch
@@ -37,31 +36,30 @@ public sealed class IRAddInstruction : IRInstruction, IIRFlagTranslatingInstruct
                 new IRAddExpr(Destination, Source),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-            
+
             // Sign flag: result < 0
             IRFlag.Sign => new IRCompareExpr(
                 new IRAddExpr(Destination, Source),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-            
+
             // Carry flag: unsigned overflow (result < either operand) 
             IRFlag.Carry => new IRCompareExpr(
                 new IRAddExpr(Destination, Source),
                 Destination,
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-            
+
             // Overflow flag is too complex to express directly
-            
+
             _ => null // Other flags not directly mappable
         };
     }
-    
+
     public IRAddInstruction(IRExpression destination, IRExpression source)
     {
         Destination = destination;
         Source = source;
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

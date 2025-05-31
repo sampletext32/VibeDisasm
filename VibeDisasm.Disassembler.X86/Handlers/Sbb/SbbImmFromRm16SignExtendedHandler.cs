@@ -24,15 +24,21 @@ public class SbbImmFromRm16SignExtendedHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x83)
+        {
             return false;
+        }
 
         // Must have operand size prefix for 16-bit operation
         if (!Decoder.HasOperandSizePrefix())
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 3 (SBB)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -68,13 +74,13 @@ public class SbbImmFromRm16SignExtendedHandler : InstructionHandler
         }
 
         // Sign-extend to 16 bits
-        sbyte imm8 = (sbyte)Decoder.ReadByte();
-        
+        var imm8 = (sbyte)Decoder.ReadByte();
+
         // Create the immediate operand with sign extension
         var sourceOperand = OperandFactory.CreateImmediateOperand((ushort)imm8, 16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

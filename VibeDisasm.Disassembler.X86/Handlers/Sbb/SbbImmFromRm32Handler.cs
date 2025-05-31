@@ -24,11 +24,15 @@ public class SbbImmFromRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 3 (SBB)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -62,12 +66,12 @@ public class SbbImmFromRm32Handler : InstructionHandler
 
         // Read the immediate value in little-endian format
         var imm32 = Decoder.ReadUInt32();
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             immOperand

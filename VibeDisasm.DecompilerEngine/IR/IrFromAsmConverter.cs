@@ -1,7 +1,6 @@
-using VibeDisasm.Disassembler.X86;
-using VibeDisasm.DecompilerEngine.ControlFlow;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.IR;
 

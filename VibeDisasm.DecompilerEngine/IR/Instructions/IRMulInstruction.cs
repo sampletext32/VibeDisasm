@@ -30,17 +30,16 @@ public sealed class IRMulInstruction : IRInstruction, IIRFlagTranslatingInstruct
                 new IRMulExpr(Left, Right),
                 IRConstantExpr.Uint(0xFFFFFFFF), // Check if result > 32-bit max
                 expectedValue ? IRComparisonType.GreaterThan : IRComparisonType.LessThanOrEqual),
-                
+
             _ => null // Other flags not directly mappable
         };
     }
-    
+
     public IRMulInstruction(IRExpression left, IRExpression right)
     {
         Left = left;
         Right = right;
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

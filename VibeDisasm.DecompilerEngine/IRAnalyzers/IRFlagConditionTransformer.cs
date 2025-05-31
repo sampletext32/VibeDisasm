@@ -1,5 +1,4 @@
 using System.Diagnostics.Contracts;
-using VibeDisasm.DecompilerEngine.IR;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
@@ -41,7 +40,9 @@ public static class IRFlagConditionTransformer
     {
         if (condition is not IRCompareExpr { Left: IRFlagExpr flagExpr, Right: IRConstantExpr { Value: bool value } }
             || flagSettingInstruction is not IIRFlagTranslatingInstruction flagTranslator)
+        {
             return null;
+        }
 
         return flagTranslator.GetFlagCondition(flagExpr.Flag, value);
     }
@@ -61,7 +62,9 @@ public static class IRFlagConditionTransformer
             || signFlag.Flag != IRFlag.Sign
             || overflowFlag.Flag != IRFlag.Overflow
             || flagSettingInstruction is not IRCmpInstruction cmpInst)
+        {
             return null;
+        }
 
         return new IRCompareExpr(
             cmpInst.Left,
@@ -85,7 +88,9 @@ public static class IRFlagConditionTransformer
             || signFlag.Flag != IRFlag.Sign
             || overflowFlag.Flag != IRFlag.Overflow
             || flagSettingInstruction is not IRCmpInstruction cmpInst)
+        {
             return null;
+        }
 
         return new IRCompareExpr(
             cmpInst.Left,
@@ -117,7 +122,9 @@ public static class IRFlagConditionTransformer
                 }
             }
             || flagSettingInstruction is not IRCmpInstruction cmpInst)
+        {
             return null;
+        }
 
         // This is the JNLE pattern - translate directly to Greater Than
         return new IRCompareExpr(
@@ -134,7 +141,9 @@ public static class IRFlagConditionTransformer
     private static IRExpression? TryTransformJLEPattern(IRExpression condition, IRInstruction flagSettingInstruction)
     {
         if (!IsLessThanOrEqualPattern(condition) || flagSettingInstruction is not IRCmpInstruction cmpInst)
+        {
             return null;
+        }
 
         // This is the JLE pattern - translate directly to Less Than or Equal
         return new IRCompareExpr(
@@ -151,7 +160,9 @@ public static class IRFlagConditionTransformer
     private static IRExpression? TryTransformLogicalExpression(IRExpression condition, IRInstruction flagSettingInstruction)
     {
         if (condition is not IRLogicalExpr logicalExpr)
+        {
             return null;
+        }
 
         // TEST reg, reg with Zero OR (Sign != Overflow) - less than or equal to zero pattern
         if (flagSettingInstruction is IRTestInstruction testInst

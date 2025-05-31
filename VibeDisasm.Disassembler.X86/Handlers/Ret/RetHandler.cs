@@ -9,11 +9,11 @@ public class RetHandler : InstructionHandler
     /// Initializes a new instance of the RetHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public RetHandler(InstructionDecoder decoder) 
+    public RetHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class RetHandler : InstructionHandler
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode == 0xC3 && !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes a RET instruction
     /// </summary>
@@ -36,10 +36,10 @@ public class RetHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Ret;
-        
+
         // No operands for RET
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

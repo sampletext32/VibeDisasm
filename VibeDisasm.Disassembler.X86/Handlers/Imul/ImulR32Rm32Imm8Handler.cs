@@ -43,7 +43,7 @@ public class ImulR32Rm32Imm8Handler : InstructionHandler
         var destOperand = OperandFactory.CreateRegisterOperand(reg);
 
         // Read imm8 and sign-extend to int32
-        sbyte imm8 = (sbyte)Decoder.ReadByte();
+        var imm8 = (sbyte)Decoder.ReadByte();
         var immOperand = OperandFactory.CreateImmediateOperand((uint)imm8, 8); // 8-bit immediate, sign-extended
 
         instruction.StructuredOperands =

@@ -11,7 +11,7 @@ public class ImmediateOperand : Operand
     /// Gets or sets the immediate value
     /// </summary>
     public ulong Value { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the ImmediateOperand class
     /// </summary>
@@ -20,7 +20,7 @@ public class ImmediateOperand : Operand
     public ImmediateOperand(long value, int size = 32)
     {
         Type = OperandType.ImmediateValue;
-        
+
         // For negative values in 32-bit mode, convert to unsigned 32-bit representation
         if (value < 0 && size == 32)
         {
@@ -30,24 +30,24 @@ public class ImmediateOperand : Operand
         {
             Value = (ulong)value;
         }
-        
+
         Size = size;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>
     public override string ToString()
     {
         // Mask the value based on its size
-        ulong maskedValue = Size switch
+        var maskedValue = Size switch
         {
             8 => Value & 0xFF,
             16 => Value & 0xFFFF,
             32 => Value & 0xFFFFFFFF,
             _ => Value
         };
-        
+
         string format;
 
         if (maskedValue == 0)

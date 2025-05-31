@@ -9,7 +9,7 @@ public class Instruction
     /// Gets or sets the address of the instruction
     /// </summary>
     public ulong Address { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the type of the instruction
     /// </summary>

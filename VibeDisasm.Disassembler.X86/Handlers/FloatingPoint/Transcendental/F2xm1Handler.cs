@@ -22,7 +22,10 @@ public class F2xm1Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // F2XM1 is D9 F0
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,10 +33,10 @@ public class F2xm1Handler : InstructionHandler
         }
 
         // Check if the next byte is F0
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xF0;
     }
-    
+
     /// <summary>
     /// Decodes a F2XM1 instruction
     /// </summary>
@@ -48,8 +51,8 @@ public class F2xm1Handler : InstructionHandler
         }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Set the instruction type
         instruction.Type = InstructionType.F2xm1;
 

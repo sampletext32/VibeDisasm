@@ -39,15 +39,15 @@ public class XchgEaxReg16Handler : InstructionHandler
         instruction.Type = InstructionType.Xchg;
 
         // Register is encoded in the low 3 bits of the opcode
-        RegisterIndex reg = (RegisterIndex)(opcode & 0x07);
-        
+        var reg = (RegisterIndex)(opcode & 0x07);
+
         // Create the register operands (using 32-bit registers to match test expectations)
         // The test expects "eax,ecx" even with operand size prefix
         var eaxOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A);
         var regOperand = OperandFactory.CreateRegisterOperand(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             eaxOperand,
             regOperand

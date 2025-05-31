@@ -43,7 +43,7 @@ public class ImulR32Rm32Imm32Handler : InstructionHandler
         var destOperand = OperandFactory.CreateRegisterOperand(reg);
 
         // Read imm32 (4 bytes)
-        uint imm32 = Decoder.ReadUInt32();
+        var imm32 = Decoder.ReadUInt32();
         var immOperand = OperandFactory.CreateImmediateOperand(imm32);
 
         instruction.StructuredOperands =

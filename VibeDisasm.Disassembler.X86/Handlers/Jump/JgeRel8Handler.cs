@@ -15,7 +15,7 @@ public class JgeRel8Handler : InstructionHandler
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class JgeRel8Handler : InstructionHandler
     {
         return opcode == 0x7D;
     }
-    
+
     /// <summary>
     /// Decodes a JGE rel8 instruction
     /// </summary>
@@ -36,7 +36,7 @@ public class JgeRel8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Jnl;
-        
+
         // Check if we can read the offset byte
         if (!Decoder.CanReadByte())
         {
@@ -44,20 +44,20 @@ public class JgeRel8Handler : InstructionHandler
         }
 
         // Read the offset byte
-        sbyte offset = (sbyte)Decoder.ReadByte();
-        
+        var offset = (sbyte)Decoder.ReadByte();
+
         // The instruction.Address already includes the base address from the disassembler
-        ulong targetAddress = instruction.Address + 2UL + (ulong) offset;
-        
+        var targetAddress = instruction.Address + 2UL + (ulong)offset;
+
         // Create the relative offset operand with the absolute target address
         var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             targetOperand
         ];
-        
+
         return true;
     }
 }

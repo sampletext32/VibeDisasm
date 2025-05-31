@@ -42,7 +42,7 @@ public static class InstructionTypeExtensions
             InstructionType.Jp or         // Jump if parity (even)
             InstructionType.Jpo;        // Jump if not parity (odd)
     }
-    
+
     /// <summary>
     /// Determines if the instruction type is a call instruction
     /// </summary>
@@ -50,7 +50,7 @@ public static class InstructionTypeExtensions
     {
         return type is InstructionType.Call;
     }
-    
+
     /// <summary>
     /// Gets a description of the jump condition for a conditional jump instruction
     /// </summary>

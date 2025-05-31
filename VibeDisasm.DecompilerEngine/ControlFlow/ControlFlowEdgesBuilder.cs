@@ -17,7 +17,7 @@ public static class ControlFlowEdgesBuilder
     {
         // build predecessor and successor relation
 
-        Queue<AsmBlock> blockQueue = new Queue<AsmBlock>();
+        var blockQueue = new Queue<AsmBlock>();
         HashSet<uint> visitedBlockAddresses = [];
 
         List<ControlFlowEdge> edges = [];
@@ -66,7 +66,7 @@ public static class ControlFlowEdgesBuilder
                 edges.Add(
                     fallthroughEdge
                 );
-                
+
                 blockQueue.Enqueue(function.Blocks[takenEdge.ToBlockAddress]);
                 blockQueue.Enqueue(function.Blocks[fallthroughEdge.ToBlockAddress]);
             }
@@ -84,7 +84,7 @@ public static class ControlFlowEdgesBuilder
 
                 blockQueue.Enqueue(function.Blocks[takenEdge.ToBlockAddress]);
             }
-            else if(lastInstruction.RawInstruction.Type == InstructionType.Ret)
+            else if (lastInstruction.RawInstruction.Type == InstructionType.Ret)
             {
                 // do nothing, RET has no descendants
             }

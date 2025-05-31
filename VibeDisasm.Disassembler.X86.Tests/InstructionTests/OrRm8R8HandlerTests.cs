@@ -16,21 +16,21 @@ public class OrRm8R8HandlerTests
     {
         // Arrange
         // OR [ebx+ecx*4+0x41], al (08 44 8B 41)
-        byte[] codeBuffer = new byte[] { 0x08, 0x44, 0x8B, 0x41 };
+        var codeBuffer = new byte[] { 0x08, 0x44, 0x8B, 0x41 };
         var disassembler = new Disassembler(codeBuffer, 0);
-        
+
         // Act
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Or, instruction.Type);
-        
+
         // Check that we have two operands
         Assert.Equal(2, instruction.StructuredOperands.Count);
-        
+
         // Check the first operand (memory operand with SIB)
         var memOperand = instruction.StructuredOperands[0];
         Assert.IsType<ScaledIndexMemoryOperand>(memOperand);
@@ -40,7 +40,7 @@ public class OrRm8R8HandlerTests
         Assert.Equal(4, scaledIndexMemoryOperand.Scale);
         Assert.Equal(0x41, scaledIndexMemoryOperand.Displacement);
         Assert.Equal(8, scaledIndexMemoryOperand.Size); // Validate that it's an 8-bit memory reference
-        
+
         // Check the second operand (AL)
         var alOperand = instruction.StructuredOperands[1];
         Assert.IsType<Register8Operand>(alOperand);
@@ -48,7 +48,7 @@ public class OrRm8R8HandlerTests
         Assert.Equal(RegisterIndex8.AL, register8Operand.Register);
         Assert.Equal(8, register8Operand.Size); // Validate that it's an 8-bit register (AL)
     }
-    
+
     /// <summary>
     /// Tests the OrRm8R8Handler for decoding OR reg8, reg8 instruction
     /// </summary>
@@ -57,28 +57,28 @@ public class OrRm8R8HandlerTests
     {
         // Arrange
         // OR bl, ch (08 EB)
-        byte[] codeBuffer = new byte[] { 0x08, 0xEB };
+        var codeBuffer = new byte[] { 0x08, 0xEB };
         var disassembler = new Disassembler(codeBuffer, 0);
-        
+
         // Act
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Or, instruction.Type);
-        
+
         // Check that we have two operands
         Assert.Equal(2, instruction.StructuredOperands.Count);
-        
+
         // Check the first operand (BL)
         var blOperand = instruction.StructuredOperands[0];
         Assert.IsType<Register8Operand>(blOperand);
         var registerOperand1 = (Register8Operand)blOperand;
         Assert.Equal(RegisterIndex8.BL, registerOperand1.Register);
         Assert.Equal(8, registerOperand1.Size); // Validate that it's an 8-bit register (BL)
-        
+
         // Check the second operand (CH)
         var chOperand = instruction.StructuredOperands[1];
         Assert.IsType<Register8Operand>(chOperand);

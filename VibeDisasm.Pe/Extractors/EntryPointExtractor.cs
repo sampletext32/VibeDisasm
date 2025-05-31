@@ -1,4 +1,4 @@
-﻿using VibeDisasm.Pe.Raw;
+using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
 
@@ -8,18 +8,18 @@ public static class EntryPointExtractor
     {
         // Create a list to store all definite code offsets
         var entryPoints = new List<EntryPointInfo>();
-        
+
         // 1. Add entry point as definite code
         if (rawPeFile.OptionalHeader.AddressOfEntryPoint > 0)
         {
-            uint entryPointOffset = Util.RvaToOffset(rawPeFile, rawPeFile.OptionalHeader.AddressOfEntryPoint);
+            var entryPointOffset = Util.RvaToOffset(rawPeFile, rawPeFile.OptionalHeader.AddressOfEntryPoint);
             entryPoints.Add(new EntryPointInfo(
                 entryPointOffset,
                 rawPeFile.OptionalHeader.AddressOfEntryPoint,
                 "Entry Point",
                 "Program entry point"));
         }
-        
+
         // 2. Add exported functions as definite code
         if (exportInfo != null && exportInfo.Functions.Count > 0)
         {
@@ -27,9 +27,11 @@ public static class EntryPointExtractor
             {
                 // Skip forwarded exports (they don't have code in this file)
                 if (exportedFunction.IsForwarded)
+                {
                     continue;
-                    
-                uint exportOffset = Util.RvaToOffset(rawPeFile, exportedFunction.RelativeVirtualAddress);
+                }
+
+                var exportOffset = Util.RvaToOffset(rawPeFile, exportedFunction.RelativeVirtualAddress);
                 entryPoints.Add(new EntryPointInfo(
                     exportOffset,
                     exportedFunction.RelativeVirtualAddress,

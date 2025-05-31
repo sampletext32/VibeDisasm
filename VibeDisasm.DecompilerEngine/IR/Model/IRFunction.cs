@@ -8,10 +8,10 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 /// </summary>
 public class IRFunction : IRNode
 {
-    public  string Name { get; init; }
-    public  IRType ReturnType { get; init; }
-    public  List<IRVariable> Parameters { get; init; }
-    public  List<IRBlock> Blocks { get; init; }
+    public string Name { get; init; }
+    public IRType ReturnType { get; init; }
+    public List<IRVariable> Parameters { get; init; }
+    public List<IRBlock> Blocks { get; init; }
 
     public IRFunction(string name, IRType returnType, List<IRVariable> parameters, List<IRBlock> blocks)
     {

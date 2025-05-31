@@ -11,11 +11,11 @@ public class PushImm16Handler : InstructionHandler
     /// Initializes a new instance of the PushImm16Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public PushImm16Handler(InstructionDecoder decoder) 
+    public PushImm16Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -28,11 +28,11 @@ public class PushImm16Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have an operand size prefix
         return Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes a PUSH imm16 instruction
     /// </summary>
@@ -45,19 +45,19 @@ public class PushImm16Handler : InstructionHandler
         instruction.Type = InstructionType.Push;
 
         // Check if we have enough bytes for the 16-bit immediate
-        if(!Decoder.CanReadUShort())
+        if (!Decoder.CanReadUShort())
         {
             return false;
         }
 
         // Read the 16-bit immediate value
-        ushort imm16 = Decoder.ReadUInt16();
-        
+        var imm16 = Decoder.ReadUInt16();
+
         // Create an immediate operand with 16-bit size
         var immOperand = new ImmediateOperand(imm16, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             immOperand
         ];

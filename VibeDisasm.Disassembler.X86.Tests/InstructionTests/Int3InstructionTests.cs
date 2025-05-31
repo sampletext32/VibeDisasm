@@ -13,16 +13,16 @@ public class Int3InstructionTests
     {
         // Arrange
         // INT3 (CC)
-        byte[] codeBuffer = new byte[] { 0xCC };
+        var codeBuffer = new byte[] { 0xCC };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Int3, instruction.Type);
-        
+
         // Check that we have no operands
         Assert.Empty(instruction.StructuredOperands);
     }

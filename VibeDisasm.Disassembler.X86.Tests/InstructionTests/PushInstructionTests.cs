@@ -16,19 +16,19 @@ public class PushInstructionTests
     {
         // Arrange
         byte[] code = { 0x68, 0x78, 0x56, 0x34, 0x12 }; // PUSH 0x12345678
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Push, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (immediate value)
         var operand = instruction.StructuredOperands[0];
         Assert.IsType<ImmediateOperand>(operand);
@@ -36,7 +36,7 @@ public class PushInstructionTests
         Assert.Equal(0x12345678u, immOperand.Value);
         Assert.Equal(32, immOperand.Size);
     }
-    
+
     /// <summary>
     /// Tests the PUSH imm16 instruction with operand size prefix (0x66 0x68)
     /// </summary>
@@ -45,19 +45,19 @@ public class PushInstructionTests
     {
         // Arrange
         byte[] code = { 0x66, 0x68, 0x78, 0x56 }; // PUSH 0x5678 (with operand size prefix)
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Push, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (immediate value)
         var operand = instruction.StructuredOperands[0];
         Assert.IsType<ImmediateOperand>(operand);
@@ -65,7 +65,7 @@ public class PushInstructionTests
         Assert.Equal(0x5678u, immOperand.Value);
         Assert.Equal(16, immOperand.Size);
     }
-    
+
     /// <summary>
     /// Tests the PUSH imm8 instruction (0x6A)
     /// </summary>
@@ -74,19 +74,19 @@ public class PushInstructionTests
     {
         // Arrange
         byte[] code = { 0x6A, 0x42 }; // PUSH 0x42
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         var instruction = instructions[0];
         Assert.Equal(InstructionType.Push, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (immediate value)
         var operand = instruction.StructuredOperands[0];
         Assert.IsType<ImmediateOperand>(operand);

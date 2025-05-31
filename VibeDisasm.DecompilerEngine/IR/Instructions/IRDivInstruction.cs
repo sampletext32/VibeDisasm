@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
@@ -18,14 +17,14 @@ public sealed class IRDivInstruction : IRInstruction
     public IRRegisterExpr DestRemainder { get; init; }
     public override IRExpression? Result => DestQuotient;
     public override IReadOnlyList<IRExpression> Operands => [Dividend, Divisor];
-    
+
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Carry),
         new(IRFlag.Overflow)
     ];
 
     public override string ToString() => $"{DestQuotient} = {Dividend} / {Divisor}; {DestRemainder} = {Dividend} % {Divisor}";
-    
+
     public IRDivInstruction(IRExpression dividend, IRExpression divisor, IRRegisterExpr destQuotient, IRRegisterExpr destRemainder)
     {
         Dividend = dividend;
@@ -33,7 +32,6 @@ public sealed class IRDivInstruction : IRInstruction
         DestQuotient = destQuotient;
         DestRemainder = destRemainder;
     }
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

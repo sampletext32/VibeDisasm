@@ -28,18 +28,20 @@ public class GraphStatusBar
     public void Render(Vector2 canvasPos, Vector2 canvasSize, ImDrawListPtr drawList)
     {
         if (_panelViewModel.CfgViewModel == null)
+        {
             return;
-            
+        }
+
         // Create status text
-        string statusText = _panelViewModel.GetStatusString();
-        
+        var statusText = _panelViewModel.GetStatusString();
+
         // Calculate text size and position
         var statusTextSize = ImGui.CalcTextSize(statusText);
         var textPos = new Vector2(
-            canvasPos.X + canvasSize.X - statusTextSize.X - 10, 
+            canvasPos.X + canvasSize.X - statusTextSize.X - 10,
             canvasPos.Y + canvasSize.Y - statusTextSize.Y - 10
         );
-        
+
         // Draw text
         drawList.AddText(
             textPos,

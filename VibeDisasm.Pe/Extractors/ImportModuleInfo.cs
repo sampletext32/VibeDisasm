@@ -9,7 +9,7 @@ public class ImportModuleInfo
     /// Gets or sets the name of the imported module
     /// </summary>
     public string Name { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// Gets or sets the list of imported functions from this module
     /// </summary>

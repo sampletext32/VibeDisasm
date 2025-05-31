@@ -22,11 +22,15 @@ public class DivRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0xF7)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 6 (DIV)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -53,7 +57,7 @@ public class DivRm32Handler : InstructionHandler
         // For DIV r/m32 (0xF7 /6):
         // - The r/m field with mod specifies the operand (register or memory)
         var (_, reg, _, operand) = ModRMDecoder.ReadModRM();
-        
+
         // Verify this is a DIV instruction
         // The reg field should be 6 (DIV), which maps to RegisterIndex.Si in our enum
         if (reg != RegisterIndex.Si)
@@ -63,7 +67,7 @@ public class DivRm32Handler : InstructionHandler
 
         // Set the structured operands
         // DIV has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

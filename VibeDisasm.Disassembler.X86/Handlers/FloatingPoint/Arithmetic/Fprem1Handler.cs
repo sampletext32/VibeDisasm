@@ -22,16 +22,21 @@ public class Fprem1Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FPREM1 is D9 F5
-        if (opcode != 0xD9) return false;
+        if (opcode != 0xD9)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the next byte is F5
-        byte nextByte = Decoder.PeakByte();
+        var nextByte = Decoder.PeakByte();
         return nextByte == 0xF5;
     }
-    
+
     /// <summary>
     /// Decodes an FPREM1 instruction
     /// </summary>
@@ -41,21 +46,25 @@ public class Fprem1Handler : InstructionHandler
     public override bool Decode(byte opcode, Instruction instruction)
     {
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Read the second byte of the opcode
-        byte secondByte = Decoder.ReadByte();
-        
+        var secondByte = Decoder.ReadByte();
+
         // Verify the opcode is correct
         if (secondByte != 0xF5)
+        {
             return false;
-        
+        }
+
         // Set the instruction type
         instruction.Type = InstructionType.Fprem1;
-        
+
         // FPREM1 has no operands
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

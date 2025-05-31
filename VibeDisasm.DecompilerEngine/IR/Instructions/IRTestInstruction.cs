@@ -15,7 +15,7 @@ public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruc
     public IRExpression Right { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-    
+
     public override IReadOnlyList<IRFlagEffect> SideEffects => [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
@@ -26,7 +26,7 @@ public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruc
     ];
 
     public override string ToString() => $"Test({Left}, {Right})";
-    
+
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
         // Special case for TEST reg, reg (common zero-check pattern)
@@ -41,7 +41,7 @@ public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruc
                     expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual
                 );
             }
-            
+
             // For TEST reg, reg, checking Sign flag is equivalent to checking if the register is negative
             if (flag == IRFlag.Sign)
             {
@@ -52,7 +52,7 @@ public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruc
                 );
             }
         }
-        
+
         // For all other cases, TEST behaves like AND but doesn't modify the operands
         return flag switch
         {
@@ -60,20 +60,20 @@ public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruc
                 new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-            
+
             IRFlag.Sign => new IRCompareExpr(
                 new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
                 IRConstantExpr.Int(0),
                 expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-                
+
             // CF and OF are cleared by TEST
             IRFlag.Carry => expectedValue ? IRConstantExpr.Bool(false) : IRConstantExpr.Bool(true),
             IRFlag.Overflow => expectedValue ? IRConstantExpr.Bool(false) : IRConstantExpr.Bool(true),
-                
+
             _ => null // Other flags not directly mappable
         };
     }
-    
+
     public IRTestInstruction(IRExpression left, IRExpression right)
     {
         Left = left;

@@ -11,11 +11,11 @@ public class XorMemRegHandler : InstructionHandler
     /// Initializes a new instance of the XorMemRegHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public XorMemRegHandler(InstructionDecoder decoder) 
+    public XorMemRegHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -27,7 +27,7 @@ public class XorMemRegHandler : InstructionHandler
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode == 0x31 && !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes an XOR r/m32, r32 instruction
     /// </summary>
@@ -38,25 +38,25 @@ public class XorMemRegHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xor;
-        
+
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the ModR/M byte
         var (_, reg, _, destOperand) = ModRMDecoder.ReadModRM();
 
         // Create the source register operand
         var srcOperand = OperandFactory.CreateRegisterOperand(reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             srcOperand
         ];
-        
+
         return true;
     }
 }

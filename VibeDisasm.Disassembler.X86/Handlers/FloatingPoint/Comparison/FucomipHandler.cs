@@ -24,7 +24,10 @@ public class FucomipHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FUCOMIP ST(0), ST(i) is DF E8-EF
-        if (opcode != 0xDF) return false;
+        if (opcode != 0xDF)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FucomipHandler : InstructionHandler
         }
 
         // Check second opcode byte
-        byte secondOpcode = Decoder.PeakByte();
-        
+        var secondOpcode = Decoder.PeakByte();
+
         // Only handle F0-F7
         return secondOpcode is >= 0xE8 and <= 0xEF;
     }
-    
+
     /// <summary>
     /// Decodes a FUCOMIP ST(0), ST(i) instruction
     /// </summary>
@@ -53,15 +56,15 @@ public class FucomipHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRMFpu();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fucomip;
 
         // Create the FPU register operands
         var srcOperand = OperandFactory.CreateFPURegisterOperand(rm);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             srcOperand
         ];

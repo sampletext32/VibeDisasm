@@ -19,26 +19,26 @@ public class TestDataProvider : IEnumerable<object[]>
         // Get the directory where the test assembly is located
         var assemblyLocation = typeof(TestDataProvider).Assembly.Location;
         var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
-        
+
         // Navigate to the TestData directory
         // First try to find it in the project structure (for development)
-        string testDataDirectory = Path.Combine(assemblyDirectory!, "..", "..", "..", "TestData");
-        
+        var testDataDirectory = Path.Combine(assemblyDirectory!, "..", "..", "..", "TestData");
+
         // If the directory doesn't exist (e.g., in a published build), try the output directory
         if (!Directory.Exists(testDataDirectory))
         {
             testDataDirectory = Path.Combine(assemblyDirectory!, "TestData");
-            
+
             // If still not found, throw an exception
             if (!Directory.Exists(testDataDirectory))
             {
                 throw new DirectoryNotFoundException($"Could not find TestData directory at {testDataDirectory}");
             }
         }
-        
+
         // Get the absolute path
         testDataDirectory = Path.GetFullPath(testDataDirectory);
-        
+
         // Return all CSV files from the TestData directory
         return Directory.GetFiles(testDataDirectory, "*.csv");
     }
@@ -55,7 +55,7 @@ public class TestDataProvider : IEnumerable<object[]>
         {
             throw new FileNotFoundException($"Could not find test file at {filePath}");
         }
-        
+
         // Open the file directly from the file system
         using var stream = File.OpenRead(filePath);
 
@@ -78,7 +78,7 @@ public class TestDataProvider : IEnumerable<object[]>
 
         // Read all records from CSV
         var entries = csvReader.GetRecords<TestFromFileEntry>().ToList();
-        
+
         // Return each entry with its file name
         foreach (var entry in entries)
         {
@@ -94,8 +94,8 @@ public class TestDataProvider : IEnumerable<object[]>
         foreach (var filePath in GetTestFiles())
         {
             // Extract just the filename part for display purposes
-            string fileName = Path.GetFileName(filePath);
-            int testIndex = 0;
+            var fileName = Path.GetFileName(filePath);
+            var testIndex = 0;
 
             foreach (var entry in LoadTestEntries(filePath))
             {

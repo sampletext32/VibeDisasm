@@ -11,11 +11,11 @@ public class XorEaxImmHandler : InstructionHandler
     /// Initializes a new instance of the XorEaxImmHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public XorEaxImmHandler(InstructionDecoder decoder) 
+    public XorEaxImmHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -25,7 +25,7 @@ public class XorEaxImmHandler : InstructionHandler
     {
         return opcode == 0x35;
     }
-    
+
     /// <summary>
     /// Decodes a XOR EAX, imm32 instruction
     /// </summary>
@@ -36,28 +36,28 @@ public class XorEaxImmHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xor;
-        
+
         if (!Decoder.CanReadUInt())
         {
             return false;
         }
-        
+
         // Read the immediate value using the decoder
-        uint imm32 = Decoder.ReadUInt32();
-        
+        var imm32 = Decoder.ReadUInt32();
+
         // Create the register operand for EAX
         var eaxOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A);
-        
+
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             eaxOperand,
             immOperand
         ];
-        
+
         return true;
     }
 }

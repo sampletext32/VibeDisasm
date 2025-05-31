@@ -25,15 +25,19 @@ public class ImulR32Rm32Handler : InstructionHandler
     {
         // IMUL r32, r/m32: opcode 0F AF /r
         if (opcode != 0x0F)
+        {
             return false;
+        }
 
         // Check if we can read the second byte
         if (!Decoder.CanReadByte())
+        {
             return false;
-            
+        }
+
         // Check if the second byte is 0xAF
-        byte secondByte = Decoder.PeakByte();
-        
+        var secondByte = Decoder.PeakByte();
+
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
         return secondByte == 0xAF && !Decoder.HasOperandSizePrefix();
@@ -54,7 +58,8 @@ public class ImulR32Rm32Handler : InstructionHandler
         {
             return false;
         }
-        byte secondByte = Decoder.ReadByte();
+
+        var secondByte = Decoder.ReadByte();
         if (secondByte != 0xAF)
         {
             return false;

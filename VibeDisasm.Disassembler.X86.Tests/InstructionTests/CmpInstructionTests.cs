@@ -16,25 +16,25 @@ public class CmpInstructionTests
     {
         // Arrange
         byte[] code = { 0x3B, 0xC7 }; // CMP EAX, EDI
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         Assert.Equal(InstructionType.Cmp, instructions[0].Type);
-        
+
         // Check that we have two operands
         Assert.Equal(2, instructions[0].StructuredOperands.Count);
-        
+
         // Check the first operand (EAX)
         var eaxOperand = instructions[0].StructuredOperands[0];
         Assert.IsType<RegisterOperand>(eaxOperand);
         var registerOperand1 = (RegisterOperand)eaxOperand;
         Assert.Equal(RegisterIndex.A, registerOperand1.Register);
         Assert.Equal(32, registerOperand1.Size); // Validate that it's a 32-bit register (EAX)
-        
+
         // Check the second operand (EDI)
         var ediOperand = instructions[0].StructuredOperands[1];
         Assert.IsType<RegisterOperand>(ediOperand);
@@ -42,7 +42,7 @@ public class CmpInstructionTests
         Assert.Equal(RegisterIndex.Di, registerOperand2.Register);
         Assert.Equal(32, registerOperand2.Size); // Validate that it's a 32-bit register (EDI)
     }
-    
+
     /// <summary>
     /// Tests the CMP r32, m32 instruction (0x3B) with memory operand
     /// </summary>
@@ -51,25 +51,25 @@ public class CmpInstructionTests
     {
         // Arrange
         byte[] code = { 0x3B, 0x00 }; // CMP EAX, DWORD PTR [EAX]
-        
+
         // Act
-        Disassembler disassembler = new Disassembler(code, 0x1000);
+        var disassembler = new Disassembler(code, 0x1000);
         var instructions = disassembler.Disassemble();
-        
+
         // Assert
-        Assert.Single((IEnumerable) instructions);
+        Assert.Single((IEnumerable)instructions);
         Assert.Equal(InstructionType.Cmp, instructions[0].Type);
-        
+
         // Check that we have two operands
         Assert.Equal(2, instructions[0].StructuredOperands.Count);
-        
+
         // Check the first operand (EAX)
         var eaxOperand = instructions[0].StructuredOperands[0];
         Assert.IsType<RegisterOperand>(eaxOperand);
         var registerOperand = (RegisterOperand)eaxOperand;
         Assert.Equal(RegisterIndex.A, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (EAX)
-        
+
         // Check the second operand (memory operand)
         var memoryOperand = instructions[0].StructuredOperands[1];
         Assert.IsType<BaseRegisterMemoryOperand>(memoryOperand);

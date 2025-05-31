@@ -1,5 +1,3 @@
-using VibeDisasm.Disassembler.X86.Operands;
-
 namespace VibeDisasm.Disassembler.X86.Handlers.Dec;
 
 /// <summary>
@@ -28,7 +26,7 @@ public class DecRm32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -36,7 +34,7 @@ public class DecRm32Handler : InstructionHandler
         }
 
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // DEC r/m32 is encoded as FF /1 (reg field = 1)
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
@@ -53,7 +51,7 @@ public class DecRm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Dec;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -67,7 +65,7 @@ public class DecRm32Handler : InstructionHandler
 
         // Set the structured operands
         // DEC has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

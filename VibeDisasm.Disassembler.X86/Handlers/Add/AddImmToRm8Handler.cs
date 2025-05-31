@@ -24,10 +24,14 @@ public class AddImmToRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x80)
+        {
             return false;
+        }
 
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -61,13 +65,13 @@ public class AddImmToRm8Handler : InstructionHandler
             return false;
         }
 
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             sourceOperand

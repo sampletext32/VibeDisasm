@@ -25,7 +25,7 @@ public class LeaveHandler : InstructionHandler
         // LEAVE is 0xC9
         return opcode == 0xC9;
     }
-    
+
     /// <summary>
     /// Decodes a LEAVE instruction
     /// </summary>
@@ -36,7 +36,7 @@ public class LeaveHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Leave;
-        
+
         // LEAVE has no operands
         instruction.StructuredOperands = [];
 

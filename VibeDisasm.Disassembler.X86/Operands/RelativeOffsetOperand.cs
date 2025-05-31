@@ -11,7 +11,7 @@ public class RelativeOffsetOperand : Operand
     /// Gets or sets the target address
     /// </summary>
     public uint TargetAddress { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the RelativeOffsetOperand class
     /// </summary>
@@ -23,7 +23,7 @@ public class RelativeOffsetOperand : Operand
         TargetAddress = targetAddress;
         Size = size;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>

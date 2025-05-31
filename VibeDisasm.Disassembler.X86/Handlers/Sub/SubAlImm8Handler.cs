@@ -40,19 +40,19 @@ public class SubAlImm8Handler : InstructionHandler
         }
 
         // Read the immediate byte
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Set the instruction type
         instruction.Type = InstructionType.Sub;
-        
+
         // Create the destination register operand (AL)
         var destinationOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
-        
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

@@ -11,7 +11,7 @@ public class AdcAccumulatorImmHandler : InstructionHandler
     /// Initializes a new instance of the AdcAccumulatorImmHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AdcAccumulatorImmHandler(InstructionDecoder decoder) 
+    public AdcAccumulatorImmHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
@@ -39,8 +39,8 @@ public class AdcAccumulatorImmHandler : InstructionHandler
         instruction.Type = InstructionType.Adc;
 
         // Determine operand size based on prefix
-        int operandSize = Decoder.HasOperandSizePrefix() ? 16 : 32;
-        
+        var operandSize = Decoder.HasOperandSizePrefix() ? 16 : 32;
+
         // Check if we have enough bytes for the immediate value
         if (operandSize == 16 && !Decoder.CanReadUShort())
         {
@@ -55,12 +55,12 @@ public class AdcAccumulatorImmHandler : InstructionHandler
         var accumulatorOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, operandSize);
 
         // Read and create the immediate operand based on operand size
-        var immOperand = operandSize == 16 
+        var immOperand = operandSize == 16
             ? OperandFactory.CreateImmediateOperand(Decoder.ReadUInt16(), operandSize)
             : OperandFactory.CreateImmediateOperand(Decoder.ReadUInt32(), operandSize);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             accumulatorOperand,
             immOperand

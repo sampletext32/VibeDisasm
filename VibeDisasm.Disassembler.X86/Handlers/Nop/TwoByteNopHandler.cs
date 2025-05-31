@@ -37,10 +37,10 @@ public class TwoByteNopHandler : InstructionHandler
         // Although this is actually XCHG AX, AX, it's treated as NOP in the x86 architecture
         // and is commonly disassembled as such
         instruction.Type = InstructionType.Nop;
-        
+
         // NOP has no operands, even with the operand size prefix
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

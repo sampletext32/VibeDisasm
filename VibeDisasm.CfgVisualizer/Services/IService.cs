@@ -1,3 +1,3 @@
-﻿namespace VibeDisasm.CfgVisualizer.Services;
+namespace VibeDisasm.CfgVisualizer.Services;
 
 public interface IService;

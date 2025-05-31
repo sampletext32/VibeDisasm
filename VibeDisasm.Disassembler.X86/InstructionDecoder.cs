@@ -62,10 +62,10 @@ public class InstructionDecoder
         _prefixDecoder.Reset();
 
         // Save the start position of the instruction
-        uint startPosition = _position;
+        var startPosition = _position;
 
         // Create a new instruction
-        Instruction instruction = new Instruction
+        var instruction = new Instruction
         {
             Address = startPosition,
         };
@@ -73,8 +73,8 @@ public class InstructionDecoder
         // Handle prefixes
         while (CanReadByte())
         {
-            byte prefix = _codeBuffer[_position];
-            
+            var prefix = _codeBuffer[_position];
+
             if (_prefixDecoder.DecodePrefix(prefix))
             {
                 _position++;
@@ -84,16 +84,16 @@ public class InstructionDecoder
                 break;
             }
         }
-        
+
         // If only prefixes were found and we're at the end of the buffer, return null
         if (_position > startPosition && !CanReadByte())
         {
             return null;
         }
-        
+
         // Read the opcode
-        byte opcode = ReadByte();
-        
+        var opcode = ReadByte();
+
         // Get a handler for the opcode
         var handler = _handlerFactory.GetHandler(opcode);
 
@@ -105,7 +105,7 @@ public class InstructionDecoder
         if (handler != null)
         {
             // Store the current segment override state
-            bool hasSegmentOverride = _prefixDecoder.HasSegmentOverridePrefix();
+            var hasSegmentOverride = _prefixDecoder.HasSegmentOverridePrefix();
             var segmentOverride = _prefixDecoder.GetSegmentOverride();
 
             // Save the position before decoding
@@ -189,7 +189,7 @@ public class InstructionDecoder
                 _ => instruction.Type // Keep original type for other instructions
             };
         }
-        
+
         return instruction;
     }
 
@@ -279,12 +279,12 @@ public class InstructionDecoder
     {
         if (_position + 1 >= _length)
         {
-            return (0,0);
+            return (0, 0);
         }
 
         return (_codeBuffer[_position], _codeBuffer[_position + 1]);
     }
-    
+
     /// <summary>
     /// Peaks a byte from the buffer at the specified offset from current position without adjusting position
     /// </summary>
@@ -292,8 +292,8 @@ public class InstructionDecoder
     /// <returns>The byte peaked</returns>
     public byte PeakByte(uint offset)
     {
-        uint targetPosition = _position + offset;
-        
+        var targetPosition = _position + offset;
+
         if (targetPosition >= _length)
         {
             return 0;
@@ -327,7 +327,7 @@ public class InstructionDecoder
             return 0;
         }
 
-        ushort value = (ushort) (_codeBuffer[_position] | (_codeBuffer[_position + 1] << 8));
+        var value = (ushort)(_codeBuffer[_position] | (_codeBuffer[_position + 1] << 8));
         _position += 2;
         return value;
     }
@@ -343,7 +343,7 @@ public class InstructionDecoder
             return 0;
         }
 
-        uint value = (uint) (_codeBuffer[_position] |
+        var value = (uint)(_codeBuffer[_position] |
                              (_codeBuffer[_position + 1] << 8) |
                              (_codeBuffer[_position + 2] << 16) |
                              (_codeBuffer[_position + 3] << 24));

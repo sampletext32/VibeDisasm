@@ -59,7 +59,7 @@ public class MultiByteNopHandler : InstructionHandler
         }
 
         // Check if the second byte is 0x1F (part of the multi-byte NOP encoding)
-        byte secondByte = Decoder.PeakByte();
+        var secondByte = Decoder.PeakByte();
         return secondByte == 0x1F;
     }
 
@@ -82,21 +82,21 @@ public class MultiByteNopHandler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have an operand size prefix (0x66)
-        bool hasOperandSizePrefix = Decoder.HasOperandSizeOverridePrefix();
-        
+        var hasOperandSizePrefix = Decoder.HasOperandSizeOverridePrefix();
+
         // Determine the size of the operand
-        int operandSize = hasOperandSizePrefix ? 16 : 32;
-        
+        var operandSize = hasOperandSizePrefix ? 16 : 32;
+
         // Read the ModR/M byte
-        byte modRm = Decoder.ReadByte();
-        
+        var modRm = Decoder.ReadByte();
+
         // Default memory operand parameters
-        RegisterIndex baseReg = RegisterIndex.A;
+        var baseReg = RegisterIndex.A;
         RegisterIndex? indexReg = null;
-        int scale = 0;
-        
+        var scale = 0;
+
         // Try to find a matching NOP variant (we check longest patterns first)
         foreach (var (variantModRm, expectedBytes, variantBaseReg, variantIndexReg, variantScale) in NopVariants)
         {
@@ -111,10 +111,10 @@ public class MultiByteNopHandler : InstructionHandler
             {
                 continue;
             }
-            
+
             // Create a buffer to read the expected bytes
-            byte[] buffer = new byte[expectedBytes.Length];
-            
+            var buffer = new byte[expectedBytes.Length];
+
             // Read the bytes into the buffer without advancing the decoder position
             for (uint i = 0; i < expectedBytes.Length; i++)
             {
@@ -122,12 +122,13 @@ public class MultiByteNopHandler : InstructionHandler
                 {
                     break;
                 }
+
                 buffer[i] = Decoder.PeakByte(i);
             }
-            
+
             // Check if the expected bytes match
-            bool isMatch = true;
-            for (int i = 0; i < expectedBytes.Length; i++)
+            var isMatch = true;
+            for (var i = 0; i < expectedBytes.Length; i++)
             {
                 if (buffer[i] != expectedBytes[i])
                 {
@@ -135,49 +136,49 @@ public class MultiByteNopHandler : InstructionHandler
                     break;
                 }
             }
-            
+
             // If we found a match, use it and stop checking
             if (isMatch)
             {
                 baseReg = variantBaseReg;
                 indexReg = variantIndexReg;
                 scale = variantScale;
-                
+
                 // Consume the expected bytes
-                for (int i = 0; i < expectedBytes.Length; i++)
+                for (var i = 0; i < expectedBytes.Length; i++)
                 {
                     Decoder.ReadByte();
                 }
-                
+
                 break;
             }
         }
-        
+
         // Create the appropriate structured operand based on the NOP variant
         if (indexReg.HasValue && scale > 0)
         {
             // Create a scaled index memory operand (e.g., [eax+eax*1])
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 OperandFactory.CreateScaledIndexMemoryOperand(
-                    indexReg.Value, 
-                    scale, 
-                    baseReg, 
-                    0, 
+                    indexReg.Value,
+                    scale,
+                    baseReg,
+                    0,
                     operandSize)
             ];
         }
         else
         {
             // Create a simple base register memory operand (e.g., [eax])
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 OperandFactory.CreateBaseRegisterMemoryOperand(
-                    baseReg, 
+                    baseReg,
                     operandSize)
             ];
         }
-        
+
         return true;
     }
 }

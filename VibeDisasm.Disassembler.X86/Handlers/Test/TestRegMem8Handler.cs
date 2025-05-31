@@ -36,7 +36,7 @@ public class TestRegMem8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Test;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -45,20 +45,20 @@ public class TestRegMem8Handler : InstructionHandler
 
         // Read the ModR/M byte, specifying that we're dealing with 8-bit operands
         var (mod, reg, rm, destOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
 
         // Create the register operand for the reg field using the 8-bit register type
         var regOperand = OperandFactory.CreateRegisterOperand8(reg);
-        
+
         // Set the structured operands based on addressing mode
         if (mod == 3) // Direct register addressing
         {
             // Create the register operand for the r/m field using the 8-bit register type
             var rmOperand = OperandFactory.CreateRegisterOperand8(rm);
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rmOperand,
                 regOperand
@@ -67,7 +67,7 @@ public class TestRegMem8Handler : InstructionHandler
         else // Memory addressing
         {
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 destOperand,
                 regOperand

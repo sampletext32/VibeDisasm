@@ -28,16 +28,16 @@ public class SubImmFromRm16SignExtendedHandler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Check if the reg field is 5 (SUB)
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         return reg == 5; // 5 = SUB
     }
 
@@ -51,7 +51,7 @@ public class SubImmFromRm16SignExtendedHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Sub;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -77,9 +77,9 @@ public class SubImmFromRm16SignExtendedHandler : InstructionHandler
 
         // Create the source immediate operand with the sign-extended value
         var sourceOperand = OperandFactory.CreateImmediateOperand((ushort)imm16, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

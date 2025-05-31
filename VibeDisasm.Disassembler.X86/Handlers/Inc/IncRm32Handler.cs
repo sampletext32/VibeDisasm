@@ -1,5 +1,3 @@
-using VibeDisasm.Disassembler.X86.Operands;
-
 namespace VibeDisasm.Disassembler.X86.Handlers.Inc;
 
 /// <summary>
@@ -28,7 +26,7 @@ public class IncRm32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Check if we have enough bytes to read the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -36,7 +34,7 @@ public class IncRm32Handler : InstructionHandler
         }
 
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // INC r/m32 is encoded as FF /0 (reg field = 0)
         // Only handle when the operand size prefix is NOT present
         // This ensures 16-bit handlers get priority when the prefix is present
@@ -53,7 +51,7 @@ public class IncRm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Inc;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
@@ -67,7 +65,7 @@ public class IncRm32Handler : InstructionHandler
 
         // Set the structured operands
         // INC has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

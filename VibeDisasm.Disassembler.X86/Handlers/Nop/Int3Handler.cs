@@ -9,11 +9,11 @@ public class Int3Handler : InstructionHandler
     /// Initializes a new instance of the Int3Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public Int3Handler(InstructionDecoder decoder) 
+    public Int3Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -23,7 +23,7 @@ public class Int3Handler : InstructionHandler
     {
         return opcode == 0xCC;
     }
-    
+
     /// <summary>
     /// Decodes an INT3 instruction
     /// </summary>
@@ -34,10 +34,10 @@ public class Int3Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Int3;
-        
+
         // INT3 has no operands
         instruction.StructuredOperands = [];
-        
+
         return true;
     }
 }

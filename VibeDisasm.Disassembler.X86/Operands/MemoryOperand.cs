@@ -9,7 +9,7 @@ public abstract class MemoryOperand : Operand
     /// Gets or sets the segment override (if any)
     /// </summary>
     public Segment? SegmentOverride { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the MemoryOperand class
     /// </summary>
@@ -28,7 +28,7 @@ public abstract class MemoryOperand : Operand
     protected string GetSizePrefix()
     {
         // Use size-based prefix
-        string sizePrefix = Size switch
+        var sizePrefix = Size switch
         {
             8 => "byte ptr ",
             16 => "word ptr ",
@@ -37,13 +37,13 @@ public abstract class MemoryOperand : Operand
             64 => "qword ptr ",
             _ => ""
         };
-        
+
         // If we have a segment override, include it in the format "dword ptr es:[reg]"
         if (SegmentOverride != null)
         {
             return $"{sizePrefix}{SegmentOverride?.ToString("G").ToLower()}:";
         }
-        
+
         return sizePrefix;
     }
 }

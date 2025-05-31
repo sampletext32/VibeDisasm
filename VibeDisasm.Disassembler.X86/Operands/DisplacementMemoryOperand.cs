@@ -11,12 +11,12 @@ public class DisplacementMemoryOperand : MemoryOperand
     /// Gets or sets the base register
     /// </summary>
     public RegisterIndex BaseRegister { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the displacement value
     /// </summary>
     public long Displacement { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the DisplacementMemoryOperand class
     /// </summary>
@@ -31,7 +31,7 @@ public class DisplacementMemoryOperand : MemoryOperand
         BaseRegister = baseRegister;
         Displacement = displacement;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>
@@ -41,8 +41,8 @@ public class DisplacementMemoryOperand : MemoryOperand
         var registerName = RegisterMapper.GetRegisterName(BaseRegister, 32);
 
         // Format the displacement value
-        long absDisplacement = Math.Abs(Displacement);
-        string sign = Displacement >= 0 ? "+" : "-";
+        var absDisplacement = Math.Abs(Displacement);
+        var sign = Displacement >= 0 ? "+" : "-";
         string format;
 
         if (absDisplacement == 0)
@@ -62,8 +62,8 @@ public class DisplacementMemoryOperand : MemoryOperand
             format = "X8";
         }
 
-        string formattedDisplacement = $"0x{absDisplacement.ToString(format)}";
-        
+        var formattedDisplacement = $"0x{absDisplacement.ToString(format)}";
+
         return $"{GetSizePrefix()}[{registerName}{sign}{formattedDisplacement}]";
     }
 }

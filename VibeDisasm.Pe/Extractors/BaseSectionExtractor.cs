@@ -19,12 +19,12 @@ public static class BaseSectionExtractor
         {
             throw new ArgumentNullException(nameof(rawPeFile));
         }
-        
+
         if (sectionHeader == null)
         {
             throw new ArgumentNullException(nameof(sectionHeader));
         }
-        
+
         var sectionInfo = new SectionInfo
         {
             Name = sectionHeader.Name,
@@ -34,12 +34,12 @@ public static class BaseSectionExtractor
             RawDataSize = sectionHeader.SizeOfRawData,
             Characteristics = sectionHeader.Characteristics
         };
-        
+
         if (sectionHeader.PointerToRawData > 0 && sectionHeader.SizeOfRawData > 0)
         {
             sectionInfo.Data = rawPeFile.GetSectionData(sectionHeader);
         }
-        
+
         return sectionInfo;
     }
 }

@@ -24,7 +24,10 @@ public class FdivFloat32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FDIV is D8 /6
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,11 +35,11 @@ public class FdivFloat32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 6
-        byte reg = ModRMDecoder.PeakModRMReg();
-        
+        var reg = ModRMDecoder.PeakModRMReg();
+
         return reg == 6;
     }
-    
+
     /// <summary>
     /// Decodes a FDIV float32 instruction
     /// </summary>
@@ -52,7 +55,7 @@ public class FdivFloat32Handler : InstructionHandler
 
         // Read the ModR/M byte using the specialized FPU method
         var (mod, reg, fpuRm, rawOperand) = ModRMDecoder.ReadModRMFpu();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fdiv;
 
@@ -60,7 +63,7 @@ public class FdivFloat32Handler : InstructionHandler
         if (mod != 3) // Memory operand
         {
             // Set the structured operands - the operand already has the correct size from ReadModRM
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 rawOperand
             ];
@@ -70,9 +73,9 @@ public class FdivFloat32Handler : InstructionHandler
             // For register operands, we need to handle the stack registers
             var st0Operand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0); // ST(0)
             var stiOperand = OperandFactory.CreateFPURegisterOperand(fpuRm); // ST(i)
-            
+
             // Set the structured operands
-            instruction.StructuredOperands = 
+            instruction.StructuredOperands =
             [
                 st0Operand,
                 stiOperand

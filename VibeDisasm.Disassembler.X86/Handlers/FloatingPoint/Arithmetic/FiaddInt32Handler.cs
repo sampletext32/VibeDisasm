@@ -22,7 +22,10 @@ public class FiaddInt32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FIADD is DA /0
-        if (opcode != 0xDA) return false;
+        if (opcode != 0xDA)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FiaddInt32Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 0
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3)
         return reg == 0 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FIADD int32 instruction
     /// </summary>
@@ -53,12 +56,12 @@ public class FiaddInt32Handler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, rawOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fiadd;
 
         // Set the structured operands - the operand already has the correct size from ReadModRM
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             rawOperand
         ];

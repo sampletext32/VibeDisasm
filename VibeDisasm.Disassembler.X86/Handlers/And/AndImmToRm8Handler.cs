@@ -66,13 +66,13 @@ public class AndImmToRm8Handler : InstructionHandler
         }
 
         // Read the immediate value
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

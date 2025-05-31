@@ -24,7 +24,7 @@ public class CmcHandler : InstructionHandler
         // CMC is F5
         return opcode == 0xF5;
     }
-    
+
     /// <summary>
     /// Decodes a CMC instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class CmcHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Cmc;
-        
+
         // CMC has no operands
         instruction.StructuredOperands = [];
 

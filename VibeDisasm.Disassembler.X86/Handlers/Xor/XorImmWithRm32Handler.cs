@@ -11,11 +11,11 @@ public class XorImmWithRm32Handler : InstructionHandler
     /// Initializes a new instance of the XorImmWithRm32Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public XorImmWithRm32Handler(InstructionDecoder decoder) 
+    public XorImmWithRm32Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -24,17 +24,21 @@ public class XorImmWithRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
-            
+        }
+
         // Check if the reg field of the ModR/M byte is 6 (XOR)
         if (!Decoder.CanReadByte())
+        {
             return false;
-            
+        }
+
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         return reg == 6; // 6 = XOR
     }
-    
+
     /// <summary>
     /// Decodes a XOR r/m32, imm32 instruction
     /// </summary>
@@ -45,15 +49,15 @@ public class XorImmWithRm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xor;
-        
+
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the ModR/M byte
         var (_, _, _, destOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Read the immediate value
         if (!Decoder.CanReadUInt())
         {
@@ -64,14 +68,14 @@ public class XorImmWithRm32Handler : InstructionHandler
 
         // Create the immediate operand
         var immOperand = OperandFactory.CreateImmediateOperand(imm, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             immOperand
         ];
-        
+
         return true;
     }
 }

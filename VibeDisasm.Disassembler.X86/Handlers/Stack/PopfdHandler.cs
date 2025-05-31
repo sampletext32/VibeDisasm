@@ -25,7 +25,7 @@ public class PopfdHandler : InstructionHandler
         // POPFD is 0x9D
         return opcode == 0x9D;
     }
-    
+
     /// <summary>
     /// Decodes a POPFD instruction
     /// </summary>
@@ -36,7 +36,7 @@ public class PopfdHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Popfd;
-        
+
         // POPFD has no operands
         instruction.StructuredOperands = [];
 

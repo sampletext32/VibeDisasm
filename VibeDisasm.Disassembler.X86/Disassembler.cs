@@ -34,15 +34,15 @@ public class Disassembler
     /// <returns>A list of disassembled instructions</returns>
     public List<Instruction> Disassemble()
     {
-        List<Instruction> instructions = new List<Instruction>();
+        var instructions = new List<Instruction>();
 
         // Create an instruction decoder
-        InstructionDecoder decoder = new InstructionDecoder(_codeBuffer, _length);
+        var decoder = new InstructionDecoder(_codeBuffer, _length);
 
         // Decode instructions until the end of the buffer is reached
         while (true)
         {
-            uint position = decoder.GetPosition();
+            var position = decoder.GetPosition();
 
             // Check if we've reached the end of the buffer
             if (!decoder.CanReadByte())
@@ -51,10 +51,10 @@ public class Disassembler
             }
 
             // Store the position before decoding to handle prefixes properly
-            uint startPosition = position;
+            var startPosition = position;
 
             // Decode the instruction
-            Instruction? instruction = decoder.DecodeInstruction();
+            var instruction = decoder.DecodeInstruction();
 
             if (instruction != null)
             {
@@ -67,9 +67,9 @@ public class Disassembler
             else
             {
                 // If decoding failed, create a dummy instruction for the unknown byte
-                byte unknownByte = decoder.ReadByte();
+                var unknownByte = decoder.ReadByte();
 
-                Instruction dummyInstruction = new Instruction
+                var dummyInstruction = new Instruction
                 {
                     Address = _baseAddress + position,
                     Type = InstructionType.Unknown,

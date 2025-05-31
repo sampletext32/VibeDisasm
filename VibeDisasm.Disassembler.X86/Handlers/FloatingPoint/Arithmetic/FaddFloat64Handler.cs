@@ -22,7 +22,10 @@ public class FaddFloat64Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FADD is DC /0
-        if (opcode != 0xDC) return false;
+        if (opcode != 0xDC)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FaddFloat64Handler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 0 and mod != 3 (memory operand)
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3) with reg = 0
         return reg == 0 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FADD float64 instruction
     /// </summary>
@@ -56,12 +59,12 @@ public class FaddFloat64Handler : InstructionHandler
 
         // We've already verified reg field is 0 (FADD) in CanHandle
         // and we only handle memory operands (mod != 3)
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fadd;
 
         // Set the structured operands - the operand already has the correct size from ReadModRMFpu64
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             rawOperand
         ];

@@ -24,11 +24,15 @@ public class CmpImmWithRm32Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x81)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 7 (CMP)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -55,13 +59,13 @@ public class CmpImmWithRm32Handler : InstructionHandler
             return false;
         }
 
-        uint imm32 = Decoder.ReadUInt32();
-        
+        var imm32 = Decoder.ReadUInt32();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm32, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

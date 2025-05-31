@@ -36,7 +36,7 @@ public class SubR8Rm8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Sub;
-        
+
         if (!Decoder.CanReadByte())
         {
             return false;
@@ -44,14 +44,14 @@ public class SubR8Rm8Handler : InstructionHandler
 
         // Read the ModR/M byte, specifying that we're dealing with 8-bit operands
         var (_, reg, _, sourceOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
-        
+
         // Create the destination register operand using the 8-bit register type
         var destinationOperand = OperandFactory.CreateRegisterOperand8(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

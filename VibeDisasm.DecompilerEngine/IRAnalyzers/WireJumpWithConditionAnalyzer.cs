@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
@@ -16,7 +16,10 @@ public class WireJumpWithConditionAnalyzer
             {
                 if (instructions[i] is IRJumpInstruction jump)
                 {
-                    if (jump.Condition is null) continue;
+                    if (jump.Condition is null)
+                    {
+                        continue;
+                    }
 
                     // backtrack instruction to find condition
                     var neededFlags = jump.EnumerateAllExpressionsOfType<IRFlagExpr>()
@@ -24,7 +27,7 @@ public class WireJumpWithConditionAnalyzer
                         .Select(x => x.Flag)
                         .ToList();
 
-                    bool found = false;
+                    var found = false;
                     for (var j = i - 1; j >= 0; j--)
                     {
                         var sideEffects = instructions[j].SideEffects;

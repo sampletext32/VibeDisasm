@@ -22,11 +22,15 @@ public class MulRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0xF6)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 4 (MUL)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -56,7 +60,7 @@ public class MulRm8Handler : InstructionHandler
 
         // Set the structured operands
         // MUL has only one operand
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand
         ];

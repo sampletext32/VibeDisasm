@@ -24,20 +24,25 @@ public class FnstswHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FNSTSW is a two-byte opcode (0xDF 0xE0)
-        if (opcode != 0xDF) return false;
+        if (opcode != 0xDF)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
             return false;
         }
 
-        if (Decoder.PeakByte() != 0xE0) 
+        if (Decoder.PeakByte() != 0xE0)
+        {
             return false;
-        
+        }
+
         return true;
 
     }
-    
+
     /// <summary>
     /// Decodes an FNSTSW instruction
     /// </summary>
@@ -51,26 +56,26 @@ public class FnstswHandler : InstructionHandler
         {
             return false;
         }
-        
+
         // Verify the second byte is 0xE0
-        byte secondByte = Decoder.ReadByte();
+        var secondByte = Decoder.ReadByte();
         if (secondByte != 0xE0)
         {
             return false;
         }
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fnstsw;
-        
+
         // Create the AX register operand
         var axOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             axOperand
         ];
-        
+
         return true;
     }
 }

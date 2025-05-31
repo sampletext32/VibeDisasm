@@ -16,7 +16,7 @@ public class AppState
     public AppState()
     {
     }
-    
+
     public event Action<PeFileState>? FileLoaded;
     public event Action<EntryPointInfo>? EntryPointSelected;
     public event Action<CfgNodeView?>? CfgNodeSelected;

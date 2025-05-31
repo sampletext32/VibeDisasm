@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Disassembler.X86;
+namespace VibeDisasm.Disassembler.X86;
 
 public enum Segment
 {

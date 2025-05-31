@@ -24,7 +24,7 @@ public class StdHandler : InstructionHandler
         // STD is FD
         return opcode == 0xFD;
     }
-    
+
     /// <summary>
     /// Decodes a STD instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class StdHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Std;
-        
+
         // STD has no operands
         instruction.StructuredOperands = [];
 

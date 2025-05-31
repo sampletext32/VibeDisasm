@@ -1,9 +1,5 @@
-using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.State;
-using VibeDisasm.DecompilerEngine.ControlFlow;
-using VibeDisasm.Pe.Extractors;
-using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
 
@@ -19,7 +15,7 @@ public class FileLoadingPanelViewModel : IViewModel
     {
         _actionsService = actionsService;
         _state = state;
-        
+
         state.FileLoaded += OnFileLoaded;
     }
 

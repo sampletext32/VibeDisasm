@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 using VibeDisasm.Disassembler.X86;
 
@@ -16,7 +16,6 @@ public sealed class StubIRInstruction : IRInstruction
     }
 
     public override string ToString() => $"StubIRInstruction - {_instructionType:G} Not implemented";
-
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 

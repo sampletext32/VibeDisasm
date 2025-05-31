@@ -22,7 +22,10 @@ public class FnsaveHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FNSAVE is DD /6
-        if (opcode != 0xDD) return false;
+        if (opcode != 0xDD)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -30,14 +33,14 @@ public class FnsaveHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 6
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle memory operands (mod != 3)
         return reg == 6 && mod != 3;
     }
-    
+
     /// <summary>
     /// Decodes a FNSAVE instruction
     /// </summary>
@@ -53,12 +56,12 @@ public class FnsaveHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, rawOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fnsave;
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             rawOperand
         ];

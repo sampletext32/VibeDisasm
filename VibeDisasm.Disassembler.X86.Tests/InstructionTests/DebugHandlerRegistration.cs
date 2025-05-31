@@ -24,7 +24,7 @@ public class DebugHandlerRegistration
     public void FindMissingHandlers()
     {
         // Create a factory
-        byte[] codeBuffer = new byte[1];
+        var codeBuffer = new byte[1];
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
         var sut = new InstructionHandlerFactory(decoder);
 

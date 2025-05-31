@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
@@ -16,13 +16,13 @@ public static class Util
         // Find the section containing the RVA
         foreach (var section in rawPeFile.SectionHeaders)
         {
-            uint sectionStart = section.VirtualAddress;
-            uint sectionEnd = sectionStart + Math.Max(section.VirtualSize, section.SizeOfRawData);
+            var sectionStart = section.VirtualAddress;
+            var sectionEnd = sectionStart + Math.Max(section.VirtualSize, section.SizeOfRawData);
 
             if (rva >= sectionStart && rva < sectionEnd)
             {
                 // Calculate the offset within the section
-                uint offset = rva - sectionStart + section.PointerToRawData;
+                var offset = rva - sectionStart + section.PointerToRawData;
                 return offset;
             }
         }
@@ -44,7 +44,7 @@ public static class Util
     /// <returns>The string read from the offset</returns>
     public static string ReadAsciiString(byte[] data, uint offset)
     {
-        int length = 0;
+        var length = 0;
         while (offset + length < data.Length && data[offset + length] != 0)
         {
             length++;
@@ -55,8 +55,8 @@ public static class Util
 
     public static string ReadNullTerminatedUnicodeString(this BinaryReader reader)
     {
-        List<byte> bytes = new List<byte>();
-        byte[] buffer = new byte[2];
+        var bytes = new List<byte>();
+        var buffer = new byte[2];
 
         while (true)
         {
@@ -78,7 +78,7 @@ public static class Util
 
     public static string ReadFixedLengthUnicodeString(this BinaryReader reader, ushort length)
     {
-        byte[] data = reader.ReadBytes(length * 2); // Unicode: 2 bytes per char
+        var data = reader.ReadBytes(length * 2); // Unicode: 2 bytes per char
         return Encoding.Unicode.GetString(data);
     }
 }

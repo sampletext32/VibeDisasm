@@ -24,11 +24,15 @@ public class AdcImmToRm32SignExtendedHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x83)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 2 (ADC)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -60,10 +64,10 @@ public class AdcImmToRm32SignExtendedHandler : InstructionHandler
         }
 
         // Read the immediate value (sign-extended from 8 to 32 bits)
-        sbyte imm32 = (sbyte) Decoder.ReadByte();
+        var imm32 = (sbyte)Decoder.ReadByte();
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             OperandFactory.CreateImmediateOperand((uint)imm32)

@@ -24,7 +24,7 @@ public class StcHandler : InstructionHandler
         // STC is F9
         return opcode == 0xF9;
     }
-    
+
     /// <summary>
     /// Decodes a STC instruction
     /// </summary>
@@ -35,7 +35,7 @@ public class StcHandler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Stc;
-        
+
         // STC has no operands
         instruction.StructuredOperands = [];
 

@@ -1,9 +1,9 @@
 using System.Numerics;
 using ImGuiNET;
+using Microsoft.Extensions.DependencyInjection;
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
-using Microsoft.Extensions.DependencyInjection;
 using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.State;
@@ -96,7 +96,7 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
         if (paths.Length > 0)
         {
             // Check if the file has a valid extension
-            string extension = Path.GetExtension(paths[0]).ToLowerInvariant();
+            var extension = Path.GetExtension(paths[0]).ToLowerInvariant();
             if (extension is ".exe" or ".dll")
             {
                 _actionsService.TryLoadFile(paths[0]);
@@ -136,7 +136,9 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
 
         // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole
         if ((_dockspaceFlags & ImGuiDockNodeFlags.PassthruCentralNode) != 0)
+        {
             windowFlags |= ImGuiWindowFlags.NoBackground;
+        }
 
         // Important: note that we proceed even if Begin() returns false (aka window is collapsed).
         // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive, 
@@ -146,7 +148,9 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
         ImGui.PopStyleVar();
 
         if (_optFullscreen)
+        {
             ImGui.PopStyleVar(2);
+        }
 
         // DockSpace
         var io = ImGui.GetIO();

@@ -49,44 +49,48 @@ public class InHandler : InstructionHandler
         {
             case 0xE4: // IN AL, imm8
                 destOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
-                
+
                 // Check if we can read the immediate byte
                 if (!Decoder.CanReadByte())
+                {
                     return false;
-                
+                }
+
                 // Read the immediate byte (port number)
-                byte imm8 = Decoder.ReadByte();
+                var imm8 = Decoder.ReadByte();
                 srcOperand = OperandFactory.CreateImmediateOperand(imm8);
                 break;
-                
+
             case 0xE5: // IN EAX, imm8
                 destOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32);
-                
+
                 // Check if we can read the immediate byte
                 if (!Decoder.CanReadByte())
+                {
                     return false;
-                
+                }
+
                 // Read the immediate byte (port number)
                 imm8 = Decoder.ReadByte();
                 srcOperand = OperandFactory.CreateImmediateOperand(imm8);
                 break;
-                
+
             case 0xEC: // IN AL, DX
                 destOperand = OperandFactory.CreateRegisterOperand8(RegisterIndex8.AL);
                 srcOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.D, 16);
                 break;
-                
+
             case 0xED: // IN EAX, DX
                 destOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 32);
                 srcOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.D, 16);
                 break;
-                
+
             default:
                 return false;
         }
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destOperand,
             srcOperand

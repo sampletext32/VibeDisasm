@@ -30,7 +30,9 @@ public class IRWiredJumpInstruction : IRWrappingInstruction<IRJumpInstruction>
     public string ToLangString()
     {
         if (WrappedInstruction.Condition == null)
+        {
             return $"jump to {WrappedInstruction.Target}"; // Unconditional jump
+        }
 
         return WrappedInstruction.ToString();
     }

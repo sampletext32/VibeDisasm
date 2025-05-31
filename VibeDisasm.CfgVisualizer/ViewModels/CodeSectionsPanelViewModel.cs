@@ -13,12 +13,12 @@ public class CodeSectionsPanelViewModel : IViewModel
     /// List of section information
     /// </summary>
     public List<SectionDisplayInfo> Sections { get; private set; } = [];
-    
+
     /// <summary>
     /// Selected section index
     /// </summary>
     public int SelectedSectionIndex { get; private set; } = -1;
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -41,7 +41,7 @@ public class CodeSectionsPanelViewModel : IViewModel
         Sections = sections;
         SelectedSectionIndex = -1;
     }
-    
+
     /// <summary>
     /// Selects a section by index
     /// </summary>
@@ -51,7 +51,7 @@ public class CodeSectionsPanelViewModel : IViewModel
         if (index >= 0 && index < Sections.Count)
         {
             SelectedSectionIndex = index;
-            
+
             // TODO: notify
         }
     }
@@ -66,67 +66,67 @@ public class SectionDisplayInfo
     /// The name of the section
     /// </summary>
     public string Name { get; }
-    
+
     /// <summary>
     /// The virtual address of the section
     /// </summary>
     public uint VirtualAddress { get; }
-    
+
     /// <summary>
     /// The virtual size of the section
     /// </summary>
     public uint VirtualSize { get; }
-    
+
     /// <summary>
     /// The raw data address (file offset) of the section
     /// </summary>
     public uint RawDataAddress { get; }
-    
+
     /// <summary>
     /// The raw data size of the section
     /// </summary>
     public uint RawDataSize { get; }
-    
+
     /// <summary>
     /// The section characteristics
     /// </summary>
     public uint Characteristics { get; }
-    
+
     /// <summary>
     /// Gets whether the section is executable
     /// </summary>
     public bool IsExecutable { get; }
-    
+
     /// <summary>
     /// Gets whether the section is readable
     /// </summary>
     public bool IsReadable { get; }
-    
+
     /// <summary>
     /// Gets whether the section is writable
     /// </summary>
     public bool IsWritable { get; }
-    
+
     /// <summary>
     /// Gets whether the section contains code
     /// </summary>
     public bool ContainsCode { get; }
-    
+
     /// <summary>
     /// Gets whether the section contains initialized data
     /// </summary>
     public bool ContainsInitializedData { get; }
-    
+
     /// <summary>
     /// Gets whether the section contains uninitialized data
     /// </summary>
     public bool ContainsUninitializedData { get; }
-    
+
     /// <summary>
     /// Computed view string for display in the UI
     /// </summary>
     public string ComputedView { get; }
-    
+
     /// <summary>
     /// Constructor
     /// </summary>
@@ -136,7 +136,7 @@ public class SectionDisplayInfo
     /// <param name="rawDataAddress">Raw data address</param>
     /// <param name="rawDataSize">Raw data size</param>
     /// <param name="characteristics">Section characteristics</param>
-    public SectionDisplayInfo(string name, uint virtualAddress, uint virtualSize, 
+    public SectionDisplayInfo(string name, uint virtualAddress, uint virtualSize,
                              uint rawDataAddress, uint rawDataSize, uint characteristics)
     {
         Name = name;
@@ -145,7 +145,7 @@ public class SectionDisplayInfo
         RawDataAddress = rawDataAddress;
         RawDataSize = rawDataSize;
         Characteristics = characteristics;
-        
+
         // Calculate properties based on characteristics
         IsExecutable = (Characteristics & SectionCharacteristics.Executable) != 0;
         IsReadable = (Characteristics & SectionCharacteristics.Readable) != 0;
@@ -153,12 +153,12 @@ public class SectionDisplayInfo
         ContainsCode = (Characteristics & SectionCharacteristics.ContainsCode) != 0;
         ContainsInitializedData = (Characteristics & SectionCharacteristics.ContainsInitializedData) != 0;
         ContainsUninitializedData = (Characteristics & SectionCharacteristics.ContainsUninitializedData) != 0;
-        
+
         // Create a computed view string
-        string attributes = GetAttributesString();
+        var attributes = GetAttributesString();
         ComputedView = $"{VirtualAddress:X8} - {Name} ({VirtualSize:X} bytes) {attributes}";
     }
-    
+
     /// <summary>
     /// Creates a section display info from a SectionInfo object
     /// </summary>
@@ -175,7 +175,7 @@ public class SectionDisplayInfo
             sectionInfo.Characteristics
         );
     }
-    
+
     /// <summary>
     /// Gets a string representation of the section attributes
     /// </summary>
@@ -183,14 +183,37 @@ public class SectionDisplayInfo
     private string GetAttributesString()
     {
         var attributes = new List<string>();
-        
-        if (IsExecutable) attributes.Add("Exec");
-        if (IsReadable) attributes.Add("Read");
-        if (IsWritable) attributes.Add("Write");
-        if (ContainsCode) attributes.Add("Code");
-        if (ContainsInitializedData) attributes.Add("Data");
-        if (ContainsUninitializedData) attributes.Add("BSS");
-        
+
+        if (IsExecutable)
+        {
+            attributes.Add("Exec");
+        }
+
+        if (IsReadable)
+        {
+            attributes.Add("Read");
+        }
+
+        if (IsWritable)
+        {
+            attributes.Add("Write");
+        }
+
+        if (ContainsCode)
+        {
+            attributes.Add("Code");
+        }
+
+        if (ContainsInitializedData)
+        {
+            attributes.Add("Data");
+        }
+
+        if (ContainsUninitializedData)
+        {
+            attributes.Add("BSS");
+        }
+
         return attributes.Count > 0 ? $"[{string.Join(", ", attributes)}]" : string.Empty;
     }
 }

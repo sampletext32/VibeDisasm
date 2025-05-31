@@ -24,7 +24,10 @@ public class FfreeHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FFREE ST(i) is DD C0-C7
-        if (opcode != 0xDD) return false;
+        if (opcode != 0xDD)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,14 +35,14 @@ public class FfreeHandler : InstructionHandler
         }
 
         // Check if the ModR/M byte has reg field = 0 and mod = 3
-        byte modRm = Decoder.PeakByte();
-        byte reg = (byte)((modRm >> 3) & 0x7);
-        byte mod = (byte)((modRm >> 6) & 0x3);
-        
+        var modRm = Decoder.PeakByte();
+        var reg = (byte)((modRm >> 3) & 0x7);
+        var mod = (byte)((modRm >> 6) & 0x3);
+
         // Only handle register operands (mod = 3) with reg = 0
         return reg == 0 && mod == 3;
     }
-    
+
     /// <summary>
     /// Decodes a FFREE ST(i) instruction
     /// </summary>
@@ -55,12 +58,12 @@ public class FfreeHandler : InstructionHandler
 
         // Read the ModR/M byte
         var (mod, reg, rm, _) = ModRMDecoder.ReadModRM();
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Ffree;
 
         // Map rm field to FPU register index
-        FpuRegisterIndex stIndex = rm switch
+        var stIndex = rm switch
         {
             RegisterIndex.A => FpuRegisterIndex.ST0,
             RegisterIndex.C => FpuRegisterIndex.ST1,
@@ -72,12 +75,12 @@ public class FfreeHandler : InstructionHandler
             RegisterIndex.Di => FpuRegisterIndex.ST7,
             _ => FpuRegisterIndex.ST0 // Default case, should not happen
         };
-        
+
         // Create the FPU register operand
         var fpuRegisterOperand = OperandFactory.CreateFPURegisterOperand(stIndex);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             fpuRegisterOperand
         ];

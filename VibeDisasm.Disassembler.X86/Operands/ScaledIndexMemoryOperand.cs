@@ -11,22 +11,22 @@ public class ScaledIndexMemoryOperand : MemoryOperand
     /// Gets or sets the base register
     /// </summary>
     public RegisterIndex? BaseRegister { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the index register
     /// </summary>
     public RegisterIndex IndexRegister { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the scale factor (1, 2, 4, or 8)
     /// </summary>
     public int Scale { get; set; }
-    
+
     /// <summary>
     /// Gets or sets the displacement value
     /// </summary>
     public long Displacement { get; set; }
-    
+
     /// <summary>
     /// Initializes a new instance of the ScaledIndexMemoryOperand class
     /// </summary>
@@ -36,7 +36,7 @@ public class ScaledIndexMemoryOperand : MemoryOperand
     /// <param name="displacement">The displacement value</param>
     /// <param name="size">The size of the memory access in bits</param>
     /// <param name="segmentOverride">Optional segment override</param>
-    public ScaledIndexMemoryOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null, 
+    public ScaledIndexMemoryOperand(RegisterIndex indexRegister, int scale, RegisterIndex? baseRegister = null,
                                    long displacement = 0, int size = 32, Segment? segmentOverride = null)
         : base(size, segmentOverride)
     {
@@ -46,22 +46,22 @@ public class ScaledIndexMemoryOperand : MemoryOperand
         BaseRegister = baseRegister;
         Displacement = displacement;
     }
-    
+
     /// <summary>
     /// Returns a string representation of this operand
     /// </summary>
     public override string ToString()
     {
-        string baseRegPart = BaseRegister != null ? $"{RegisterMapper.GetRegisterName(BaseRegister.Value, 32)}+" : "";
-        string indexPart = $"{RegisterMapper.GetRegisterName(IndexRegister, 32)}*{Scale}";
-        string dispPart = "";
-        
+        var baseRegPart = BaseRegister != null ? $"{RegisterMapper.GetRegisterName(BaseRegister.Value, 32)}+" : "";
+        var indexPart = $"{RegisterMapper.GetRegisterName(IndexRegister, 32)}*{Scale}";
+        var dispPart = "";
+
         if (Displacement != 0)
         {
-            string sign = Displacement > 0 ? "+" : "-";
+            var sign = Displacement > 0 ? "+" : "-";
             dispPart = $"{sign}0x{Math.Abs(Displacement):X2}";
         }
-        
+
         return $"{GetSizePrefix()}[{baseRegPart}{indexPart}{dispPart}]";
     }
 }

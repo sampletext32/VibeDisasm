@@ -1,5 +1,4 @@
 using VibeDisasm.CfgVisualizer.State;
-using VibeDisasm.CfgVisualizer.ViewModels;
 
 namespace VibeDisasm.CfgVisualizer.Services;
 
@@ -22,7 +21,7 @@ public class ActionsService : IService
         var peFileState = _peFileService.LoadPeFile(path);
 
         _appState.OnPeFileLoaded(peFileState);
-        
+
         return true;
     }
 }

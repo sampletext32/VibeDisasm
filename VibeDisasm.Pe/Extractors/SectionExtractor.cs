@@ -18,14 +18,14 @@ public static class SectionExtractor
         {
             throw new ArgumentNullException(nameof(rawPeFile));
         }
-        
+
         var sectionInfos = new SectionInfo[rawPeFile.SectionHeaders.Length];
-        
-        for (int i = 0; i < rawPeFile.SectionHeaders.Length; i++)
+
+        for (var i = 0; i < rawPeFile.SectionHeaders.Length; i++)
         {
             sectionInfos[i] = BaseSectionExtractor.CreateSectionInfo(rawPeFile, rawPeFile.SectionHeaders[i]);
         }
-        
+
         return sectionInfos;
     }
 }

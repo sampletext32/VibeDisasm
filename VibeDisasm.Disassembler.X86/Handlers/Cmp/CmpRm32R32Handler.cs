@@ -11,11 +11,11 @@ public class CmpRm32R32Handler : InstructionHandler
     /// Initializes a new instance of the CmpRm32R32Handler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public CmpRm32R32Handler(InstructionDecoder decoder) 
+    public CmpRm32R32Handler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -27,7 +27,7 @@ public class CmpRm32R32Handler : InstructionHandler
         // This ensures 16-bit handlers get priority when the prefix is present
         return opcode == 0x39 && !Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes a CMP r/m32, r32 instruction
     /// </summary>
@@ -43,23 +43,23 @@ public class CmpRm32R32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Read the ModR/M byte
         // For CMP r/m32, r32 (0x39):
         // - The r/m field with mod specifies the destination operand (register or memory)
         // - The reg field specifies the source register
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Create the source register operand
         var sourceOperand = OperandFactory.CreateRegisterOperand(reg, 32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

@@ -33,10 +33,10 @@ public class MovRm32Imm32Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Peak at the ModR/M byte without advancing the position
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // MOV r/m8, imm8 only uses reg=0
         return reg == 0;
     }
@@ -51,29 +51,29 @@ public class MovRm32Imm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Mov;
-        
+
         // Read the ModR/M byte
         var (_, _, _, destinationOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Check if we have enough bytes for the immediate value (4 bytes)
         if (!Decoder.CanReadUInt())
         {
             return false;
         }
-        
+
         // Read the immediate dword and create the operands
-        uint imm32 = Decoder.ReadUInt32();
-        
+        var imm32 = Decoder.ReadUInt32();
+
         // Create the immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm32);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

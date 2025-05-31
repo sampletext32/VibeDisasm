@@ -27,7 +27,7 @@ public class XchgR32Rm32Handler : InstructionHandler
         // XCHG r32, r/m32 is 0x87
         return opcode == 0x87;
     }
-    
+
     /// <summary>
     /// Decodes an XCHG r32, r/m32 instruction
     /// </summary>
@@ -38,29 +38,29 @@ public class XchgR32Rm32Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Xchg;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the ModR/M byte
         // For XCHG r32, r/m32 (0x87):
         // - The reg field specifies the first register operand
         // - The r/m field with mod specifies the second operand (register or memory)
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM();
-        
+
         // Create the source register operand from the reg field
         var sourceOperand = OperandFactory.CreateRegisterOperand(reg);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

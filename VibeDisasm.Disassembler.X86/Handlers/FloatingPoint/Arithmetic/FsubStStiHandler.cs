@@ -24,7 +24,10 @@ public class FsubStStiHandler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         // FSUB ST, ST(i) is D8 E0-E7
-        if (opcode != 0xD8) return false;
+        if (opcode != 0xD8)
+        {
+            return false;
+        }
 
         if (!Decoder.CanReadByte())
         {
@@ -32,12 +35,12 @@ public class FsubStStiHandler : InstructionHandler
         }
 
         // Check second opcode byte
-        byte secondOpcode = Decoder.PeakByte();
-        
+        var secondOpcode = Decoder.PeakByte();
+
         // Only handle E0-E7
         return secondOpcode is >= 0xE0 and <= 0xE7;
     }
-    
+
     /// <summary>
     /// Decodes a FSUB ST, ST(i) instruction
     /// </summary>
@@ -53,16 +56,16 @@ public class FsubStStiHandler : InstructionHandler
 
         // Read the ModR/M byte and calculate ST(i) index
         var stIndex = (FpuRegisterIndex)(Decoder.ReadByte() - 0xE0);
-        
+
         // Set the instruction type
         instruction.Type = InstructionType.Fsub;
-        
+
         // Create the FPU register operands
         var st0Operand = OperandFactory.CreateFPURegisterOperand(FpuRegisterIndex.ST0);
         var stiOperand = OperandFactory.CreateFPURegisterOperand(stIndex);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             st0Operand,
             stiOperand

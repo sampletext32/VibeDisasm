@@ -49,12 +49,12 @@ public class AddRm8R8Handler : InstructionHandler
         // - The reg field specifies the source register
         // - The r/m field with mod specifies the destination operand (register or memory)
         var (_, reg, _, destinationOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
         var sourceOperand = OperandFactory.CreateRegisterOperand8(reg);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

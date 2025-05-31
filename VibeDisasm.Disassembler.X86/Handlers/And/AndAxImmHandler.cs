@@ -11,11 +11,11 @@ public class AndAxImmHandler : InstructionHandler
     /// Initializes a new instance of the AndAxImmHandler class
     /// </summary>
     /// <param name="decoder">The instruction decoder that owns this handler</param>
-    public AndAxImmHandler(InstructionDecoder decoder) 
+    public AndAxImmHandler(InstructionDecoder decoder)
         : base(decoder)
     {
     }
-    
+
     /// <summary>
     /// Checks if this handler can decode the given opcode
     /// </summary>
@@ -32,7 +32,7 @@ public class AndAxImmHandler : InstructionHandler
         // Only handle when the operand size prefix is present
         return Decoder.HasOperandSizePrefix();
     }
-    
+
     /// <summary>
     /// Decodes an AND AX, imm16 instruction
     /// </summary>
@@ -51,7 +51,7 @@ public class AndAxImmHandler : InstructionHandler
         }
 
         // Read the immediate value
-        ushort imm16 = Decoder.ReadUInt16();
+        var imm16 = Decoder.ReadUInt16();
 
         // Create the AX register operand
         var axOperand = OperandFactory.CreateRegisterOperand(RegisterIndex.A, 16);
@@ -60,7 +60,7 @@ public class AndAxImmHandler : InstructionHandler
         var immOperand = OperandFactory.CreateImmediateOperand(imm16);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             axOperand,
             immOperand

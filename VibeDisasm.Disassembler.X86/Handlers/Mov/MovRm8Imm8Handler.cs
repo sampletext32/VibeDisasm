@@ -28,16 +28,16 @@ public class MovRm8Imm8Handler : InstructionHandler
         {
             return false;
         }
-        
+
         // Then check if we can peek at the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Peak at the ModR/M byte without advancing the position
         var reg = ModRMDecoder.PeakModRMReg();
-        
+
         // MOV r/m8, imm8 only uses reg=0
         return reg == 0;
     }
@@ -52,13 +52,13 @@ public class MovRm8Imm8Handler : InstructionHandler
     {
         // Set the instruction type
         instruction.Type = InstructionType.Mov;
-        
+
         // Check if we have enough bytes for the ModR/M byte
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
+
         // Read the ModR/M byte
         // For MOV r/m8, imm8 (0xC6):
         // - The r/m field with mod specifies the destination operand (register or memory)
@@ -66,25 +66,25 @@ public class MovRm8Imm8Handler : InstructionHandler
         var (_, _, _, destinationOperand) = ModRMDecoder.ReadModRM8();
 
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
-        
+
         // Read the immediate value
         if (!Decoder.CanReadByte())
         {
             return false;
         }
-        
-        byte imm8 = Decoder.ReadByte();
-        
+
+        var imm8 = Decoder.ReadByte();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand
         ];
-        
+
         return true;
     }
 }

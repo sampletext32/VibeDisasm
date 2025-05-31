@@ -24,11 +24,15 @@ public class CmpImmWithRm8Handler : InstructionHandler
     public override bool CanHandle(byte opcode)
     {
         if (opcode != 0x80)
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 7 (CMP)
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         var reg = ModRMDecoder.PeakModRMReg();
 
@@ -48,7 +52,7 @@ public class CmpImmWithRm8Handler : InstructionHandler
 
         // Read the ModR/M byte, specifying that we're dealing with 8-bit operands
         var (_, _, _, destinationOperand) = ModRMDecoder.ReadModRM8();
-        
+
         // Note: The operand size is already set to 8-bit by the ReadModRM8 method
 
         // Check if we have enough bytes for the immediate value
@@ -58,13 +62,13 @@ public class CmpImmWithRm8Handler : InstructionHandler
         }
 
         // Read the immediate byte
-        byte imm8 = Decoder.ReadByte();
-        
+        var imm8 = Decoder.ReadByte();
+
         // Create the source immediate operand
         var sourceOperand = OperandFactory.CreateImmediateOperand(imm8, 8);
-        
+
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             destinationOperand,
             sourceOperand

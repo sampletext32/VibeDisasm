@@ -25,11 +25,15 @@ public class RcrRm32ByImmHandler : InstructionHandler
     {
         // RCR r/m32, imm8 is encoded as 0xC1 /3
         if (opcode != 0xC1)
+        {
             return false;
+        }
 
         // Check if we can read the ModR/M byte
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Check if the reg field of the ModR/M byte is 3 (RCR)
         var reg = ModRMDecoder.PeakModRMReg();
@@ -52,16 +56,18 @@ public class RcrRm32ByImmHandler : InstructionHandler
 
         // Check if we can read the immediate byte
         if (!Decoder.CanReadByte())
+        {
             return false;
+        }
 
         // Read the immediate byte (rotate count)
-        byte imm8 = Decoder.ReadByte();
+        var imm8 = Decoder.ReadByte();
 
         // Create an immediate operand for the rotate count
         var immOperand = OperandFactory.CreateImmediateOperand(imm8);
 
         // Set the structured operands
-        instruction.StructuredOperands = 
+        instruction.StructuredOperands =
         [
             operand,
             immOperand

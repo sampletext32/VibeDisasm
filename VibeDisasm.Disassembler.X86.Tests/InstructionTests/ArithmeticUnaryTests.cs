@@ -17,19 +17,19 @@ public class ArithmeticUnaryTests
         // Arrange
         // DIV ECX (F7 F1) - ModR/M byte F1 = 11 110 001 (mod=3, reg=6, rm=1)
         // mod=3 means direct register addressing, reg=6 is the DIV opcode extension, rm=1 is ECX
-        byte[] codeBuffer = new byte[] { 0xF7, 0xF1 };
+        var codeBuffer = new byte[] { 0xF7, 0xF1 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Div, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
@@ -37,7 +37,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(RegisterIndex.C, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (ECX)
     }
-    
+
     /// <summary>
     /// Tests the IdivRm32Handler for decoding IDIV r/m32 instruction
     /// </summary>
@@ -47,19 +47,19 @@ public class ArithmeticUnaryTests
         // Arrange
         // IDIV ECX (F7 F9) - ModR/M byte F9 = 11 111 001 (mod=3, reg=7, rm=1)
         // mod=3 means direct register addressing, reg=7 is the IDIV opcode extension, rm=1 is ECX
-        byte[] codeBuffer = new byte[] { 0xF7, 0xF9 };
+        var codeBuffer = new byte[] { 0xF7, 0xF9 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.IDiv, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
@@ -67,7 +67,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(RegisterIndex.C, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (ECX)
     }
-    
+
     /// <summary>
     /// Tests the MulRm32Handler for decoding MUL r/m32 instruction
     /// </summary>
@@ -77,19 +77,19 @@ public class ArithmeticUnaryTests
         // Arrange
         // MUL ECX (F7 E1) - ModR/M byte E1 = 11 100 001 (mod=3, reg=4, rm=1)
         // mod=3 means direct register addressing, reg=4 is the MUL opcode extension, rm=1 is ECX
-        byte[] codeBuffer = new byte[] { 0xF7, 0xE1 };
+        var codeBuffer = new byte[] { 0xF7, 0xE1 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Mul, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
@@ -97,7 +97,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(RegisterIndex.C, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (ECX)
     }
-    
+
     /// <summary>
     /// Tests the ImulRm32Handler for decoding IMUL r/m32 instruction
     /// </summary>
@@ -107,19 +107,19 @@ public class ArithmeticUnaryTests
         // Arrange
         // IMUL ECX (F7 E9) - ModR/M byte E9 = 11 101 001 (mod=3, reg=5, rm=1)
         // mod=3 means direct register addressing, reg=5 is the IMUL opcode extension, rm=1 is ECX
-        byte[] codeBuffer = new byte[] { 0xF7, 0xE9 };
+        var codeBuffer = new byte[] { 0xF7, 0xE9 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.IMul, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
@@ -127,7 +127,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(RegisterIndex.C, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (ECX)
     }
-    
+
     /// <summary>
     /// Tests the NegRm32Handler for decoding NEG r/m32 instruction
     /// </summary>
@@ -137,19 +137,19 @@ public class ArithmeticUnaryTests
         // Arrange
         // NEG ECX (F7 D9) - ModR/M byte D9 = 11 011 001 (mod=3, reg=3, rm=1)
         // mod=3 means direct register addressing, reg=3 is the NEG opcode extension, rm=1 is ECX
-        byte[] codeBuffer = new byte[] { 0xF7, 0xD9 };
+        var codeBuffer = new byte[] { 0xF7, 0xD9 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Neg, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
@@ -157,7 +157,7 @@ public class ArithmeticUnaryTests
         Assert.Equal(RegisterIndex.C, registerOperand.Register);
         Assert.Equal(32, registerOperand.Size); // Validate that it's a 32-bit register (ECX)
     }
-    
+
     /// <summary>
     /// Tests the NotRm32Handler for decoding NOT r/m32 instruction
     /// </summary>
@@ -167,19 +167,19 @@ public class ArithmeticUnaryTests
         // Arrange
         // NOT ECX (F7 D1) - ModR/M byte D1 = 11 010 001 (mod=3, reg=2, rm=1)
         // mod=3 means direct register addressing, reg=2 is the NOT opcode extension, rm=1 is ECX
-        byte[] codeBuffer = new byte[] { 0xF7, 0xD1 };
+        var codeBuffer = new byte[] { 0xF7, 0xD1 };
         var decoder = new InstructionDecoder(codeBuffer, codeBuffer.Length);
-        
+
         // Act
         var instruction = decoder.DecodeInstruction();
-        
+
         // Assert
         Assert.NotNull(instruction);
         Assert.Equal(InstructionType.Not, instruction.Type);
-        
+
         // Check that we have one operand
-        Assert.Single((IEnumerable) instruction.StructuredOperands);
-        
+        Assert.Single((IEnumerable)instruction.StructuredOperands);
+
         // Check the operand (ECX)
         var ecxOperand = instruction.StructuredOperands[0];
         Assert.IsType<RegisterOperand>(ecxOperand);
