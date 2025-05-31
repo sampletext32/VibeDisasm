@@ -4,7 +4,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 /// Represents the whole program in IR form.
 /// Example: Module with several IRFunctions and global variables
 /// </summary>
-public sealed class IRProgram
+public sealed class IRProgram : IRNode
 {
     public required IReadOnlyList<IRFunction> Functions { get; init; }
     public required IReadOnlyList<IRVariable> GlobalVariables { get; init; }

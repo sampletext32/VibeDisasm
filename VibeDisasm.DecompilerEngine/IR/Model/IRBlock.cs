@@ -6,7 +6,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 /// Represents a basic block in IR.
 /// Example: Block with instructions for a loop body
 /// </summary>
-public class IRBlock
+public class IRBlock : IRNode
 {
     public required string Id { get; init; }
     public required List<IRInstruction> Instructions { get; init; }

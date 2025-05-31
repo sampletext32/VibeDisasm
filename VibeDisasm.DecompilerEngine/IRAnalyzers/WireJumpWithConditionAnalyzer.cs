@@ -29,6 +29,8 @@ public class WireJumpWithConditionAnalyzer
                     {
                         var sideEffects = instructions[j].SideEffects;
 
+                        // TODO: there might be an instruction that modifies a part of flags (e.g. only ZF), and another for other part (only CF)
+                        // TODO: in this case we would create an invalid wiring, but it's okay for now.
                         // need to check if the instruction covers all flags, because for example Jnbe modifies Carry and Zero
                         if (sideEffects.Select(x => x.Flag)
                             .Intersect(neededFlags)
