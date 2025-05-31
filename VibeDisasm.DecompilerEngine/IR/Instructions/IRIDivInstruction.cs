@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 
@@ -31,4 +33,9 @@ public sealed class IRIDivInstruction : IRInstruction
         DestQuotient = destQuotient;
         DestRemainder = destRemainder;
     }
+
+
+    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }

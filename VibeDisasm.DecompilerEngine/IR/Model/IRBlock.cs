@@ -1,4 +1,5 @@
 using VibeDisasm.DecompilerEngine.IR.Instructions;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Model;
 
@@ -18,4 +19,11 @@ public class IRBlock : IRNode
     }
 
     public override string ToString() => $"// Block {Id}\n" + string.Join("\n", Instructions);
+
+    public override void Accept(IIRNodeVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }
