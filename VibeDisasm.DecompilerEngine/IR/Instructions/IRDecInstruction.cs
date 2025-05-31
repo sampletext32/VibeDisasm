@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 
@@ -7,7 +7,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a decrement (DEC) instruction in IR.
 /// Example: dec eax -> IRDecInstruction(eax)
 /// </summary>
-public sealed class IRDecInstruction : IRInstruction
+public sealed class IRDecInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Target { get; init; }
     
@@ -22,7 +22,21 @@ public sealed class IRDecInstruction : IRInstruction
     public override string ToString() => $"{Target}--";
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
-    
+
+    public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
+    {
+        return flag switch
+        {
+            IRFlag.Zero => new IRCompareExpr(Target, IRConstantExpr.Int(1), 
+                expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
+            
+            IRFlag.Sign => new IRCompareExpr(Target, IRConstantExpr.Int(0),
+                expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
+            
+            _ => null // Other flags not directly mappable
+        };
+    }
+
     public IRDecInstruction(IRExpression target)
     {
         Target = target;

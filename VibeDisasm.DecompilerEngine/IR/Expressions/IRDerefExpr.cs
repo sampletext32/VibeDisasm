@@ -15,4 +15,14 @@ public sealed class IRDerefExpr : IRExpression
 
     [Pure]
     public override string ToString() => $"*({Address})";
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRDerefExpr other)
+        {
+            return Address.Equals(other.Address);
+        }
+
+        return false;
+    }
 }

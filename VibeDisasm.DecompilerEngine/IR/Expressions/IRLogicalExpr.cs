@@ -19,6 +19,16 @@ public class IRLogicalExpr : IRExpression
     }
 
     public override string ToString() => $"{Operand1} {Operation.ToLangString()} {Operand2}";
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRLogicalExpr other)
+        {
+            return Operand1.Equals(other.Operand1) && Operand2.Equals(other.Operand2) && Operation == other.Operation;
+        }
+
+        return false;
+    }
 }
 
 public enum IRLogicalOperation

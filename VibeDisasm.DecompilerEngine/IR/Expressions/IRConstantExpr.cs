@@ -20,15 +20,25 @@ public sealed class IRConstantExpr : IRExpression
         Type = type;
     }
 
-    public static IRConstantExpr Byte(byte value) => new IRConstantExpr(value, IRType.Byte);
-    public static IRConstantExpr Int(int value) => new IRConstantExpr(value, IRType.Int);
-    public static IRConstantExpr Uint(uint value) => new IRConstantExpr(value, IRType.Uint);
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRConstantExpr other)
+        {
+            return Value.Equals(other.Value) && Type == other.Type;
+        }
 
-    public static IRConstantExpr Short(short value) => new IRConstantExpr(value, IRType.Short);
-    public static IRConstantExpr UShort(ushort value) => new IRConstantExpr(value, IRType.UShort);
-    public static IRConstantExpr Long(long value) => new IRConstantExpr(value, IRType.Long);
-    public static IRConstantExpr Ulong(ulong value) => new IRConstantExpr(value, IRType.Ulong);
-    public static IRConstantExpr Bool(bool value) => new IRConstantExpr(value, IRType.Bool);
+        return false;
+    }
+
+    public static IRConstantExpr Byte(byte value) => new(value, IRType.Byte);
+    public static IRConstantExpr Int(int value) => new(value, IRType.Int);
+    public static IRConstantExpr Uint(uint value) => new(value, IRType.Uint);
+
+    public static IRConstantExpr Short(short value) => new(value, IRType.Short);
+    public static IRConstantExpr UShort(ushort value) => new(value, IRType.UShort);
+    public static IRConstantExpr Long(long value) => new(value, IRType.Long);
+    public static IRConstantExpr Ulong(ulong value) => new(value, IRType.Ulong);
+    public static IRConstantExpr Bool(bool value) => new(value, IRType.Bool);
     public static IRConstantExpr FromSize(ulong value, int size) => size switch {
         8 => Byte((byte)value),
         16 => UShort((ushort)value),
@@ -39,27 +49,20 @@ public sealed class IRConstantExpr : IRExpression
 
     public override string ToString()
     {
-        switch (Value)
+        return Value switch
         {
-            case byte i:
-                return FormatNumber(i);
-            case short i:
-                return FormatNumber(i);
-            case ushort u:
-                return FormatNumber(u);
-            case int i:
-                return FormatNumber(i);
-            case uint u:
-                return FormatNumber(u);
-            case long l:
-                return FormatNumber(l);
-            case ulong ul:
-                return FormatNumber(ul);
-            case bool b:
-                return b ? "true" : "false";
-            default:
-                return Value.ToString() ?? "!unknown type constant!";
-        }
+            byte i => FormatNumber(i),
+            short i => FormatNumber(i),
+            ushort u => FormatNumber(u),
+            int i => FormatNumber(i),
+            uint u => FormatNumber(u),
+            long l => FormatNumber(l),
+            ulong ul => FormatNumber(ul),
+            bool b => b
+                ? "true"
+                : "false",
+            _ => Value.ToString() ?? "!unknown type constant!"
+        };
     }
 
     private static string FormatNumber(long number)

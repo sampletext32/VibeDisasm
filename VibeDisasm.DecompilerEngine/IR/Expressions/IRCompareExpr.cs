@@ -16,6 +16,16 @@ public class IRCompareExpr : IRExpression
     }
 
     public override string ToString() => $"{Left} {Comparison.ToLangString()} {Right}";
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRCompareExpr other)
+        {
+            return Left.Equals(other.Left) && Right.Equals(other.Right) && Comparison == other.Comparison;
+        }
+
+        return false;
+    }
 }
 
 public enum IRComparisonType

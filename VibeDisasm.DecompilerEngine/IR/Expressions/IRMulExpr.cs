@@ -14,4 +14,13 @@ public sealed class IRMulExpr : IRExpression
         Right = right;
     }
     public override string ToString() => $"{Left} * {Right}";
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRMulExpr other)
+        {
+            return Left.Equals(other.Left) && Right.Equals(other.Right);
+        }
+        return false;
+    }
 }
