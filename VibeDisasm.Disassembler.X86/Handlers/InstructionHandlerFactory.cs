@@ -14,6 +14,7 @@ using VibeDisasm.Disassembler.X86.Handlers.Jump;
 using VibeDisasm.Disassembler.X86.Handlers.Lea;
 using VibeDisasm.Disassembler.X86.Handlers.Misc;
 using VibeDisasm.Disassembler.X86.Handlers.Mov;
+using VibeDisasm.Disassembler.X86.Handlers.Movzx;
 using VibeDisasm.Disassembler.X86.Handlers.Mul;
 using VibeDisasm.Disassembler.X86.Handlers.Neg;
 using VibeDisasm.Disassembler.X86.Handlers.Nop;
@@ -87,6 +88,7 @@ public class InstructionHandlerFactory
         RegisterFloatingPointHandlers(); // FPU instructions
         RegisterStringHandlers();    // String instructions
         RegisterMovHandlers();       // MOV instructions
+        RegisterMovzxHandlers();     // MOVZX instructions
         RegisterSubHandlers(); // Register SUB handlers
         RegisterNopHandlers(); // Register NOP handlers
         RegisterBitHandlers(); // Register bit manipulation handlers
@@ -839,6 +841,15 @@ public class InstructionHandlerFactory
         _handlers.Add(new Stack.PopfdHandler(_decoder));      // POPF/POPFD (9D)
         _handlers.Add(new Stack.EnterHandler(_decoder));      // ENTER (C8)
         _handlers.Add(new Stack.LeaveHandler(_decoder));      // LEAVE (C9)
+    }
+    
+    /// <summary>
+    /// Registers all MOVZX instruction handlers
+    /// </summary>
+    private void RegisterMovzxHandlers()
+    {
+        _handlers.Add(new MovzxR32Rm8Handler(_decoder));     // MOVZX r32, r/m8 (0F B6)
+        _handlers.Add(new MovzxR32Rm16Handler(_decoder));    // MOVZX r32, r/m16 (0F B7)
     }
 
     /// <summary>

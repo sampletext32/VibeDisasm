@@ -1,0 +1,101 @@
+# MOVZX instruction tests
+# Format: RawBytes;Instructions
+RawBytes;Instructions
+
+# MOVZX r32, r/m8 (opcode 0F B6)
+# Register operands
+0FB6C0;[{ "Type": "Movzx", "Operands": ["eax", "al"] }]
+0FB6C1;[{ "Type": "Movzx", "Operands": ["eax", "cl"] }]
+0FB6C2;[{ "Type": "Movzx", "Operands": ["eax", "dl"] }]
+0FB6C3;[{ "Type": "Movzx", "Operands": ["eax", "bl"] }]
+0FB6C4;[{ "Type": "Movzx", "Operands": ["eax", "ah"] }]
+0FB6C5;[{ "Type": "Movzx", "Operands": ["eax", "ch"] }]
+0FB6C6;[{ "Type": "Movzx", "Operands": ["eax", "dh"] }]
+0FB6C7;[{ "Type": "Movzx", "Operands": ["eax", "bh"] }]
+
+0FB6D0;[{ "Type": "Movzx", "Operands": ["edx", "al"] }]
+0FB6D1;[{ "Type": "Movzx", "Operands": ["edx", "cl"] }]
+0FB6D2;[{ "Type": "Movzx", "Operands": ["edx", "dl"] }]
+0FB6D3;[{ "Type": "Movzx", "Operands": ["edx", "bl"] }]
+
+0FB6F4;[{ "Type": "Movzx", "Operands": ["esi", "ah"] }]
+0FB6F5;[{ "Type": "Movzx", "Operands": ["esi", "ch"] }]
+0FB6F6;[{ "Type": "Movzx", "Operands": ["esi", "dh"] }]
+0FB6F7;[{ "Type": "Movzx", "Operands": ["esi", "bh"] }]
+
+# Memory operands
+0FB600;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [eax]"] }]
+0FB601;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ecx]"] }]
+0FB602;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [edx]"] }]
+0FB603;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ebx]"] }]
+0FB605EFCDAB89;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [0x89ABCDEF]"] }]
+0FB60501000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [0x01]"] }]
+
+# Displacement memory operands
+0FB64001;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [eax+0x01]"] }]
+0FB64101;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ecx+0x01]"] }]
+0FB64201;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [edx+0x01]"] }]
+0FB64301;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ebx+0x01]"] }]
+0FB64501;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ebp+0x01]"] }]
+0FB64601;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [esi+0x01]"] }]
+0FB64701;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [edi+0x01]"] }]
+
+0FB68001000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [eax+0x01]"] }]
+0FB68101000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ecx+0x01]"] }]
+0FB68201000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [edx+0x01]"] }]
+
+# SIB addressing
+0FB60424;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [esp+0x00]"] }]
+0FB6442401;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [esp+0x01]"] }]
+0FB6048D00000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [ecx*4]"] }]
+0FB6049500000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [edx*4]"] }]
+0FB604BD00000000;[{ "Type": "Movzx", "Operands": ["eax", "byte ptr [edi*4]"] }]
+
+# MOVZX r32, r/m16 (opcode 0F B7)
+# Register operands
+0FB7C0;[{ "Type": "Movzx", "Operands": ["eax", "ax"] }]
+0FB7C1;[{ "Type": "Movzx", "Operands": ["eax", "cx"] }]
+0FB7C2;[{ "Type": "Movzx", "Operands": ["eax", "dx"] }]
+0FB7C3;[{ "Type": "Movzx", "Operands": ["eax", "bx"] }]
+0FB7C4;[{ "Type": "Movzx", "Operands": ["eax", "sp"] }]
+0FB7C5;[{ "Type": "Movzx", "Operands": ["eax", "bp"] }]
+0FB7C6;[{ "Type": "Movzx", "Operands": ["eax", "si"] }]
+0FB7C7;[{ "Type": "Movzx", "Operands": ["eax", "di"] }]
+
+0FB7D0;[{ "Type": "Movzx", "Operands": ["edx", "ax"] }]
+0FB7D1;[{ "Type": "Movzx", "Operands": ["edx", "cx"] }]
+0FB7D2;[{ "Type": "Movzx", "Operands": ["edx", "dx"] }]
+0FB7D3;[{ "Type": "Movzx", "Operands": ["edx", "bx"] }]
+
+0FB7F4;[{ "Type": "Movzx", "Operands": ["esi", "sp"] }]
+0FB7F5;[{ "Type": "Movzx", "Operands": ["esi", "bp"] }]
+0FB7F6;[{ "Type": "Movzx", "Operands": ["esi", "si"] }]
+0FB7F7;[{ "Type": "Movzx", "Operands": ["esi", "di"] }]
+
+# Memory operands
+0FB700;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [eax]"] }]
+0FB701;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ecx]"] }]
+0FB702;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [edx]"] }]
+0FB703;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ebx]"] }]
+0FB705EFCDAB89;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [0x89ABCDEF]"] }]
+0FB70501000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [0x01]"] }]
+
+# Displacement memory operands
+0FB74001;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [eax+0x01]"] }]
+0FB74101;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ecx+0x01]"] }]
+0FB74201;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [edx+0x01]"] }]
+0FB74301;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ebx+0x01]"] }]
+0FB74501;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ebp+0x01]"] }]
+0FB74601;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [esi+0x01]"] }]
+0FB74701;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [edi+0x01]"] }]
+
+0FB78001000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [eax+0x01]"] }]
+0FB78101000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ecx+0x01]"] }]
+0FB78201000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [edx+0x01]"] }]
+
+# SIB addressing
+0FB70424;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [esp+0x00]"] }]
+0FB7442401;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [esp+0x01]"] }]
+0FB7048D00000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [ecx*4]"] }]
+0FB7049500000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [edx*4]"] }]
+0FB704BD00000000;[{ "Type": "Movzx", "Operands": ["eax", "word ptr [edi*4]"] }]

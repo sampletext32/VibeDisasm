@@ -22,6 +22,7 @@ public sealed class PeFileService : IService
         return new PeFileState(
             FileData: fileData,
             LoadedFilePath: filePath,
+            RawPeFile: rawPe,
             PeInfo: PeInfoExtractor.Extract(rawPe),
             ExportInfo: exportInfo,
             Sections: SectionExtractor.Extract(rawPe),

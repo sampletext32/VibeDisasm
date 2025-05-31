@@ -1,11 +1,11 @@
-﻿namespace VibeDisasm.DecompilerEngine.IR.Visitors;
+﻿namespace VibeDisasm.Core;
 
 public static class NumberFormatter
 {
-    public static string FormatNumber(this long number)
+    public static string FormatNumber(this long number, bool includeSign = true)
     {
         var abs = Math.Abs(number);
-        var sign = number >= 0 ? "+" : "-";
+        var sign = includeSign ? (number >= 0 ? "+" : "-") : "";
         string format;
 
         if (abs == 0)

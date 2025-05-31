@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+      <ProjectReference Include="..\VibeDisasm.Core\VibeDisasm.Core.csproj" />
       <ProjectReference Include="..\VibeDisasm.Disassembler.X86\VibeDisasm.Disassembler.X86.csproj" />
     </ItemGroup>
 

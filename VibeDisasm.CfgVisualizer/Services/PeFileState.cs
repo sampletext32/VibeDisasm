@@ -1,4 +1,5 @@
 using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.CfgVisualizer.Services;
 
@@ -8,6 +9,7 @@ namespace VibeDisasm.CfgVisualizer.Services;
 public record PeFileState(
     byte[] FileData,
     string LoadedFilePath,
+    RawPeFile RawPeFile,
     PeInfo PeInfo,
     ExportInfo? ExportInfo,
     IReadOnlyList<SectionInfo> Sections,

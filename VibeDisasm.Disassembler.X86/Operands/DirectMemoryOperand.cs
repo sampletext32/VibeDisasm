@@ -1,3 +1,5 @@
+using VibeDisasm.Core;
+
 namespace VibeDisasm.Disassembler.X86.Operands;
 
 /// <summary>
@@ -30,6 +32,7 @@ public class DirectMemoryOperand : MemoryOperand
     /// </summary>
     public override string ToString()
     {
-        return $"{GetSizePrefix()}[0x{Address:X}]";
+        var formatted = NumberFormatter.FormatNumber(Address, false);
+        return $"{GetSizePrefix()}[{formatted}]";
     }
 }
