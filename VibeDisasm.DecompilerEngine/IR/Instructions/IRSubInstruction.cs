@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,13 +10,13 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a subtract instruction in IR.
 /// Example: sub eax, ebx -> IRSubInstruction(eax, ebx)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRSubInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Destination { get; init; }
     public IRExpression Source { get; init; }
     public override IRExpression? Result => Destination;
 
-    public override string ToString() => $"{Destination} -= {Source}";
     public override IReadOnlyList<IRExpression> Operands => [Destination, Source];
 
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
@@ -50,7 +51,9 @@ public sealed class IRSubInstruction : IRInstruction, IIRFlagTranslatingInstruct
         Source = source;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitSub(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitSub(this);
+
+    internal override string DebugDisplay => $"IRSubInstruction({Destination.DebugDisplay} -= {Source.DebugDisplay})";
 }

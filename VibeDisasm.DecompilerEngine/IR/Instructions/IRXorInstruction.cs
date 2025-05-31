@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,14 +10,13 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a bitwise XOR instruction in IR.
 /// Example: xor eax, 1 -> IRXorInstruction(eax, 1)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRXorInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
     public override IRExpression? Result => Left;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-
-    public override string ToString() => $"{Left} ^= {Right}";
 
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
@@ -52,7 +52,9 @@ public sealed class IRXorInstruction : IRInstruction, IIRFlagTranslatingInstruct
         Right = right;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitXor(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitXor(this);
+
+    internal override string DebugDisplay => $"IRXorInstruction({Left.DebugDisplay} ^= {Right.DebugDisplay})";
 }

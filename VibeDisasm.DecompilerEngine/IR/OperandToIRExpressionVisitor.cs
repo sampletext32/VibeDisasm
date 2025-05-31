@@ -71,6 +71,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
         => new IRRegisterExpr(X86RegisterToIrRegister(operand.Register, operand.Size));
 
     public IRExpression VisitFarPointer(FarPointerOperand operand)
+        // TODO: Handle far pointers properly
         => new IRMemoryExpr($"{operand.BaseRegister}:{operand.Displacement}");
 
     public IRExpression VisitOperand(Operand operand)
@@ -140,6 +141,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
             };
         }
     }
+
     private static IRRegister X86RegisterToIrRegister(RegisterIndex8 registerIndex, int size)
     {
         return registerIndex switch
@@ -155,6 +157,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
             _ => throw new ArgumentOutOfRangeException(nameof(registerIndex), registerIndex, null)
         };
     }
+
     private static IRRegister X86RegisterToIrRegister(FpuRegisterIndex registerIndex, int size)
     {
         return registerIndex switch

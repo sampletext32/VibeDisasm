@@ -7,13 +7,10 @@ namespace VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 public abstract class IRWrappingInstruction<T> : IRInstruction
     where T : IRInstruction
 {
-    protected readonly T WrappedInstruction;
+    public T WrappedInstruction { get; init; }
 
     public override IRExpression? Result => WrappedInstruction.Result;
     public override IReadOnlyList<IRExpression> Operands => WrappedInstruction.Operands;
 
-    public IRWrappingInstruction(T wrappedInstruction)
-    {
-        WrappedInstruction = wrappedInstruction;
-    }
+    public IRWrappingInstruction(T wrappedInstruction) => WrappedInstruction = wrappedInstruction;
 }

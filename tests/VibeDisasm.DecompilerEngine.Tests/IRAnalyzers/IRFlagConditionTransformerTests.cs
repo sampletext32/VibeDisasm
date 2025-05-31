@@ -278,8 +278,8 @@ public class IRFlagConditionTransformerTests
         var logicalExpr = Assert.IsType<IRLogicalExpr>(result);
         Assert.Equal(IRLogicalOperation.Or, logicalExpr.Operation);
 
-        var leftCmp = Assert.IsType<IRCompareExpr>(logicalExpr.Operand1);
-        var rightCmp = Assert.IsType<IRCompareExpr>(logicalExpr.Operand2);
+        var leftCmp = Assert.IsType<IRCompareExpr>(logicalExpr.Left);
+        var rightCmp = Assert.IsType<IRCompareExpr>(logicalExpr.Right);
 
         Assert.Equal(IRComparisonType.Equal, leftCmp.Comparison);
         Assert.Equal(IRComparisonType.GreaterThanOrEqual, rightCmp.Comparison);

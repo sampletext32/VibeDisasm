@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,11 +10,11 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents an increment (INC) instruction in IR.
 /// Example: inc eax -> IRIncInstruction(eax)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRIncInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Target { get; init; }
 
-    public override string ToString() => $"{Target}++";
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
 
@@ -31,12 +32,11 @@ public sealed class IRIncInstruction : IRInstruction, IIRFlagTranslatingInstruct
         };
     }
 
-    public IRIncInstruction(IRExpression target)
-    {
-        Target = target;
-    }
+    public IRIncInstruction(IRExpression target) => Target = target;
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitInc(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitInc(this);
+
+    internal override string DebugDisplay => $"IRIncInstruction({Target.DebugDisplay}++)";
 }

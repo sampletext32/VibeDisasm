@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,11 +10,11 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a negation (NEG) instruction in IR.
 /// Example: neg eax -> IRNegInstruction(eax)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRNegInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Target { get; init; }
 
-    public override string ToString() => $"{Target} = -{Target}";
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
 
@@ -43,12 +44,11 @@ public sealed class IRNegInstruction : IRInstruction, IIRFlagTranslatingInstruct
         };
     }
 
-    public IRNegInstruction(IRExpression target)
-    {
-        Target = target;
-    }
+    public IRNegInstruction(IRExpression target) => Target = target;
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitNeg(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitNeg(this);
+
+    internal override string DebugDisplay => $"IRNegInstruction({Target.DebugDisplay} = -{Target.DebugDisplay})";
 }

@@ -1,25 +1,21 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
+[DebuggerDisplay("{DebugDisplay}")]
 public class IRUnflaggedJumpInstruction : IRWrappingInstruction<IRWiredJumpInstruction>
 {
     public IRExpression Condition { get; }
 
     public IRUnflaggedJumpInstruction(
         IRWiredJumpInstruction wrappedInstruction,
-        IRExpression condition) : base(wrappedInstruction)
-    {
+        IRExpression condition) : base(wrappedInstruction) =>
         Condition = condition;
-    }
 
-    public override string ToString() => $"if ({Condition}) goto {WrappedInstruction.Target}";
-
-    public override void Accept(IIRNodeVisitor visitor)
-    {
-        visitor.Visit(this);
-    }
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitUnflaggedJump(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitUnflaggedJump(this);
+    internal override string DebugDisplay => $"IRUnflaggedJumpInstruction(if ({Condition.DebugDisplay}) goto {WrappedInstruction.Target.DebugDisplay})";
 }

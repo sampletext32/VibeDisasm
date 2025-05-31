@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
@@ -8,6 +9,7 @@ namespace VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 /// <summary>
 /// Represents a jump instruction with a reference to the instruction that set its condition flags.
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public class IRWiredJumpInstruction : IRWrappingInstruction<IRJumpInstruction>
 {
     public IRInstruction ConditionInstruction { get; set; }
@@ -16,31 +18,12 @@ public class IRWiredJumpInstruction : IRWrappingInstruction<IRJumpInstruction>
     public IRExpression Target => WrappedInstruction.Target;
 
     public IRWiredJumpInstruction(IRJumpInstruction originalJump, IRInstruction conditionInstruction)
-        : base(originalJump)
-    {
+        : base(originalJump) =>
         ConditionInstruction = conditionInstruction;
-    }
 
-    public override string ToString() => ToLangString();
-
-    /// <summary>
-    /// Translates the condition to a human-readable string using the context of the condition instruction.
-    /// </summary>
-    [Pure]
-    public string ToLangString()
-    {
-        if (WrappedInstruction.Condition == null)
-        {
-            return $"jump to {WrappedInstruction.Target}"; // Unconditional jump
-        }
-
-        return WrappedInstruction.ToString();
-    }
-
-    public override void Accept(IIRNodeVisitor visitor)
-    {
-        visitor.Visit(this);
-    }
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitWiredJump(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitWiredJump(this);
+
+    internal override string DebugDisplay => $"IRWiredJumpInstruction(Condition: {ConditionInstruction.DebugDisplay} Jump: {WrappedInstruction.DebugDisplay})";
 }

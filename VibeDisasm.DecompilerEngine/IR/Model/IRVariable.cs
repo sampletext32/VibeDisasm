@@ -15,10 +15,8 @@ public class IRVariable : IRNode
     public bool IsArgument { get; init; }
     public bool IsLocal { get; init; }
 
-    public override void Accept(IIRNodeVisitor visitor)
-    {
-        visitor.Visit(this);
-    }
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitVariable(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitVariable(this);
+    internal override string DebugDisplay => $"IRVariable(Name={Name}, Type={Type?.Name ?? "unknown"}, IsArgument={IsArgument}, IsLocal={IsLocal})";
 }

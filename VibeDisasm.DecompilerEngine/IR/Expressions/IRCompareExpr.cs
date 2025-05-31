@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
+[DebuggerDisplay("{DebugDisplay}")]
 public class IRCompareExpr : IRExpression
 {
     public IRExpression Left { get; set; }
@@ -17,8 +19,6 @@ public class IRCompareExpr : IRExpression
         Comparison = comparison;
     }
 
-    public override string ToString() => $"{Left} {Comparison.ToLangString()} {Right}";
-
     public override bool Equals(object? obj)
     {
         if (obj is IRCompareExpr other)
@@ -29,36 +29,11 @@ public class IRCompareExpr : IRExpression
         return false;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitCompare(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitCompare(this);
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
-}
+    public override int GetHashCode() => throw new NotImplementedException();
 
-public enum IRComparisonType
-{
-    Equal,
-    NotEqual,
-    LessThan,
-    LessThanOrEqual,
-    GreaterThan,
-    GreaterThanOrEqual
-}
-
-public static class IRComparisonTypeExtensions
-{
-    public static string ToLangString(this IRComparisonType comparisonType) => comparisonType switch
-    {
-        IRComparisonType.Equal => "==",
-        IRComparisonType.NotEqual => "!=",
-        IRComparisonType.LessThan => "<",
-        IRComparisonType.LessThanOrEqual => "<=",
-        IRComparisonType.GreaterThan => ">",
-        IRComparisonType.GreaterThanOrEqual => ">=",
-        _ => throw new ArgumentOutOfRangeException(nameof(comparisonType), comparisonType, null)
-    };
+    internal override string DebugDisplay => $"IRCompareExpr({Left.DebugDisplay} {Comparison} {Right.DebugDisplay})";
 }

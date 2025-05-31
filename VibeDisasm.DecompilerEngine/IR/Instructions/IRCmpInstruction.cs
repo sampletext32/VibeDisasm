@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,14 +10,13 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a comparison (CMP/TEST) instruction in IR.
 /// Example: cmp eax, 1 -> IRCmpInstruction(eax, 1)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRCmpInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-
-    public override string ToString() => $"Compare({Left}, {Right})";
 
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
@@ -43,7 +43,9 @@ public sealed class IRCmpInstruction : IRInstruction, IIRFlagTranslatingInstruct
         Right = right;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitCmp(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitCmp(this);
+
+    internal override string DebugDisplay => $"IRCmpInstruction(Compare({Left.DebugDisplay}, {Right.DebugDisplay}))";
 }

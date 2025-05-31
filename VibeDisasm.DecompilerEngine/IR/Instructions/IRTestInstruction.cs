@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,14 +10,13 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a TEST instruction in IR which is commonly used to check if a register is zero.
 /// Example: test eax, eax -> IRTestInstruction(eax, eax)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-
-    public override string ToString() => $"Test({Left}, {Right})";
 
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
@@ -71,7 +71,9 @@ public sealed class IRTestInstruction : IRInstruction, IIRFlagTranslatingInstruc
         Right = right;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitTest(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitTest(this);
+
+    internal override string DebugDisplay => $"IRTestInstruction(Test({Left.DebugDisplay}, {Right.DebugDisplay}))";
 }
