@@ -50,7 +50,7 @@ public class JgeRel8Handler : InstructionHandler
         ulong targetAddress = instruction.Address + 2UL + (ulong) offset;
         
         // Create the relative offset operand with the absolute target address
-        var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress, 8);
+        var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress);
         
         // Set the structured operands
         instruction.StructuredOperands = 
