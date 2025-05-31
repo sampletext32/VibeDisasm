@@ -64,4 +64,6 @@ public interface IIRNodeReturningVisitor<out TReturn>
     
     TReturn? VisitShl(IRShlInstruction instr);
     TReturn? VisitShr(IRShrInstruction instr);
+    
+    TReturn? VisitMovzx(IRMovzxInstruction instr);
 }

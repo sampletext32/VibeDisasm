@@ -104,4 +104,5 @@ public abstract class BaseIRNodeVisitor : IIRNodeVisitor
     public virtual void VisitShl(IRShlInstruction instr) {}
 
     public virtual void VisitShr(IRShrInstruction instr) {}
+    public virtual void VisitMovzx(IRMovzxInstruction instr) {}
 }

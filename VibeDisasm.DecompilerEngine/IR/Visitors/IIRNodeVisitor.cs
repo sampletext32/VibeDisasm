@@ -64,4 +64,6 @@ public interface IIRNodeVisitor
     
     void VisitShl(IRShlInstruction instr);
     void VisitShr(IRShrInstruction instr);
+    
+    void VisitMovzx(IRMovzxInstruction instr);
 }
