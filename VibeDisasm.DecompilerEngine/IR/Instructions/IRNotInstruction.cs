@@ -1,4 +1,5 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 
@@ -6,7 +7,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a bitwise NOT instruction in IR.
 /// Example: not eax -> IRNotInstruction(eax)
 /// </summary>
-public sealed class IRNotInstruction : IRInstruction
+public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Operand { get; init; }
     public override IRExpression? Result => Operand;
@@ -27,4 +28,34 @@ public sealed class IRNotInstruction : IRInstruction
     }
 
     public override string ToString() => $"{Operand} = ~{Operand}";
+    
+    public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
+    {
+        return flag switch
+        {
+            // Zero flag: ~operand == 0 (which means operand == -1)
+            IRFlag.Zero => new IRCompareExpr(
+                Operand,
+                IRConstantExpr.Int(-1),
+                expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
+            
+            // Sign flag: result is negative (highest bit is set)
+            IRFlag.Sign => new IRCompareExpr(
+                new IRNotExpr(Operand),
+                IRConstantExpr.Int(0),
+                expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
+                
+            // Carry flag: always cleared to 0 by NOT instruction
+            IRFlag.Carry => expectedValue ? 
+                IRConstantExpr.Bool(false) : // If expected true, never happens
+                IRConstantExpr.Bool(true),   // If expected false, always happens
+                
+            // Overflow flag: always cleared to 0 by NOT instruction
+            IRFlag.Overflow => expectedValue ? 
+                IRConstantExpr.Bool(false) : // If expected true, never happens
+                IRConstantExpr.Bool(true),   // If expected false, always happens
+                
+            _ => null // Other flags not directly mappable
+        };
+    }
 }

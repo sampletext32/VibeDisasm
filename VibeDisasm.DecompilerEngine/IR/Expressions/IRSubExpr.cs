@@ -1,26 +1,26 @@
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 /// <summary>
-/// Represents an addition expression in IR.
+/// Represents a subtraction expression in IR.
 /// </summary>
-public sealed class IRAddExpr : IRExpression
+public sealed class IRSubExpr : IRExpression
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
 
     public override List<IRExpression> SubExpressions => [Left, Right];
 
-    public IRAddExpr(IRExpression left, IRExpression right)
+    public IRSubExpr(IRExpression left, IRExpression right)
     {
         Left = left;
         Right = right;
     }
 
-    public override string ToString() => $"{Left} + {Right}";
-
+    public override string ToString() => $"{Left} - {Right}";
+    
     public override bool Equals(object? obj)
     {
-        if (obj is IRAddExpr other)
+        if (obj is IRSubExpr other)
         {
             return Left.Equals(other.Left) && Right.Equals(other.Right);
         }

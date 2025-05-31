@@ -13,4 +13,14 @@ public sealed class IRMemoryExpr : IRExpression
     public IRMemoryExpr(string address) => Address = address;
 
     public override string ToString() => $"[{Address}]";
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRMemoryExpr other)
+        {
+            return Address.Equals(other.Address);
+        }
+
+        return false;
+    }
 }

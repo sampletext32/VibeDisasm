@@ -16,6 +16,16 @@ public sealed class IRSegmentExpr : IRExpression
     }
 
     public override string ToString() => $"{Segment}";
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRSegmentExpr other)
+        {
+            return Segment == other.Segment;
+        }
+
+        return false;
+    }
 }
 
 public enum IRSegment

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 
@@ -7,7 +8,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a bitwise AND instruction in IR.
 /// Example: and eax, 1 -> IRAndInstruction(eax, 1)
 /// </summary>
-public sealed class IRAndInstruction : IRInstruction
+public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
@@ -21,6 +22,26 @@ public sealed class IRAndInstruction : IRInstruction
     ];
 
     public override string ToString() => $"{Left} &= {Right}";
+    
+    public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
+    {
+        return flag switch
+        {
+            // Zero flag: result of AND is zero (common test pattern)
+            IRFlag.Zero => new IRCompareExpr(
+                new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
+                IRConstantExpr.Int(0),
+                expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
+            
+            // Sign flag: MSB of result is set (result is negative)
+            IRFlag.Sign => new IRCompareExpr(
+                new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
+                IRConstantExpr.Int(0),
+                expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
+                
+            _ => null // Other flags not directly mappable
+        };
+    }
     
     public IRAndInstruction(IRExpression left, IRExpression right)
     {

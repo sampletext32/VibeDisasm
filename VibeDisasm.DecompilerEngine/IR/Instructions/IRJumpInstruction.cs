@@ -27,5 +27,5 @@ public sealed class IRJumpInstruction : IRInstruction
     }
 
     public override string ToString()
-        => Condition is null ? $"jump -> {Target}" : $"jump_if {Condition} -> {Target}";
+        => $"{_underlyingInstruction.Address:X8} " + (Condition is null ? $"jump -> {Target}" : $"jump_if {Condition} -> {Target}");
 }

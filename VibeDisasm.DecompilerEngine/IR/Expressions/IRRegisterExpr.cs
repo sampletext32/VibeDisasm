@@ -16,6 +16,16 @@ public sealed class IRRegisterExpr : IRExpression
     }
 
     public override string ToString() => $"{Register}";
+    
+    public override bool Equals(object? obj)
+    {
+        if (obj is IRRegisterExpr other)
+        {
+            return Register == other.Register;
+        }
+
+        return false;
+    }
 }
 
 public enum IRRegister

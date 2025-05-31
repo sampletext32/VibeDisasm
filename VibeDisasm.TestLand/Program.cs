@@ -23,11 +23,12 @@ CodeOffsetsInfo codeOffsetsInfo = CodeOffsetsExtractor.Extract(rawPeFile);
 var entryPointCodeOffset = codeOffsetsInfo.Offsets.FirstOrDefault(x => x.Source == "Entry Point")!;
 
 // Disassemble the entry point into basic blocks (control flow function)
-var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, 0x2f496);
+var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, 0xaed0);
 
 var irFunction = IrFromAsmConverter.Convert(asmFunction);
 
 new WireJumpWithConditionAnalyzer().Handle(irFunction);
+new IRFlagConditionReplacementAnalyzer().Handle(irFunction);
 
 Console.WriteLine(irFunction);
 
