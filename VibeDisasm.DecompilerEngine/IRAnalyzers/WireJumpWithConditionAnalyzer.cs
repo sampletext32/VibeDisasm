@@ -1,6 +1,7 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
 namespace VibeDisasm.DecompilerEngine.IRAnalyzers;
@@ -30,7 +31,8 @@ public class WireJumpWithConditionAnalyzer
                     var found = false;
                     for (var j = i - 1; j >= 0; j--)
                     {
-                        var sideEffects = instructions[j].SideEffects;
+                        var sideEffects = SideEffectsVisitor.Instance.Visit(instructions[j])
+                            ?? throw new InvalidOperationException();
 
                         // TODO: there might be an instruction that modifies a part of flags (e.g. only ZF), and another for other part (only CF)
                         // TODO: in this case we would create an invalid wiring, but it's okay for now.

@@ -8,5 +8,5 @@ namespace VibeDisasm.DecompilerEngine.IR.Model;
 public abstract class IRNode
 {
     public abstract void Accept(IIRNodeVisitor visitor);
-    public abstract T Accept<T>(IIRNodeReturningVisitor<T> visitor);
+    public abstract T? Accept<T>(IIRNodeReturningVisitor<T> visitor);
 }

@@ -15,9 +15,6 @@ public sealed class IRMoveInstruction : IRInstruction
     public override IRExpression? Result => Destination;
     public override IReadOnlyList<IRExpression> Operands => [Destination, Source];
 
-    // MOV doesn't affect flags in x86
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
-
     public IRMoveInstruction(IRExpression destination, IRExpression source)
     {
         Destination = destination;
@@ -28,5 +25,5 @@ public sealed class IRMoveInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitMove(this);
 }

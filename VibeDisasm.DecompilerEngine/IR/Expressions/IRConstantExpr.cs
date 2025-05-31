@@ -32,7 +32,7 @@ public sealed class IRConstantExpr : IRExpression
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitConstant(this);
 
     public static IRConstantExpr Byte(byte value) => new(value, IRType.Byte);
     public static IRConstantExpr Int(int value) => new(value, IRType.Int);

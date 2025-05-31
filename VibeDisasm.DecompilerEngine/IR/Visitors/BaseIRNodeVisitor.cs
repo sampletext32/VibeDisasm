@@ -5,7 +5,7 @@ using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
 namespace VibeDisasm.DecompilerEngine.IR.Visitors;
 
-public class BaseIRNodeVisitor : IIRNodeVisitor
+public abstract class BaseIRNodeVisitor : IIRNodeVisitor
 {
     public virtual void Visit(IRAddExpr expr)
     {

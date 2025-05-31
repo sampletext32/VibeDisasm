@@ -32,7 +32,7 @@ public sealed class IRXorExpr : IRExpression
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitXor(this);
 
     public override int GetHashCode()
     {

@@ -14,9 +14,6 @@ public sealed class IRPushInstruction : IRInstruction
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Value];
 
-    // PUSH doesn't affect flags in x86
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
-
     public IRPushInstruction(IRExpression value)
     {
         Value = value;
@@ -26,5 +23,5 @@ public sealed class IRPushInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitPush(this);
 }

@@ -11,7 +11,6 @@ public abstract class IRWrappingInstruction<T> : IRInstruction
 
     public override IRExpression? Result => WrappedInstruction.Result;
     public override IReadOnlyList<IRExpression> Operands => WrappedInstruction.Operands;
-    public override IReadOnlyList<IRFlagEffect> SideEffects => WrappedInstruction.SideEffects;
 
     public IRWrappingInstruction(T wrappedInstruction)
     {

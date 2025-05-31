@@ -13,14 +13,6 @@ public sealed class IRNegInstruction : IRInstruction, IIRFlagTranslatingInstruct
 {
     public IRExpression Target { get; init; }
 
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new(IRFlag.Zero),
-        new(IRFlag.Sign),
-        new(IRFlag.Carry),
-        new(IRFlag.Overflow),
-        new(IRFlag.Parity)
-    ];
-
     public override string ToString() => $"{Target} = -{Target}";
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
@@ -58,5 +50,5 @@ public sealed class IRNegInstruction : IRInstruction, IIRFlagTranslatingInstruct
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitNeg(this);
 }

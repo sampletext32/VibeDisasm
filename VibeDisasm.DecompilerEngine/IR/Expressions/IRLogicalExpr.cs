@@ -32,7 +32,7 @@ public class IRLogicalExpr : IRExpression
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitLogical(this);
 
     public override int GetHashCode()
     {

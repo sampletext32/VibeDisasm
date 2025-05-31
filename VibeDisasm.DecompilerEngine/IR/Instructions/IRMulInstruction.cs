@@ -15,10 +15,6 @@ public sealed class IRMulInstruction : IRInstruction, IIRFlagTranslatingInstruct
     public IRExpression Right { get; init; }
     public override IRExpression? Result => Left;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new(IRFlag.Carry),
-        new(IRFlag.Overflow)
-    ];
     public override string ToString() => $"{Left} *= {Right}";
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
@@ -43,5 +39,5 @@ public sealed class IRMulInstruction : IRInstruction, IIRFlagTranslatingInstruct
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitMul(this);
 }
