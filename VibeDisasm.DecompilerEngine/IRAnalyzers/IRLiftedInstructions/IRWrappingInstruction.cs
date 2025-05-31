@@ -2,10 +2,11 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
-public class IRWrappingInstruction<T> : IRInstruction
+public abstract class IRWrappingInstruction<T> : IRInstruction
     where T : IRInstruction
 {
     protected readonly T WrappedInstruction;

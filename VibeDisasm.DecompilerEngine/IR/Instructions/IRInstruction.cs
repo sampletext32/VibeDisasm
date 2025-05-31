@@ -1,5 +1,6 @@
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 

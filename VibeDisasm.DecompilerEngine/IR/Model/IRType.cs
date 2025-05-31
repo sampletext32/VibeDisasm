@@ -1,3 +1,5 @@
+using VibeDisasm.DecompilerEngine.IR.Visitors;
+
 namespace VibeDisasm.DecompilerEngine.IR.Model;
 
 /// <summary>
@@ -21,4 +23,11 @@ public sealed class IRType : IRNode
     public static IRType Long => new IRType("long");
     public static IRType Ulong => new IRType("ulong");
     public static IRType Bool => new IRType("bool");
+
+    public override void Accept(IIRNodeVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }

@@ -1,3 +1,5 @@
+using VibeDisasm.DecompilerEngine.IR.Visitors;
+
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 /// <summary>
@@ -26,6 +28,11 @@ public sealed class IRSegmentExpr : IRExpression
 
         return false;
     }
+
+
+    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public enum IRSegment

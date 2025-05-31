@@ -1,6 +1,7 @@
 using System.Diagnostics.Contracts;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
@@ -33,4 +34,11 @@ public class IRWiredJumpInstruction : IRWrappingInstruction<IRJumpInstruction>
 
         return WrappedInstruction.ToString();
     }
+
+    public override void Accept(IIRNodeVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }

@@ -1,4 +1,5 @@
-﻿using VibeDisasm.Disassembler.X86;
+﻿using VibeDisasm.DecompilerEngine.IR.Visitors;
+using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
@@ -29,6 +30,11 @@ public class IRLogicalExpr : IRExpression
 
         return false;
     }
+
+
+    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public enum IRLogicalOperation

@@ -1,3 +1,5 @@
+using VibeDisasm.DecompilerEngine.IR.Visitors;
+
 namespace VibeDisasm.DecompilerEngine.IR.Model;
 
 /// <summary>
@@ -12,4 +14,11 @@ public class IRVariable : IRNode
     public required IRType Type { get; init; }
     public bool IsArgument { get; init; }
     public bool IsLocal { get; init; }
+
+    public override void Accept(IIRNodeVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }

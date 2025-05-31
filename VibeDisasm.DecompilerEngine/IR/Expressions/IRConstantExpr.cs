@@ -1,5 +1,6 @@
 using System.Numerics;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
@@ -29,6 +30,11 @@ public sealed class IRConstantExpr : IRExpression
 
         return false;
     }
+
+
+    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 
     public static IRConstantExpr Byte(byte value) => new(value, IRType.Byte);
     public static IRConstantExpr Int(int value) => new(value, IRType.Int);

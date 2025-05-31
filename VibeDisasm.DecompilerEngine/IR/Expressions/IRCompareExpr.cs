@@ -1,4 +1,6 @@
-﻿namespace VibeDisasm.DecompilerEngine.IR.Expressions;
+﻿using VibeDisasm.DecompilerEngine.IR.Visitors;
+
+namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 public class IRCompareExpr : IRExpression
 {
@@ -26,6 +28,11 @@ public class IRCompareExpr : IRExpression
 
         return false;
     }
+
+
+    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+
+    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
 }
 
 public enum IRComparisonType
