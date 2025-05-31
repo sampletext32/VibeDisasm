@@ -96,4 +96,12 @@ public abstract class BaseIRNodeVisitor : IIRNodeVisitor
     public virtual void VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) {}
 
     public virtual void VisitWiredJump(IRWiredJumpInstruction instr) {}
+    public virtual void VisitFld(IRFldInstruction instr) {}
+
+    public virtual void VisitFstp(IRFstpInstruction instr) {}
+    public virtual void VisitFadd(IRFaddInstruction instr) {}
+
+    public virtual void VisitShl(IRShlInstruction instr) {}
+
+    public virtual void VisitShr(IRShrInstruction instr) {}
 }

@@ -24,7 +24,7 @@ var codeOffsetsInfo = CodeOffsetsExtractor.Extract(rawPeFile);
 var entryPointCodeOffset = codeOffsetsInfo.Offsets.FirstOrDefault(x => x.Source == "Entry Point")!;
 
 // Disassemble the entry point into basic blocks (control flow function)
-var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, 0xaed0);
+var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, 0x9bb0);
 
 var irFunction = IrFromAsmConverter.Convert(asmFunction);
 
