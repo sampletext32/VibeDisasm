@@ -42,5 +42,5 @@ public class IRWiredJumpInstruction : IRWrappingInstruction<IRJumpInstruction>
         visitor.Visit(this);
     }
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitWiredJump(this);
 }

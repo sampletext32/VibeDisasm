@@ -15,9 +15,6 @@ public sealed class IRLeaInstruction : IRInstruction
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target, Address];
 
-    // LEA doesn't affect any flags in x86
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
-
     public IRLeaInstruction(IRExpression target, IRExpression address)
     {
         Target = target;
@@ -28,5 +25,5 @@ public sealed class IRLeaInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitLea(this);
 }

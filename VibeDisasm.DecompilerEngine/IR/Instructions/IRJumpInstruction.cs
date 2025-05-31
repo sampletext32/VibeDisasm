@@ -18,9 +18,6 @@ public sealed class IRJumpInstruction : IRInstruction
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => Condition is null ? [Target] : [Condition, Target];
 
-    // Jump instructions don't modify flags in x86
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
-
     public IRJumpInstruction(AsmInstruction underlyingInstruction, IRExpression target, IRExpression? condition = null)
     {
         _underlyingInstruction = underlyingInstruction;
@@ -33,5 +30,5 @@ public sealed class IRJumpInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitJump(this);
 }

@@ -29,5 +29,5 @@ public sealed class IRType : IRNode
         visitor.Visit(this);
     }
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitType(this);
 }

@@ -15,15 +15,6 @@ public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruct
     public override IRExpression? Result => Operand;
     public override IReadOnlyList<IRExpression> Operands => [Operand];
 
-    // NOT instruction clears OF and CF flags, and affects SF, ZF, and PF
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new(IRFlag.Overflow),
-        new(IRFlag.Carry),
-        new(IRFlag.Sign),
-        new(IRFlag.Zero),
-        new(IRFlag.Parity)
-    ];
-
     public IRNotInstruction(IRExpression operand)
     {
         Operand = operand;
@@ -63,5 +54,5 @@ public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruct
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitNot(this);
 }

@@ -18,11 +18,6 @@ public sealed class IRIDivInstruction : IRInstruction
     public override IRExpression? Result => DestQuotient;
     public override IReadOnlyList<IRExpression> Operands => [Dividend, Divisor];
 
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [
-        new(IRFlag.Carry),
-        new(IRFlag.Overflow)
-    ];
-
     public override string ToString() => $"{DestQuotient} = {Dividend} / {Divisor}; {DestRemainder} = {Dividend} % {Divisor}";
 
     public IRIDivInstruction(IRExpression dividend, IRExpression divisor, IRRegisterExpr destQuotient, IRRegisterExpr destRemainder)
@@ -35,5 +30,5 @@ public sealed class IRIDivInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitIDiv(this);
 }

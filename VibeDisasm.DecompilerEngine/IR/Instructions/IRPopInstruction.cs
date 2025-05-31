@@ -14,9 +14,6 @@ public sealed class IRPopInstruction : IRInstruction
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
 
-    // POP doesn't affect flags in x86
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
-
     public IRPopInstruction(IRExpression target)
     {
         Target = target;
@@ -26,5 +23,5 @@ public sealed class IRPopInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitPop(this);
 }

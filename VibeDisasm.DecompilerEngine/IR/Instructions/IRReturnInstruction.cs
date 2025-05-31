@@ -19,9 +19,6 @@ public sealed class IRReturnInstruction : IRInstruction
         ? [Value]
         : [];
 
-    // RET doesn't affect flags in x86
-    public override IReadOnlyList<IRFlagEffect> SideEffects => [];
-
     public IRReturnInstruction()
     {
     }
@@ -35,5 +32,5 @@ public sealed class IRReturnInstruction : IRInstruction
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitReturn(this);
 }

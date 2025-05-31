@@ -25,5 +25,5 @@ public class IRBlock : IRNode
         visitor.Visit(this);
     }
 
-    public override T Accept<T>(IIRNodeReturningVisitor<T> visitor) => visitor.Visit(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitBlock(this);
 }
