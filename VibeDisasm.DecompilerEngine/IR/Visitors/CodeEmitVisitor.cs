@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Expressions;
+using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
@@ -116,4 +116,14 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
         : Visit(instr.WrappedInstruction);
 
     public override string? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) => $"if ({Visit(instr.Condition)}) goto {Visit(instr.WrappedInstruction.Target)}";
+
+    public override string? VisitFld(IRFldInstruction instr) => $"ST(0) = fld({Visit(instr.Source)}) /* push FPU stack */";
+
+    public override string? VisitFstp(IRFstpInstruction instr) => $"{Visit(instr.Destination)} = ST(0); /* pop FPU stack */"; // Store and pop
+
+    public override string? VisitFadd(IRFaddInstruction instr) => $"ST(0) += {Visit(instr.Source)}"; // Add to ST(0)
+
+    public override string? VisitShl(IRShlInstruction instr) => $"{Visit(instr.Value)} <<= {Visit(instr.ShiftCount)}";
+
+    public override string? VisitShr(IRShrInstruction instr) => $"{Visit(instr.Value)} >>= {Visit(instr.ShiftCount)}";
 }

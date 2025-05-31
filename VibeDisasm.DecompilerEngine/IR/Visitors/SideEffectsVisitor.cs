@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.IR.Instructions;
+using VibeDisasm.DecompilerEngine.IR.Instructions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 
 namespace VibeDisasm.DecompilerEngine.IR.Visitors;
@@ -123,6 +123,24 @@ public class SideEffectsVisitor : BaseIRNodeReturningVisitor<IReadOnlyList<IRFla
     ];
 
     public override IReadOnlyList<IRFlagEffect>? VisitXor(IRXorInstruction instr) =>
+    [
+        new(IRFlag.Zero),
+        new(IRFlag.Sign),
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow),
+        new(IRFlag.Parity)
+    ];
+
+    public override IReadOnlyList<IRFlagEffect>? VisitShl(IRShlInstruction instr) =>
+    [
+        new(IRFlag.Zero),
+        new(IRFlag.Sign),
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow),
+        new(IRFlag.Parity)
+    ];
+
+    public override IReadOnlyList<IRFlagEffect>? VisitShr(IRShrInstruction instr) =>
     [
         new(IRFlag.Zero),
         new(IRFlag.Sign),

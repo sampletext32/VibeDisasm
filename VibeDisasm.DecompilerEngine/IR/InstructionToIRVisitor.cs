@@ -312,6 +312,28 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     OperandToIR(operands[0]),
                     new IRCompareExpr(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.Equal)
                 );
+            case InstructionType.Fld:
+                return new IRFldInstruction(
+                    OperandToIR(operands[0])
+                );
+            case InstructionType.Fstp:
+                return new IRFstpInstruction(
+                    OperandToIR(operands[0])
+                );
+            case InstructionType.Fadd:
+                return new IRFaddInstruction(
+                    operands.Count > 0 ? OperandToIR(operands[0]) : new IRRegisterExpr(IRRegister.ST1)
+                );
+            case InstructionType.Shl:
+                return new IRShlInstruction(
+                    OperandToIR(operands[0]),
+                    OperandToIR(operands[1])
+                );
+            case InstructionType.Shr:
+                return new IRShrInstruction(
+                    OperandToIR(operands[0]),
+                    OperandToIR(operands[1])
+                );
             default:
                 return new StubIRInstruction(instruction.Type);
         }

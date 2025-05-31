@@ -104,4 +104,11 @@ public abstract class BaseIRNodeReturningVisitor<TReturn> : IIRNodeReturningVisi
     public virtual TReturn? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) => _defaultReturn(instr);
 
     public virtual TReturn? VisitWiredJump(IRWiredJumpInstruction instr) => _defaultReturn(instr);
+    public virtual TReturn? VisitFld(IRFldInstruction instr) => _defaultReturn(instr);
+
+    public virtual TReturn? VisitFstp(IRFstpInstruction instr) => _defaultReturn(instr);
+    public virtual TReturn? VisitFadd(IRFaddInstruction instr) => _defaultReturn(instr);
+
+    public virtual TReturn? VisitShl(IRShlInstruction instr) => _defaultReturn(instr);
+    public virtual TReturn? VisitShr(IRShrInstruction instr) => _defaultReturn(instr);
 }
