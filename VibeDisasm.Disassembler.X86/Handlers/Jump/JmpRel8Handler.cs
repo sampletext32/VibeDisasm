@@ -49,7 +49,7 @@ public class JmpRel8Handler : InstructionHandler
         ulong targetAddress = instruction.Address + 2UL + (uint)offset;
         
         // Create the target address operand
-        var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress, 8);
+        var targetOperand = OperandFactory.CreateRelativeOffsetOperand((uint)targetAddress);
         
         // Set the structured operands
         instruction.StructuredOperands = 
