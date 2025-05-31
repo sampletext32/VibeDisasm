@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\VibeDisasm.Disassembler.X86\VibeDisasm.Disassembler.X86.csproj" />
+      <ProjectReference Include="..\..\VibeDisasm.Disassembler.X86\VibeDisasm.Disassembler.X86.csproj" />
     </ItemGroup>
 
     <ItemGroup>
