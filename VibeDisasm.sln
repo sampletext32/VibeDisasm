@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.DecompilerEngine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.Disassembler.X86.Tests", "tests\VibeDisasm.Disassembler.X86.Tests\VibeDisasm.Disassembler.X86.Tests.csproj", "{0364E296-B25A-4711-813F-1EDFCD09A193}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.Core", "VibeDisasm.Core\VibeDisasm.Core.csproj", "{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,6 +122,18 @@ Global
 		{0364E296-B25A-4711-813F-1EDFCD09A193}.Release|x64.Build.0 = Release|Any CPU
 		{0364E296-B25A-4711-813F-1EDFCD09A193}.Release|x86.ActiveCfg = Release|Any CPU
 		{0364E296-B25A-4711-813F-1EDFCD09A193}.Release|x86.Build.0 = Release|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Release|x64.Build.0 = Release|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,5 +146,6 @@ Global
 		{F5C7A602-4D84-4866-9913-7AD3CE4C8B69} = {1C2EFA1D-098E-4FB9-AED4-CDEAFBB249E6}
 		{9FEDE52C-1BEF-4128-AD8C-52AA9B92D524} = {29839E44-B79F-46EC-96C1-89CD8F7A3AC7}
 		{0364E296-B25A-4711-813F-1EDFCD09A193} = {29839E44-B79F-46EC-96C1-89CD8F7A3AC7}
+		{D2F2B8BC-8E05-47F7-8D6C-7E74B91BC73D} = {1C2EFA1D-098E-4FB9-AED4-CDEAFBB249E6}
 	EndGlobalSection
 EndGlobal

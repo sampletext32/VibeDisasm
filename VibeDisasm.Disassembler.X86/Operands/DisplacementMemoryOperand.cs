@@ -1,3 +1,5 @@
+using VibeDisasm.Core;
+
 namespace VibeDisasm.Disassembler.X86.Operands;
 
 /// <summary>
@@ -40,30 +42,8 @@ public class DisplacementMemoryOperand : MemoryOperand
         // Get register name
         var registerName = RegisterMapper.GetRegisterName(BaseRegister, 32);
 
-        // Format the displacement value
-        var absDisplacement = Math.Abs(Displacement);
-        var sign = Displacement >= 0 ? "+" : "-";
-        string format;
+        var formatted = NumberFormatter.FormatNumber(Displacement, true);
 
-        if (absDisplacement == 0)
-        {
-            format = "X2";
-        }
-        else if (absDisplacement <= 0xFF)
-        {
-            format = "X2";
-        }
-        else if (absDisplacement <= 0xFFFF)
-        {
-            format = "X4";
-        }
-        else
-        {
-            format = "X8";
-        }
-
-        var formattedDisplacement = $"0x{absDisplacement.ToString(format)}";
-
-        return $"{GetSizePrefix()}[{registerName}{sign}{formattedDisplacement}]";
+        return $"{GetSizePrefix()}[{registerName}{formatted}]";
     }
 }

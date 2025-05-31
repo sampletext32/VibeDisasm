@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.Pe.Extractors;
@@ -53,5 +54,44 @@ public class EntryPointsPanelViewModel : IViewModel
 
             _state.OnEntryPointSelected(EntryPoints[index]);
         }
+    }
+
+    /// <summary>
+    /// Adds a custom entry point with the specified RVA
+    /// </summary>
+    /// <param name="rva">Relative Virtual Address of the custom entry point</param>
+    [Pure]
+    public bool AddCustomEntryPoint(uint rva)
+    {
+        // Check if the RVA is within a valid section
+        var isValidRva = _state.OpenedFile.Sections.Any(section =>
+            rva >= section.VirtualAddress &&
+            rva < section.VirtualAddress + section.VirtualSize);
+
+        if (!isValidRva)
+        {
+            return false;
+        }
+
+        // Convert RVA to file offset
+        var fileOffset = Util.RvaToOffset(_state.OpenedFile.RawPeFile, rva);
+
+        // Create a new entry point info
+        var customEntryPoint = new EntryPointInfo(
+            fileOffset,
+            rva,
+            "Custom",
+            $"User-defined entry point at RVA {rva:X8}");
+
+        // Create a new list with the custom entry point added
+        var newEntryPoints = new List<EntryPointInfo>(EntryPoints) { customEntryPoint };
+
+        // Update the entry points list
+        SetEntryPoints(newEntryPoints);
+
+        // Select the newly added entry point
+        SelectEntryPoint(newEntryPoints.Count - 1);
+
+        return true;
     }
 }
