@@ -35,6 +35,8 @@ public class SideEffectsVisitor : BaseIRNodeReturningVisitor<IReadOnlyList<IRFla
     [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow),
         new(IRFlag.Parity)
     ];
 
@@ -55,18 +57,6 @@ public class SideEffectsVisitor : BaseIRNodeReturningVisitor<IReadOnlyList<IRFla
         new(IRFlag.Overflow),
         new(IRFlag.Parity),
         new(IRFlag.Auxiliary)
-    ];
-
-    public override IReadOnlyList<IRFlagEffect>? VisitDiv(IRDivInstruction instr) =>
-    [
-        new(IRFlag.Carry),
-        new(IRFlag.Overflow)
-    ];
-
-    public override IReadOnlyList<IRFlagEffect>? VisitIDiv(IRIDivInstruction instr) =>
-    [
-        new(IRFlag.Carry),
-        new(IRFlag.Overflow)
     ];
 
     public override IReadOnlyList<IRFlagEffect>? VisitInc(IRIncInstruction instr) =>
@@ -90,22 +80,16 @@ public class SideEffectsVisitor : BaseIRNodeReturningVisitor<IReadOnlyList<IRFla
         new(IRFlag.Sign),
         new(IRFlag.Carry),
         new(IRFlag.Overflow),
-        new(IRFlag.Parity)
-    ];
-
-    public override IReadOnlyList<IRFlagEffect>? VisitNot(IRNotInstruction instr) =>
-    [
-        new(IRFlag.Overflow),
-        new(IRFlag.Carry),
-        new(IRFlag.Sign),
-        new(IRFlag.Zero),
-        new(IRFlag.Parity)
+        new(IRFlag.Parity),
+        new(IRFlag.Auxiliary)
     ];
 
     public override IReadOnlyList<IRFlagEffect>? VisitOr(IROrInstruction instr) =>
     [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow),
         new(IRFlag.Parity)
     ];
 
@@ -135,14 +119,15 @@ public class SideEffectsVisitor : BaseIRNodeReturningVisitor<IReadOnlyList<IRFla
         new(IRFlag.Sign),
         new(IRFlag.Carry),
         new(IRFlag.Overflow),
-        new(IRFlag.Parity),
-        new(IRFlag.Auxiliary)
+        new(IRFlag.Parity)
     ];
 
     public override IReadOnlyList<IRFlagEffect>? VisitXor(IRXorInstruction instr) =>
     [
         new(IRFlag.Zero),
         new(IRFlag.Sign),
+        new(IRFlag.Carry),
+        new(IRFlag.Overflow),
         new(IRFlag.Parity)
     ];
 }
