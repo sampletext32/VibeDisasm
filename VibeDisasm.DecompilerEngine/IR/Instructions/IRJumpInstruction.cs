@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
@@ -10,6 +11,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Example: jmp 0x401000 -> IRJumpInstruction(0x401000, null)
 /// Example: je 0x401100 -> IRJumpInstruction(0x401100, some_condition)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRJumpInstruction : IRInstruction
 {
     private readonly AsmInstruction _underlyingInstruction;
@@ -25,10 +27,11 @@ public sealed class IRJumpInstruction : IRInstruction
         Condition = condition;
     }
 
-    public override string ToString()
-        => (Condition is null ? $"jump -> {Target}" : $"jump_if {Condition} -> {Target}");
-
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitJump(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitJump(this);
+
+    internal override string DebugDisplay => Condition is null
+        ? $"IRJumpInstruction(jump -> {Target.DebugDisplay})"
+        : $"IRJumpInstruction(jump_if {Condition.DebugDisplay} -> {Target.DebugDisplay})";
 }

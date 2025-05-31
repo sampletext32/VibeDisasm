@@ -9,15 +9,10 @@ public sealed class IRFlagEffect : IRNode
 {
     public IRFlag Flag { get; init; }
 
-    public IRFlagEffect(IRFlag flag)
-    {
-        Flag = flag;
-    }
+    public IRFlagEffect(IRFlag flag) => Flag = flag;
 
-    public override void Accept(IIRNodeVisitor visitor)
-    {
-        visitor.Visit(this);
-    }
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitFlagEffect(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitFlagEffect(this);
+    internal override string DebugDisplay => $"IRFlagEffect({Flag:G})";
 }

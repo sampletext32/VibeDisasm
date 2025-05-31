@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,6 +10,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a return instruction in IR.
 /// Example: return eax -> IRReturnInstruction(eax)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRReturnInstruction : IRInstruction
 {
     public IRExpression? Value { get; init; }
@@ -25,12 +27,11 @@ public sealed class IRReturnInstruction : IRInstruction
 
     public IRReturnInstruction(IRExpression? value) => Value = value;
 
-    [Pure]
-    public override string ToString() => Value is null
-        ? "return"
-        : $"return {Value}";
-
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitReturn(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitReturn(this);
+
+    internal override string DebugDisplay => Value is null
+        ? "IRReturnInstruction(return)"
+        : $"IRReturnInstruction(return {Value.DebugDisplay})";
 }

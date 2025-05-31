@@ -1,4 +1,5 @@
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 
 namespace VibeDisasm.DecompilerEngine.IRAnalyzers;
@@ -40,13 +41,13 @@ public class IRFlagConditionReplacementAnalyzer
                         block.Instructions[i] = newJump;
 
                         Console.WriteLine(
-                            $"IR replaced flag jump {wiredJump} with condition {newJump}."
+                            $"IR replaced flag jump {CodeEmitVisitor.Instance.Visit(wiredJump)} with condition {CodeEmitVisitor.Instance.Visit(newJump)}."
                         );
                     }
                     else
                     {
                         Console.WriteLine(
-                            $"IR failed to replace flag jump {wiredJump} with condition."
+                            $"IR failed to replace flag jump {CodeEmitVisitor.Instance.Visit(wiredJump)} with condition."
                         );
                     }
                 }

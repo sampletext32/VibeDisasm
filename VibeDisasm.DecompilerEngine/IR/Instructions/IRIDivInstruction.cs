@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
@@ -9,6 +10,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Example: idiv ebx -> IRIDivInstruction(eax, ebx, eax, edx)
 /// EAX = EAX / src, EDX = EAX % src
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRIDivInstruction : IRInstruction
 {
     public IRExpression Dividend { get; init; }
@@ -28,7 +30,9 @@ public sealed class IRIDivInstruction : IRInstruction
         DestRemainder = destRemainder;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitIDiv(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitIDiv(this);
+
+    internal override string DebugDisplay => $"IRIDivInstruction({DestQuotient.DebugDisplay} = {Dividend.DebugDisplay} / {Divisor.DebugDisplay}; {DestRemainder.DebugDisplay} = {Dividend.DebugDisplay} % {Divisor.DebugDisplay})";
 }

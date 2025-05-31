@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
@@ -5,6 +6,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 /// <summary>
 /// Represents a subtraction expression in IR.
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRSubExpr : IRExpression
 {
     public IRExpression Left { get; init; }
@@ -18,8 +20,6 @@ public sealed class IRSubExpr : IRExpression
         Right = right;
     }
 
-    public override string ToString() => $"{Left} - {Right}";
-
     public override bool Equals(object? obj)
     {
         if (obj is IRSubExpr other)
@@ -30,12 +30,11 @@ public sealed class IRSubExpr : IRExpression
         return false;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitSub(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitSub(this);
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+    public override int GetHashCode() => throw new NotImplementedException();
+
+    internal override string DebugDisplay => $"IRSubExpr({Left.DebugDisplay} - {Right.DebugDisplay})";
 }

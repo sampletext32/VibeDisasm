@@ -17,10 +17,8 @@ public sealed class IRProgram : IRNode
             : "") +
         string.Join("\n\n", Functions);
 
-    public override void Accept(IIRNodeVisitor visitor)
-    {
-        visitor.Visit(this);
-    }
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitProgram(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitProgram(this);
+    internal override string DebugDisplay => $"IRProgram(Functions: {Functions.Count}, Globals: {GlobalVariables.Count})";
 }

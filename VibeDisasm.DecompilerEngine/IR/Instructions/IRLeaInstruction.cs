@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
@@ -8,6 +9,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a LEA (load effective address) instruction in IR.
 /// Example: lea eax, [ebx+4] -> IRLeaInstruction(eax, [ebx+4])
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRLeaInstruction : IRInstruction
 {
     public IRExpression Target { get; init; }
@@ -21,9 +23,9 @@ public sealed class IRLeaInstruction : IRInstruction
         Address = address;
     }
 
-    public override string ToString() => $"{Target} = &{Address}";
-
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitLea(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitLea(this);
+
+    internal override string DebugDisplay => $"IRLeaInstruction({Target.DebugDisplay} = &{Address.DebugDisplay})";
 }

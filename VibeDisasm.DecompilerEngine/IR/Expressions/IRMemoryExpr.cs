@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
@@ -6,6 +7,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 /// Represents a memory operand in IR.
 /// Example: [ebp+8] -> IRMemory("ebp+8")
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRMemoryExpr : IRExpression
 {
     public string Address { get; init; }
@@ -13,8 +15,6 @@ public sealed class IRMemoryExpr : IRExpression
     public override List<IRExpression> SubExpressions => [];
 
     public IRMemoryExpr(string address) => Address = address;
-
-    public override string ToString() => $"[{Address}]";
 
     public override bool Equals(object? obj)
     {
@@ -26,12 +26,11 @@ public sealed class IRMemoryExpr : IRExpression
         return false;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitMemory(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitMemory(this);
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+    public override int GetHashCode() => throw new NotImplementedException();
+
+    internal override string DebugDisplay => $"IRMemoryExpr({Address})";
 }

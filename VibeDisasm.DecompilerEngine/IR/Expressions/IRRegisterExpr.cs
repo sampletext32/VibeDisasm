@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
@@ -6,18 +7,14 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 /// Represents a register operand in IR.
 /// Example: eax -> IRRegister("eax")
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRRegisterExpr : IRExpression
 {
     public IRRegister Register { get; init; }
 
     public override List<IRExpression> SubExpressions => [];
 
-    public IRRegisterExpr(IRRegister register)
-    {
-        Register = register;
-    }
-
-    public override string ToString() => $"{Register}";
+    public IRRegisterExpr(IRRegister register) => Register = register;
 
     public override bool Equals(object? obj)
     {
@@ -29,14 +26,13 @@ public sealed class IRRegisterExpr : IRExpression
         return false;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitRegister(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitRegister(this);
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+    public override int GetHashCode() => throw new NotImplementedException();
+
+    internal override string DebugDisplay => $"IRRegisterExpr({Register:G})";
 }
 
 public enum IRRegister

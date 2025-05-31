@@ -1,4 +1,4 @@
-using System.Diagnostics.Contracts;
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Expressions;
@@ -6,6 +6,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 /// <summary>
 /// Represents a NOT in IR (e.g., ~value).
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRNotExpr : IRExpression
 {
     public IRExpression Value { get; init; }
@@ -13,9 +14,6 @@ public sealed class IRNotExpr : IRExpression
     public override List<IRExpression> SubExpressions => [Value];
 
     public IRNotExpr(IRExpression value) => Value = value;
-
-    [Pure]
-    public override string ToString() => $"~{Value}";
 
     public override bool Equals(object? obj)
     {
@@ -27,12 +25,11 @@ public sealed class IRNotExpr : IRExpression
         return false;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitNot(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitNot(this);
 
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+    public override int GetHashCode() => throw new NotImplementedException();
+
+    internal override string DebugDisplay => $"IRNotExpr({Value.DebugDisplay})";
 }

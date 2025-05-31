@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
@@ -8,6 +9,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a move instruction in IR.
 /// Example: mov eax, ebx -> IRMoveInstruction(eax, ebx)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRMoveInstruction : IRInstruction
 {
     public IRExpression Destination { get; init; }
@@ -21,9 +23,9 @@ public sealed class IRMoveInstruction : IRInstruction
         Source = source;
     }
 
-    public override string ToString() => $"{Destination} = {Source}";
-
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitMove(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitMove(this);
+
+    internal override string DebugDisplay => $"IRMoveInstruction({Destination.DebugDisplay} = {Source.DebugDisplay})";
 }

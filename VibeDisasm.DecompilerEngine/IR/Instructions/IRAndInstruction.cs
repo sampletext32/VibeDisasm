@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,14 +10,13 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a bitwise AND instruction in IR.
 /// Example: and eax, 1 -> IRAndInstruction(eax, 1)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
     public override IRExpression? Result => Left;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-
-    public override string ToString() => $"{Left} &= {Right}";
 
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
@@ -44,7 +44,9 @@ public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruct
         Right = right;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitAnd(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitAnd(this);
+
+    internal override string DebugDisplay => $"IRAndInstruction({Left.DebugDisplay} &= {Right.DebugDisplay})";
 }

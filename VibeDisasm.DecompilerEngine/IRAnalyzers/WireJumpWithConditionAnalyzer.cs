@@ -45,7 +45,7 @@ public class WireJumpWithConditionAnalyzer
                             instructions[i] = new IRWiredJumpInstruction(jump, instructions[j]);
 
                             Console.WriteLine(
-                                $"IR wired jump {jump} with condition {instructions[j]}."
+                                $"IR wired jump {CodeEmitVisitor.Instance.Visit(jump)} with condition {CodeEmitVisitor.Instance.Visit(instructions[j])}."
                             );
 
                             found = true;

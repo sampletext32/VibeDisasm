@@ -1,4 +1,5 @@
 using VibeDisasm.DecompilerEngine.IR;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 using VibeDisasm.DecompilerEngine.IRAnalyzers;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
@@ -30,6 +31,8 @@ var irFunction = IrFromAsmConverter.Convert(asmFunction);
 new WireJumpWithConditionAnalyzer().Handle(irFunction);
 new IRFlagConditionReplacementAnalyzer().Handle(irFunction);
 
-Console.WriteLine(irFunction);
+var code = CodeEmitVisitor.Instance.Visit(irFunction);
+
+Console.WriteLine(code);
 
 _ = 5;

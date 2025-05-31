@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,11 +10,11 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a decrement (DEC) instruction in IR.
 /// Example: dec eax -> IRDecInstruction(eax)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRDecInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Target { get; init; }
 
-    public override string ToString() => $"{Target}--";
     public override IRExpression? Result => Target;
     public override IReadOnlyList<IRExpression> Operands => [Target];
 
@@ -31,12 +32,11 @@ public sealed class IRDecInstruction : IRInstruction, IIRFlagTranslatingInstruct
         };
     }
 
-    public IRDecInstruction(IRExpression target)
-    {
-        Target = target;
-    }
+    public IRDecInstruction(IRExpression target) => Target = target;
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitDec(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitDec(this);
+
+    internal override string DebugDisplay => $"IRDecInstruction({Target.DebugDisplay}--)";
 }

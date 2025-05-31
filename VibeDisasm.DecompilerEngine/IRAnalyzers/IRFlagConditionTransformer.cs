@@ -108,13 +108,13 @@ public static class IRFlagConditionTransformer
         if (condition is not IRLogicalExpr
             {
                 Operation: IRLogicalOperation.And,
-                Operand1: IRCompareExpr
+                Left: IRCompareExpr
                 {
                     Left: IRFlagExpr { Flag: IRFlag.Zero },
                     Right: IRConstantExpr { Value: false },
                     Comparison: IRComparisonType.Equal
                 },
-                Operand2: IRCompareExpr
+                Right: IRCompareExpr
                 {
                     Left: IRFlagExpr { Flag: IRFlag.Sign },
                     Right: IRFlagExpr { Flag: IRFlag.Overflow },
@@ -177,8 +177,8 @@ public static class IRFlagConditionTransformer
         }
 
         // Recursive transformation of logical expressions
-        var transformedOp1 = TransformCondition(logicalExpr.Operand1, flagSettingInstruction);
-        var transformedOp2 = TransformCondition(logicalExpr.Operand2, flagSettingInstruction);
+        var transformedOp1 = TransformCondition(logicalExpr.Left, flagSettingInstruction);
+        var transformedOp2 = TransformCondition(logicalExpr.Right, flagSettingInstruction);
 
         if (transformedOp1 != null && transformedOp2 != null)
         {
@@ -198,13 +198,13 @@ public static class IRFlagConditionTransformer
         return expr is IRLogicalExpr
         {
             Operation: IRLogicalOperation.Or,
-            Operand1: IRCompareExpr
+            Left: IRCompareExpr
             {
                 Left: IRFlagExpr { Flag: IRFlag.Zero },
                 Right: IRConstantExpr { Value: true },
                 Comparison: IRComparisonType.Equal
             },
-            Operand2: IRCompareExpr
+            Right: IRCompareExpr
             {
                 Left: IRFlagExpr { Flag: IRFlag.Sign },
                 Right: IRFlagExpr { Flag: IRFlag.Overflow },

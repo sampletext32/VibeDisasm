@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
@@ -9,18 +10,14 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Represents a bitwise NOT instruction in IR.
 /// Example: not eax -> IRNotInstruction(eax)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruction
 {
     public IRExpression Operand { get; init; }
     public override IRExpression? Result => Operand;
     public override IReadOnlyList<IRExpression> Operands => [Operand];
 
-    public IRNotInstruction(IRExpression operand)
-    {
-        Operand = operand;
-    }
-
-    public override string ToString() => $"{Operand} = ~{Operand}";
+    public IRNotInstruction(IRExpression operand) => Operand = operand;
 
     public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
     {
@@ -52,7 +49,9 @@ public sealed class IRNotInstruction : IRInstruction, IIRFlagTranslatingInstruct
         };
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitNot(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitNot(this);
+
+    internal override string DebugDisplay => $"IRNotInstruction({Operand.DebugDisplay} = ~{Operand.DebugDisplay})";
 }

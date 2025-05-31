@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
@@ -7,6 +8,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 /// Represents a constant value in IR.
 /// Example: 5 -> IRConstant(5)
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRConstantExpr : IRExpression
 {
     public object Value { get; init; }
@@ -30,7 +32,7 @@ public sealed class IRConstantExpr : IRExpression
         return false;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.Visit(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitConstant(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitConstant(this);
 
@@ -52,77 +54,5 @@ public sealed class IRConstantExpr : IRExpression
         _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
     };
 
-    public override string ToString()
-    {
-        return Value switch
-        {
-            byte i => FormatNumber(i),
-            short i => FormatNumber(i),
-            ushort u => FormatNumber(u),
-            int i => FormatNumber(i),
-            uint u => FormatNumber(u),
-            long l => FormatNumber(l),
-            ulong ul => FormatNumber(ul),
-            bool b => b
-                ? "true"
-                : "false",
-            _ => Value.ToString() ?? "!unknown type constant!"
-        };
-    }
-
-    private static string FormatNumber(long number)
-    {
-        var abs = Math.Abs(number);
-        var sign = number >= 0 ? "+" : "-";
-        string format;
-
-        if (abs == 0)
-        {
-            format = "X2";
-        }
-        else if (abs <= 0xFF)
-        {
-            format = "X2";
-        }
-        else if (abs <= 0xFFFF)
-        {
-            format = "X4";
-        }
-        else
-        {
-            format = "X8";
-        }
-
-        return $"{sign}0x{abs.ToString(format)}";
-    }
-
-    private static string FormatNumber(ulong number)
-    {
-        var abs = number;
-        string format;
-
-        if (abs == 0)
-        {
-            format = "X2";
-        }
-        else if (abs <= 0xFF)
-        {
-            format = "X2";
-        }
-        else if (abs <= 0xFFFF)
-        {
-            format = "X4";
-        }
-        else
-        {
-            format = "X8";
-        }
-
-        return $"+0x{abs.ToString(format)}";
-    }
-
-    public override int GetHashCode()
-    {
-        throw new NotImplementedException();
-    }
+    internal override string DebugDisplay => $"IRConstantExpr({Type.DebugDisplay} {Value:X8})";
 }
