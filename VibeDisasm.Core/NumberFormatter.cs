@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Core;
+namespace VibeDisasm.Core;
 
 public static class NumberFormatter
 {

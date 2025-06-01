@@ -1,4 +1,4 @@
-﻿using VibeDisasm.DecompilerEngine.ControlFlow;
+using VibeDisasm.DecompilerEngine.ControlFlow;
 using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.Disassembler.X86;
 

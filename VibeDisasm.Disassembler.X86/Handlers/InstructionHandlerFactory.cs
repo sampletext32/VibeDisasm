@@ -842,7 +842,7 @@ public class InstructionHandlerFactory
         _handlers.Add(new Stack.EnterHandler(_decoder));      // ENTER (C8)
         _handlers.Add(new Stack.LeaveHandler(_decoder));      // LEAVE (C9)
     }
-    
+
     /// <summary>
     /// Registers all MOVZX instruction handlers
     /// </summary>

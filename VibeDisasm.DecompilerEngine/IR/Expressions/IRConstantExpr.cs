@@ -55,4 +55,9 @@ public sealed class IRConstantExpr : IRExpression
     };
 
     internal override string DebugDisplay => $"IRConstantExpr({Type.DebugDisplay} {Value:X8})";
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }

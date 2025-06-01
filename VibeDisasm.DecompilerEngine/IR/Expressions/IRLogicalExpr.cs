@@ -35,4 +35,9 @@ public class IRLogicalExpr : IRExpression
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitLogical(this);
 
     internal override string DebugDisplay => $"{Left.DebugDisplay} {Operation} {Right.DebugDisplay}";
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
+    }
 }

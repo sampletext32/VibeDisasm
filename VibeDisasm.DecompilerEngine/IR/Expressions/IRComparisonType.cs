@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.DecompilerEngine.IR.Expressions;
+namespace VibeDisasm.DecompilerEngine.IR.Expressions;
 
 public enum IRComparisonType
 {

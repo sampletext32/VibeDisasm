@@ -66,7 +66,7 @@ public class MovzxR32Rm8Handler : InstructionHandler
         // For MOVZX r32, r/m8 (0F B6):
         // - The reg field specifies the destination register (32-bit)
         // - The r/m field with mod specifies the source operand (8-bit register or memory)
-        var (mod, reg8, _, sourceOperand8) = ModRMDecoder.ReadModRM8();
+        var (_, reg8, _, sourceOperand8) = ModRMDecoder.ReadModRM8();
 
         // Create the register operand for the reg field (32-bit)
         var destinationOperand = OperandFactory.CreateRegisterOperand((RegisterIndex)reg8);

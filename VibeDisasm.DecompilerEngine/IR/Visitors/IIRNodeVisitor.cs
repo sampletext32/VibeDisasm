@@ -7,7 +7,7 @@ namespace VibeDisasm.DecompilerEngine.IR.Visitors;
 
 public interface IIRNodeVisitor
 {
-    public void Visit(IRNode node) => node.Accept(this);
+    void Visit(IRNode node) => node.Accept(this);
     void VisitAdd(IRAddExpr expr);
     void VisitCompare(IRCompareExpr expr);
     void VisitConstant(IRConstantExpr expr);
