@@ -148,7 +148,4 @@ public class SideEffectsVisitor : BaseIRNodeReturningVisitor<IReadOnlyList<IRFla
         new(IRFlag.Overflow),
         new(IRFlag.Parity)
     ];
-
-    // MOVZX doesn't affect any flags
-    public override IReadOnlyList<IRFlagEffect>? VisitMovzx(IRMovzxInstruction instr) => [];
 }
