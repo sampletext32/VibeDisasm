@@ -57,13 +57,13 @@ public interface IIRNodeVisitor
 
     void VisitUnflaggedJump(IRUnflaggedJumpInstruction instr);
     void VisitWiredJump(IRWiredJumpInstruction instr);
-    
+
     void VisitFld(IRFldInstruction instr);
     void VisitFstp(IRFstpInstruction instr);
     void VisitFadd(IRFaddInstruction instr);
-    
+
     void VisitShl(IRShlInstruction instr);
     void VisitShr(IRShrInstruction instr);
-    
+
     void VisitMovzx(IRMovzxInstruction instr);
 }

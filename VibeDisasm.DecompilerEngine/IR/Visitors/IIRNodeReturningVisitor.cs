@@ -57,13 +57,13 @@ public interface IIRNodeReturningVisitor<out TReturn>
 
     TReturn? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr);
     TReturn? VisitWiredJump(IRWiredJumpInstruction instr);
-    
+
     TReturn? VisitFld(IRFldInstruction instr);
     TReturn? VisitFstp(IRFstpInstruction instr);
     TReturn? VisitFadd(IRFaddInstruction instr);
-    
+
     TReturn? VisitShl(IRShlInstruction instr);
     TReturn? VisitShr(IRShrInstruction instr);
-    
+
     TReturn? VisitMovzx(IRMovzxInstruction instr);
 }

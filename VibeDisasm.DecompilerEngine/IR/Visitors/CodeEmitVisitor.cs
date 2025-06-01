@@ -55,7 +55,7 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
 
     public override string? VisitType(IRType type) => $"{type.Name}";
 
-    public override string? VisitBlock(IRBlock block) => $"// Block {block.Id}\n" + string.Join("\n", block.Instructions.Select(Visit));
+    public override string? VisitBlock(IRBlock block) => $"// Block {block.Address:X8}\n" + string.Join("\n", block.Instructions.Select(Visit));
 
     public override string? VisitFunction(IRFunction function) => $"{Visit(function.ReturnType)} {function.Name}({string.Join(", ", function.Parameters.Select(Visit))})\n" + string.Join("\n\n", function.Blocks.Select(Visit));
 
@@ -127,6 +127,6 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
     public override string? VisitShl(IRShlInstruction instr) => $"{Visit(instr.Value)} <<= {Visit(instr.ShiftCount)}";
 
     public override string? VisitShr(IRShrInstruction instr) => $"{Visit(instr.Value)} >>= {Visit(instr.ShiftCount)}";
-    
+
     public override string? VisitMovzx(IRMovzxInstruction instr) => $"{Visit(instr.Destination)} = (uint){Visit(instr.Source)}";
 }

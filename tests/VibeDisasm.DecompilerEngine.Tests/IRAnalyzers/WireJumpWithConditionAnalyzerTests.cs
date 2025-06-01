@@ -46,17 +46,17 @@ public class WireJumpWithConditionAnalyzerTests
             )
         ];
 
-        var targetBlock = new IRBlock
-        {
-            Id = "target",
-            Instructions = targetInstructions
-        };
+        var targetBlock = new IRBlock(
+            0x00,
+            targetInstructions,
+            false
+        );
 
-        var srcBlock = new IRBlock
-        {
-            Id = "main",
-            Instructions = mainInstructions
-        };
+        var srcBlock = new IRBlock(
+            0x10,
+            mainInstructions,
+            false
+        );
 
         var irFunction = new IRFunction(
             "test_function",
@@ -111,17 +111,17 @@ public class WireJumpWithConditionAnalyzerTests
             )
         ];
 
-        var targetBlock = new IRBlock
-        {
-            Id = "target",
-            Instructions = targetInstructions
-        };
+        var targetBlock = new IRBlock(
+            0x00,
+            targetInstructions,
+            false
+        );
 
-        var srcBlock = new IRBlock
-        {
-            Id = "main",
-            Instructions = mainInstructions
-        };
+        var srcBlock = new IRBlock(
+            0x10,
+            mainInstructions,
+            false
+        );
 
         var irFunction = new IRFunction(
             "test_function",
@@ -169,17 +169,17 @@ public class WireJumpWithConditionAnalyzerTests
             )
         ];
 
-        var targetBlock = new IRBlock
-        {
-            Id = "target",
-            Instructions = targetInstructions
-        };
+        var targetBlock = new IRBlock(
+            0x00,
+            targetInstructions,
+            false
+        );
 
-        var srcBlock = new IRBlock
-        {
-            Id = "main",
-            Instructions = mainInstructions
-        };
+        var srcBlock = new IRBlock(
+            0x10,
+            mainInstructions,
+            false
+        );
 
         var irFunction = new IRFunction(
             "test_function",

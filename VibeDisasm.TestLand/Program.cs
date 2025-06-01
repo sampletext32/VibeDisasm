@@ -6,7 +6,7 @@ using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
 
 // Path to the PE file to analyze
-const string filePath = @"./DLLs/ArealMap.dll";
+const string filePath = @"./DLLs/iron_3d.exe";
 var fileName = Path.GetFileName(filePath);
 
 // Read the file bytes
@@ -24,7 +24,7 @@ var codeOffsetsInfo = CodeOffsetsExtractor.Extract(rawPeFile);
 var entryPointCodeOffset = codeOffsetsInfo.Offsets.FirstOrDefault(x => x.Source == "Entry Point")!;
 
 // Disassemble the entry point into basic blocks (control flow function)
-var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, 0x9bb0);
+var asmFunction = AsmFunctionDisassembler.DisassembleFunction(fileData, entryPointCodeOffset.FileOffset);
 
 var irFunction = IrFromAsmConverter.Convert(asmFunction);
 

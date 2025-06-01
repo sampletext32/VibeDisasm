@@ -15,13 +15,13 @@ public static class IrFromAsmConverter
 
         foreach (var asmBlock in asmFunction.Blocks.Values.OrderBy(x => x.StartAddress))
         {
-            var irBlock = new IRBlock
-            {
-                Id = $"0x{asmBlock.StartAddress:X8}",
-                Instructions = asmBlock.Instructions
+            var irBlock = new IRBlock(
+                asmBlock.StartAddress,
+                asmBlock.Instructions
                     .Select(Lift)
-                    .ToList()
-            };
+                    .ToList(),
+                asmBlock.IsEntryBlock
+            );
             irBlocks.Add(irBlock);
         }
 
@@ -39,4 +39,3 @@ public static class IrFromAsmConverter
     private static IRInstruction Lift(AsmInstruction instruction)
         => instruction.Accept(InstructionVisitor);
 }
-
