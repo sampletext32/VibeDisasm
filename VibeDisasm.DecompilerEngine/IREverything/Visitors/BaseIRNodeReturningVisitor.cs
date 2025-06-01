@@ -2,6 +2,7 @@ using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.Instructions;
 using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
+using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
@@ -112,4 +113,9 @@ public abstract class BaseIRNodeReturningVisitor<TReturn> : IIRNodeReturningVisi
     public virtual TReturn? VisitShl(IRShlInstruction instr) => _defaultReturn(instr);
     public virtual TReturn? VisitShr(IRShrInstruction instr) => _defaultReturn(instr);
     public virtual TReturn? VisitMovzx(IRMovzxInstruction instr) => _defaultReturn(instr);
+
+    public virtual TReturn? VisitSequence(IRSequenceNode node) => _defaultReturn(node);
+    public virtual TReturn? VisitIf(IRIfNode node) => _defaultReturn(node);
+    public virtual TReturn? VisitLoop(IRLoopNode node) => _defaultReturn(node);
+    public virtual TReturn? VisitBlock(IRBlockNode node) => _defaultReturn(node);
 }

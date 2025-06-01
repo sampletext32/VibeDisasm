@@ -2,6 +2,7 @@ using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.Instructions;
 using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
+using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
@@ -105,4 +106,9 @@ public abstract class BaseIRNodeVisitor : IIRNodeVisitor
 
     public virtual void VisitShr(IRShrInstruction instr) { }
     public virtual void VisitMovzx(IRMovzxInstruction instr) { }
+
+    public virtual void VisitSequence(IRSequenceNode node) { }
+    public virtual void VisitIf(IRIfNode node) { }
+    public virtual void VisitLoop(IRLoopNode node) { }
+    public virtual void VisitBlock(IRBlockNode node) { }
 }

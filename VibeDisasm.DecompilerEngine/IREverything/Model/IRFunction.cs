@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Model;
@@ -14,6 +15,12 @@ public class IRFunction : IRNode
     public IRType ReturnType { get; init; }
     public List<IRVariable> Parameters { get; init; }
     public List<IRBlock> Blocks { get; init; }
+    
+    /// <summary>
+    /// Gets the structured representation of this function.
+    /// This property is populated by IR structuring analyzers.
+    /// </summary>
+    public IRSequenceNode? Structured { get; internal set; }
 
     public IRFunction(string name, IRType returnType, List<IRVariable> parameters, List<IRBlock> blocks)
     {
