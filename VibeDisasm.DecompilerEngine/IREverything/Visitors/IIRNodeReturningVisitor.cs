@@ -69,7 +69,7 @@ public interface IIRNodeReturningVisitor<out TReturn>
     TReturn? VisitMovzx(IRMovzxInstruction instr);
 
     TReturn? VisitSequence(IRSequenceNode node);
-    TReturn? VisitIf(IRIfNode node);
-    TReturn? VisitLoop(IRLoopNode node);
-    TReturn? VisitBlock(IRBlockNode node);
+    TReturn? VisitIfThen(IRIfThenNode node);
+    TReturn? VisitIfElse(IRIfElseNode elseNode);
+
 }

@@ -11,6 +11,8 @@ public abstract class IRStructuredNode : IRNode
 {
     public IRStructuredNode? Parent { get; internal set; }
 
+    public abstract IEnumerable<IRBlock> EnumerateBlocks();
+
     public abstract override void Accept(IIRNodeVisitor visitor);
 
     public abstract override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default;

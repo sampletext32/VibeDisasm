@@ -10,7 +10,7 @@ public class WireJumpWithConditionAnalyzer
 {
     public void Handle(IRFunction function)
     {
-        foreach (var functionBlock in function.Blocks)
+        foreach (var functionBlock in function.Body.EnumerateBlocks())
         {
             var instructions = functionBlock.Instructions;
             for (var i = 0; i < instructions.Count; i++)

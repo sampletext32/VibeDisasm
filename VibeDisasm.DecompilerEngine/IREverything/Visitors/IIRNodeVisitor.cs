@@ -69,7 +69,6 @@ public interface IIRNodeVisitor
     void VisitMovzx(IRMovzxInstruction instr);
 
     void VisitSequence(IRSequenceNode node);
-    void VisitIf(IRIfNode node);
-    void VisitLoop(IRLoopNode node);
-    void VisitBlock(IRBlockNode node);
+    void VisitIfThen(IRIfThenNode node);
+    void VisitIfElse(IRIfElseNode elseNode);
 }

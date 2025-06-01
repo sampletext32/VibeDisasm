@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Structuring;
@@ -12,14 +11,9 @@ public class IRSequenceNode : IRStructuredNode
 {
     public List<IRStructuredNode> Nodes { get; }
 
-    public IRSequenceNode()
+    public IRSequenceNode(List<IRStructuredNode> nodes)
     {
-        Nodes = [];
-    }
-
-    public IRSequenceNode(IEnumerable<IRStructuredNode> nodes)
-    {
-        Nodes = nodes.ToList();
+        Nodes = nodes;
         foreach (var node in Nodes)
         {
             node.Parent = this;
@@ -37,6 +31,18 @@ public class IRSequenceNode : IRStructuredNode
         foreach (var node in nodes)
         {
             AddNode(node);
+        }
+    }
+
+    public override IEnumerable<IRBlock> EnumerateBlocks()
+    {
+        foreach (var node in Nodes)
+        {
+            var blocks = node.EnumerateBlocks();
+            foreach (var block in blocks)
+            {
+                yield return block;
+            }
         }
     }
 

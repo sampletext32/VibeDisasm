@@ -3,12 +3,41 @@ using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.Instructions;
 using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
+using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
 public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
 {
     public static CodeEmitVisitor Instance = new();
+
+    private string _indent = "";
+
+    public CodeEmitVisitor Indent()
+    {
+        _indent += "  ";
+        return this;
+    }
+    public CodeEmitVisitor Unindent()
+    {
+        if (_indent.Length >= 2)
+        {
+            _indent = _indent[..^2];
+        }
+        else
+        {
+            _indent = "";
+        }
+
+        return this;
+    }
+
+    public string Nop() => "";
+
+    public void Reset()
+    {
+        _indent = "";
+    }
 
     private CodeEmitVisitor() : base(node => $"{nameof(CodeEmitVisitor)}: Unsupported IR node: {node.GetType().Name}")
     {
@@ -55,78 +84,86 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
 
     public override string? VisitType(IRType type) => $"{type.Name}";
 
-    public override string? VisitBlock(IRBlock block) => $"// Block {block.Address:X8}\n" + string.Join("\n", block.Instructions.Select(Visit));
-
-    public override string? VisitFunction(IRFunction function) => $"{Visit(function.ReturnType)} {function.Name}({string.Join(", ", function.Parameters.Select(Visit))})\n" + string.Join("\n\n", function.Blocks.Select(Visit));
-
     // TODO: flag here is a string constant, not an IRFlagExpr
-    public override string? VisitAdc(IRAdcInstruction instr) => $"{Visit(instr.Left)} += {Visit(instr.Right)} + CF";
+    public override string? VisitAdc(IRAdcInstruction instr) => $"{_indent}{Visit(instr.Left)} += {Visit(instr.Right)} + CF";
 
-    public override string? VisitAdd(IRAddInstruction instr) => $"{Visit(instr.Destination)} += {Visit(instr.Source)}";
+    public override string? VisitAdd(IRAddInstruction instr) => $"{_indent}{Visit(instr.Destination)} += {Visit(instr.Source)}";
 
-    public override string? VisitAnd(IRAndInstruction instr) => $"{Visit(instr.Left)} &= {Visit(instr.Right)}";
+    public override string? VisitAnd(IRAndInstruction instr) => $"{_indent}{Visit(instr.Left)} &= {Visit(instr.Right)}";
 
-    public override string? VisitCall(IRCallInstruction instr) => $"call {Visit(instr.Target)}";
+    public override string? VisitCall(IRCallInstruction instr) => $"{_indent}call {Visit(instr.Target)}";
 
-    public override string? VisitCmp(IRCmpInstruction instr) => $"Compare({Visit(instr.Left)}, {Visit(instr.Right)})";
+    public override string? VisitCmp(IRCmpInstruction instr) => $"{_indent}Compare({Visit(instr.Left)}, {Visit(instr.Right)})";
 
-    public override string? VisitDec(IRDecInstruction instr) => $"{Visit(instr.Target)}--";
+    public override string? VisitDec(IRDecInstruction instr) => $"{_indent}{Visit(instr.Target)}--";
 
-    public override string? VisitDiv(IRDivInstruction instr) => $"{Visit(instr.DestQuotient)} = {Visit(instr.Dividend)} / {Visit(instr.Divisor)}; {Visit(instr.DestRemainder)} = {Visit(instr.Dividend)} % {Visit(instr.Divisor)}";
+    public override string? VisitDiv(IRDivInstruction instr) => $"{_indent}{Visit(instr.DestQuotient)} = {Visit(instr.Dividend)} / {Visit(instr.Divisor)}; {Visit(instr.DestRemainder)} = {Visit(instr.Dividend)} % {Visit(instr.Divisor)}";
 
-    public override string? VisitIDiv(IRIDivInstruction instr) => $"{Visit(instr.DestQuotient)} = {Visit(instr.Dividend)} / {Visit(instr.Divisor)}; {Visit(instr.DestRemainder)} = {Visit(instr.Dividend)} % {Visit(instr.Divisor)}";
+    public override string? VisitIDiv(IRIDivInstruction instr) => $"{_indent}{Visit(instr.DestQuotient)} = {Visit(instr.Dividend)} / {Visit(instr.Divisor)}; {Visit(instr.DestRemainder)} = {Visit(instr.Dividend)} % {Visit(instr.Divisor)}";
 
-    public override string? VisitInc(IRIncInstruction instr) => $"{Visit(instr.Target)}++";
+    public override string? VisitInc(IRIncInstruction instr) => $"{_indent}{Visit(instr.Target)}++";
 
     public override string? VisitJump(IRJumpInstruction instr) => (instr.Condition is null
-        ? $"jump -> {Visit(instr.Target)}"
-        : $"jump_if {Visit(instr.Condition)} -> {Visit(instr.Target)}");
+        ? $"{_indent}jump -> {Visit(instr.Target)}"
+        : $"{_indent}jump_if {Visit(instr.Condition)} -> {Visit(instr.Target)}");
 
-    public override string? VisitLea(IRLeaInstruction instr) => $"{Visit(instr.Target)} = &{Visit(instr.Address)}";
+    public override string? VisitLea(IRLeaInstruction instr) => $"{_indent}{Visit(instr.Target)} = &{Visit(instr.Address)}";
 
-    public override string? VisitMove(IRMoveInstruction instr) => $"{Visit(instr.Destination)} = {Visit(instr.Source)}";
+    public override string? VisitMove(IRMoveInstruction instr) => $"{_indent}{Visit(instr.Destination)} = {Visit(instr.Source)}";
 
-    public override string? VisitMul(IRMulInstruction instr) => $"{Visit(instr.Left)} *= {Visit(instr.Right)}";
+    public override string? VisitMul(IRMulInstruction instr) => $"{_indent}{Visit(instr.Left)} *= {Visit(instr.Right)}";
 
-    public override string? VisitNeg(IRNegInstruction instr) => $"{Visit(instr.Target)} = -{Visit(instr.Target)}";
+    public override string? VisitNeg(IRNegInstruction instr) => $"{_indent}{Visit(instr.Target)} = -{Visit(instr.Target)}";
 
-    public override string? VisitNot(IRNotInstruction instr) => $"{Visit(instr.Operand)} = ~{Visit(instr.Operand)}";
+    public override string? VisitNot(IRNotInstruction instr) => $"{_indent}{Visit(instr.Operand)} = ~{Visit(instr.Operand)}";
 
-    public override string? VisitOr(IROrInstruction instr) => $"{Visit(instr.Left)} |= {Visit(instr.Right)}";
+    public override string? VisitOr(IROrInstruction instr) => $"{_indent}{Visit(instr.Left)} |= {Visit(instr.Right)}";
 
-    public override string? VisitPop(IRPopInstruction instr) => $"pop({Visit(instr.Target)})";
-    public override string? VisitPush(IRPushInstruction instr) => $"push({Visit(instr.Value)})";
+    public override string? VisitPop(IRPopInstruction instr) => $"{_indent}pop({Visit(instr.Target)})";
+    public override string? VisitPush(IRPushInstruction instr) => $"{_indent}push({Visit(instr.Value)})";
 
     public override string? VisitReturn(IRReturnInstruction instr) => instr.Value is null
-        ? "return"
-        : $"return {Visit(instr.Value)}";
+        ? $"{_indent}return"
+        : $"{_indent}return {Visit(instr.Value)}";
 
     // TODO: flag here is a string constant, not an IRFlagExpr
-    public override string? VisitSbb(IRSbbInstruction instr) => $"{Visit(instr.Left)} -= {Visit(instr.Right)} - CF";
+    public override string? VisitSbb(IRSbbInstruction instr) => $"{_indent}{Visit(instr.Left)} -= {Visit(instr.Right)} - CF";
 
-    public override string? VisitSub(IRSubInstruction instr) => $"{Visit(instr.Destination)} -= {Visit(instr.Source)}";
+    public override string? VisitSub(IRSubInstruction instr) => $"{_indent}{Visit(instr.Destination)} -= {Visit(instr.Source)}";
 
-    public override string? VisitTest(IRTestInstruction instr) => $"Test({Visit(instr.Left)}, {Visit(instr.Right)})";
+    public override string? VisitTest(IRTestInstruction instr) => $"{_indent}Test({Visit(instr.Left)}, {Visit(instr.Right)})";
 
-    public override string? VisitXor(IRXorInstruction instr) => $"{Visit(instr.Left)} ^= {Visit(instr.Right)}";
+    public override string? VisitXor(IRXorInstruction instr) => $"{_indent}{Visit(instr.Left)} ^= {Visit(instr.Right)}";
 
-    public override string? VisitStub(StubIRInstruction instr) => $"StubIRInstruction - {instr.InstructionType:G} Not implemented";
+    public override string? VisitStub(StubIRInstruction instr) => $"{_indent}StubIRInstruction - {instr.InstructionType:G} Not implemented";
 
     public override string? VisitWiredJump(IRWiredJumpInstruction instr) => instr.WrappedInstruction.Condition == null
-        ? $"jump to {Visit(instr.WrappedInstruction.Target)}" // Unconditional jump
+        ? $"{_indent}jump to {Visit(instr.WrappedInstruction.Target)}" // Unconditional jump
         : Visit(instr.WrappedInstruction);
 
-    public override string? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) => $"if ({Visit(instr.Condition)}) goto {Visit(instr.WrappedInstruction.Target)}";
+    public override string? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) => $"{_indent}if ({Visit(instr.Condition)}) goto {Visit(instr.WrappedInstruction.Target)}";
 
-    public override string? VisitFld(IRFldInstruction instr) => $"ST(0) = fld({Visit(instr.Source)}) /* push FPU stack */";
+    public override string? VisitFld(IRFldInstruction instr) => $"{_indent}ST(0) = fld({Visit(instr.Source)}) /* push FPU stack */";
 
-    public override string? VisitFstp(IRFstpInstruction instr) => $"{Visit(instr.Destination)} = ST(0); /* pop FPU stack */"; // Store and pop
+    public override string? VisitFstp(IRFstpInstruction instr) => $"{_indent}{Visit(instr.Destination)} = ST(0); /* pop FPU stack */"; // Store and pop
 
-    public override string? VisitFadd(IRFaddInstruction instr) => $"ST(0) += {Visit(instr.Source)}"; // Add to ST(0)
+    public override string? VisitFadd(IRFaddInstruction instr) => $"{_indent}ST(0) += {Visit(instr.Source)}"; // Add to ST(0)
 
-    public override string? VisitShl(IRShlInstruction instr) => $"{Visit(instr.Value)} <<= {Visit(instr.ShiftCount)}";
+    public override string? VisitShl(IRShlInstruction instr) => $"{_indent}{Visit(instr.Value)} <<= {Visit(instr.ShiftCount)}";
 
-    public override string? VisitShr(IRShrInstruction instr) => $"{Visit(instr.Value)} >>= {Visit(instr.ShiftCount)}";
+    public override string? VisitShr(IRShrInstruction instr) => $"{_indent}{Visit(instr.Value)} >>= {Visit(instr.ShiftCount)}";
 
-    public override string? VisitMovzx(IRMovzxInstruction instr) => $"{Visit(instr.Destination)} = (uint){Visit(instr.Source)}";
+    public override string? VisitMovzx(IRMovzxInstruction instr) => $"{_indent}{Visit(instr.Destination)} = (uint){Visit(instr.Source)}";
+
+    public override string? VisitBlock(IRBlock block)
+    {
+        return $"{_indent}{{\n" +
+               $"{Indent()._indent}// {block.Address:X8}\n" +
+               string.Join($"{_indent}\n", block.Instructions.Select(Visit)) +
+               $"\n" +
+               $"{Unindent()._indent}}}";
+    }
+
+    public override string? VisitFunction(IRFunction function) => $"{Visit(function.ReturnType)} {function.Name}({string.Join(", ", function.Parameters.Select(Visit))})\n{Visit(function.Body)}";
+    public override string? VisitSequence(IRSequenceNode node) => $"{string.Join($"\n{_indent}", node.Nodes.Select(Visit))}";
 }

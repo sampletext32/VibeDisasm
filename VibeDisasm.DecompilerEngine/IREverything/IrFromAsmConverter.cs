@@ -1,5 +1,6 @@
 using VibeDisasm.DecompilerEngine.IREverything.Instructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
+using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 using VibeDisasm.Disassembler.X86;
 
 namespace VibeDisasm.DecompilerEngine.IREverything;
@@ -11,7 +12,7 @@ public static class IrFromAsmConverter
 {
     public static IRFunction Convert(AsmFunction asmFunction)
     {
-        var irBlocks = new List<IRBlock>();
+        var irBlocks = new List<IRStructuredNode>();
 
         foreach (var asmBlock in asmFunction.Blocks.Values.OrderBy(x => x.StartAddress))
         {
@@ -25,11 +26,13 @@ public static class IrFromAsmConverter
             irBlocks.Add(irBlock);
         }
 
+        var body = new IRSequenceNode(irBlocks);
+
         var irFunction = new IRFunction(
             name: $"Function_0x{asmFunction.Blocks.Values.First(x => x.IsEntryBlock).StartAddress:X8}",
             returnType: IRType.Int,
             parameters: [],
-            blocks: irBlocks
+            body: body
         );
         return irFunction;
     }

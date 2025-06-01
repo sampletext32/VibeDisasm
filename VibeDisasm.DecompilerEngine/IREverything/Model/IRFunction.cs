@@ -14,20 +14,14 @@ public class IRFunction : IRNode
     public string Name { get; init; }
     public IRType ReturnType { get; init; }
     public List<IRVariable> Parameters { get; init; }
-    public List<IRBlock> Blocks { get; init; }
-    
-    /// <summary>
-    /// Gets the structured representation of this function.
-    /// This property is populated by IR structuring analyzers.
-    /// </summary>
-    public IRSequenceNode? Structured { get; internal set; }
+    public IRSequenceNode Body { get; init; }
 
-    public IRFunction(string name, IRType returnType, List<IRVariable> parameters, List<IRBlock> blocks)
+    public IRFunction(string name, IRType returnType, List<IRVariable> parameters, IRSequenceNode body)
     {
         Name = name;
         ReturnType = returnType;
         Parameters = parameters;
-        Blocks = blocks;
+        Body = body;
     }
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.VisitFunction(this);

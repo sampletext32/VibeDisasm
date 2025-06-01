@@ -18,7 +18,7 @@ public class IRFlagConditionReplacementAnalyzer
     public void Handle(IRFunction function)
     {
         // For each block in the function
-        foreach (var block in function.Blocks)
+        foreach (var block in function.Body.EnumerateBlocks())
         {
             // For each instruction in the block
             for (var i = 0; i < block.Instructions.Count; i++)
