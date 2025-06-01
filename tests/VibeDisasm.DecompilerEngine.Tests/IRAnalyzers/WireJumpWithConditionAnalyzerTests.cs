@@ -1,8 +1,8 @@
-using VibeDisasm.DecompilerEngine.IR.Expressions;
-using VibeDisasm.DecompilerEngine.IR.Instructions;
-using VibeDisasm.DecompilerEngine.IR.Model;
-using VibeDisasm.DecompilerEngine.IRAnalyzers;
-using VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
+using VibeDisasm.DecompilerEngine.IREverything.Expressions;
+using VibeDisasm.DecompilerEngine.IREverything.Instructions;
+using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers;
+using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructions;
+using VibeDisasm.DecompilerEngine.IREverything.Model;
 
 namespace VibeDisasm.DecompilerEngine.Tests.IRAnalyzers;
 
@@ -25,23 +25,22 @@ public class WireJumpWithConditionAnalyzerTests
             // mov eax, 10
             new IRMoveInstruction(
                 new IRRegisterExpr(IRRegister.EAX),
-                IRConstantExpr.Int(10)
+                IR.Int(10)
             ),
 
             // cmp eax, 5
             new IRCmpInstruction(
                 new IRRegisterExpr(IRRegister.EAX),
-                IRConstantExpr.Int(5)
+                IR.Int(5)
             ),
 
             // jz targetBlock
             new IRJumpInstruction(
                 null!,
-                IRConstantExpr.Int(0x2000),
-                new IRCompareExpr(
+                IR.Int(0x2000),
+                IR.CompareEqual(
                     new IRFlagExpr(IRFlag.Zero),
-                    IRConstantExpr.Bool(true),
-                    IRComparisonType.Equal
+                    IR.True()
                 )
             )
         ];
@@ -88,25 +87,22 @@ public class WireJumpWithConditionAnalyzerTests
         [
             new IRCmpInstruction(
                 new IRRegisterExpr(IRRegister.EAX),
-                IRConstantExpr.Int(5)
+                IR.Int(5)
             ),
 
             // jnle targetBlock (Zero == false AND Sign == Overflow)
             new IRJumpInstruction(
                 null!,
-                IRConstantExpr.Int(0x2000),
-                new IRLogicalExpr(
-                    new IRCompareExpr(
+                IR.Int(0x2000),
+                IR.LogicalAnd(
+                    IR.CompareEqual(
                         new IRFlagExpr(IRFlag.Zero),
-                        IRConstantExpr.Bool(false),
-                        IRComparisonType.Equal
+                        IR.False()
                     ),
-                    new IRCompareExpr(
+                    IR.CompareEqual(
                         new IRFlagExpr(IRFlag.Sign),
-                        new IRFlagExpr(IRFlag.Overflow),
-                        IRComparisonType.Equal
-                    ),
-                    IRLogicalOperation.And
+                        new IRFlagExpr(IRFlag.Overflow)
+                    )
                 )
             )
         ];
@@ -154,17 +150,16 @@ public class WireJumpWithConditionAnalyzerTests
             // mov eax, 10 (does not set flags)
             new IRMoveInstruction(
                 new IRRegisterExpr(IRRegister.EAX),
-                IRConstantExpr.Int(10)
+                IR.Int(10)
             ),
 
             // jz targetBlock - but no previous instruction sets Zero flag
             new IRJumpInstruction(
                 null!,
-                IRConstantExpr.Int(0x2000),
-                new IRCompareExpr(
+                IR.Int(0x2000),
+                IR.CompareEqual(
                     new IRFlagExpr(IRFlag.Zero),
-                    IRConstantExpr.Bool(true),
-                    IRComparisonType.Equal
+                    IR.True()
                 )
             )
         ];

@@ -1,7 +1,7 @@
-using VibeDisasm.DecompilerEngine.IR.Expressions;
-using VibeDisasm.DecompilerEngine.IR.Instructions;
-using VibeDisasm.DecompilerEngine.IR.Model;
-using VibeDisasm.DecompilerEngine.IRAnalyzers;
+using VibeDisasm.DecompilerEngine.IREverything.Expressions;
+using VibeDisasm.DecompilerEngine.IREverything.Instructions;
+using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers;
+using VibeDisasm.DecompilerEngine.IREverything.Model;
 
 namespace VibeDisasm.DecompilerEngine.Tests.IRAnalyzers;
 
@@ -19,10 +19,9 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRCompareExpr(
+        var condition = IR.CompareEqual(
             new IRFlagExpr(IRFlag.Zero),
-            IRConstantExpr.Bool(true),
-            IRComparisonType.Equal
+            IR.True()
         );
 
         // Act
@@ -44,10 +43,9 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRCompareExpr(
+        var condition = IR.CompareNotEqual(
             new IRFlagExpr(IRFlag.Sign),
-            new IRFlagExpr(IRFlag.Overflow),
-            IRComparisonType.NotEqual
+            new IRFlagExpr(IRFlag.Overflow)
         );
 
         // Act
@@ -69,10 +67,9 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRCompareExpr(
+        var condition = IR.CompareEqual(
             new IRFlagExpr(IRFlag.Sign),
-            new IRFlagExpr(IRFlag.Overflow),
-            IRComparisonType.Equal
+            new IRFlagExpr(IRFlag.Overflow)
         );
 
         // Act
@@ -89,24 +86,21 @@ public class IRFlagConditionTransformerTests
     [Fact]
     public void TransformJNLEPattern_ToGreaterThan()
     {
-        // Arrange - Exactly as in JNLE instruction 
+        // Arrange - Exactly as in JNLE instruction
         // Zero == false AND Sign == Overflow
         var varA = new IRRegisterExpr(IRRegister.EAX);
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRLogicalExpr(
-            new IRCompareExpr(
+        var condition = IR.LogicalAnd(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Zero),
-                IRConstantExpr.Bool(false),
-                IRComparisonType.Equal
+                IR.False()
             ),
-            new IRCompareExpr(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Sign),
-                new IRFlagExpr(IRFlag.Overflow),
-                IRComparisonType.Equal
-            ),
-            IRLogicalOperation.And
+                new IRFlagExpr(IRFlag.Overflow)
+            )
         );
 
         // Act
@@ -129,18 +123,15 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRLogicalExpr(
-            new IRCompareExpr(
+        var condition = IR.LogicalOr(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Zero),
-                IRConstantExpr.Bool(true),
-                IRComparisonType.Equal
+                IR.True()
             ),
-            new IRCompareExpr(
+            IR.CompareNotEqual(
                 new IRFlagExpr(IRFlag.Sign),
-                new IRFlagExpr(IRFlag.Overflow),
-                IRComparisonType.NotEqual
-            ),
-            IRLogicalOperation.Or
+                new IRFlagExpr(IRFlag.Overflow)
+            )
         );
 
         // Act
@@ -162,18 +153,15 @@ public class IRFlagConditionTransformerTests
         var flagSetter = new IRTestInstruction(varA, varA);
 
         // Zero == true OR Sign != Overflow (same as JLE pattern)
-        var condition = new IRLogicalExpr(
-            new IRCompareExpr(
+        var condition = IR.LogicalOr(
+            IR.CompareNotEqual(
                 new IRFlagExpr(IRFlag.Zero),
-                IRConstantExpr.Bool(true),
-                IRComparisonType.Equal
+                IR.True()
             ),
-            new IRCompareExpr(
+            IR.CompareNotEqual(
                 new IRFlagExpr(IRFlag.Sign),
-                new IRFlagExpr(IRFlag.Overflow),
-                IRComparisonType.NotEqual
-            ),
-            IRLogicalOperation.Or
+                new IRFlagExpr(IRFlag.Overflow)
+            )
         );
 
         // Act
@@ -197,10 +185,9 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRCompareExpr(
+        var condition = IR.CompareEqual(
             new IRFlagExpr(IRFlag.Carry),
-            IRConstantExpr.Bool(true),
-            IRComparisonType.Equal
+            IR.True()
         );
 
         // Act
@@ -222,18 +209,15 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRLogicalExpr(
-            new IRCompareExpr(
+        var condition = IR.LogicalAnd(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Carry),
-                IRConstantExpr.Bool(false),
-                IRComparisonType.Equal
+                IR.False()
             ),
-            new IRCompareExpr(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Zero),
-                IRConstantExpr.Bool(false),
-                IRComparisonType.Equal
-            ),
-            IRLogicalOperation.And
+                IR.False()
+            )
         );
 
         // Act
@@ -254,20 +238,17 @@ public class IRFlagConditionTransformerTests
         var varB = new IRRegisterExpr(IRRegister.EBX);
         var flagSetter = new IRCmpInstruction(varA, varB);
 
-        var condition = new IRLogicalExpr(
+        var condition = IR.LogicalOr(
             // Zero == true (Equal)
-            new IRCompareExpr(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Zero),
-                IRConstantExpr.Bool(true),
-                IRComparisonType.Equal
+                IR.True()
             ),
             // Sign == Overflow (GreaterThanOrEqual)
-            new IRCompareExpr(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Sign),
-                new IRFlagExpr(IRFlag.Overflow),
-                IRComparisonType.Equal
-            ),
-            IRLogicalOperation.Or
+                new IRFlagExpr(IRFlag.Overflow)
+            )
         );
 
         // Act
@@ -293,10 +274,9 @@ public class IRFlagConditionTransformerTests
         var flagSetter = new IRTestInstruction(varA, varA);
 
         // Zero flag comparison (similar to JZ after TEST)
-        var condition = new IRCompareExpr(
+        var condition = IR.CompareEqual(
             new IRFlagExpr(IRFlag.Zero),
-            IRConstantExpr.Bool(true),
-            IRComparisonType.Equal
+            IR.True()
         );
 
         // Act
@@ -317,14 +297,13 @@ public class IRFlagConditionTransformerTests
     {
         // Arrange - Pattern that truly doesn't match any recognized patterns
         var varA = new IRRegisterExpr(IRRegister.EAX);
-        var varB = IRConstantExpr.Int(42); // Use a constant instead of register to avoid direct match
+        var varB = IR.Int(42); // Use a constant instead of register to avoid direct match
         var flagSetter = new IRTestInstruction(varA, varB); // Use TEST instead of CMP
 
         // Use a parity flag which isn't handled in our patterns with test instructions
-        var condition = new IRCompareExpr(
+        var condition = IR.CompareNotEqual(
             new IRFlagExpr(IRFlag.Parity),
-            IRConstantExpr.Bool(true),
-            IRComparisonType.NotEqual
+            IR.True()
         );
 
         // Act

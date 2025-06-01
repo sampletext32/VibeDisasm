@@ -1,6 +1,6 @@
-using VibeDisasm.DecompilerEngine.IR;
-using VibeDisasm.DecompilerEngine.IR.Visitors;
-using VibeDisasm.DecompilerEngine.IRAnalyzers;
+using VibeDisasm.DecompilerEngine.IREverything;
+using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers;
+using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
