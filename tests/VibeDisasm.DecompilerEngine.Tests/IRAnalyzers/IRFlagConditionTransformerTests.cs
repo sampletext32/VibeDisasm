@@ -154,7 +154,7 @@ public class IRFlagConditionTransformerTests
 
         // Zero == true OR Sign != Overflow (same as JLE pattern)
         var condition = IR.LogicalOr(
-            IR.CompareNotEqual(
+            IR.CompareEqual(
                 new IRFlagExpr(IRFlag.Zero),
                 IR.True()
             ),

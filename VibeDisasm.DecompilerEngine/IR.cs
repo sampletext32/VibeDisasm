@@ -9,6 +9,8 @@ namespace VibeDisasm.DecompilerEngine;
 public static class IR
 {
     public static IRAddExpr Add(IRExpression left, IRExpression right) => new(left, right);
+    public static IRMulExpr Mul(IRExpression left, IRExpression right) => new(left, right);
+    public static IRSubExpr Sub(IRExpression left, IRExpression right) => new(left, right);
 
     public static IRCompareExpr Compare(IRExpression left, IRExpression right, IRComparisonType comparison) => new(left, right, comparison);
     public static IRCompareExpr CompareEqual(IRExpression left, IRExpression right) => new(left, right, IRComparisonType.Equal);

@@ -43,7 +43,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
                 IR.Add(
                     baseExpr,
                     IR.Add(
-                        new IRMulExpr(indexExpr, scaleExpr),
+                        IR.Mul(indexExpr, scaleExpr),
                         dispExpr
                     )
                 )
@@ -54,7 +54,7 @@ public sealed class OperandToIRExpressionVisitor : IOperandVisitor<IRExpression>
             // *((index * scale) + displacement)
             return new IRDerefExpr(
                 IR.Add(
-                    new IRMulExpr(indexExpr, scaleExpr),
+                    IR.Mul(indexExpr, scaleExpr),
                     dispExpr
                 )
             );

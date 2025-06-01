@@ -142,7 +142,7 @@ public class FlagTranslateConditionVisitor : BaseIRNodeReturningVisitor<IRExpres
             ),
 
             IRFlag.Sign => IR.Compare(
-                new IRSubExpr(instr.Left, instr.Right),
+                IR.Sub(instr.Left, instr.Right),
                 IR.Int(0),
                 _expectedValue
                     ? IRComparisonType.LessThan
@@ -216,7 +216,7 @@ public class FlagTranslateConditionVisitor : BaseIRNodeReturningVisitor<IRExpres
             // Carry flag and Overflow flag in MUL are both set when the high half of the result is non-zero
             // This effectively means the result is too large to fit in the destination register
             IRFlag.Carry or IRFlag.Overflow => IR.Compare(
-                new IRMulExpr(instr.Left, instr.Right),
+                IR.Mul(instr.Left, instr.Right),
                 IR.Uint(0xFFFFFFFF), // Check if result > 32-bit max
                 _expectedValue
                     ? IRComparisonType.GreaterThan
@@ -320,8 +320,8 @@ public class FlagTranslateConditionVisitor : BaseIRNodeReturningVisitor<IRExpres
         {
             // Zero flag: result == 0
             IRFlag.Zero => IR.Compare(
-                new IRSubExpr(
-                    new IRSubExpr(instr.Left, instr.Right),
+                IR.Sub(
+                    IR.Sub(instr.Left, instr.Right),
                     new IRFlagExpr(IRFlag.Carry)
                 ),
                 IR.Int(0),
@@ -332,8 +332,8 @@ public class FlagTranslateConditionVisitor : BaseIRNodeReturningVisitor<IRExpres
 
             // Sign flag: result < 0
             IRFlag.Sign => IR.Compare(
-                new IRSubExpr(
-                    new IRSubExpr(instr.Left, instr.Right),
+                IR.Sub(
+                    IR.Sub(instr.Left, instr.Right),
                     new IRFlagExpr(IRFlag.Carry)
                 ),
                 IR.Int(0),
