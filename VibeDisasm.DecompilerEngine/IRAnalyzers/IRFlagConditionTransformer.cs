@@ -1,8 +1,8 @@
 using System.Diagnostics.Contracts;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
 using VibeDisasm.DecompilerEngine.IR.Instructions;
-using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
 using VibeDisasm.DecompilerEngine.IR.Model;
+using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IRAnalyzers;
 
@@ -38,13 +38,12 @@ public static class IRFlagConditionTransformer
     [Pure]
     private static IRExpression? TryTransformDirectFlagComparison(IRExpression condition, IRInstruction flagSettingInstruction)
     {
-        if (condition is not IRCompareExpr { Left: IRFlagExpr flagExpr, Right: IRConstantExpr { Value: bool value } }
-            || flagSettingInstruction is not IIRFlagTranslatingInstruction flagTranslator)
+        if (condition is not IRCompareExpr { Left: IRFlagExpr flagExpr, Right: IRConstantExpr { Value: bool value } })
         {
             return null;
         }
 
-        return flagTranslator.GetFlagCondition(flagExpr.Flag, value);
+        return new FlagTranslateConditionVisitor(flagExpr.Flag, value).Visit(flagSettingInstruction);
     }
 
     /// <summary>

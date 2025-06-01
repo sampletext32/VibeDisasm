@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
-using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
-using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
@@ -11,49 +9,12 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Example: add eax, 1 -> IRAddInstruction(eax, 1)
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public sealed class IRAddInstruction : IRInstruction, IIRFlagTranslatingInstruction
+public sealed class IRAddInstruction : IRInstruction
 {
     public IRExpression Destination { get; init; }
     public IRExpression Source { get; init; }
     public override IRExpression? Result => Destination;
     public override IReadOnlyList<IRExpression> Operands => [Destination, Source];
-
-    public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
-    {
-        return flag switch
-        {
-            // Zero flag: result == 0
-            IRFlag.Zero => new IRCompareExpr(
-                new IRAddExpr(Destination, Source),
-                IRConstantExpr.Int(0),
-                expectedValue
-                    ? IRComparisonType.Equal
-                    : IRComparisonType.NotEqual
-            ),
-
-            // Sign flag: result < 0
-            IRFlag.Sign => new IRCompareExpr(
-                new IRAddExpr(Destination, Source),
-                IRConstantExpr.Int(0),
-                expectedValue
-                    ? IRComparisonType.LessThan
-                    : IRComparisonType.GreaterThanOrEqual
-            ),
-
-            // Carry flag: unsigned overflow (result < either operand)
-            IRFlag.Carry => new IRCompareExpr(
-                new IRAddExpr(Destination, Source),
-                Destination,
-                expectedValue
-                    ? IRComparisonType.LessThan
-                    : IRComparisonType.GreaterThanOrEqual
-            ),
-
-            // Overflow flag is too complex to express directly
-
-            _ => null // Other flags not directly mappable
-        };
-    }
 
     public IRAddInstruction(IRExpression destination, IRExpression source)
     {

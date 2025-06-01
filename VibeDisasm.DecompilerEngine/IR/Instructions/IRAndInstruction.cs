@@ -1,7 +1,5 @@
 using System.Diagnostics;
 using VibeDisasm.DecompilerEngine.IR.Expressions;
-using VibeDisasm.DecompilerEngine.IR.Instructions.Abstractions;
-using VibeDisasm.DecompilerEngine.IR.Model;
 using VibeDisasm.DecompilerEngine.IR.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IR.Instructions;
@@ -11,32 +9,12 @@ namespace VibeDisasm.DecompilerEngine.IR.Instructions;
 /// Example: and eax, 1 -> IRAndInstruction(eax, 1)
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public sealed class IRAndInstruction : IRInstruction, IIRFlagTranslatingInstruction
+public sealed class IRAndInstruction : IRInstruction
 {
     public IRExpression Left { get; init; }
     public IRExpression Right { get; init; }
     public override IRExpression? Result => Left;
     public override IReadOnlyList<IRExpression> Operands => [Left, Right];
-
-    public IRExpression? GetFlagCondition(IRFlag flag, bool expectedValue)
-    {
-        return flag switch
-        {
-            // Zero flag: result of AND is zero (common test pattern)
-            IRFlag.Zero => new IRCompareExpr(
-                new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
-                IRConstantExpr.Int(0),
-                expectedValue ? IRComparisonType.Equal : IRComparisonType.NotEqual),
-
-            // Sign flag: MSB of result is set (result is negative)
-            IRFlag.Sign => new IRCompareExpr(
-                new IRLogicalExpr(Left, Right, IRLogicalOperation.And),
-                IRConstantExpr.Int(0),
-                expectedValue ? IRComparisonType.LessThan : IRComparisonType.GreaterThanOrEqual),
-
-            _ => null // Other flags not directly mappable
-        };
-    }
 
     public IRAndInstruction(IRExpression left, IRExpression right)
     {

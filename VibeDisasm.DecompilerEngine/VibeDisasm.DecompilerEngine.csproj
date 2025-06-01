@@ -5,12 +5,4 @@
       <ProjectReference Include="..\VibeDisasm.Disassembler.X86\VibeDisasm.Disassembler.X86.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="IR\Structuring\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="IR\Structuring\IRIfThen.cs" />
-    </ItemGroup>
-
 </Project>

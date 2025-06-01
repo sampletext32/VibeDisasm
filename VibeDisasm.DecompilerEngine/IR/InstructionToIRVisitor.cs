@@ -139,63 +139,63 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(true), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(true), IRComparisonType.Equal)
                 );
             case InstructionType.Jnz:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal)
                 );
             case InstructionType.Js:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), IRConstantExpr.Bool(true), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Sign), IRConstantExpr.Bool(true), IRComparisonType.Equal)
                 );
             case InstructionType.Jns:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), IRConstantExpr.Bool(false), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Sign), IRConstantExpr.Bool(false), IRComparisonType.Equal)
                 );
             case InstructionType.Jo:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Overflow), IRConstantExpr.Bool(true), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Overflow), IRConstantExpr.Bool(true), IRComparisonType.Equal)
                 );
             case InstructionType.Jno:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Overflow), IRConstantExpr.Bool(false), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Overflow), IRConstantExpr.Bool(false), IRComparisonType.Equal)
                 );
             case InstructionType.Jp:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Parity), IRConstantExpr.Bool(true), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Parity), IRConstantExpr.Bool(true), IRComparisonType.Equal)
                 );
             case InstructionType.Jpo:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Parity), IRConstantExpr.Bool(false), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Parity), IRConstantExpr.Bool(false), IRComparisonType.Equal)
                 );
             // Flag comparison jumps
             case InstructionType.Jnge:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.NotEqual)
+                    IR.Compare(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.NotEqual)
                 );
 
             case InstructionType.Jnl:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.Equal)
                 );
 
             case InstructionType.Jng: // Jump if Not Greater (same as JLE)
@@ -203,8 +203,8 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     instruction,
                     OperandToIR(operands[0]),
                     new IRLogicalExpr(
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(true), IRComparisonType.Equal),
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.NotEqual),
+                        IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(true), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.NotEqual),
                         IRLogicalOperation.Or
                     )
                 );
@@ -214,8 +214,8 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     instruction,
                     OperandToIR(operands[0]),
                     new IRLogicalExpr(
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal),
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Sign), new IRFlagExpr(IRFlag.Overflow), IRComparisonType.Equal),
                         IRLogicalOperation.And
                     )
                 );
@@ -226,8 +226,8 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     instruction,
                     OperandToIR(operands[0]),
                     new IRLogicalExpr(
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(false), IRComparisonType.Equal),
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(false), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal),
                         IRLogicalOperation.And
                     )
                 );
@@ -236,14 +236,14 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(false), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(false), IRComparisonType.Equal)
                 );
 
             case InstructionType.Jb:
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(true), IRComparisonType.Equal)
+                    IR.Compare(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(true), IRComparisonType.Equal)
                 );
 
             case InstructionType.Jna:
@@ -251,8 +251,8 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     instruction,
                     OperandToIR(operands[0]),
                     new IRLogicalExpr(
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(false), IRComparisonType.Equal),
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Carry), IRConstantExpr.Bool(false), IRComparisonType.Equal),
+                        IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Bool(false), IRComparisonType.Equal),
                         IRLogicalOperation.Or
                     )
                 );
@@ -262,7 +262,7 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.NotEqual)
+                    IR.Compare(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.NotEqual)
                 ); // Would need special handling for ECX
 
             case InstructionType.Loope:
@@ -271,8 +271,8 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     instruction,
                     OperandToIR(operands[0]),
                     new IRLogicalExpr(
-                        new IRCompareExpr(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.NotEqual),
-                        new IRCompareExpr(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Int(0), IRComparisonType.Equal),
+                        IR.Compare(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.NotEqual),
+                        IR.Compare(new IRFlagExpr(IRFlag.Zero), IRConstantExpr.Int(0), IRComparisonType.Equal),
                         IRLogicalOperation.And
                     )
                 );
@@ -283,12 +283,12 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                     instruction,
                     OperandToIR(operands[0]),
                     new IRLogicalExpr(
-                        new IRCompareExpr(
+                        IR.Compare(
                             new IRRegisterExpr(IRRegister.ECX),
                             IRConstantExpr.Int(0),
                             IRComparisonType.NotEqual
                         ),
-                        new IRCompareExpr(
+                        IR.Compare(
                             new IRFlagExpr(IRFlag.Zero),
                             IRConstantExpr.Int(0),
                             IRComparisonType.Equal
@@ -302,7 +302,7 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRRegisterExpr(IRRegister.CX), IRConstantExpr.Int(0), IRComparisonType.Equal)
+                    IR.Compare(new IRRegisterExpr(IRRegister.CX), IRConstantExpr.Int(0), IRComparisonType.Equal)
                 );
 
             case InstructionType.Jecxz:
@@ -310,7 +310,7 @@ public sealed class InstructionToIRVisitor : IInstructionVisitor<IRInstruction>
                 return new IRJumpInstruction(
                     instruction,
                     OperandToIR(operands[0]),
-                    new IRCompareExpr(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.Equal)
+                    IR.Compare(new IRRegisterExpr(IRRegister.ECX), IRConstantExpr.Int(0), IRComparisonType.Equal)
                 );
             case InstructionType.Fld:
                 return new IRFldInstruction(

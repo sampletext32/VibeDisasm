@@ -8,6 +8,7 @@ namespace VibeDisasm.DecompilerEngine.IRAnalyzers.IRLiftedInstructions;
 public class IRUnflaggedJumpInstruction : IRWrappingInstruction<IRWiredJumpInstruction>
 {
     public IRExpression Condition { get; }
+    public IRExpression Target => WrappedInstruction.Target;
 
     public IRUnflaggedJumpInstruction(
         IRWiredJumpInstruction wrappedInstruction,
