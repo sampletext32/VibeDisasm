@@ -29,6 +29,8 @@ public class IRCompareExpr : IRExpression
         return false;
     }
 
+    public override IRExpression Invert() => new IRCompareExpr(Left, Right, Comparison.Invert());
+
     public override void Accept(IIRNodeVisitor visitor) => visitor.VisitCompare(this);
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitCompare(this);

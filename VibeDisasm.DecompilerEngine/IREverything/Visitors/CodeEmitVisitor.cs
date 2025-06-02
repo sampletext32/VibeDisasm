@@ -164,6 +164,12 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
                $"{Unindent()._indent}}}";
     }
 
+    public override string? VisitIfThen(IRIfThenNode node)
+    {
+        return $"{_indent}if ({Visit(node.Condition)})\n" +
+               $"{Visit(node.ThenBlock)}";
+    }
+
     public override string? VisitFunction(IRFunction function) => $"{Visit(function.ReturnType)} {function.Name}({string.Join(", ", function.Parameters.Select(Visit))})\n{Visit(function.Body)}";
     public override string? VisitSequence(IRSequenceNode node) => $"{string.Join($"\n{_indent}", node.Nodes.Select(Visit))}";
 }

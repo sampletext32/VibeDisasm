@@ -26,4 +26,6 @@ public abstract class IRExpression : IRNode
             }
         }
     }
+
+    public virtual IRExpression Invert() => throw new InvalidOperationException("Can't invert base expression");
 }

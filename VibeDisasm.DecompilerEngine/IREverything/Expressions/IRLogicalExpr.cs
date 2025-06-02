@@ -20,6 +20,11 @@ public class IRLogicalExpr : IRExpression
         Operation = operation;
     }
 
+    public override IRExpression Invert()
+    {
+        throw new InvalidOperationException("Cant invert this logical expression now");
+    }
+
     public override bool Equals(object? obj)
     {
         if (obj is IRLogicalExpr other)

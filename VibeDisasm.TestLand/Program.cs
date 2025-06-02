@@ -30,6 +30,7 @@ var irFunction = IrFromAsmConverter.Convert(asmFunction);
 
 new WireJumpWithConditionAnalyzer().Handle(irFunction);
 new IRFlagConditionReplacementAnalyzer().Handle(irFunction);
+new SimpleIfThenAnalyzer().Handle(irFunction);
 
 var code = CodeEmitVisitor.Instance.Visit(irFunction);
 
