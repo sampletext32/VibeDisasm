@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <ItemGroup>
+        <ProjectReference Include="..\VibeDisasm.DecompilerEngine\VibeDisasm.DecompilerEngine.csproj"/>
+        <ProjectReference Include="..\VibeDisasm.Pe\VibeDisasm.Pe.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="frontend\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="frontend\vibe-disasm\package-lock.json" />
+      <_ContentIncludedByDefault Remove="frontend\vibe-disasm\package.json" />
+      <_ContentIncludedByDefault Remove="frontend\vibe-disasm\tsconfig.json" />
+    </ItemGroup>
+
+</Project>
