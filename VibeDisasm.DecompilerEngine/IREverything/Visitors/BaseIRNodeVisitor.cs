@@ -109,6 +109,6 @@ public abstract class BaseIRNodeVisitor : IIRNodeVisitor
     public virtual void VisitMovzx(IRMovzxInstruction instr) { }
 
     public virtual void VisitSequence(IRSequenceNode node) { }
-    public virtual void VisitIfElse(IRIfElseNode elseNode) { }
+    public virtual void VisitIfThenElse(IRIfThenElseNode thenElseNode) { }
     public virtual void VisitIfThen(IRIfThenNode node) { }
 }

@@ -71,6 +71,6 @@ public interface IIRNodeReturningVisitor<out TReturn>
 
     TReturn? VisitSequence(IRSequenceNode node);
     TReturn? VisitIfThen(IRIfThenNode node);
-    TReturn? VisitIfElse(IRIfElseNode elseNode);
+    TReturn? VisitIfThenElse(IRIfThenElseNode thenElseNode);
 
 }

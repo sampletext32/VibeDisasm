@@ -71,5 +71,5 @@ public interface IIRNodeVisitor
 
     void VisitSequence(IRSequenceNode node);
     void VisitIfThen(IRIfThenNode node);
-    void VisitIfElse(IRIfElseNode elseNode);
+    void VisitIfThenElse(IRIfThenElseNode thenElseNode);
 }

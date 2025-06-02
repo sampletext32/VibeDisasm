@@ -9,13 +9,13 @@ namespace VibeDisasm.DecompilerEngine.IREverything.Structuring;
 /// Represents an if-then or if-then-else control structure in the IR.
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public class IRIfElseNode : IRStructuredNode
+public class IRIfThenElseNode : IRStructuredNode
 {
     public IRExpression Condition { get; }
     public IRBlock ThenBlock { get; }
     public IRBlock ElseBlock { get; }
 
-    public IRIfElseNode(IRExpression condition, IRBlock thenBlock, IRBlock elseBlock)
+    public IRIfThenElseNode(IRExpression condition, IRBlock thenBlock, IRBlock elseBlock)
     {
         Condition = condition;
         ThenBlock = thenBlock;
@@ -28,8 +28,8 @@ public class IRIfElseNode : IRStructuredNode
         yield return ElseBlock;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitIfElse(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitIfThenElse(this);
 
-    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitIfElse(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitIfThenElse(this);
     internal override string DebugDisplay => $"IRIfElse({Condition.DebugDisplay})";
 }

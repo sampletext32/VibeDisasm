@@ -118,5 +118,5 @@ public abstract class BaseIRNodeReturningVisitor<TReturn> : IIRNodeReturningVisi
     public virtual TReturn? VisitSequence(IRSequenceNode node) => _defaultReturn(node);
     public virtual TReturn? VisitIfThen(IRIfThenNode node) => _defaultReturn(node);
 
-    public virtual TReturn? VisitIfElse(IRIfElseNode elseNode) => _defaultReturn(elseNode);
+    public virtual TReturn? VisitIfThenElse(IRIfThenElseNode thenElseNode) => _defaultReturn(thenElseNode);
 }
