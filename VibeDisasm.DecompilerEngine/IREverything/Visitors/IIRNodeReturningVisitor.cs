@@ -32,6 +32,7 @@ public interface IIRNodeReturningVisitor<out TReturn>
     TReturn? VisitIDiv(IRIDivInstruction instr);
     TReturn? VisitInc(IRIncInstruction instr);
     TReturn? VisitJump(IRJumpInstruction instr);
+    TReturn? VisitConditionalJump(IRConditionalJumpInstruction instr);
     TReturn? VisitLea(IRLeaInstruction instr);
     TReturn? VisitMove(IRMoveInstruction instr);
     TReturn? VisitMul(IRMulInstruction instr);
@@ -56,7 +57,7 @@ public interface IIRNodeReturningVisitor<out TReturn>
 
     TReturn? VisitVariable(IRVariable variable);
 
-    TReturn? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr);
+    TReturn? VisitSemanticIfJump(IRSemanticIfJumpInstruction instr);
     TReturn? VisitWiredJump(IRWiredJumpInstruction instr);
 
     TReturn? VisitFld(IRFldInstruction instr);

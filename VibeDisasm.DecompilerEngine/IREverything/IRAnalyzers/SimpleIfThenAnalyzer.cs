@@ -1,4 +1,5 @@
-﻿using VibeDisasm.DecompilerEngine.IREverything.Expressions;
+﻿using VibeDisasm.DecompilerEngine.IREverything.Abstractions;
+using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
 using VibeDisasm.DecompilerEngine.IREverything.Structuring;
@@ -27,7 +28,7 @@ public class SimpleIfThenAnalyzer
                 continue;
             }
 
-            if (lastInstruction is not IRUnflaggedJumpInstruction jump)
+            if (lastInstruction is not IIRConditionalJump jump)
             {
                 Console.WriteLine($"SimpleIfThenAnalyzer stepped onto block {currentBlock.Address:X8} with last instruction not a unflagged one, but {lastInstruction.GetType().Name}.");
                 continue;

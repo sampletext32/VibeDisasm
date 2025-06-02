@@ -32,6 +32,7 @@ public interface IIRNodeVisitor
     void VisitIDiv(IRIDivInstruction instr);
     void VisitInc(IRIncInstruction instr);
     void VisitJump(IRJumpInstruction instr);
+    void VisitConditionalJump(IRConditionalJumpInstruction instr);
     void VisitLea(IRLeaInstruction instr);
     void VisitMove(IRMoveInstruction instr);
     void VisitMul(IRMulInstruction instr);
@@ -56,7 +57,7 @@ public interface IIRNodeVisitor
 
     void VisitVariable(IRVariable variable);
 
-    void VisitUnflaggedJump(IRUnflaggedJumpInstruction instr);
+    void VisitSemanticIfJump(IRSemanticIfJumpInstruction instr);
     void VisitWiredJump(IRWiredJumpInstruction instr);
 
     void VisitFld(IRFldInstruction instr);

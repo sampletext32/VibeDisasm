@@ -26,7 +26,7 @@ public class IRFlagConditionReplacementAnalyzer
                 var instruction = block.Instructions[i];
 
                 // find only wired jumps, there is no need to transform other instructions
-                if (instruction is IRWiredJumpInstruction { Condition: not null } wiredJump)
+                if (instruction is IRWiredJumpInstruction wiredJump)
                 {
                     var transformedCondition = IRFlagConditionTransformer.TransformCondition(
                         wiredJump.Condition,
@@ -35,7 +35,7 @@ public class IRFlagConditionReplacementAnalyzer
 
                     if (transformedCondition != null)
                     {
-                        var newJump = new IRUnflaggedJumpInstruction(wiredJump, transformedCondition);
+                        var newJump = new IRSemanticIfJumpInstruction(wiredJump, transformedCondition);
 
                         // Replace the wired jump with the new high-level jump
                         block.Instructions[i] = newJump;

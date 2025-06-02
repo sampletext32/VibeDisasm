@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.DecompilerEngine.IREverything.Abstractions;
 using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.Instructions;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
@@ -9,14 +10,14 @@ namespace VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructi
 /// Represents a jump instruction with a reference to the instruction that set its condition flags.
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public class IRWiredJumpInstruction : IRWrappingInstruction<IRJumpInstruction>
+public class IRWiredJumpInstruction : IRWrappingInstruction<IRConditionalJumpInstruction>, IIRConditionalJump
 {
     public IRInstruction ConditionInstruction { get; set; }
 
-    public IRExpression? Condition => WrappedInstruction.Condition;
+    public IRExpression Condition => WrappedInstruction.Condition;
     public IRExpression Target => WrappedInstruction.Target;
 
-    public IRWiredJumpInstruction(IRJumpInstruction originalJump, IRInstruction conditionInstruction)
+    public IRWiredJumpInstruction(IRConditionalJumpInstruction originalJump, IRInstruction conditionInstruction)
         : base(originalJump) =>
         ConditionInstruction = conditionInstruction;
 

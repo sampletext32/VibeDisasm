@@ -103,9 +103,9 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
 
     public override string? VisitInc(IRIncInstruction instr) => $"{_indent}{Visit(instr.Target)}++";
 
-    public override string? VisitJump(IRJumpInstruction instr) => (instr.Condition is null
-        ? $"{_indent}jump -> {Visit(instr.Target)}"
-        : $"{_indent}jump_if {Visit(instr.Condition)} -> {Visit(instr.Target)}");
+    public override string? VisitJump(IRJumpInstruction instr) => $"{_indent}jump -> {Visit(instr.Target)}";
+
+    public override string? VisitConditionalJump(IRConditionalJumpInstruction instr) => $"{_indent}jump_if {Visit(instr.Condition)} -> {Visit(instr.Target)}";
 
     public override string? VisitLea(IRLeaInstruction instr) => $"{_indent}{Visit(instr.Target)} = &{Visit(instr.Address)}";
 
@@ -141,7 +141,7 @@ public class CodeEmitVisitor : BaseIRNodeReturningVisitor<string>
         ? $"{_indent}jump to {Visit(instr.WrappedInstruction.Target)}" // Unconditional jump
         : Visit(instr.WrappedInstruction);
 
-    public override string? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) => $"{_indent}if ({Visit(instr.Condition)}) goto {Visit(instr.WrappedInstruction.Target)}";
+    public override string? VisitSemanticIfJump(IRSemanticIfJumpInstruction instr) => $"{_indent}if ({Visit(instr.Condition)}) goto {Visit(instr.WrappedInstruction.Target)}";
 
     public override string? VisitFld(IRFldInstruction instr) => $"{_indent}ST(0) = fld({Visit(instr.Source)}) /* push FPU stack */";
 

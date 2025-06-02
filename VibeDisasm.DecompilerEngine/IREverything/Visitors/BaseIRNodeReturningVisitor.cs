@@ -61,6 +61,7 @@ public abstract class BaseIRNodeReturningVisitor<TReturn> : IIRNodeReturningVisi
     public virtual TReturn? VisitInc(IRIncInstruction instr) => _defaultReturn(instr);
 
     public virtual TReturn? VisitJump(IRJumpInstruction instr) => _defaultReturn(instr);
+    public virtual TReturn? VisitConditionalJump(IRConditionalJumpInstruction instr) => _defaultReturn(instr);
 
     public virtual TReturn? VisitLea(IRLeaInstruction instr) => _defaultReturn(instr);
 
@@ -102,7 +103,7 @@ public abstract class BaseIRNodeReturningVisitor<TReturn> : IIRNodeReturningVisi
 
     public virtual TReturn? VisitVariable(IRVariable variable) => _defaultReturn(variable);
 
-    public virtual TReturn? VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) => _defaultReturn(instr);
+    public virtual TReturn? VisitSemanticIfJump(IRSemanticIfJumpInstruction instr) => _defaultReturn(instr);
 
     public virtual TReturn? VisitWiredJump(IRWiredJumpInstruction instr) => _defaultReturn(instr);
     public virtual TReturn? VisitFld(IRFldInstruction instr) => _defaultReturn(instr);

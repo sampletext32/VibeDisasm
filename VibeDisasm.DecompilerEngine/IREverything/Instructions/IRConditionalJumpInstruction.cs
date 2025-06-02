@@ -12,22 +12,24 @@ namespace VibeDisasm.DecompilerEngine.IREverything.Instructions;
 /// Example: je 0x401100 -> IRJumpInstruction(0x401100, some_condition)
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public sealed class IRJumpInstruction : IRInstruction
+public sealed class IRConditionalJumpInstruction : IRInstruction, IIRConditionalJump
 {
     private readonly AsmInstruction _underlyingInstruction;
     public IRExpression Target { get; init; }
+    public IRExpression Condition { get; init; }
     public override IRExpression? Result => null;
-    public override IReadOnlyList<IRExpression> Operands => [Target];
+    public override IReadOnlyList<IRExpression> Operands => [Condition, Target];
 
-    public IRJumpInstruction(AsmInstruction underlyingInstruction, IRExpression target)
+    public IRConditionalJumpInstruction(AsmInstruction underlyingInstruction, IRExpression target, IRExpression condition)
     {
         _underlyingInstruction = underlyingInstruction;
         Target = target;
+        Condition = condition;
     }
 
-    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitJump(this);
+    public override void Accept(IIRNodeVisitor visitor) => visitor.VisitConditionalJump(this);
 
-    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitJump(this);
+    public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitConditionalJump(this);
 
-    internal override string DebugDisplay => $"IRJumpInstruction(jump -> {Target.DebugDisplay})";
+    internal override string DebugDisplay => $"IRConditionalJumpInstruction(jump_if {Condition.DebugDisplay} -> {Target.DebugDisplay})";
 }

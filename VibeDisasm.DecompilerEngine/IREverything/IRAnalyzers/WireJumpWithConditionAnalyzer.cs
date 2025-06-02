@@ -15,7 +15,7 @@ public class WireJumpWithConditionAnalyzer
             var instructions = functionBlock.Instructions;
             for (var i = 0; i < instructions.Count; i++)
             {
-                if (instructions[i] is IRJumpInstruction jump)
+                if (instructions[i] is IRConditionalJumpInstruction jump)
                 {
                     if (jump.Condition is null)
                     {

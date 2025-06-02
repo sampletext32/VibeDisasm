@@ -53,6 +53,7 @@ public abstract class BaseIRNodeVisitor : IIRNodeVisitor
     public virtual void VisitInc(IRIncInstruction instr) { }
 
     public virtual void VisitJump(IRJumpInstruction instr) { }
+    public virtual void VisitConditionalJump(IRConditionalJumpInstruction instr) { }
 
     public virtual void VisitLea(IRLeaInstruction instr) { }
 
@@ -94,7 +95,7 @@ public abstract class BaseIRNodeVisitor : IIRNodeVisitor
 
     public virtual void VisitVariable(IRVariable variable) { }
 
-    public virtual void VisitUnflaggedJump(IRUnflaggedJumpInstruction instr) { }
+    public virtual void VisitSemanticIfJump(IRSemanticIfJumpInstruction instr) { }
 
     public virtual void VisitWiredJump(IRWiredJumpInstruction instr) { }
     public virtual void VisitFld(IRFldInstruction instr) { }
