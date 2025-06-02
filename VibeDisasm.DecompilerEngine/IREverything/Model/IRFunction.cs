@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.DecompilerEngine.IREverything.Cfg;
 using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
@@ -16,12 +17,15 @@ public class IRFunction : IRNode
     public List<IRVariable> Parameters { get; init; }
     public IRSequenceNode Body { get; init; }
 
-    public IRFunction(string name, IRType returnType, List<IRVariable> parameters, IRSequenceNode body)
+    public IRCfgEdgesLookup CfgEdges { get; init; }
+
+    public IRFunction(string name, IRType returnType, List<IRVariable> parameters, IRSequenceNode body, IRCfgEdgesLookup cfgEdges)
     {
         Name = name;
         ReturnType = returnType;
         Parameters = parameters;
         Body = body;
+        CfgEdges = cfgEdges;
     }
 
     public override void Accept(IIRNodeVisitor visitor) => visitor.VisitFunction(this);

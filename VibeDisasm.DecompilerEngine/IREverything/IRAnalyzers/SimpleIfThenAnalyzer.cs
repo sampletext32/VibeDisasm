@@ -1,6 +1,5 @@
 ﻿using VibeDisasm.DecompilerEngine.IREverything.Abstractions;
 using VibeDisasm.DecompilerEngine.IREverything.Expressions;
-using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers.IRLiftedInstructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
 using VibeDisasm.DecompilerEngine.IREverything.Structuring;
 
@@ -30,13 +29,13 @@ public class SimpleIfThenAnalyzer
 
             if (lastInstruction is not IIRConditionalJump jump)
             {
-                Console.WriteLine($"SimpleIfThenAnalyzer stepped onto block {currentBlock.Address:X8} with last instruction not a unflagged one, but {lastInstruction.GetType().Name}.");
+                Console.WriteLine($"SimpleIfThenAnalyzer stepped onto block {currentBlock.Address:X8} with last instruction not a conditional jump, but {lastInstruction.GetType().Name}.");
                 continue;
             }
 
             if (jump.Target is not IRConstantExpr targetExpr)
             {
-                Console.WriteLine($"SimpleIfThenAnalyzer block {currentBlock.Address:X8} has unflagged jump with not a constant {jump.Target.GetType().Name}.");
+                Console.WriteLine($"SimpleIfThenAnalyzer block {currentBlock.Address:X8} has conditional jump with not a constant target {jump.Target.GetType().Name}.");
                 continue;
             }
 
@@ -66,14 +65,15 @@ public class SimpleIfThenAnalyzer
                     // |        /
                     // | overjump (jumpTarget)
 
-                    // in this case jump is actually inverted if (!condition) overjump;
+                    // in this case jump is actually inverted
+                    // if (!condition) overjump;
 
                     var ifThen = new IRIfThenNode(
                         jump.Condition.Invert(),
                         nextBlock
                     );
 
-                    body.Nodes.Insert(i + 1, ifThen);
+                    body.Insert(i + 1, ifThen);
                     if (i < nextBlockIndex)
                     {
                         body.Nodes.RemoveAt(nextBlockIndex + 1);

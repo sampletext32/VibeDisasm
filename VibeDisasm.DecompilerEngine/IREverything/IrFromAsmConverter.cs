@@ -1,3 +1,4 @@
+using VibeDisasm.DecompilerEngine.IREverything.Cfg;
 using VibeDisasm.DecompilerEngine.IREverything.Instructions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
 using VibeDisasm.DecompilerEngine.IREverything.Structuring;
@@ -27,12 +28,14 @@ public static class IrFromAsmConverter
         }
 
         var body = new IRSequenceNode(irBlocks);
+        var edges = IRCfgEdgesBuilder.BuildEdges(body);
 
         var irFunction = new IRFunction(
             name: $"Function_0x{asmFunction.Blocks.Values.First(x => x.IsEntryBlock).StartAddress:X8}",
             returnType: IRType.Int,
             parameters: [],
-            body: body
+            body: body,
+            cfgEdges: edges
         );
         return irFunction;
     }

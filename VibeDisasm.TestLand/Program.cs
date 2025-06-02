@@ -1,4 +1,5 @@
 using VibeDisasm.DecompilerEngine.IREverything;
+using VibeDisasm.DecompilerEngine.IREverything.Cfg;
 using VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 using VibeDisasm.Disassembler.X86;

@@ -50,4 +50,10 @@ public class IRSequenceNode : IRStructuredNode
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitSequence(this);
     internal override string DebugDisplay => $"IRSequence({Nodes.Count} nodes)";
+
+    public void Insert(int index, IRStructuredNode node)
+    {
+        node.Parent = this;
+        Nodes.Insert(index, node);
+    }
 }
