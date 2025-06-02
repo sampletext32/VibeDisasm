@@ -117,7 +117,7 @@ public class SimpleIfThenAnalyzer
                     continue;
                 }
 
-                body.ReplaceAndInsertAfter(fallthroughBlockIndex, i, ifThen);
+                body.InsertAndRemoveMultiple(i + 1, ifThen, fallthroughBlockIndex);
             }
         }
     }

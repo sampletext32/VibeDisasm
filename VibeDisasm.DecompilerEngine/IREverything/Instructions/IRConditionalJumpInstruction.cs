@@ -14,15 +14,13 @@ namespace VibeDisasm.DecompilerEngine.IREverything.Instructions;
 [DebuggerDisplay("{DebugDisplay}")]
 public sealed class IRConditionalJumpInstruction : IRInstruction, IIRConditionalJump
 {
-    private readonly AsmInstruction _underlyingInstruction;
     public IRExpression Target { get; init; }
     public IRExpression Condition { get; init; }
     public override IRExpression? Result => null;
     public override IReadOnlyList<IRExpression> Operands => [Condition, Target];
 
-    public IRConditionalJumpInstruction(AsmInstruction underlyingInstruction, IRExpression target, IRExpression condition)
+    public IRConditionalJumpInstruction(IRExpression target, IRExpression condition)
     {
-        _underlyingInstruction = underlyingInstruction;
         Target = target;
         Condition = condition;
     }

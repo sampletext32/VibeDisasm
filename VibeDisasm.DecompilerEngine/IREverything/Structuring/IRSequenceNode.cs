@@ -101,4 +101,26 @@ public class IRSequenceNode : IRStructuredNode
         Nodes.RemoveAt(targetIndex + (targetIndex > insertAfterIndex ? 1 : 0));
         return true;
     }
+    
+    public bool InsertAndRemoveMultiple(int insertIndex, IRStructuredNode nodeToInsert, params int[] indicesToRemove)
+    {
+        if (insertIndex < 0 || insertIndex >= Nodes.Count || indicesToRemove.Any(i => i < 0 || i >= Nodes.Count))
+            return false;
+            
+        nodeToInsert.Parent = this;
+        Insert(insertIndex, nodeToInsert);
+        
+        // Sort indices in descending order to avoid index shifting issues
+        var sortedIndices = indicesToRemove
+            .Select(i => i + (i >= insertIndex ? 1 : 0)) // Adjust indices after insertion point
+            .OrderByDescending(i => i)
+            .ToList();
+            
+        foreach (var index in sortedIndices)
+        {
+            Nodes.RemoveAt(index);
+        }
+        
+        return true;
+    }
 }

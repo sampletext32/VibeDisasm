@@ -19,6 +19,7 @@ public class App : IUpdateReceiver, IKeyPressReceiver, IExitReceiver
     public GL GL { get; set; } = null!;
     public IWindow Window { get; set; } = null!;
     public ImFontPtr MainFont { get; set; }
+    public IServiceProvider ServiceProvider { get; private set; } = null!;
 
     public static App Instance { get; private set; } = null!;
 
