@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Structuring;
@@ -55,5 +56,49 @@ public class IRSequenceNode : IRStructuredNode
     {
         node.Parent = this;
         Nodes.Insert(index, node);
+    }
+
+    [Pure]
+    public int FindNodeIndex(Func<IRStructuredNode, bool> predicate)
+    {
+        for (var i = 0; i < Nodes.Count; i++)
+        {
+            if (predicate(Nodes[i]))
+                return i;
+        }
+
+        return -1;
+    }
+
+    public bool Replace(IRStructuredNode nodeToReplace, IRStructuredNode replacement)
+    {
+        var index = Nodes.IndexOf(nodeToReplace);
+        if (index == -1)
+            return false;
+
+        replacement.Parent = this;
+        Nodes[index] = replacement;
+        return true;
+    }
+
+    public bool ReplaceAt(int index, IRStructuredNode replacement)
+    {
+        if (index < 0 || index >= Nodes.Count)
+            return false;
+
+        replacement.Parent = this;
+        Nodes[index] = replacement;
+        return true;
+    }
+
+    public bool ReplaceAndInsertAfter(int targetIndex, int insertAfterIndex, IRStructuredNode replacement)
+    {
+        if (targetIndex < 0 || targetIndex >= Nodes.Count || insertAfterIndex < 0 || insertAfterIndex >= Nodes.Count)
+            return false;
+
+        replacement.Parent = this;
+        Insert(insertAfterIndex + 1, replacement);
+        Nodes.RemoveAt(targetIndex + (targetIndex > insertAfterIndex ? 1 : 0));
+        return true;
     }
 }
