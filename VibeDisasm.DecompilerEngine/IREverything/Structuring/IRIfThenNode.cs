@@ -1,9 +1,11 @@
-﻿using VibeDisasm.DecompilerEngine.IREverything.Expressions;
+﻿using System.Diagnostics;
+using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
 using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.Structuring;
 
+[DebuggerDisplay("{DebugDisplay}")]
 public class IRIfThenNode : IRStructuredNode
 {
     public IRExpression Condition { get; }
@@ -24,5 +26,5 @@ public class IRIfThenNode : IRStructuredNode
 
     public override T? Accept<T>(IIRNodeReturningVisitor<T> visitor) where T : default => visitor.VisitIfThen(this);
 
-    internal override string DebugDisplay => $"IRIfThenNode(Condition: {Condition.DebugDisplay})";
+    internal override string DebugDisplay => $"IRIfThenNode(Condition: {Condition.DebugDisplay}. ThenBlock: {ThenBlock.Address:X8})";
 }

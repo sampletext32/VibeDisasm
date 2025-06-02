@@ -4,6 +4,7 @@ using VibeDisasm.DecompilerEngine.IREverything.Cfg;
 using VibeDisasm.DecompilerEngine.IREverything.Expressions;
 using VibeDisasm.DecompilerEngine.IREverything.Model;
 using VibeDisasm.DecompilerEngine.IREverything.Structuring;
+using VibeDisasm.DecompilerEngine.IREverything.Visitors;
 
 namespace VibeDisasm.DecompilerEngine.IREverything.IRAnalyzers;
 
@@ -20,11 +21,11 @@ public class SimpleIfThenAnalyzer
     {
         var body = function.Body;
         var cfgEdges = function.CfgEdges;
-        
+
         var bodyBlocks = body.EnumerateBlocks()
             .OrderBy(x => x.Address)
             .ToList();
-            
+
         for (var i = 0; i < bodyBlocks.Count; i++)
         {
             var currentBlock = bodyBlocks[i];
@@ -54,20 +55,20 @@ public class SimpleIfThenAnalyzer
 
             var takenEdge = outgoingEdges.FirstOrDefault(e => e.Type == IREdge.Taken);
             var fallthroughEdge = outgoingEdges.FirstOrDefault(e => e.Type == IREdge.Fallthrough);
-            
+
             if (takenEdge is null || fallthroughEdge is null)
                 continue;
 
             var fallthroughBlockAddr = fallthroughEdge.To;
             var targetBlockAddr = takenEdge.To;
-            
+
             var fallthroughBlock = bodyBlocks.FirstOrDefault(b => b.Address == fallthroughBlockAddr);
             if (fallthroughBlock is null)
             {
                 Console.WriteLine($"SimpleIfThenAnalyzer couldn't find fallthrough block at address {fallthroughBlockAddr:X8}");
                 continue;
             }
-            
+
             // Check if this is a potential if-then structure (overjump pattern)
             if (IsOverjump(fallthroughBlockAddr, targetBlockAddr))
             {
@@ -75,22 +76,22 @@ public class SimpleIfThenAnalyzer
                 // 1. From the if head (current block)
                 // 2. From the then block (fallthrough block)
                 var targetIncomingEdges = cfgEdges.EdgesByTo[targetBlockAddr].ToList();
-                
+
                 // Check if we have exactly 2 incoming edges to the target block
                 if (targetIncomingEdges.Count != 2)
                 {
                     continue;
                 }
-                
+
                 // Check if the incoming edges are from the current block and the fallthrough block
                 var incomingFromCurrentBlock = targetIncomingEdges.Any(e => e.From == currentBlock.Address);
                 var incomingFromFallthroughBlock = targetIncomingEdges.Any(e => e.From == fallthroughBlockAddr);
-                
+
                 if (!incomingFromCurrentBlock || !incomingFromFallthroughBlock)
                 {
                     continue;
                 }
-                
+
                 // This is an overjump (skipping part of logic) - a simple if-then structure
                 // | currentBlock
                 // |         \
@@ -102,15 +103,15 @@ public class SimpleIfThenAnalyzer
 
                 // In this case jump is actually inverted
                 // if (!condition) overjump;
-                
+
                 var ifThen = new IRIfThenNode(
                     jump.Condition.Invert(),
                     fallthroughBlock
                 );
 
-                var fallthroughBlockIndex = body.FindNodeIndex(node => 
+                var fallthroughBlockIndex = body.FindNodeIndex(node =>
                     node is IRBlock block && block.Address == fallthroughBlockAddr);
-                
+
                 if (fallthroughBlockIndex == -1)
                 {
                     Console.WriteLine($"SimpleIfThenAnalyzer couldn't find fallthrough block in body nodes");
@@ -118,6 +119,8 @@ public class SimpleIfThenAnalyzer
                 }
 
                 body.InsertAndRemoveMultiple(i + 1, ifThen, fallthroughBlockIndex);
+
+                Console.WriteLine($"SimpleIfThenAnalyzer found a simple if-then structure: {CodeEmitVisitor.Instance.Visit(ifThen.Condition)}. Then: {ifThen.ThenBlock.Address:X8}");
             }
         }
     }
