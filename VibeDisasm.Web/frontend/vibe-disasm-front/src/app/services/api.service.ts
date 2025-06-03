@@ -31,6 +31,10 @@ export class ApiService {
     return this.http.get<Project[]>(`${this.baseUrl}/projects/list`);
   }
 
+  openProject(projectId: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/projects/open/${projectId}`, {});
+  }
+
   importProgram(projectId: string): Observable<string> {
     const params = new HttpParams().set('projectId', projectId);
     return this.http.post<string>(`${this.baseUrl}/programs/import`, {}, { params });

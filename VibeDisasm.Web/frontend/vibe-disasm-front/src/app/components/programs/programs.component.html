@@ -23,14 +23,26 @@
       <p>No programs found. Import a program to get started.</p>
     </div>
     
-    <mat-list *ngIf="!loading && programs.length > 0">
-      <mat-list-item *ngFor="let program of programs" class="program-item">
-        <mat-icon matListItemIcon>description</mat-icon>
-        <div matListItemTitle>{{ program.name }}</div>
-        <div matListItemLine class="program-path">{{ program.filePath }}</div>
-        <div matListItemLine class="program-id monospace">ID: {{ program.id }}</div>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-    </mat-list>
+    <div *ngIf="!loading && programs.length > 0" class="programs-grid">
+      <mat-card *ngFor="let program of programs" class="program-card mat-elevation-z2">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>description</mat-icon>
+          <mat-card-title>{{ program.name }}</mat-card-title>
+          <mat-card-subtitle class="program-id monospace">ID: {{ program.id }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="program-metadata">
+            <div class="filepath">
+              <mat-icon class="filepath-icon">folder</mat-icon>
+              <span class="filepath-text">{{ program.filePath }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+        <div class="card-hint">
+          <mat-icon>code</mat-icon>
+          <span>Click to analyze program</span>
+        </div>
+      </mat-card>
+    </div>
   </div>
 </div>

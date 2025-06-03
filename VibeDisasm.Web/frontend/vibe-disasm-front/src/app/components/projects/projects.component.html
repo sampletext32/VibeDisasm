@@ -21,8 +21,10 @@
     </div>
     
     <div *ngIf="!loading && projects.length > 0" class="projects-grid">
-      <mat-card *ngFor="let project of projects" class="project-card mat-elevation-z2" (click)="viewPrograms(project)">
-        <div class="card-color-band"></div>
+      <mat-card *ngFor="let project of projects" class="project-card mat-elevation-z2" (click)="openingProjectId !== project.id && viewPrograms(project)" [class.loading]="openingProjectId === project.id">
+        <div *ngIf="openingProjectId === project.id" class="card-loading-overlay">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
         <mat-card-header>
           <mat-icon mat-card-avatar>folder</mat-icon>
           <mat-card-title>{{ project.title || 'Untitled Project' }}</mat-card-title>
@@ -37,8 +39,8 @@
           </div>
         </mat-card-content>
         <div class="card-hint">
-          <mat-icon>touch_app</mat-icon>
-          <span>Click to view programs</span>
+          <mat-icon>{{ openingProjectId === project.id ? 'hourglass_empty' : 'touch_app' }}</mat-icon>
+          <span>{{ openingProjectId === project.id ? 'Opening project...' : 'Click to view programs' }}</span>
         </div>
       </mat-card>
     </div>

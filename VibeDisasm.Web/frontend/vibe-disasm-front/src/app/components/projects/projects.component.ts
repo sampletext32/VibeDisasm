@@ -53,7 +53,25 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
+  // Track loading state for each project
+  openingProjectId: string | null = null;
+
   viewPrograms(project: Project): void {
-    this.router.navigate(['/programs', project.id]);
+    // Set loading state for this specific project
+    this.openingProjectId = project.id;
+    
+    // Call the openProject endpoint
+    this.apiService.openProject(project.id)
+      .pipe(finalize(() => this.openingProjectId = null))
+      .subscribe({
+        next: () => {
+          // Only navigate after successful response
+          this.router.navigate(['/programs', project.id]);
+        },
+        error: (error) => {
+          console.error('Error opening project', error);
+          // Error handling is managed by the HTTP interceptor
+        }
+      });
   }
 }

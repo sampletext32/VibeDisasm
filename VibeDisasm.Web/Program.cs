@@ -34,6 +34,7 @@ builder.Services.AddSingleton<AppState>();
 
 // Register handlers
 builder.Services.AddSingleton<CreateProjectHandler>();
+builder.Services.AddSingleton<OpenProjectHandler>();
 builder.Services.AddSingleton<ListProjectsHandler>();
 builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
