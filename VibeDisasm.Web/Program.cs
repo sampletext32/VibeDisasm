@@ -1,8 +1,5 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
-using VibeDisasm.Pe;
-using VibeDisasm.Pe.Extractors;
-using VibeDisasm.Pe.Raw;
 using VibeDisasm.Web.Extensions;
 using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
@@ -11,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSwaggerGen();
 builder.Services.MyConfigureSwagger();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCorsConfiguration(builder.Configuration);
 
 
 // Configure JSON serialization to handle enums as strings
@@ -24,6 +22,7 @@ builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converte
 builder.Services.AddSingleton<AppState>();
 var app = builder.Build();
 
+app.UseCorsConfiguration();
 
 app.MapSwagger();
 app.UseSwaggerUI();
@@ -83,50 +82,6 @@ app.MapGet(
         var project = state.Projects.First(x => x.Id == projectId);
 
         return Results.Ok(project.Programs.Select(x => new {x.Id, x.Name, x.FilePath}));
-    }
-);
-
-app.MapGet(
-    "/pe-info",
-    (AppState state, Guid? programId) =>
-    {
-        if (programId is null)
-        {
-            return Results.BadRequest("programId is required.");
-        }
-
-        var program = state.Projects
-            .SelectMany(p => p.Programs)
-            .FirstOrDefault(p => p.Id == programId);
-
-        if (program is null)
-        {
-            return Results.NotFound($"Program with ID {programId} not found.");
-        }
-
-        try
-        {
-            var rawPeFile = new RawPeParser().Parse(program.FileData);
-            var peInfo = PeInfoExtractor.Extract(rawPeFile);
-            var sections = SectionExtractor.Extract(rawPeFile);
-            var exports = ExportExtractor.Extract(rawPeFile);
-            var imports = ImportExtractor.Extract(rawPeFile);
-            var entryPoint = EntryPointExtractor.Extract(rawPeFile, exports);
-            var resources = ResourceExtractor.Extract(rawPeFile);
-
-            return Results.Ok(new {
-                BasicInfo = peInfo,
-                Sections = sections,
-                Exports = exports,
-                Imports = imports,
-                EntryPoint = entryPoint,
-                Resources = resources
-            });
-        }
-        catch (Exception ex)
-        {
-            return Results.BadRequest($"Failed to extract PE information: {ex}");
-        }
     }
 );
 

@@ -1,0 +1,26 @@
+<div class="projects-container">
+  <h2>Projects</h2>
+  
+  <div class="actions">
+    <button (click)="createProject()" [disabled]="loading">Create New Project</button>
+  </div>
+  
+  <div *ngIf="loading" class="loading">
+    Loading...
+  </div>
+  
+  <div *ngIf="!loading && projects.length === 0" class="no-data">
+    No projects found. Create a new project to get started.
+  </div>
+  
+  <div *ngIf="!loading && projects.length > 0" class="projects-list">
+    <div *ngFor="let projectId of projects" class="project-item">
+      <div class="project-info">
+        <span class="project-id">{{ projectId }}</span>
+      </div>
+      <div class="project-actions">
+        <button (click)="viewPrograms(projectId)">View Programs</button>
+      </div>
+    </div>
+  </div>
+</div>

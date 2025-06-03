@@ -1,0 +1,28 @@
+<div class="programs-container">
+  <div class="header">
+    <button class="back-button" (click)="goBack()">← Back to Projects</button>
+    <h2>Programs for Project: <span class="project-id">{{ projectId }}</span></h2>
+  </div>
+  
+  <div class="actions">
+    <button (click)="importProgram()" [disabled]="loading">Import Program</button>
+  </div>
+  
+  <div *ngIf="loading" class="loading">
+    Loading...
+  </div>
+  
+  <div *ngIf="!loading && programs.length === 0" class="no-data">
+    No programs found. Import a program to get started.
+  </div>
+  
+  <div *ngIf="!loading && programs.length > 0" class="programs-list">
+    <div *ngFor="let program of programs" class="program-item">
+      <div class="program-info">
+        <div class="program-name">{{ program.name }}</div>
+        <div class="program-path">{{ program.filePath }}</div>
+        <div class="program-id">ID: {{ program.id }}</div>
+      </div>
+    </div>
+  </div>
+</div>
