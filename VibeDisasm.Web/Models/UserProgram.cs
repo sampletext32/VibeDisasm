@@ -5,15 +5,11 @@ public class UserProgram
     public Guid Id { get; set; }
     public string Name { get; set; }
     public string FilePath { get; set; }
-    public byte[] FileData { get; set; }
 
-    public UserProgram(Guid id, string filePath, byte[] fileData)
+    public UserProgram(Guid id, string filePath, string name)
     {
         Id = id;
         FilePath = filePath;
-        FileData = fileData;
-        Name = Path.GetFileName(filePath);
+        Name = name;
     }
-
-    public List<UserProgramFunction> Functions { get; set; } = [];
 }

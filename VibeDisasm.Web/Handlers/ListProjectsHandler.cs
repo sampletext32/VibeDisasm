@@ -1,14 +1,24 @@
+using System.Diagnostics.Contracts;
 using FluentResults;
 using VibeDisasm.Web.Dtos;
-using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListProjectsHandler(AppState state)
+public class ListProjectsHandler
 {
-    public Task<Result<IEnumerable<ProjectDetailsDto>>> Handle()
+    private readonly UserProjectRepository _repository;
+
+    public ListProjectsHandler(UserProjectRepository repository)
     {
-        var projectDetails = state.Projects.Select(p => new ProjectDetailsDto(p.Id, p.Title));
-        return Task.FromResult(Result.Ok(projectDetails));
+        _repository = repository;
+    }
+
+    [Pure]
+    public async Task<Result<IEnumerable<ProjectDetailsDto>>> Handle()
+    {
+        var projects = await _repository.GetAll();
+        var mapped = projects.Select(p => new ProjectDetailsDto(p.Id, p.Title));
+        return Result.Ok(mapped);
     }
 }

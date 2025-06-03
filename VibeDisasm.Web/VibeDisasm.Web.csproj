@@ -11,10 +11,12 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI"/>
+        <PackageReference Include="NativeFileDialogSharp" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="frontend\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

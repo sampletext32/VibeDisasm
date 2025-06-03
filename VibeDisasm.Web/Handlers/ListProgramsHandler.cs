@@ -1,22 +1,39 @@
+using System.Diagnostics.Contracts;
 using FluentResults;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListProgramsHandler(AppState state)
+public class ListProgramsHandler
 {
-    public Task<Result<IEnumerable<ProgramDetailsDto>>> Handle(Guid projectId)
+    private readonly UserProgramRepository _repository;
+    private readonly AppState _state;
+
+    public ListProgramsHandler(AppState state, UserProgramRepository repository)
     {
-        var project = state.Projects.FirstOrDefault(x => x.Id == projectId);
-        if (project is null)
+        _state = state;
+        _repository = repository;
+    }
+
+    [Pure]
+    public async Task<Result<IEnumerable<ProgramDetailsDto>>> Handle()
+    {
+        var userPrograms = await _repository.GetAll();
+        if (_state.ActiveProject is null)
         {
-            return Task.FromResult(Result.Fail<IEnumerable<ProgramDetailsDto>>($"Project with ID {projectId} not found"));
+            return Result.Fail("Active project is not set.");
         }
 
-        var programDetails = project.Programs.Select(p =>
-            new ProgramDetailsDto(p.Id, p.Name, p.FilePath));
+        var programDetails = userPrograms.Select(
+            p => new ProgramDetailsDto(
+                p.Id,
+                p.Name,
+                p.FilePath
+            )
+        );
 
-        return Task.FromResult(Result.Ok(programDetails));
+        return Result.Ok(programDetails);
     }
 }

@@ -1,21 +1,28 @@
 using FluentResults;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class CreateProjectHandler(AppState state)
+public class CreateProjectHandler
 {
-    public Task<Result<Guid>> Handle(CreateProjectDto request)
+    private readonly UserProjectRepository _repository;
+    public CreateProjectHandler(UserProjectRepository repository)
+    {
+        _repository = repository;
+    }
+
+    public async Task<Result<Guid>> Handle(CreateProjectDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Title))
         {
-            return Task.FromResult(Result.Fail<Guid>("Project title cannot be empty"));
+            return Result.Fail<Guid>("Project title cannot be empty");
         }
 
         var project = new UserProject() {Id = Guid.NewGuid(), Title = request.Title};
-        state.Projects.Add(project);
+        await _repository.Add(project);
 
-        return Task.FromResult(Result.Ok(project.Id));
+        return Result.Ok(project.Id);
     }
 }

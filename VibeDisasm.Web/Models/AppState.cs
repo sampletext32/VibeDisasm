@@ -2,5 +2,5 @@
 
 public class AppState
 {
-    public List<UserProject> Projects { get; set; } = [];
+    public UserProject? ActiveProject { get; set; }
 }

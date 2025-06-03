@@ -1,25 +1,41 @@
 using FluentResults;
-using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ImportProgramHandler(AppState state)
+public class ImportProgramHandler
 {
-    public Task<Result<Guid>> Handle(ImportProgramDto request)
+    private readonly UserProgramRepository _repository;
+    private readonly AppState _state;
+
+    public ImportProgramHandler(UserProgramRepository repository, AppState state)
     {
-        var project = state.Projects.FirstOrDefault(x => x.Id == request.ProjectId);
-        if (project is null)
+        _repository = repository;
+        _state = state;
+    }
+
+    public async Task<Result<Guid>> Handle()
+    {
+        if (_state.ActiveProject is null)
         {
-            return Task.FromResult(Result.Fail<Guid>($"Project with ID {request.ProjectId} not found"));
+            return Result.Fail("No project is opened");
         }
 
-        const string filePath = @"C:\Projects\CSharp\VibeDisasm\VibeDisasm.TestLand\DLLs\iron_3d.exe";
-        var fileData = File.ReadAllBytes(filePath);
+        var dialog = NativeFileDialogSharp.Dialog.FileOpen("dll,exe");
 
-        var program = new UserProgram(Guid.NewGuid(), filePath, fileData);
-        project.Programs.Add(program);
+        if (dialog.IsOk)
+        {
+            var filePath = dialog.Path;
 
-        return Task.FromResult(Result.Ok(program.Id));
+            var program = new UserProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath));
+
+            await _repository.Add(program);
+            return Result.Ok(program.Id);
+        }
+        else
+        {
+            return Result.Fail("File selection was cancelled");
+        }
     }
 }

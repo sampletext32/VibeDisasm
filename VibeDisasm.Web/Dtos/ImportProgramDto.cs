@@ -1,3 +1,3 @@
 namespace VibeDisasm.Web.Dtos;
 
-public record ImportProgramDto(Guid ProjectId);
+public record ImportProgramDto();
