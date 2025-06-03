@@ -1,4 +1,4 @@
-namespace VibeDisasm.Pe.Extractors;
+﻿namespace VibeDisasm.Pe.Models;
 
 /// <summary>
 /// Information about an entry point

@@ -1,4 +1,4 @@
-namespace VibeDisasm.Pe.Extractors;
+namespace VibeDisasm.Pe.Models;
 
 /// <summary>
 /// Contains information about exception handlers from a PE file

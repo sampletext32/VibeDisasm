@@ -3,6 +3,7 @@ using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.Disassembler.X86;
 using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Models;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
 

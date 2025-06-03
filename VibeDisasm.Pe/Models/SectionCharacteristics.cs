@@ -1,4 +1,4 @@
-namespace VibeDisasm.Pe.Extractors;
+namespace VibeDisasm.Pe.Models;
 
 /// <summary>
 /// Constants for PE section characteristics

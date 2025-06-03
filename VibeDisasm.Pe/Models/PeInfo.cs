@@ -1,4 +1,4 @@
-namespace VibeDisasm.Pe.Extractors;
+namespace VibeDisasm.Pe.Models;
 
 /// <summary>
 /// Contains basic information about a PE file

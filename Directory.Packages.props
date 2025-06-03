@@ -1,38 +1,38 @@
 <Project>
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    </PropertyGroup>
-    <!-- Package versions used across the solution -->
-    <ItemGroup>
-        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5"/>
-        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0"/>
-        <PackageVersion Include="xunit" Version="2.9.3"/>
-        <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <PackageVersion Include="coverlet.collector" Version="6.0.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <PackageVersion Include="coverlet.msbuild" Version="6.0.4">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageVersion>
-        <!-- Utility packages -->
-        <PackageVersion Include="CsvHelper" Version="33.0.1"/>
-        <!-- Silk.NET packages -->
-        <PackageVersion Include="Silk.NET" Version="2.22.0"/>
-        <PackageVersion Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.22.0"/>
-        <!-- File dialog -->
-        <PackageVersion Include="NativeFileDialogSharp" Version="0.5.0"/>
-    </ItemGroup>
-
-    <ItemGroup Label="Web Dependencies">
-        <PackageVersion Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.1"/>
-        <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1"/>
-        <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.1"/>
-        <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.8.1"/>
-        <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.8.1"/>
-    </ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <!-- Package versions used across the solution -->
+  <ItemGroup>
+    <PackageVersion Include="FluentResults" Version="3.16.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="coverlet.collector" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageVersion>
+    <!-- Utility packages -->
+    <PackageVersion Include="CsvHelper" Version="33.0.1" />
+    <!-- Silk.NET packages -->
+    <PackageVersion Include="Silk.NET" Version="2.22.0" />
+    <PackageVersion Include="Silk.NET.OpenGL.Extensions.ImGui" Version="2.22.0" />
+    <!-- File dialog -->
+    <PackageVersion Include="NativeFileDialogSharp" Version="0.5.0" />
+  </ItemGroup>
+  <ItemGroup Label="Web Dependencies">
+    <PackageVersion Include="Swashbuckle.AspNetCore.Swagger" Version="6.8.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.8.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.8.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.8.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.8.1" />
+  </ItemGroup>
 </Project>

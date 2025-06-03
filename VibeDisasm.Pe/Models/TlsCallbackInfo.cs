@@ -1,4 +1,4 @@
-namespace VibeDisasm.Pe.Extractors;
+namespace VibeDisasm.Pe.Models;
 
 /// <summary>
 /// Contains information about a TLS callback function in a PE file

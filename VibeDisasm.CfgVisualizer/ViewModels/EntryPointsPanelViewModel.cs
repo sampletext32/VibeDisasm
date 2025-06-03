@@ -2,6 +2,7 @@ using System.Diagnostics.Contracts;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Models;
 
 namespace VibeDisasm.CfgVisualizer.ViewModels;
 

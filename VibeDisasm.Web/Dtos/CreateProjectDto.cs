@@ -1,1 +1,3 @@
-﻿public record CreateProjectDto(string Title);
+﻿namespace VibeDisasm.Web.Dtos;
+
+public record CreateProjectDto(string Title);

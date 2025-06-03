@@ -6,6 +6,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentResults" />
         <PackageReference Include="Swashbuckle.AspNetCore"/>
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger"/>
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen"/>
@@ -14,12 +15,6 @@
 
     <ItemGroup>
       <Folder Include="frontend\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="frontend\vibe-disasm\package-lock.json" />
-      <_ContentIncludedByDefault Remove="frontend\vibe-disasm\package.json" />
-      <_ContentIncludedByDefault Remove="frontend\vibe-disasm\tsconfig.json" />
     </ItemGroup>
 
 </Project>

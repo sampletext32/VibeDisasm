@@ -1,3 +1,5 @@
+using VibeDisasm.Pe.Models;
+
 namespace VibeDisasm.Pe.Extractors;
 
 /// <summary>

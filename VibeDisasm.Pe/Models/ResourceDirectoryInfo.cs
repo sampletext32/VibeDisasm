@@ -1,4 +1,4 @@
-namespace VibeDisasm.Pe.Extractors
+namespace VibeDisasm.Pe.Models
 {
     /// <summary>
     /// Represents information about a resource directory in a PE file

@@ -1,4 +1,5 @@
 using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Models;
 using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.CfgVisualizer.Services;

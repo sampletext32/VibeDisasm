@@ -1,3 +1,4 @@
+using VibeDisasm.Pe.Models;
 using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
@@ -60,9 +61,7 @@ public static class TlsExtractor
         if (tlsInfo.AddressOfCallbacks != 0)
         {
             // Convert VA to RVA by subtracting the image base
-            var callbackArrayRva = is64Bit
-                ? (uint)(tlsInfo.AddressOfCallbacks - rawPeFile.OptionalHeader.ImageBase)
-                : (uint)(tlsInfo.AddressOfCallbacks - rawPeFile.OptionalHeader.ImageBase);
+            var callbackArrayRva = (uint)(tlsInfo.AddressOfCallbacks - rawPeFile.OptionalHeader.ImageBase);
 
             var callbackArrayOffset = Util.RvaToOffset(rawPeFile, callbackArrayRva);
             var callbackIndex = 0;

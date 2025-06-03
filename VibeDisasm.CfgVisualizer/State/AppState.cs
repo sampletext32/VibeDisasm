@@ -2,6 +2,7 @@ using VibeDisasm.CfgVisualizer.Models.Graph;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.ViewModels;
 using VibeDisasm.Pe.Extractors;
+using VibeDisasm.Pe.Models;
 
 namespace VibeDisasm.CfgVisualizer.State;
 

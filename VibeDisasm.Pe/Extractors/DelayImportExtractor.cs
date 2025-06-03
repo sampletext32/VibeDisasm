@@ -1,4 +1,5 @@
 using System.Text;
+using VibeDisasm.Pe.Models;
 using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;

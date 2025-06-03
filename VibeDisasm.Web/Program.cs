@@ -1,7 +1,9 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using VibeDisasm.Web;
+using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Extensions;
+using VibeDisasm.Web.Handlers;
 using VibeDisasm.Web.Models;
 using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
@@ -25,6 +27,12 @@ builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(
 builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddSingleton<AppState>();
+builder.Services.AddSingleton<CreateProjectHandler>();
+builder.Services.AddSingleton<ListProjectsHandler>();
+builder.Services.AddSingleton<ImportProgramHandler>();
+builder.Services.AddSingleton<ListProgramsHandler>();
+
+
 var app = builder.Build();
 
 app.UseCorsConfiguration();
@@ -34,61 +42,58 @@ app.UseSwaggerUI();
 
 app.MapPost(
     "/create-project",
-    (CreateProjectDto request, AppState state) =>
+    async (CreateProjectDto request, CreateProjectHandler handler) =>
     {
-        var project = new UserProject() {Id = Guid.NewGuid(), Title = request.Title ?? ""};
+        var id = await handler.Handle(request);
 
-        state.Projects.Add(project);
-
-        return Results.Ok(project.Id);
+        return Results.Ok(id);
     }
 );
 
 app.MapGet(
     "/list-projects",
-    (AppState state) =>
+    async (ListProjectsHandler handler) =>
     {
-        var projectDetails = state.Projects.Select(p => new ProjectDetailsDto(p.Id, p.Title));
-        return Results.Ok(projectDetails);
+        var projects = await handler.Handle();
+        return Results.Ok(projects);
     }
 );
 
 
 app.MapPost(
     "/import-program",
-    (AppState state, Guid? projectId) =>
+    async (ImportProgramDto request, ImportProgramHandler handler) =>
     {
-        if (projectId is null)
+        try
         {
-            return Results.BadRequest("projectId is required.");
+            var programId = await handler.Handle(request);
+            return Results.Ok(programId);
         }
-
-        var project = state.Projects.First(x => x.Id == projectId);
-
-        const string filePath = @"C:\Projects\CSharp\VibeDisasm\VibeDisasm.TestLand\DLLs\iron_3d.exe";
-
-        var fileData = File.ReadAllBytes(filePath);
-
-        var program = new UserProgram(Guid.NewGuid(), filePath, fileData);
-
-        project.Programs.Add(program);
-
-        return Results.Ok(program.Id);
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
     }
 );
 
 app.MapGet(
     "/list-programs",
-    (AppState state, Guid? projectId) =>
+    async (Guid? projectId, ListProgramsHandler handler) =>
     {
         if (projectId is null)
         {
             return Results.BadRequest("projectId is required.");
         }
 
-        var project = state.Projects.First(x => x.Id == projectId);
-
-        return Results.Ok(project.Programs.Select(x => new {x.Id, x.Name, x.FilePath}));
+        try
+        {
+            var programs = await handler.Handle(projectId.Value);
+            return Results.Ok(programs);
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
     }
 );
 
