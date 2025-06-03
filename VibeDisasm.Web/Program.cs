@@ -38,6 +38,7 @@ builder.Services.AddSingleton<OpenProjectHandler>();
 builder.Services.AddSingleton<ListProjectsHandler>();
 builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
+builder.Services.AddSingleton<GetProgramPeDataHandler>();
 
 
 var app = builder.Build();
@@ -50,5 +51,6 @@ app.UseSwaggerUI();
 // Map API endpoints
 app.MapProjectEndpoints();
 app.MapProgramEndpoints();
+app.MapProgramPeDataEndpoints();
 
 app.Run();

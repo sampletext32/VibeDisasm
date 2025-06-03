@@ -32,7 +32,7 @@ public class ResourceInfoPrinter
                 foreach (var resource in resourceInfo.Resources)
                 {
                     var dataPreview = "";
-                    if (resource.Data.Length > 0)
+                    if (resource.Size > 0)
                     {
                         // Show a preview of the data if available
                         if (resource.Type == ResourceType.StringTable ||
@@ -40,31 +40,12 @@ public class ResourceInfoPrinter
                             resource.Type == ResourceType.HTML ||
                             resource.Type == ResourceType.Manifest)
                         {
-                            // Try to show as text for text-based resources
-                            try
-                            {
-                                var text = System.Text.Encoding.UTF8.GetString(resource.Data);
-                                if (text.Length > 20)
-                                {
-                                    text = text.Substring(0, 17) + "...";
-                                }
-
-                                dataPreview = text.Replace('\r', ' ').Replace('\n', ' ');
-                            }
-                            catch
-                            {
-                                dataPreview = "[Binary data]";
-                            }
+                            dataPreview = "[String data]";
                         }
                         else
                         {
                             // Show as hex for binary resources
-                            var previewLength = Math.Min(8, resource.Data.Length);
-                            dataPreview = BitConverter.ToString(resource.Data, 0, previewLength).Replace("-", " ");
-                            if (resource.Data.Length > 8)
-                            {
-                                dataPreview += "...";
-                            }
+                            dataPreview = "[Binary data]";
                         }
                     }
                     else

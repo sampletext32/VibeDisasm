@@ -1,4 +1,5 @@
 using VibeDisasm.Pe.Models;
+using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
 
@@ -10,13 +11,11 @@ public static class VersionExtractor
     /// <summary>
     /// Extracts all version information from the resource information
     /// </summary>
-    /// <param name="resourceInfo">The resource information</param>
-    /// <returns>A list of version information objects</returns>
-    public static List<VersionInfo> ExtractAll(ResourceInfo resourceInfo)
+    public static List<VersionInfo> ExtractAll(RawPeFile file, ResourceInfo? resourceInfo)
     {
         if (resourceInfo == null)
         {
-            throw new ArgumentNullException(nameof(resourceInfo));
+            return [];
         }
 
         var result = new List<VersionInfo>();
@@ -32,13 +31,13 @@ public static class VersionExtractor
         foreach (var resource in versionResources)
         {
             // Skip if no data
-            if (resource.Data.Length == 0)
+            if (resource.Size == 0)
             {
                 continue;
             }
 
             // Extract version info
-            var versionInfo = ExtractVersionInfo(resource.Data);
+            var versionInfo = ExtractVersionInfo(file, resource);
             if (versionInfo != null)
             {
                 // Set the language ID and codepage from the resource
@@ -54,19 +53,18 @@ public static class VersionExtractor
     /// <summary>
     /// Extracts version information from a version resource data
     /// </summary>
-    /// <param name="resourceData">The version resource data</param>
-    /// <returns>The extracted version information, or null if not found</returns>
-    private static VersionInfo? ExtractVersionInfo(byte[] resourceData)
+    private static VersionInfo? ExtractVersionInfo(RawPeFile file, ResourceEntryInfo resource)
     {
         // Minimum size check for a valid version resource
-        if (resourceData.Length < 40)
+        if (resource.Size < 40)
         {
             return null;
         }
 
         try
         {
-            using var stream = new MemoryStream(resourceData);
+            using var stream = new MemoryStream(file.RawData);
+            stream.Seek(resource.FileOffset, SeekOrigin.Begin);
             using var reader = new BinaryReader(stream);
 
             // Parse VS_VERSIONINFO structure

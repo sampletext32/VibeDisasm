@@ -36,11 +36,6 @@ public static class BaseSectionExtractor
             Characteristics = sectionHeader.Characteristics
         };
 
-        if (sectionHeader.PointerToRawData > 0 && sectionHeader.SizeOfRawData > 0)
-        {
-            sectionInfo.Data = rawPeFile.GetSectionData(sectionHeader);
-        }
-
         return sectionInfo;
     }
 }

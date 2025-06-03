@@ -31,11 +31,7 @@ public static class ResourceExtractor
         var resourceDirectoryRva = rawPeFile.OptionalHeader.DataDirectories[2].VirtualAddress;
         var resourceDirectorySize = rawPeFile.OptionalHeader.DataDirectories[2].Size;
 
-        var resourceInfo = new ResourceInfo
-        {
-            DirectoryRVA = resourceDirectoryRva,
-            DirectorySize = resourceDirectorySize
-        };
+        var resourceInfo = new ResourceInfo {DirectoryRVA = resourceDirectoryRva, DirectorySize = resourceDirectorySize};
 
         // Process the resource directory
         if (rawPeFile.ResourceDirectory != null)
@@ -64,7 +60,9 @@ public static class ResourceExtractor
                     var offsetToData = reader.ReadUInt32();
 
                     var isNamed = (nameOrId & 0x80000000) != 0;
-                    var typeId = isNamed ? 0 : nameOrId;
+                    var typeId = isNamed
+                        ? 0
+                        : nameOrId;
                     var isDirectory = (offsetToData & 0x80000000) != 0;
                     var subDirOffset = offsetToData & 0x7FFFFFFF;
 
@@ -74,7 +72,14 @@ public static class ResourceExtractor
                         var currentPos = reader.BaseStream.Position;
 
                         // Process the type directory (level 2)
-                        ProcessTypeDirectory(rawPeFile, reader, subDirOffset, typeId, resourceInfo.Resources, resourceDirectoryRva);
+                        ProcessTypeDirectory(
+                            rawPeFile,
+                            reader,
+                            subDirOffset,
+                            typeId,
+                            resourceInfo.Resources,
+                            resourceDirectoryRva
+                        );
 
                         // Restore position for next entry
                         reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
@@ -121,7 +126,9 @@ public static class ResourceExtractor
             var offsetToData = reader.ReadUInt32();
 
             var isNamed = (nameOrId & 0x80000000) != 0;
-            var nameId = isNamed ? 0 : nameOrId;
+            var nameId = isNamed
+                ? 0
+                : nameOrId;
             var isDirectory = (offsetToData & 0x80000000) != 0;
             var langDirOffset = offsetToData & 0x7FFFFFFF;
 
@@ -131,7 +138,15 @@ public static class ResourceExtractor
                 var currentPos = reader.BaseStream.Position;
 
                 // Process the language directory (level 3)
-                ProcessLanguageDirectory(rawPeFile, reader, langDirOffset, typeId, nameId, resources, resourceDirectoryRva);
+                ProcessLanguageDirectory(
+                    rawPeFile,
+                    reader,
+                    langDirOffset,
+                    typeId,
+                    nameId,
+                    resources,
+                    resourceDirectoryRva
+                );
 
                 // Restore position for next entry
                 reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
@@ -169,7 +184,9 @@ public static class ResourceExtractor
             var offsetToData = reader.ReadUInt32();
 
             var isNamed = (langId & 0x80000000) != 0;
-            var languageId = isNamed ? 0 : langId;
+            var languageId = isNamed
+                ? 0
+                : langId;
             var isDirectory = (offsetToData & 0x80000000) != 0;
 
             if (!isDirectory)
@@ -194,20 +211,10 @@ public static class ResourceExtractor
                     RVA = dataRva
                 };
 
-                try
-                {
-                    // Read the resource data
-                    var dataOffset = Util.RvaToOffset(rawPeFile, dataRva);
-                    // Store the absolute file offset
-                    resource.FileOffset = dataOffset;
-                    resource.Data = new byte[dataSize];
-                    Array.Copy(rawPeFile.RawData, (int)dataOffset, resource.Data, 0, (int)dataSize);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error reading resource data: {ex.Message}");
-                    resource.Data = Array.Empty<byte>();
-                }
+                // Read the resource data
+                var dataOffset = Util.RvaToOffset(rawPeFile, dataRva);
+                // Store the absolute file offset
+                resource.FileOffset = dataOffset;
 
                 resources.Add(resource);
             }

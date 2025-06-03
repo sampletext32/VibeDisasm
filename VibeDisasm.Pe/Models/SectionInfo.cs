@@ -36,11 +36,6 @@ public class SectionInfo
     public uint Characteristics { get; set; }
 
     /// <summary>
-    /// The raw data of the section
-    /// </summary>
-    public byte[] Data { get; set; } = [];
-
-    /// <summary>
     /// Gets whether the section is executable
     /// </summary>
     public bool IsExecutable => (Characteristics & SectionCharacteristics.Executable) != 0;

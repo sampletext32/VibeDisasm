@@ -36,11 +36,6 @@ public class ResourceEntryInfo
     public ResourceType Type { get; set; }
 
     /// <summary>
-    /// Gets or sets the raw data of the resource
-    /// </summary>
-    public byte[] Data { get; set; } = [];
-
-    /// <summary>
     /// Gets or sets the size of the resource data
     /// </summary>
     public uint Size { get; set; }

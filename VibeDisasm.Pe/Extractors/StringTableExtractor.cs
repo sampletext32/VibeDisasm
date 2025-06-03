@@ -1,5 +1,6 @@
 using System.Text;
 using VibeDisasm.Pe.Models;
+using VibeDisasm.Pe.Raw;
 
 namespace VibeDisasm.Pe.Extractors;
 
@@ -13,8 +14,13 @@ public class StringTableExtractor
     /// </summary>
     /// <param name="resourceInfo">The resource information containing all extracted resources</param>
     /// <returns>A list of string table info objects</returns>
-    public static List<StringTableInfo> ExtractAll(ResourceInfo resourceInfo)
+    public static List<StringTableInfo> ExtractAll(RawPeFile file, ResourceInfo? resourceInfo)
     {
+        if (resourceInfo is null)
+        {
+            return [];
+        }
+
         var stringTables = new List<StringTableInfo>();
 
         // Find all string table resources
@@ -40,17 +46,13 @@ public class StringTableExtractor
             var resource = group.First();
 
             // Skip if we don't have the data
-            if (resource.Data.Length == 0)
+            if (resource.Size == 0)
             {
                 continue;
             }
 
             // Extract the string table
-            var stringTable = ExtractSingleStringTable(
-                resource.Data,
-                resource.Id,
-                resource.LanguageId,
-                resource.FileOffset);
+            var stringTable = ExtractSingleStringTable(file, resource);
 
             if (stringTable.Strings.Count > 0)
             {
@@ -64,32 +66,28 @@ public class StringTableExtractor
     /// <summary>
     /// Extracts a string table from resource data
     /// </summary>
-    /// <param name="resourceData">The raw resource data</param>
-    /// <param name="id">The ID of the string table</param>
-    /// <param name="languageId">The language ID of the string table</param>
-    /// <param name="fileOffset">The absolute file offset of the resource data</param>
-    /// <returns>A string table info object</returns>
-    public static StringTableInfo ExtractSingleStringTable(byte[] resourceData, uint id, uint languageId, uint fileOffset = 0)
+    public static StringTableInfo ExtractSingleStringTable(RawPeFile file, ResourceEntryInfo resource, uint fileOffset = 0)
     {
-        if (resourceData.Length == 0)
+        if (resource.Size == 0)
         {
             return new StringTableInfo
             {
-                Id = id,
-                LanguageId = languageId
+                Id = resource.Id,
+                LanguageId = resource.LanguageId
             };
         }
 
         var stringTable = new StringTableInfo
         {
-            Id = id,
-            LanguageId = languageId,
+            Id = resource.Id,
+            LanguageId = resource.LanguageId,
             FileOffset = fileOffset
         };
 
         try
         {
-            using var stream = new MemoryStream(resourceData);
+            using var stream = new MemoryStream(file.RawData);
+            stream.Seek(resource.FileOffset, SeekOrigin.Begin);
             using var reader = new BinaryReader(stream);
 
             // String tables in PE files have a different format than we initially thought.
@@ -104,7 +102,7 @@ public class StringTableExtractor
             // - Strings are stored in order by ID, with missing IDs having length 0
 
             // Calculate the base ID for this string table (ID * 16)
-            var baseId = (ushort)(id * 16);
+            var baseId = (ushort)(resource.Id * 16);
 
             // Parse each string in the table
             while (reader.BaseStream.Position < reader.BaseStream.Length)

@@ -94,12 +94,6 @@ public class SectionInfoPrinter
             Console.WriteLine($"  Is Readable: {section.IsReadable}");
             Console.WriteLine($"  Is Writable: {section.IsWritable}");
             Console.WriteLine($"  Contains Code: {section.ContainsCode}");
-
-            if (section.Data.Length > 0)
-            {
-                Console.WriteLine($"\r\nFirst 16 bytes of {title}:");
-                Console.WriteLine(BitConverter.ToString(section.Data.Take(16).ToArray()).Replace("-", " "));
-            }
         }
         else
         {
