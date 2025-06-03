@@ -20,7 +20,11 @@ public class CreateProjectHandler
             return Result.Fail<Guid>("Project title cannot be empty");
         }
 
-        var project = new UserProject() {Id = Guid.NewGuid(), Title = request.Title};
+        var project = new UserProject() {
+            Id = Guid.NewGuid(),
+            Title = request.Title,
+            CreatedAt = DateTime.UtcNow
+        };
         await _repository.Add(project);
 
         return Result.Ok(project.Id);

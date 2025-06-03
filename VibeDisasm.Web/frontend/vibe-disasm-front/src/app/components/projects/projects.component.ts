@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
 import { ApiService, Project } from '../../services/api.service';
 import { NewProjectDialogComponent } from '../new-project-dialog/new-project-dialog.component';
@@ -18,8 +17,7 @@ export class ProjectsComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -36,10 +34,6 @@ export class ProjectsComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error loading projects', error);
-          this.snackBar.open('Failed to load projects. Please try again.', 'Close', {
-            duration: 5000,
-            panelClass: ['error-snackbar']
-          });
         }
       });
   }

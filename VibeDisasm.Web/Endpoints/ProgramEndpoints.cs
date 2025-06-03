@@ -1,4 +1,3 @@
-using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Handlers;

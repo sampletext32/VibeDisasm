@@ -1,3 +1,3 @@
-﻿namespace VibeDisasm.Web.Dtos;
+namespace VibeDisasm.Web.Dtos;
 
-public record ProjectDetailsDto(Guid Id, string Title);
+public record ProjectDetailsDto(Guid Id, string Title, DateTime CreatedAt);

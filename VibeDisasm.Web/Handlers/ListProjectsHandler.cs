@@ -18,7 +18,7 @@ public class ListProjectsHandler
     public async Task<Result<IEnumerable<ProjectDetailsDto>>> Handle()
     {
         var projects = await _repository.GetAll();
-        var mapped = projects.Select(p => new ProjectDetailsDto(p.Id, p.Title));
+        var mapped = projects.Select(p => new ProjectDetailsDto(p.Id, p.Title, p.CreatedAt));
         return Result.Ok(mapped);
     }
 }

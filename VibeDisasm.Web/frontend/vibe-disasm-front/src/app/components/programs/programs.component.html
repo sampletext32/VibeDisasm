@@ -1,28 +1,36 @@
-<div class="programs-container">
+<div class="container mat-elevation-z2">
   <div class="header">
-    <button class="back-button" (click)="goBack()">← Back to Projects</button>
-    <h2>Programs for Project: <span class="project-id">{{ projectId }}</span></h2>
-  </div>
-  
-  <div class="actions">
-    <button (click)="importProgram()" [disabled]="loading">Import Program</button>
-  </div>
-  
-  <div *ngIf="loading" class="loading">
-    Loading...
-  </div>
-  
-  <div *ngIf="!loading && programs.length === 0" class="no-data">
-    No programs found. Import a program to get started.
-  </div>
-  
-  <div *ngIf="!loading && programs.length > 0" class="programs-list">
-    <div *ngFor="let program of programs" class="program-item">
-      <div class="program-info">
-        <div class="program-name">{{ program.name }}</div>
-        <div class="program-path">{{ program.filePath }}</div>
-        <div class="program-id">ID: {{ program.id }}</div>
-      </div>
+    <div class="header-left">
+      <button mat-icon-button (click)="goBack()" aria-label="Back to projects">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h2>Programs <span class="project-id monospace">{{ projectId }}</span></h2>
     </div>
+    <div class="header-right">
+      <button mat-raised-button color="primary" (click)="importProgram()" [disabled]="loading">
+        <mat-icon>upload_file</mat-icon> Import Program
+      </button>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    
+    <div *ngIf="!loading && programs.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">description</mat-icon>
+      <p>No programs found. Import a program to get started.</p>
+    </div>
+    
+    <mat-list *ngIf="!loading && programs.length > 0">
+      <mat-list-item *ngFor="let program of programs" class="program-item">
+        <mat-icon matListItemIcon>description</mat-icon>
+        <div matListItemTitle>{{ program.name }}</div>
+        <div matListItemLine class="program-path">{{ program.filePath }}</div>
+        <div matListItemLine class="program-id monospace">ID: {{ program.id }}</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-list>
   </div>
 </div>

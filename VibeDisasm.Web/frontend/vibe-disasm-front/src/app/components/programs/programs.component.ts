@@ -43,10 +43,6 @@ export class ProgramsComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error loading programs', error);
-          this.snackBar.open('Failed to load programs. Please try again.', 'Close', {
-            duration: 5000,
-            panelClass: ['error-snackbar']
-          });
         }
       });
   }
@@ -69,10 +65,6 @@ export class ProgramsComponent implements OnInit {
         error: (error) => {
           console.error('Error importing program', error);
           this.loading = false;
-          this.snackBar.open('Failed to import program. Please try again.', 'Close', {
-            duration: 5000,
-            panelClass: ['error-snackbar']
-          });
         }
       });
   }

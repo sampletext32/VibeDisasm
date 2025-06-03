@@ -1,27 +1,46 @@
-<div class="projects-container">
-  <h2>Projects</h2>
-  
-  <div class="actions">
-    <button (click)="createProject()" [disabled]="loading">Create New Project</button>
+<div class="container">
+  <div class="header mat-elevation-z1">
+    <div class="header-left">
+      <h2>Projects</h2>
+    </div>
+    <div class="header-right">
+      <button mat-raised-button color="primary" (click)="createProject()" [disabled]="loading">
+        <mat-icon>add</mat-icon> Create New Project
+      </button>
+    </div>
   </div>
-  
-  <div *ngIf="loading" class="loading">
-    Loading...
-  </div>
-  
-  <div *ngIf="!loading && projects.length === 0" class="no-data">
-    No projects found. Create a new project to get started.
-  </div>
-  
-  <div *ngIf="!loading && projects.length > 0" class="projects-list">
-    <div *ngFor="let project of projects" class="project-item">
-      <div class="project-info">
-        <span class="project-title">{{ project.title || 'Untitled Project' }}</span>
-        <span class="project-id">ID: {{ project.id }}</span>
-      </div>
-      <div class="project-actions">
-        <button (click)="viewPrograms(project)">View Programs</button>
-      </div>
+
+  <div class="content-container">
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    
+    <div *ngIf="!loading && projects.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">folder_open</mat-icon>
+      <p>No projects found. Create a new project to get started.</p>
+    </div>
+    
+    <div *ngIf="!loading && projects.length > 0" class="projects-grid">
+      <mat-card *ngFor="let project of projects" class="project-card mat-elevation-z2" (click)="viewPrograms(project)">
+        <div class="card-color-band"></div>
+        <mat-card-header>
+          <mat-icon mat-card-avatar>folder</mat-icon>
+          <mat-card-title>{{ project.title || 'Untitled Project' }}</mat-card-title>
+          <mat-card-subtitle class="project-id monospace">ID: {{ project.id }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="project-metadata">
+            <div class="metadata-item">
+              <mat-icon class="metadata-icon">calendar_today</mat-icon>
+              <span>Created: {{ project.createdAt | date:'short' || 'Unknown' }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+        <div class="card-hint">
+          <mat-icon>touch_app</mat-icon>
+          <span>Click to view programs</span>
+        </div>
+      </mat-card>
     </div>
   </div>
 </div>
