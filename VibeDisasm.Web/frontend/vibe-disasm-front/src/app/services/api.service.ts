@@ -23,20 +23,20 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   createProject(title: string): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/create-project`, { title });
+    return this.http.post<string>(`${this.baseUrl}/projects/create`, { title });
   }
 
   listProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(`${this.baseUrl}/list-projects`);
+    return this.http.get<Project[]>(`${this.baseUrl}/projects/list`);
   }
 
   importProgram(projectId: string): Observable<string> {
     const params = new HttpParams().set('projectId', projectId);
-    return this.http.post<string>(`${this.baseUrl}/import-program`, {}, { params });
+    return this.http.post<string>(`${this.baseUrl}/programs/import`, {}, { params });
   }
 
   listPrograms(projectId: string): Observable<Program[]> {
     const params = new HttpParams().set('projectId', projectId);
-    return this.http.get<Program[]>(`${this.baseUrl}/list-programs`, { params });
+    return this.http.get<Program[]>(`${this.baseUrl}/programs/byproject`, { params });
   }
 }
