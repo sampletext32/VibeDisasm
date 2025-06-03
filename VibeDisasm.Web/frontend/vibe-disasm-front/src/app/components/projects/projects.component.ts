@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../services/api.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs/operators';
+import { ApiService, Project } from '../../services/api.service';
+import { NewProjectDialogComponent } from '../new-project-dialog/new-project-dialog.component';
 
 @Component({
   selector: 'app-projects',
@@ -8,12 +12,14 @@ import { ApiService } from '../../services/api.service';
   styleUrls: ['./projects.component.scss']
 })
 export class ProjectsComponent implements OnInit {
-  projects: string[] = [];
+  projects: Project[] = [];
   loading = false;
 
   constructor(
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -22,33 +28,38 @@ export class ProjectsComponent implements OnInit {
 
   loadProjects(): void {
     this.loading = true;
-    this.apiService.listProjects().subscribe({
-      next: (projects) => {
-        this.projects = projects;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading projects', error);
-        this.loading = false;
-      }
-    });
+    this.apiService.listProjects()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (projects) => {
+          this.projects = projects;
+        },
+        error: (error) => {
+          console.error('Error loading projects', error);
+          this.snackBar.open('Failed to load projects. Please try again.', 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
   }
 
   createProject(): void {
-    this.loading = true;
-    this.apiService.createProject().subscribe({
-      next: (projectId) => {
-        this.projects.push(projectId);
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error creating project', error);
-        this.loading = false;
+    const dialogRef = this.dialog.open(NewProjectDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // The dialog now returns the complete project object
+        this.projects.push(result);
+        // Refresh the project list to ensure we have the latest data
+        this.loadProjects();
       }
     });
   }
 
-  viewPrograms(projectId: string): void {
-    this.router.navigate(['/programs', projectId]);
+  viewPrograms(project: Project): void {
+    this.router.navigate(['/programs', project.id]);
   }
 }

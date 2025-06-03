@@ -14,12 +14,13 @@
   </div>
   
   <div *ngIf="!loading && projects.length > 0" class="projects-list">
-    <div *ngFor="let projectId of projects" class="project-item">
+    <div *ngFor="let project of projects" class="project-item">
       <div class="project-info">
-        <span class="project-id">{{ projectId }}</span>
+        <span class="project-title">{{ project.title || 'Untitled Project' }}</span>
+        <span class="project-id">ID: {{ project.id }}</span>
       </div>
       <div class="project-actions">
-        <button (click)="viewPrograms(projectId)">View Programs</button>
+        <button (click)="viewPrograms(project)">View Programs</button>
       </div>
     </div>
   </div>

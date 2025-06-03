@@ -55,9 +55,20 @@
       border-radius: 4px;
       
       .project-info {
+        display: flex;
+        flex-direction: column;
+        
+        .project-title {
+          font-size: 1.1rem;
+          font-weight: 500;
+          margin-bottom: 4px;
+          color: #2c3e50;
+        }
+        
         .project-id {
           font-family: monospace;
-          color: #333;
+          font-size: 0.8rem;
+          color: #666;
         }
       }
       

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export interface Program {
   id: string;
@@ -8,20 +9,25 @@ export interface Program {
   filePath: string;
 }
 
+export interface Project {
+  id: string;
+  title: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:5201';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  createProject(): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/create-project`, {});
+  createProject(title: string): Observable<string> {
+    return this.http.post<string>(`${this.baseUrl}/create-project`, { title });
   }
 
-  listProjects(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.baseUrl}/list-projects`);
+  listProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(`${this.baseUrl}/list-projects`);
   }
 
   importProgram(projectId: string): Observable<string> {
