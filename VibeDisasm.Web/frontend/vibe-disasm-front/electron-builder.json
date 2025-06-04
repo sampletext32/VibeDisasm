@@ -1,0 +1,35 @@
+{
+  "productName": "VibeDisasm",
+  "appId": "com.vibe.disasm",
+  "directories": {
+    "output": "release/"
+  },
+  "files": [
+    "dist/vibe-disasm-front/**/*",
+    "electron/**/*",
+    "package.json"
+  ],
+  "win": {
+    "icon": "src/assets/icons/icon.png",
+    "target": [
+      "nsis"
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "perMachine": false
+  },
+  "mac": {
+    "icon": "src/assets/icons/icon.png",
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "src/assets/icons/icon.png",
+    "target": [
+      "AppImage"
+    ]
+  }
+}

@@ -3,4 +3,12 @@
   <div class="content-container">
     <router-outlet></router-outlet>
   </div>
+
+  <!-- Electron-specific footer that only shows in desktop mode -->
+  <div *ngIf="isElectron" class="electron-footer">
+    <span>Running in Desktop Mode</span>
+  </div>
+  <div *ngIf="!isElectron" class="electron-footer">
+    <span>Running in Website Mode</span>
+  </div>
 </div>

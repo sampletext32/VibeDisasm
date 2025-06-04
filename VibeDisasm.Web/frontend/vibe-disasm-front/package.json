@@ -1,12 +1,16 @@
 {
   "name": "vibe-disasm-front",
   "version": "0.0.0",
+  "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "electron": "electron .",
+    "electron-dev": "node electron/electron-dev.js",
+    "electron-build": "ng build && electron ."
   },
   "private": true,
   "dependencies": {
@@ -30,6 +34,8 @@
     "@angular/compiler-cli": "~13.3.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "electron": "^36.4.0",
+    "wait-on": "^7.2.0",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
