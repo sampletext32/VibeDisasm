@@ -7,7 +7,7 @@ using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Raw;
 
 // Path to the PE file to analyze
-const string filePath = @"./DLLs/iron_3d.exe";
+const string filePath = @"./DLLs/ArealMap.dll";
 var fileName = Path.GetFileName(filePath);
 
 // Read the file bytes

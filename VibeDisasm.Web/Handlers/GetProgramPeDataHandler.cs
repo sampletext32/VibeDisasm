@@ -75,7 +75,7 @@ public class GetProgramPeDataHandler
     /// </summary>
     /// <param name="programId">The ID of the program</param>
     /// <returns>Result containing resource information</returns>
-    public async Task<Result<ResourceInfo?>> GetResources(Guid programId)
+    public async Task<Result<PeResources?>> GetResources(Guid programId)
     {
         return await ExtractPeData(programId, rawPeFile => ResourceExtractor.Extract(rawPeFile));
     }

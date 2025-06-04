@@ -13,7 +13,7 @@ public class ResourceEntryInfo
     /// <summary>
     /// Gets or sets the ID of the resource (if it has an ID instead of a name)
     /// </summary>
-    public uint Id { get; set; }
+    public ResourceType NameId { get; set; }
 
     /// <summary>
     /// Gets or sets whether the resource has a name (as opposed to an ID)

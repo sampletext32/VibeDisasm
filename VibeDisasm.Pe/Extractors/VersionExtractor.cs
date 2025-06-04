@@ -11,7 +11,7 @@ public static class VersionExtractor
     /// <summary>
     /// Extracts all version information from the resource information
     /// </summary>
-    public static List<VersionInfo> ExtractAll(RawPeFile file, ResourceInfo? resourceInfo)
+    public static List<VersionInfo> ExtractAll(RawPeFile file, PeResources? resourceInfo)
     {
         if (resourceInfo == null)
         {
@@ -21,7 +21,7 @@ public static class VersionExtractor
         var result = new List<VersionInfo>();
 
         // Find all version resources
-        var versionResources = resourceInfo.Resources.Where(r => r.Type == ResourceType.Version).ToList();
+        var versionResources = resourceInfo.FlattenResources().Where(r => r.Type == ResourceType.Version).ToList();
         if (versionResources.Count == 0)
         {
             return result;

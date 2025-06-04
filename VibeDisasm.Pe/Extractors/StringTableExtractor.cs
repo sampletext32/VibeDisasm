@@ -12,9 +12,7 @@ public class StringTableExtractor
     /// <summary>
     /// Extracts all string tables from resource information
     /// </summary>
-    /// <param name="resourceInfo">The resource information containing all extracted resources</param>
-    /// <returns>A list of string table info objects</returns>
-    public static List<StringTableInfo> ExtractAll(RawPeFile file, ResourceInfo? resourceInfo)
+    public static List<StringTableInfo> ExtractAll(RawPeFile file, PeResources? resourceInfo)
     {
         if (resourceInfo is null)
         {
@@ -24,18 +22,18 @@ public class StringTableExtractor
         var stringTables = new List<StringTableInfo>();
 
         // Find all string table resources
-        var stringTableResources = resourceInfo.Resources
+        var stringTableResources = resourceInfo.FlattenResources()
             .Where(r => r.Type == ResourceType.StringTable)
             .ToList();
 
         if (stringTableResources.Count == 0)
         {
-            return new List<StringTableInfo>();
+            return [];
         }
 
         // Group string table resources by ID and language
         var groupedResources = stringTableResources
-            .GroupBy(r => new { r.Id, r.LanguageId })
+            .GroupBy(r => new {Id = r.NameId, r.LanguageId })
             .ToList();
 
         // Process each group
@@ -70,16 +68,16 @@ public class StringTableExtractor
     {
         if (resource.Size == 0)
         {
-            return new StringTableInfo
+            return new()
             {
-                Id = resource.Id,
+                Id = (uint)resource.NameId,
                 LanguageId = resource.LanguageId
             };
         }
 
         var stringTable = new StringTableInfo
         {
-            Id = resource.Id,
+            Id = (uint)resource.NameId,
             LanguageId = resource.LanguageId,
             FileOffset = fileOffset
         };
@@ -102,7 +100,7 @@ public class StringTableExtractor
             // - Strings are stored in order by ID, with missing IDs having length 0
 
             // Calculate the base ID for this string table (ID * 16)
-            var baseId = (ushort)(resource.Id * 16);
+            var baseId = (ushort)((int)resource.NameId * 16);
 
             // Parse each string in the table
             while (reader.BaseStream.Position < reader.BaseStream.Length)
@@ -155,7 +153,7 @@ public class StringTableExtractor
         }
         catch (IOException ex)
         {
-            System.Console.WriteLine($"Error parsing string table: {ex.Message}");
+            Console.WriteLine($"Error parsing string table: {ex.Message}");
         }
 
         return stringTable;
