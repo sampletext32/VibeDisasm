@@ -54,7 +54,7 @@ export class ProgramDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    window.history.back();
+    this.router.navigate(['/programs']);
   }
 
   setActiveTab(tab: string): void {

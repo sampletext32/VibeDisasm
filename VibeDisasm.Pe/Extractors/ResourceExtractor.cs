@@ -46,10 +46,10 @@ public static class ResourceExtractor
                 reader.BaseStream.Seek(rootOffset, SeekOrigin.Begin);
 
                 // Read the root directory header
-                reader.ReadUInt32(); // Characteristics
-                reader.ReadUInt32(); // TimeDateStamp
-                reader.ReadUInt16(); // MajorVersion
-                reader.ReadUInt16(); // MinorVersion
+                var characteristics = reader.ReadUInt32(); // Characteristics
+                var timeDateStamp = reader.ReadUInt32(); // TimeDateStamp
+                var majorVersion = reader.ReadUInt16(); // MajorVersion
+                var minorVersion= reader.ReadUInt16(); // MinorVersion
                 var namedEntries = reader.ReadUInt16();
                 var idEntries = reader.ReadUInt16();
 
@@ -60,6 +60,26 @@ public static class ResourceExtractor
                     var offsetToData = reader.ReadUInt32();
 
                     var isNamed = (nameOrId & 0x80000000) != 0;
+                    string resourceName = "";
+                    
+                    if (isNamed)
+                    {
+                        // Save current position
+                        var currentPos = reader.BaseStream.Position;
+                        
+                        // Calculate absolute offset to the name string
+                        var nameOffset = nameOrId & 0x7FFFFFFF;
+                        var absoluteNameOffset = rootOffset + nameOffset;
+                        
+                        // Read the name string
+                        reader.BaseStream.Seek(absoluteNameOffset, SeekOrigin.Begin);
+                        var nameLength = reader.ReadUInt16(); // Length in WCHARs
+                        resourceName = reader.ReadFixedLengthUnicodeString(nameLength);
+                        
+                        // Restore position
+                        reader.BaseStream.Seek(currentPos, SeekOrigin.Begin);
+                    }
+                    
                     var typeId = isNamed
                         ? 0
                         : nameOrId;

@@ -72,8 +72,8 @@ public static class VersionExtractor
 
             // Read the header
             var length = reader.ReadUInt16();    // wLength - Total structure length
-            _ = reader.ReadUInt16();                // wValueLength - Value field length
-            _ = reader.ReadUInt16();                // wType - 0=binary, 1=text
+            var valueLength = reader.ReadUInt16();                // wValueLength - Value field length
+            var wType = reader.ReadUInt16();                // wType - 0=binary, 1=text
 
             // Read the key (should be "VS_VERSION_INFO")
             var key = reader.ReadNullTerminatedUnicodeString();
@@ -99,17 +99,17 @@ public static class VersionExtractor
             }
 
             // Read version information fields
-            _ = reader.ReadUInt32();                        // dwStrucVersion
+            var structVersion = reader.ReadUInt32();        // dwStrucVersion
             var fileVersionMS = reader.ReadUInt32();       // dwFileVersionMS
             var fileVersionLS = reader.ReadUInt32();       // dwFileVersionLS
             var productVersionMS = reader.ReadUInt32();    // dwProductVersionMS
             var productVersionLS = reader.ReadUInt32();    // dwProductVersionLS
-            _ = reader.ReadUInt64();                        // dwFileFlagsMask
+            var fileFlagsMask = reader.ReadUInt64();       // dwFileFlagsMask
             var fileFlags = reader.ReadUInt32();           // dwFileFlags
             var fileOS = reader.ReadUInt32();              // dwFileOS
             var fileType = reader.ReadUInt32();            // dwFileType
             var fileSubtype = reader.ReadUInt32();         // dwFileSubtype
-            _ = reader.ReadUInt32();                        // dwFileDateMS
+            var fileDateMS = reader.ReadUInt32();          // dwFileDateMS
 
             // Create and populate the version info object
             var versionInfo = new VersionInfo
@@ -123,12 +123,17 @@ public static class VersionExtractor
             };
 
             // Parse child blocks (StringFileInfo and VarFileInfo)
-            while (reader.BaseStream.Position < length)
+            // The length value represents the total structure length including the header we've already read
+            // Store the initial position where we started reading the structure
+            var initialPos = resource.FileOffset;
+            var startPos = reader.BaseStream.Position;
+            var endPos = initialPos + length; // Use absolute file position based on the structure start
+            while (reader.BaseStream.Position < endPos)
             {
                 var childStartPos = reader.BaseStream.Position;
                 var childLength = reader.ReadUInt16();           // wLength
-                _ = reader.ReadUInt16();                            // wValueLength
-                _ = reader.ReadUInt16();                            // wType
+                var childValueLength = reader.ReadUInt16();        // wValueLength
+                var childType = reader.ReadUInt16();               // wType
                 var childKey = reader.ReadNullTerminatedUnicodeString();
                 AlignTo4ByteBoundary(reader);
                 var childHeaderLength = reader.BaseStream.Position - childStartPos;
@@ -146,8 +151,11 @@ public static class VersionExtractor
                 else
                 {
                     // Skip unknown blocks
-                    reader.BaseStream.Seek(childLength - (reader.BaseStream.Position - childStartPos), SeekOrigin.Current);
+                    reader.BaseStream.Seek(childDataLength, SeekOrigin.Current);
                 }
+
+                // Ensure we move to the next child block
+                reader.BaseStream.Position = childStartPos + childLength;
             }
 
             return versionInfo;
@@ -188,9 +196,9 @@ public static class VersionExtractor
 
             // Read string table header
             var tableLength = reader.ReadUInt16();
-            _ = reader.ReadUInt16();
-            _ = reader.ReadUInt16();
-            _ = reader.ReadNullTerminatedUnicodeString(); // e.g., "040904E3"
+            var tableValueLength = reader.ReadUInt16();
+            var tableType = reader.ReadUInt16();
+            var tableLangCodepage = reader.ReadNullTerminatedUnicodeString(); // e.g., "040904E3"
             AlignTo4ByteBoundary(reader);
 
             // Calculate the data length of the string table
@@ -225,16 +233,18 @@ public static class VersionExtractor
         while (reader.BaseStream.Position < endPos)
         {
             // Read string entry header
-            _ = reader.ReadUInt16();
-            var stringValueLength = reader.ReadUInt16();
-            _ = reader.ReadUInt16();
+            var stringLength = reader.ReadUInt16();
+            int stringValueLength = reader.ReadUInt16();
+            var stringType = reader.ReadUInt16();
             var stringKey = reader.ReadNullTerminatedUnicodeString();
             AlignTo4ByteBoundary(reader);
 
             // Read the string value
             if (stringValueLength > 0)
             {
-                var value = reader.ReadFixedLengthUnicodeString(stringValueLength);
+                // In version resources, stringValueLength is in WORDs (2 bytes each), and includes the null terminator
+                var value = reader.ReadFixedLengthUnicodeString(stringValueLength - 1);
+                _ = reader.ReadUInt16(); // read null terminator
                 AlignTo4ByteBoundary(reader);
 
                 // Store the key-value pair
@@ -267,7 +277,7 @@ public static class VersionExtractor
             // Read var entry header
             var varLength = reader.ReadUInt16();
             var varValueLength = reader.ReadUInt16();
-            _ = reader.ReadUInt16();
+            var varType = reader.ReadUInt16();
             var varKey = reader.ReadNullTerminatedUnicodeString(); // e.g., "Translation"
             AlignTo4ByteBoundary(reader);
 
@@ -289,6 +299,10 @@ public static class VersionExtractor
                         Codepage = codepage
                     });
                 }
+            }
+            else
+            {
+                Console.WriteLine("VersionExtractor: Unexpected VarFileInfo key: " + varKey);
             }
 
             // Ensure we're at the end of the var entry

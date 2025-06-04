@@ -19,6 +19,12 @@ var rawPeFile = RawPeFactory.FromBytes(fileData);
 // Extract basic PE information
 var peInfo = PeInfoExtractor.Extract(rawPeFile);
 
+var resources = ResourceExtractor.Extract(rawPeFile);
+
+var version = VersionExtractor.ExtractAll(rawPeFile, resources);
+
+var stringTables = StringTableExtractor.ExtractAll(rawPeFile, resources);
+
 // Extract all definite code offsets
 var codeOffsetsInfo = CodeOffsetsExtractor.Extract(rawPeFile);
 

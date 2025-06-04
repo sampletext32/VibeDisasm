@@ -76,7 +76,7 @@ public static class Util
         return Encoding.Unicode.GetString(bytes.ToArray());
     }
 
-    public static string ReadFixedLengthUnicodeString(this BinaryReader reader, ushort length)
+    public static string ReadFixedLengthUnicodeString(this BinaryReader reader, int length)
     {
         var data = reader.ReadBytes(length * 2); // Unicode: 2 bytes per char
         return Encoding.Unicode.GetString(data);
