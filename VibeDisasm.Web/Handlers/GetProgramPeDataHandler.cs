@@ -41,16 +41,6 @@ public class GetProgramPeDataHandler
     }
 
     /// <summary>
-    /// Gets the code offsets of a PE file
-    /// </summary>
-    /// <param name="programId">The ID of the program</param>
-    /// <returns>Result containing code offsets information</returns>
-    public async Task<Result<CodeOffsetsInfo>> GetCodeOffsets(Guid programId)
-    {
-        return await ExtractPeData(programId, rawPeFile => CodeOffsetsExtractor.Extract(rawPeFile));
-    }
-
-    /// <summary>
     /// Gets the entry point information of a PE file
     /// </summary>
     /// <param name="programId">The ID of the program</param>

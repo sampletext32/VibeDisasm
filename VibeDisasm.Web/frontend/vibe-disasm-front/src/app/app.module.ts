@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProjectsComponent } from './components/projects/projects.component';
 import { ProgramsComponent } from './components/programs/programs.component';
+import { ProgramDetailComponent } from './components/program-detail/program-detail.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NewProjectDialogComponent } from './components/new-project-dialog/new-project-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -23,6 +24,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 // Interceptors
 import { ErrorInterceptor } from './interceptors/error-interceptor';
@@ -33,7 +37,8 @@ import { ErrorInterceptor } from './interceptors/error-interceptor';
     ProjectsComponent,
     ProgramsComponent,
     HeaderComponent,
-    NewProjectDialogComponent
+    NewProjectDialogComponent,
+    ProgramDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +55,9 @@ import { ErrorInterceptor } from './interceptors/error-interceptor';
     MatCardModule,
     MatDividerModule,
     MatIconModule,
+    MatTabsModule,
+    MatTableModule,
+    MatSortModule,
     MatToolbarModule,
     MatListModule
   ],

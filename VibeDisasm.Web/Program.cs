@@ -43,6 +43,8 @@ builder.Services.AddSingleton<GetProgramPeDataHandler>();
 
 var app = builder.Build();
 
+app.UseDeveloperExceptionPage();
+
 app.UseCorsConfiguration();
 
 app.MapSwagger();

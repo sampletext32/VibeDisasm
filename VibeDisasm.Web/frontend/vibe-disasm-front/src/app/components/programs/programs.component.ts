@@ -11,6 +11,7 @@ import { ApiService, Program } from '../../services/api.service';
 })
 export class ProgramsComponent implements OnInit {
   projectId: string = '';
+  projectName: string = 'Project';
   programs: Program[] = [];
   loading = false;
 
@@ -45,6 +46,10 @@ export class ProgramsComponent implements OnInit {
           console.error('Error loading programs', error);
         }
       });
+  }
+
+  openProgram(programId: string): void {
+    this.router.navigate(['/program', programId]);
   }
 
   importProgram(): void {

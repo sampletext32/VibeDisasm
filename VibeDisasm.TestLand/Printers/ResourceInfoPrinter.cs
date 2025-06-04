@@ -1,5 +1,4 @@
 using System.Globalization;
-using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Models;
 
 namespace VibeDisasm.TestLand.Printers;

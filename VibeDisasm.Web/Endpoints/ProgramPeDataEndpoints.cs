@@ -24,10 +24,6 @@ public static class ProgramPeDataEndpoints
             .WithName("GetTls")
             .WithDescription("Returns TLS information for the program");
 
-        group.MapGet("/codeoffsets", GetCodeOffsets)
-            .WithName("GetCodeOffsets")
-            .WithDescription("Returns code offsets information for the program");
-
         group.MapGet("/entrypoint", GetEntryPoint)
             .WithName("GetEntryPoint")
             .WithDescription("Returns entry point information for the program");
@@ -112,22 +108,8 @@ public static class ProgramPeDataEndpoints
             : Results.Problem(result.Errors.First().Message);
     }
 
-    /// <summary>
-    /// Gets code offsets information for a program
-    /// </summary>
-    /// <param name="programId">The ID of the program</param>
-    /// <param name="handler">The handler for PE data extraction</param>
-    /// <returns>Code offsets information for the program</returns>
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    private static async Task<IResult> GetCodeOffsets(Guid programId, GetProgramPeDataHandler handler)
-    {
-        var result = await handler.GetCodeOffsets(programId);
-        return result.IsSuccess 
-            ? Results.Ok(result.Value) 
-            : Results.Problem(result.Errors.First().Message);
-    }
+
+
 
     /// <summary>
     /// Gets entry point information for a program

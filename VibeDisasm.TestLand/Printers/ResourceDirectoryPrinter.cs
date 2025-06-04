@@ -1,4 +1,3 @@
-using VibeDisasm.Pe.Extractors;
 using VibeDisasm.Pe.Models;
 
 namespace VibeDisasm.TestLand.Printers;
@@ -14,21 +13,21 @@ public class ResourceDirectoryPrinter
     /// <param name="resourceDirectoryInfo">The resource directory information to print</param>
     public static void Print(ResourceDirectoryInfo? resourceDirectoryInfo)
     {
-        System.Console.WriteLine("\r\nResource Directory Information:");
+        Console.WriteLine("\r\nResource Directory Information:");
 
         if (resourceDirectoryInfo != null)
         {
-            System.Console.WriteLine($"  Resource Directory Found: Yes");
-            System.Console.WriteLine($"  Characteristics: 0x{resourceDirectoryInfo.Characteristics:X8}");
-            System.Console.WriteLine($"  Time/Date Stamp: 0x{resourceDirectoryInfo.TimeDateStamp:X8}");
-            System.Console.WriteLine($"  Version: {resourceDirectoryInfo.MajorVersion}.{resourceDirectoryInfo.MinorVersion}");
-            System.Console.WriteLine($"  Named Entries: {resourceDirectoryInfo.NumberOfNamedEntries}");
-            System.Console.WriteLine($"  ID Entries: {resourceDirectoryInfo.NumberOfIdEntries}");
-            System.Console.WriteLine($"  Total Entries: {resourceDirectoryInfo.NumberOfNamedEntries + resourceDirectoryInfo.NumberOfIdEntries}");
+            Console.WriteLine($"  Resource Directory Found: Yes");
+            Console.WriteLine($"  Characteristics: 0x{resourceDirectoryInfo.Characteristics:X8}");
+            Console.WriteLine($"  Time/Date Stamp: 0x{resourceDirectoryInfo.TimeDateStamp:X8}");
+            Console.WriteLine($"  Version: {resourceDirectoryInfo.MajorVersion}.{resourceDirectoryInfo.MinorVersion}");
+            Console.WriteLine($"  Named Entries: {resourceDirectoryInfo.NumberOfNamedEntries}");
+            Console.WriteLine($"  ID Entries: {resourceDirectoryInfo.NumberOfIdEntries}");
+            Console.WriteLine($"  Total Entries: {resourceDirectoryInfo.NumberOfNamedEntries + resourceDirectoryInfo.NumberOfIdEntries}");
         }
         else
         {
-            System.Console.WriteLine("  Resource Directory Found: No");
+            Console.WriteLine("  Resource Directory Found: No");
         }
     }
 }

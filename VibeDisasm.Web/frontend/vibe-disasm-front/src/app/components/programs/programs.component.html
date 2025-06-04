@@ -4,7 +4,7 @@
       <button mat-icon-button (click)="goBack()" aria-label="Back to projects">
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <h2>Programs <span class="project-id monospace">{{ projectId }}</span></h2>
+      <h2>Programs <span class="project-name">{{ projectName }}</span></h2>
     </div>
     <div class="header-right">
       <button mat-raised-button color="primary" (click)="importProgram()" [disabled]="loading">
@@ -24,11 +24,10 @@
     </div>
     
     <div *ngIf="!loading && programs.length > 0" class="programs-grid">
-      <mat-card *ngFor="let program of programs" class="program-card mat-elevation-z2">
+      <mat-card *ngFor="let program of programs" class="program-card mat-elevation-z2" (click)="openProgram(program.id)">
         <mat-card-header>
           <mat-icon mat-card-avatar>description</mat-icon>
           <mat-card-title>{{ program.name }}</mat-card-title>
-          <mat-card-subtitle class="program-id monospace">ID: {{ program.id }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="program-metadata">
@@ -39,7 +38,7 @@
           </div>
         </mat-card-content>
         <div class="card-hint">
-          <mat-icon>code</mat-icon>
+          <mat-icon>analytics</mat-icon>
           <span>Click to analyze program</span>
         </div>
       </mat-card>
