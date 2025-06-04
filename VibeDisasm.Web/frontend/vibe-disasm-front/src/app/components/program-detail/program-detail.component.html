@@ -6,6 +6,12 @@
       </button>
       <h2>Program Analysis: <span class="program-name">{{ programName }}</span></h2>
     </div>
+    <div class="header-right">
+      <button mat-raised-button color="primary" [routerLink]="['/decompile', programId]">
+        <mat-icon>code</mat-icon>
+        Decompile
+      </button>
+    </div>
   </div>
 
   <div class="content-container">

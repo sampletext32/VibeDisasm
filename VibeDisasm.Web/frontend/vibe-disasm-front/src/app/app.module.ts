@@ -10,6 +10,7 @@ import { ProgramsComponent } from './components/programs/programs.component';
 import { ProgramDetailComponent } from './components/program-detail/program-detail.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NewProjectDialogComponent } from './components/new-project-dialog/new-project-dialog.component';
+import { DecompilationComponent } from './components/decompilation/decompilation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Angular Material
@@ -38,7 +39,8 @@ import { ErrorInterceptor } from './interceptors/error-interceptor';
     ProgramsComponent,
     HeaderComponent,
     NewProjectDialogComponent,
-    ProgramDetailComponent
+    ProgramDetailComponent,
+    DecompilationComponent
   ],
   imports: [
     BrowserModule,
