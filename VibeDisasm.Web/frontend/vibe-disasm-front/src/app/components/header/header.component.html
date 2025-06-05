@@ -1,5 +1,5 @@
 <div class="navigation-header">
-  <div class="navigation-item" (click)="toggleMenu('file')" [class.active]="activeMenu === 'file'" (mouseenter)="showTooltip('file-menu', $event)" (mouseleave)="hideTooltip()">
+  <div class="navigation-item" (click)="toggleMenu('file')" [class.active]="activeMenu === 'file'">
     File
     @if (activeMenu === 'file') {
       <div class="dropdown-menu">
@@ -8,13 +8,13 @@
       </div>
     }
   </div>
-  <div class="navigation-item" (click)="toggleMenu('edit')" [class.active]="activeMenu === 'edit'" (mouseenter)="showTooltip('edit-menu', $event)" (mouseleave)="hideTooltip()">
+  <div class="navigation-item" (click)="toggleMenu('edit')" [class.active]="activeMenu === 'edit'">
     Edit
     @if (activeMenu === 'edit') {
       <div class="dropdown-menu">
-        <div class="dropdown-item" (mouseenter)="showTooltip('cut', $event)" (mouseleave)="hideTooltip()">Cut</div>
-        <div class="dropdown-item" (mouseenter)="showTooltip('copy', $event)" (mouseleave)="hideTooltip()">Copy</div>
-        <div class="dropdown-item" (mouseenter)="showTooltip('paste', $event)" (mouseleave)="hideTooltip()">Paste</div>
+        <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('cut', $event)" (mouseleave)="hideTooltip()">Cut</div>
+        <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('copy', $event)" (mouseleave)="hideTooltip()">Copy</div>
+        <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('paste', $event)" (mouseleave)="hideTooltip()">Paste</div>
       </div>
     }
   </div>

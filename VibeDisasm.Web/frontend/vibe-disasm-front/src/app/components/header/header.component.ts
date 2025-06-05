@@ -33,6 +33,7 @@ export class HeaderComponent {
 
   createNewProject(event: Event): void {
     event.stopPropagation();
+    this.hideTooltip();
     this.activeMenu = null;
     // Implement new project functionality
     console.log('Create new project');
@@ -40,8 +41,15 @@ export class HeaderComponent {
 
   openProject(event: Event): void {
     event.stopPropagation();
+    this.hideTooltip();
     this.activeMenu = null;
     this.router.navigate(['/projects']);
+  }
+
+  actionUnknown(event: MouseEvent) {
+    event.stopPropagation();
+    this.hideTooltip();
+    this.activeMenu = null;
   }
 
   showTooltip(tooltipKey: string, event: MouseEvent): void {

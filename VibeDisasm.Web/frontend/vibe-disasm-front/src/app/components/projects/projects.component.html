@@ -45,7 +45,7 @@
               <div class="project-metadata">
                 <div class="metadata-item">
                   <mat-icon class="metadata-icon">calendar_today</mat-icon>
-                  <span>Created: {{ project.createdAt | date:'short' || 'Unknown' }}</span>
+                  <span>Created: {{ (project.createdAt | date:'short') || 'Unknown' }}</span>
                 </div>
               </div>
             </mat-card-content>
