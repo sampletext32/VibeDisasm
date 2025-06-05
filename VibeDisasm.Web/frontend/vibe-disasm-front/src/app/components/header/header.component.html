@@ -1,6 +1,21 @@
-<mat-toolbar color="primary" class="main-header">
-  <div class="logo" (click)="navigateToProjects()">
-    <mat-icon>memory</mat-icon>
-    <span class="logo-text">VibeDisasm</span>
+<div class="navigation-header">
+  <div class="navigation-item" (click)="toggleMenu('file')" [class.active]="activeMenu === 'file'" (mouseenter)="showTooltip('file-menu', $event)" (mouseleave)="hideTooltip()">
+    File
+    <div class="dropdown-menu" *ngIf="activeMenu === 'file'">
+      <div class="dropdown-item" (click)="createNewProject($event)" (mouseenter)="showTooltip('new-project', $event)" (mouseleave)="hideTooltip()">New Project</div>
+      <div class="dropdown-item" (click)="openProject($event)" (mouseenter)="showTooltip('open-project', $event)" (mouseleave)="hideTooltip()">Open Project</div>
+    </div>
   </div>
-</mat-toolbar>
+  <div class="navigation-item" (click)="toggleMenu('edit')" [class.active]="activeMenu === 'edit'" (mouseenter)="showTooltip('edit-menu', $event)" (mouseleave)="hideTooltip()">
+    Edit
+    <div class="dropdown-menu" *ngIf="activeMenu === 'edit'">
+      <div class="dropdown-item" (mouseenter)="showTooltip('cut', $event)" (mouseleave)="hideTooltip()">Cut</div>
+      <div class="dropdown-item" (mouseenter)="showTooltip('copy', $event)" (mouseleave)="hideTooltip()">Copy</div>
+      <div class="dropdown-item" (mouseenter)="showTooltip('paste', $event)" (mouseleave)="hideTooltip()">Paste</div>
+    </div>
+  </div>
+</div>
+
+<div class="custom-tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipTop" [style.left.px]="tooltipLeft">
+  {{ tooltipText }}
+</div>

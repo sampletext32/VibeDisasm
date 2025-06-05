@@ -5,7 +5,8 @@
     </div>
     <div class="header-right">
       <button mat-raised-button color="primary" (click)="createProject()" [disabled]="loading">
-        <mat-icon>add</mat-icon> Create New Project
+        <mat-icon>add</mat-icon>
+        Create New Project
       </button>
     </div>
   </div>
@@ -14,14 +15,16 @@
     <div *ngIf="loading" class="loading-container">
       <mat-spinner diameter="40"></mat-spinner>
     </div>
-    
+
     <div *ngIf="!loading && projects.length === 0" class="empty-state">
       <mat-icon class="empty-icon">folder_open</mat-icon>
       <p>No projects found. Create a new project to get started.</p>
     </div>
-    
+
     <div *ngIf="!loading && projects.length > 0" class="projects-grid">
-      <mat-card *ngFor="let project of projects" class="project-card mat-elevation-z2" (click)="openingProjectId !== project.id && viewPrograms(project)" [class.loading]="openingProjectId === project.id">
+      <mat-card *ngFor="let project of projects" class="project-card mat-elevation-z2"
+                (click)="openingProjectId !== project.id && viewPrograms(project)"
+                [class.loading]="openingProjectId === project.id">
         <div *ngIf="openingProjectId === project.id" class="card-loading-overlay">
           <mat-spinner diameter="40"></mat-spinner>
         </div>

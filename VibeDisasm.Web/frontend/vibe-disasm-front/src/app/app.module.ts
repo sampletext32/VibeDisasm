@@ -41,7 +41,7 @@ import { ErrorInterceptor } from './interceptors/error-interceptor';
     HeaderComponent,
     NewProjectDialogComponent,
     ProgramDetailComponent,
-    DecompilationComponent
+    DecompilationComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,22 +1,63 @@
-.main-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.navigation-header {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+  z-index: 1000;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
+.navigation-item {
+  position: relative;
+  display: block;
+  padding: 0.3em 1em;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover, &.active {
+    background-color: #e5f3ff;
+    box-shadow: inset 0 0 0 1px #cce8ff;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ddd;
+  z-index: 1001;
+}
+
+.dropdown-item {
+  padding: 0.5em 1em;
   cursor: pointer;
   
-  mat-icon {
-    margin-right: 8px;
+  &:hover {
+    background-color: #e5f3ff;
   }
-  
-  .logo-text {
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
+}
+
+.custom-tooltip {
+  position: fixed;
+  padding: 6px 10px;
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 2000;
+  animation: fadeIn 0.15s ease-in-out;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  max-width: 250px;
+  border: 1px solid #ddd;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
