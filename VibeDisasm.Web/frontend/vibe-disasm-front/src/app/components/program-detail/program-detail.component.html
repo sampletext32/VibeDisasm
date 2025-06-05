@@ -15,173 +15,195 @@
   </div>
 
   <div class="content-container">
-    <div *ngIf="loading" class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
 
     <mat-tab-group (selectedTabChange)="setActiveTab($event.tab.textLabel.toLowerCase().replace(' ', '-'))">
       <mat-tab label="PE Info">
-        <div class="tab-content" *ngIf="peInfo">
-          <h2>PE Information</h2>
-          <!-- TODO: Display PE info details -->
-          <pre>{{ peInfo | json }}</pre>
-        </div>
+        @if (peInfo) {
+          <div class="tab-content">
+            <h2>PE Information</h2>
+            <!-- TODO: Display PE info details -->
+            <pre>{{ peInfo | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Sections">
-        <div class="tab-content" *ngIf="sections.length > 0">
-          <h2>Sections</h2>
-          <!-- TODO: Display sections in a table -->
-          <table mat-table [dataSource]="sections" class="mat-elevation-z1 full-width">
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef>Name</th>
-                  <td mat-cell *matCellDef="let section">{{ section.name }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="virtualAddress">
-                  <th mat-header-cell *matHeaderCellDef>Virtual Address</th>
-                  <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.virtualAddress.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="virtualSize">
-                  <th mat-header-cell *matHeaderCellDef>Virtual Size</th>
-                  <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.virtualSize.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="rawDataAddress">
-                  <th mat-header-cell *matHeaderCellDef>Raw Address</th>
-                  <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.rawDataAddress.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="rawDataSize">
-                  <th mat-header-cell *matHeaderCellDef>Raw Size</th>
-                  <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.rawDataSize.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="characteristics">
-                  <th mat-header-cell *matHeaderCellDef>Characteristics</th>
-                  <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.characteristics.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="isExecutable">
-                  <th mat-header-cell *matHeaderCellDef>Executable</th>
-                  <td mat-cell *matCellDef="let section">
-                    <mat-icon *ngIf="section.isExecutable" color="accent">check_circle</mat-icon>
-                    <mat-icon *ngIf="!section.isExecutable" color="warn">cancel</mat-icon>
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="isReadable">
-                  <th mat-header-cell *matHeaderCellDef>Readable</th>
-                  <td mat-cell *matCellDef="let section">
-                    <mat-icon *ngIf="section.isReadable" color="accent">check_circle</mat-icon>
-                    <mat-icon *ngIf="!section.isReadable" color="warn">cancel</mat-icon>
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="['name', 'virtualAddress', 'virtualSize', 'rawDataAddress', 'rawDataSize', 'characteristics', 'isExecutable', 'isReadable']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['name', 'virtualAddress', 'virtualSize', 'rawDataAddress', 'rawDataSize', 'characteristics', 'isExecutable', 'isReadable'];"></tr>
-              </table>
-        </div>
+        @if (sections.length > 0) {
+          <div class="tab-content">
+            <h2>Sections</h2>
+            <!-- TODO: Display sections in a table -->
+            <table mat-table [dataSource]="sections" class="mat-elevation-z1 full-width">
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Name</th>
+                <td mat-cell *matCellDef="let section">{{ section.name }}</td>
+              </ng-container>
+              <ng-container matColumnDef="virtualAddress">
+                <th mat-header-cell *matHeaderCellDef>Virtual Address</th>
+                <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.virtualAddress.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="virtualSize">
+                <th mat-header-cell *matHeaderCellDef>Virtual Size</th>
+                <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.virtualSize.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="rawDataAddress">
+                <th mat-header-cell *matHeaderCellDef>Raw Address</th>
+                <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.rawDataAddress.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="rawDataSize">
+                <th mat-header-cell *matHeaderCellDef>Raw Size</th>
+                <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.rawDataSize.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="characteristics">
+                <th mat-header-cell *matHeaderCellDef>Characteristics</th>
+                <td mat-cell *matCellDef="let section" class="monospace">0x{{ section.characteristics.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="isExecutable">
+                <th mat-header-cell *matHeaderCellDef>Executable</th>
+                <td mat-cell *matCellDef="let section">
+                  @if (section.isExecutable) {
+                    <mat-icon color="accent">check_circle</mat-icon>
+                  }
+                  @if (!section.isExecutable) {
+                    <mat-icon color="warn">cancel</mat-icon>
+                  }
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="isReadable">
+                <th mat-header-cell *matHeaderCellDef>Readable</th>
+                <td mat-cell *matCellDef="let section">
+                  @if (section.isReadable) {
+                    <mat-icon color="accent">check_circle</mat-icon>
+                  }
+                  @if (!section.isReadable) {
+                    <mat-icon color="warn">cancel</mat-icon>
+                  }
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['name', 'virtualAddress', 'virtualSize', 'rawDataAddress', 'rawDataSize', 'characteristics', 'isExecutable', 'isReadable']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['name', 'virtualAddress', 'virtualSize', 'rawDataAddress', 'rawDataSize', 'characteristics', 'isExecutable', 'isReadable'];"></tr>
+            </table>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="TLS">
-        <div class="tab-content" *ngIf="tlsInfo">
-          <h2>Thread Local Storage</h2>
-          <!-- TODO: Display TLS info details -->
-          <pre>{{ tlsInfo | json }}</pre>
-        </div>
+        @if (tlsInfo) {
+          <div class="tab-content">
+            <h2>Thread Local Storage</h2>
+            <!-- TODO: Display TLS info details -->
+            <pre>{{ tlsInfo | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Entry Points">
-        <div class="tab-content" *ngIf="entryPoints.length > 0">
-          <h2>Entry Points</h2>
-          <!-- TODO: Display entry points in a list -->
-          <table mat-table [dataSource]="entryPoints" class="mat-elevation-z1 full-width">
-                <ng-container matColumnDef="fileOffset">
-                  <th mat-header-cell *matHeaderCellDef>File Offset</th>
-                  <td mat-cell *matCellDef="let entry" class="monospace">0x{{ entry.fileOffset.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="rva">
-                  <th mat-header-cell *matHeaderCellDef>RVA</th>
-                  <td mat-cell *matCellDef="let entry" class="monospace">0x{{ entry.rva.toString(16).padStart(8, '0') }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="source">
-                  <th mat-header-cell *matHeaderCellDef>Source</th>
-                  <td mat-cell *matCellDef="let entry">{{ entry.source }}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="description">
-                  <th mat-header-cell *matHeaderCellDef>Description</th>
-                  <td mat-cell *matCellDef="let entry">{{ entry.description }}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="['fileOffset', 'rva', 'source', 'description']"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['fileOffset', 'rva', 'source', 'description'];"></tr>
-              </table>
-        </div>
+        @if (entryPoints.length > 0) {
+          <div class="tab-content">
+            <h2>Entry Points</h2>
+            <!-- TODO: Display entry points in a list -->
+            <table mat-table [dataSource]="entryPoints" class="mat-elevation-z1 full-width">
+              <ng-container matColumnDef="fileOffset">
+                <th mat-header-cell *matHeaderCellDef>File Offset</th>
+                <td mat-cell *matCellDef="let entry" class="monospace">0x{{ entry.fileOffset.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="rva">
+                <th mat-header-cell *matHeaderCellDef>RVA</th>
+                <td mat-cell *matCellDef="let entry" class="monospace">0x{{ entry.rva.toString(16).padStart(8, '0') }}</td>
+              </ng-container>
+              <ng-container matColumnDef="source">
+                <th mat-header-cell *matHeaderCellDef>Source</th>
+                <td mat-cell *matCellDef="let entry">{{ entry.source }}</td>
+              </ng-container>
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let entry">{{ entry.description }}</td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="['fileOffset', 'rva', 'source', 'description']"></tr>
+              <tr mat-row *matRowDef="let row; columns: ['fileOffset', 'rva', 'source', 'description'];"></tr>
+            </table>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Imports">
-        <div class="tab-content" *ngIf="imports">
-          <h2>Imports</h2>
-          <!-- TODO: Display imports in a structured way -->
-          <pre>{{ imports | json }}</pre>
-        </div>
+        @if (imports) {
+          <div class="tab-content">
+            <h2>Imports</h2>
+            <!-- TODO: Display imports in a structured way -->
+            <pre>{{ imports | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Exports">
-        <div class="tab-content" *ngIf="exports">
-          <h2>Exports</h2>
-          <!-- TODO: Display exports in a structured way -->
-          <pre>{{ exports | json }}</pre>
-        </div>
+        @if (exports) {
+          <div class="tab-content">
+            <h2>Exports</h2>
+            <!-- TODO: Display exports in a structured way -->
+            <pre>{{ exports | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Resources">
-        <div class="tab-content" *ngIf="resources">
-          <h2>Resources</h2>
-          <!-- TODO: Display resources in a structured way -->
-          <pre>{{ resources | json }}</pre>
-        </div>
+        @if (resources) {
+          <div class="tab-content">
+            <h2>Resources</h2>
+            <!-- TODO: Display resources in a structured way -->
+            <pre>{{ resources | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Delay Imports">
-        <div class="tab-content" *ngIf="delayImports">
-          <h2>Delay Imports</h2>
-          <!-- TODO: Display delay imports in a structured way -->
-          <pre>{{ delayImports | json }}</pre>
-        </div>
+        @if (delayImports) {
+          <div class="tab-content">
+            <h2>Delay Imports</h2>
+            <!-- TODO: Display delay imports in a structured way -->
+            <pre>{{ delayImports | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Exceptions">
-        <div class="tab-content" *ngIf="exceptions">
-          <h2>Exceptions</h2>
-          <!-- TODO: Display exceptions in a structured way -->
-          <pre>{{ exceptions | json }}</pre>
-        </div>
+        @if (exceptions) {
+          <div class="tab-content">
+            <h2>Exceptions</h2>
+            <!-- TODO: Display exceptions in a structured way -->
+            <pre>{{ exceptions | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="Version Info">
-        <div class="tab-content" *ngIf="versionInfo.length > 0">
-          <h2>Version Information</h2>
-          <!-- TODO: Display version info in a structured way -->
-          <pre>{{ versionInfo | json }}</pre>
-        </div>
+        @if (versionInfo.length > 0) {
+          <div class="tab-content">
+            <h2>Version Information</h2>
+            <!-- TODO: Display version info in a structured way -->
+            <pre>{{ versionInfo | json }}</pre>
+          </div>
+        }
       </mat-tab>
 
       <mat-tab label="String Table">
-        <div class="tab-content" *ngIf="stringTable.length > 0">
-          <h2>String Table</h2>
-          <!-- TODO: Display string table in a structured way -->
-          <mat-list>
-            <mat-list-item *ngFor="let str of stringTable">
-              <span class="monospace">{{ str.value }}</span>
-            </mat-list-item>
-          </mat-list>
-        </div>
+        @if (stringTable.length > 0) {
+          <div class="tab-content">
+            <h2>String Table</h2>
+            <!-- TODO: Display string table in a structured way -->
+            <mat-list>
+              @for (str of stringTable; track str) {
+                <mat-list-item>
+                  <span class="monospace">{{ str.value }}</span>
+                </mat-list-item>
+              }
+            </mat-list>
+          </div>
+        }
       </mat-tab>
     </mat-tab-group>
   </div>

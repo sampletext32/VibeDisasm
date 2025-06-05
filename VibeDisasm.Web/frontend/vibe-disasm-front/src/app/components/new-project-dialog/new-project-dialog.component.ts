@@ -1,22 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService, Project } from '../../services/api.service';
 
 @Component({
-  selector: 'app-new-project-dialog',
-  templateUrl: './new-project-dialog.component.html',
-  styleUrls: ['./new-project-dialog.component.scss']
+    selector: 'app-new-project-dialog',
+    templateUrl: './new-project-dialog.component.html',
+    styleUrls: ['./new-project-dialog.component.scss'],
+    standalone: false
 })
 export class NewProjectDialogComponent implements OnInit {
-  projectForm: FormGroup = this.fb.group({
+  projectForm: UntypedFormGroup = this.fb.group({
     title: ['', [Validators.required]]
   });
-  
+
   isCreating = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private dialogRef: MatDialogRef<NewProjectDialogComponent>,
     private apiService: ApiService
   ) { }
@@ -31,7 +32,7 @@ export class NewProjectDialogComponent implements OnInit {
     if (this.projectForm.valid && !this.isCreating) {
       this.isCreating = true;
       const title = this.projectForm.value.title;
-      
+
       this.apiService.createProject(title).subscribe({
         next: (projectId) => {
           this.isCreating = false;

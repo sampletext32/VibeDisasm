@@ -12,40 +12,50 @@
   </div>
 
   <div class="content-container">
-    <div *ngIf="loading" class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
 
-    <div *ngIf="!loading && projects.length === 0" class="empty-state">
-      <mat-icon class="empty-icon">folder_open</mat-icon>
-      <p>No projects found. Create a new project to get started.</p>
-    </div>
+    @if (!loading && projects.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">folder_open</mat-icon>
+        <p>No projects found. Create a new project to get started.</p>
+      </div>
+    }
 
-    <div *ngIf="!loading && projects.length > 0" class="projects-grid">
-      <mat-card *ngFor="let project of projects" class="project-card mat-elevation-z2"
-                (click)="openingProjectId !== project.id && viewPrograms(project)"
-                [class.loading]="openingProjectId === project.id">
-        <div *ngIf="openingProjectId === project.id" class="card-loading-overlay">
-          <mat-spinner diameter="40"></mat-spinner>
-        </div>
-        <mat-card-header>
-          <mat-icon mat-card-avatar>folder</mat-icon>
-          <mat-card-title>{{ project.title || 'Untitled Project' }}</mat-card-title>
-          <mat-card-subtitle class="project-id monospace">ID: {{ project.id }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="project-metadata">
-            <div class="metadata-item">
-              <mat-icon class="metadata-icon">calendar_today</mat-icon>
-              <span>Created: {{ project.createdAt | date:'short' || 'Unknown' }}</span>
+    @if (!loading && projects.length > 0) {
+      <div class="projects-grid">
+        @for (project of projects; track project) {
+          <mat-card class="project-card mat-elevation-z2"
+            (click)="openingProjectId !== project.id && viewPrograms(project)"
+            [class.loading]="openingProjectId === project.id">
+            @if (openingProjectId === project.id) {
+              <div class="card-loading-overlay">
+                <mat-spinner diameter="40"></mat-spinner>
+              </div>
+            }
+            <mat-card-header>
+              <mat-icon mat-card-avatar>folder</mat-icon>
+              <mat-card-title>{{ project.title || 'Untitled Project' }}</mat-card-title>
+              <mat-card-subtitle class="project-id monospace">ID: {{ project.id }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="project-metadata">
+                <div class="metadata-item">
+                  <mat-icon class="metadata-icon">calendar_today</mat-icon>
+                  <span>Created: {{ project.createdAt | date:'short' || 'Unknown' }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+            <div class="card-hint">
+              <mat-icon>{{ openingProjectId === project.id ? 'hourglass_empty' : 'touch_app' }}</mat-icon>
+              <span>{{ openingProjectId === project.id ? 'Opening project...' : 'Click to view programs' }}</span>
             </div>
-          </div>
-        </mat-card-content>
-        <div class="card-hint">
-          <mat-icon>{{ openingProjectId === project.id ? 'hourglass_empty' : 'touch_app' }}</mat-icon>
-          <span>{{ openingProjectId === project.id ? 'Opening project...' : 'Click to view programs' }}</span>
-        </div>
-      </mat-card>
-    </div>
+          </mat-card>
+        }
+      </div>
+    }
   </div>
 </div>

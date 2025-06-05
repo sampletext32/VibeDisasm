@@ -14,34 +14,42 @@
   </div>
 
   <div class="content-container">
-    <div *ngIf="loading" class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
-    
-    <div *ngIf="!loading && programs.length === 0" class="empty-state">
-      <mat-icon class="empty-icon">description</mat-icon>
-      <p>No programs found. Import a program to get started.</p>
-    </div>
-    
-    <div *ngIf="!loading && programs.length > 0" class="programs-grid">
-      <mat-card *ngFor="let program of programs" class="program-card mat-elevation-z2" (click)="openProgram(program.id)">
-        <mat-card-header>
-          <mat-icon mat-card-avatar>description</mat-icon>
-          <mat-card-title>{{ program.name }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="program-metadata">
-            <div class="filepath">
-              <mat-icon class="filepath-icon">folder</mat-icon>
-              <span class="filepath-text">{{ program.filePath }}</span>
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
+
+    @if (!loading && programs.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">description</mat-icon>
+        <p>No programs found. Import a program to get started.</p>
+      </div>
+    }
+
+    @if (!loading && programs.length > 0) {
+      <div class="programs-grid">
+        @for (program of programs; track program) {
+          <mat-card class="program-card mat-elevation-z2" (click)="openProgram(program.id)">
+            <mat-card-header>
+              <mat-icon mat-card-avatar>description</mat-icon>
+              <mat-card-title>{{ program.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="program-metadata">
+                <div class="filepath">
+                  <mat-icon class="filepath-icon">folder</mat-icon>
+                  <span class="filepath-text">{{ program.filePath }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+            <div class="card-hint">
+              <mat-icon>analytics</mat-icon>
+              <span>Click to analyze program</span>
             </div>
-          </div>
-        </mat-card-content>
-        <div class="card-hint">
-          <mat-icon>analytics</mat-icon>
-          <span>Click to analyze program</span>
-        </div>
-      </mat-card>
-    </div>
+          </mat-card>
+        }
+      </div>
+    }
   </div>
 </div>

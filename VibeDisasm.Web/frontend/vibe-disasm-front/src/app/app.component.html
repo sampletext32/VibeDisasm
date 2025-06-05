@@ -3,10 +3,14 @@
   <div class="content-container">
     <router-outlet></router-outlet>
   </div>
-  <div *ngIf="isElectron" class="electron-footer">
-    <span>Running in Desktop Mode</span>
-  </div>
-  <div *ngIf="!isElectron" class="electron-footer">
-    <span>Running in Website Mode</span>
-  </div>
+  @if (isElectron) {
+    <div class="electron-footer">
+      <span>Running in Desktop Mode</span>
+    </div>
+  }
+  @if (!isElectron) {
+    <div class="electron-footer">
+      <span>Running in Website Mode</span>
+    </div>
+  }
 </div>

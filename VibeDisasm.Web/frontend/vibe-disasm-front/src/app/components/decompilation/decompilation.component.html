@@ -9,43 +9,47 @@
   </div>
 
   <div class="content-container">
-    <div *ngIf="loading" class="loading-container">
-      <mat-spinner diameter="40"></mat-spinner>
-    </div>
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    }
 
-    <div class="decompilation-view" *ngIf="!loading">
-      <div class="assembly-view">
-        <div class="view-header">
-          <span>Assembly Listing</span>
+    @if (!loading) {
+      <div class="decompilation-view">
+        <div class="assembly-view">
+          <div class="view-header">
+            <span>Assembly Listing</span>
+          </div>
+          <div class="table-container">
+            <table class="assembly-table">
+              <thead>
+                <tr>
+                  <th class="address-col">Address</th>
+                  <th class="bytes-col">Bytes</th>
+                  <th class="instruction-col">Instruction</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (instruction of assemblyInstructions; track instruction) {
+                  <tr>
+                    <td class="address-col monospace">{{ instruction.address }}</td>
+                    <td class="bytes-col monospace">{{ instruction.bytes }}</td>
+                    <td class="instruction-col monospace">{{ instruction.instruction }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="table-container">
-          <table class="assembly-table">
-            <thead>
-              <tr>
-                <th class="address-col">Address</th>
-                <th class="bytes-col">Bytes</th>
-                <th class="instruction-col">Instruction</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let instruction of assemblyInstructions">
-                <td class="address-col monospace">{{ instruction.address }}</td>
-                <td class="bytes-col monospace">{{ instruction.bytes }}</td>
-                <td class="instruction-col monospace">{{ instruction.instruction }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="divider"></div>
+        <div class="decompiled-view">
+          <div class="view-header">
+            <span>Decompiled Code: {{ decompiled.name }}</span>
+          </div>
+          <pre class="code-block">{{ decompiled.code }}</pre>
         </div>
       </div>
-
-      <div class="divider"></div>
-
-      <div class="decompiled-view">
-        <div class="view-header">
-          <span>Decompiled Code: {{ decompiled.name }}</span>
-        </div>
-        <pre class="code-block">{{ decompiled.code }}</pre>
-      </div>
-    </div>
+    }
   </div>
 </div>

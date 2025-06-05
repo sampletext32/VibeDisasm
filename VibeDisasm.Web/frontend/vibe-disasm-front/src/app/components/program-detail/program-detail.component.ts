@@ -6,9 +6,10 @@ import { of } from 'rxjs';
 import { ApiService, Program, PeInfo, SectionInfo, TlsInfo, EntryPointInfo, ImportInfo, ExportInfo, ResourceInfo, DelayImportInfo, ExceptionInfo, VersionInfo, StringTableInfo } from '../../services/api.service';
 
 @Component({
-  selector: 'app-program-detail',
-  templateUrl: './program-detail.component.html',
-  styleUrls: ['./program-detail.component.scss']
+    selector: 'app-program-detail',
+    templateUrl: './program-detail.component.html',
+    styleUrls: ['./program-detail.component.scss'],
+    standalone: false
 })
 export class ProgramDetailComponent implements OnInit {
   programId: string = '';

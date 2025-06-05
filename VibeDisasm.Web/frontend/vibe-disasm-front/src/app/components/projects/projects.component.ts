@@ -6,9 +6,10 @@ import { ApiService, Project } from '../../services/api.service';
 import { NewProjectDialogComponent } from '../new-project-dialog/new-project-dialog.component';
 
 @Component({
-  selector: 'app-projects',
-  templateUrl: './projects.component.html',
-  styleUrls: ['./projects.component.scss']
+    selector: 'app-projects',
+    templateUrl: './projects.component.html',
+    styleUrls: ['./projects.component.scss'],
+    standalone: false
 })
 export class ProjectsComponent implements OnInit {
   projects: Project[] = [];
@@ -59,7 +60,7 @@ export class ProjectsComponent implements OnInit {
   viewPrograms(project: Project): void {
     // Set loading state for this specific project
     this.openingProjectId = project.id;
-    
+
     // Call the openProject endpoint
     this.apiService.openProject(project.id)
       .pipe(finalize(() => this.openingProjectId = null))

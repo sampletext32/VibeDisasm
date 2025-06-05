@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ElectronService } from './services/electron.service';
 
@@ -33,41 +33,35 @@ import { MatSortModule } from '@angular/material/sort';
 // Interceptors
 import { ErrorInterceptor } from './interceptors/error-interceptor';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    ProjectsComponent,
-    ProgramsComponent,
-    HeaderComponent,
-    NewProjectDialogComponent,
-    ProgramDetailComponent,
-    DecompilationComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatCardModule,
-    MatDividerModule,
-    MatIconModule,
-    MatTabsModule,
-    MatTableModule,
-    MatSortModule,
-    MatToolbarModule,
-    MatListModule
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    ElectronService
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        ProjectsComponent,
+        ProgramsComponent,
+        HeaderComponent,
+        NewProjectDialogComponent,
+        ProgramDetailComponent,
+        DecompilationComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatProgressSpinnerModule,
+        MatCardModule,
+        MatDividerModule,
+        MatIconModule,
+        MatTabsModule,
+        MatTableModule,
+        MatSortModule,
+        MatToolbarModule,
+        MatListModule], providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        ElectronService,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }

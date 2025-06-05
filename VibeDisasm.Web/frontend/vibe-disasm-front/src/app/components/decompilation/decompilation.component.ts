@@ -15,21 +15,22 @@ interface DecompiledFunction {
 }
 
 @Component({
-  selector: 'app-decompilation',
-  templateUrl: './decompilation.component.html',
-  styleUrls: ['./decompilation.component.scss']
+    selector: 'app-decompilation',
+    templateUrl: './decompilation.component.html',
+    styleUrls: ['./decompilation.component.scss'],
+    standalone: false
 })
 export class DecompilationComponent implements OnInit {
   programId: string = '';
   programName: string = '';
   loading: boolean = false;
-  
+
   // Assembly listing
   assemblyInstructions: AssemblyInstruction[] = [];
-  
+
   // Decompiled code
   decompiled: DecompiledFunction = { name: '', code: '' };
-  
+
   // No longer needed with standard HTML table
 
   constructor(
@@ -41,12 +42,12 @@ export class DecompilationComponent implements OnInit {
 
   ngOnInit(): void {
     this.programId = this.route.snapshot.paramMap.get('id') || '';
-    
+
     if (!this.programId) {
       this.router.navigate(['/projects']);
       return;
     }
-    
+
     this.loadProgramDetails();
     this.loadStubData(); // In a real implementation, this would be replaced with API calls
   }
@@ -111,26 +112,26 @@ int add_numbers(int a, int b) {
     //   mov ecx, dword ptr [ebp+12]
     //   mov dword ptr [ebp-8], eax
     //   mov dword ptr [ebp-4], ecx
-    
+
     // IR Variable assignments:
     // var_8 = a (from parameter)
     // var_4 = b (from parameter)
-    
+
     // IR Block 0x00401012
     // Original assembly:
     //   mov edx, dword ptr [ebp-8]
     //   add edx, dword ptr [ebp-4]
     //   mov dword ptr [ebp-12], edx
-    
+
     int result = var_8 + var_4;  // IRAddExpr transformation
-    
+
     // IR Block 0x0040101B
     // Original assembly:
     //   mov eax, dword ptr [ebp-12]
     //   mov esp, ebp
     //   pop ebp
     //   ret
-    
+
     return result;
 }`
     };
