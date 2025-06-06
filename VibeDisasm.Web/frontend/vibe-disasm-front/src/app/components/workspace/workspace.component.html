@@ -1,0 +1,42 @@
+<div class="vertical">
+
+  <div class="container">
+
+    <div class="listing window">
+      <div class="window-header">
+        Listing
+      </div>
+
+      <div class="window-content">
+
+        <div class="line header">
+          <div class="item address">Address</div>
+          <div class="item bytes">Bytes</div>
+          <div class="item disasm">Disassembly</div>
+          <div class="item semantic">Semantic</div>
+        </div>
+
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,20]; track i) {
+          <div class="line">
+            <div class="item address">0x00400000</div>
+            <div class="item bytes">00 12 34 56</div>
+            <div class="item disasm">&lt;non&gt;</div>
+            <div class="item semantic">arbitrary</div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="decompile window">
+      <div class="window-header">
+        Decompile
+      </div>
+
+      <div class="window-content">
+        LALALALA
+      </div>
+    </div>
+
+  </div>
+
+</div>

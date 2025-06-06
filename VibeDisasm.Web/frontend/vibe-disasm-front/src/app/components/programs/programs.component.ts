@@ -50,7 +50,7 @@ export class ProgramsComponent implements OnInit {
   }
 
   openProgram(programId: string): void {
-    this.router.navigate(['/program', programId]);
+    this.router.navigate(['/workspace', programId]);
   }
 
   importProgram(): void {

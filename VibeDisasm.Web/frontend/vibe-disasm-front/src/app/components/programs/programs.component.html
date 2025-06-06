@@ -30,7 +30,7 @@
     @if (!loading && programs.length > 0) {
       <div class="programs-grid">
         @for (program of programs; track program) {
-          <mat-card class="program-card mat-elevation-z2" (click)="openProgram(program.id)">
+          <mat-card class="program-card mat-elevation-z2" [routerLink]="['/workspace', program.id]">
             <mat-card-header>
               <mat-icon mat-card-avatar>description</mat-icon>
               <mat-card-title>{{ program.name }}</mat-card-title>
