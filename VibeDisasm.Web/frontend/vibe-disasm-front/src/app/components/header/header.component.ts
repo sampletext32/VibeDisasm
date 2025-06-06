@@ -1,18 +1,32 @@
-import { Component, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {ElectronService} from "../../services/electron.service";
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    standalone: false
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
+  standalone: false
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   activeMenu: string | null = null;
   tooltipVisible = false;
   tooltipText = '';
   tooltipTop = 0;
-  tooltipLeft = 0;
+  tooltipLeft? = 0;
+  tooltipRight? = 0;
+
+  isElectron = false;
+
+  constructor(
+    private electronService: ElectronService,
+    private router: Router) {
+  }
+
+  ngOnInit(): void {
+    this.isElectron = this.electronService.isElectron;
+    console.log('Running in Electron:', this.isElectron);
+  }
 
   // Tooltip content mapping
   private tooltipMap: Record<string, string> = {
@@ -22,10 +36,10 @@ export class HeaderComponent {
     'edit-menu': 'Edit operations',
     'cut': 'Cut selected content',
     'copy': 'Copy selected content',
-    'paste': 'Paste content from clipboard'
+    'paste': 'Paste content from clipboard',
+    'electron': 'This app can run in electron and web. Currently running in Electron',
+    'non-electron': 'This app can run in electron and web. Currently running in a web browser',
   };
-
-  constructor(private router: Router) { }
 
   toggleMenu(menu: string): void {
     this.activeMenu = this.activeMenu === menu ? null : menu;
@@ -46,13 +60,13 @@ export class HeaderComponent {
     this.router.navigate(['/projects']);
   }
 
-  actionUnknown(event: MouseEvent) {
-    event.stopPropagation();
+  actionUnknown($event: MouseEvent) {
+    $event.stopPropagation();
     this.hideTooltip();
     this.activeMenu = null;
   }
 
-  showTooltip(tooltipKey: string, event: MouseEvent): void {
+  showTooltip(tooltipKey: string, event: MouseEvent, left: boolean = false): void {
     this.tooltipText = this.tooltipMap[tooltipKey] || '';
     if (this.tooltipText) {
       this.tooltipVisible = true;
@@ -60,7 +74,13 @@ export class HeaderComponent {
       // Position the tooltip near the cursor
       const offset = 50; // Offset from cursor
       this.tooltipTop = event.clientY;
-      this.tooltipLeft = event.clientX + offset;
+      if (!left) {
+        this.tooltipLeft = event.clientX + offset;
+        this.tooltipRight = undefined;
+      } else {
+        this.tooltipRight = offset;
+        this.tooltipLeft = undefined;
+      }
     }
   }
 

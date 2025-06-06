@@ -1,0 +1,13 @@
+<div class="split-container">
+  <div class="left-pane" #leftPane>
+    <ng-content select="[leftPane]"></ng-content>
+  </div>
+
+  <div class="resizer" #resizer>
+    |
+  </div>
+
+  <div class="right-pane" #rightPane>
+    <ng-content select="[rightPane]"></ng-content>
+  </div>
+</div>

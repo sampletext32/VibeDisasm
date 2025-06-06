@@ -1,10 +1,15 @@
 .navigation-header {
   display: flex;
+  justify-content: space-between;
   width: 100%;
   box-sizing: border-box;
   background-color: #f0f0f0;
   border-bottom: 1px solid #ddd;
   z-index: 1000;
+
+  .navigation-buttons {
+    display: flex;
+  }
 }
 
 .navigation-item {
@@ -35,7 +40,7 @@
 .dropdown-item {
   padding: 0.5em 1em;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #e5f3ff;
   }
@@ -51,13 +56,35 @@
   pointer-events: none;
   z-index: 2000;
   animation: fadeIn 0.15s ease-in-out;
-  white-space: nowrap;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   max-width: 250px;
   border: 1px solid #ddd;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.electron-footer {
+  padding: 0.3em 1em;
+  font-size: 12px;
+  align-self: end;
+  user-select: none;
+
+  span {
+    display: inline-block;
+    border-radius: 4px;
+
+    padding: 0 1em;
+    background-color: rgba(255, 255, 255, 0.1);
+
+    background-color: #2c3e50;
+    color: white;
+  }
 }

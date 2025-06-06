@@ -13,6 +13,7 @@ import {HeaderComponent} from './components/header/header.component';
 import {NewProjectDialogComponent} from './components/new-project-dialog/new-project-dialog.component';
 import {WorkspaceComponent} from "./components/workspace/workspace.component";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SplitPaneComponent} from "./components/shared/split-pane/split-pane.component";
 
 // Angular Material
 import {MatDialogModule} from '@angular/material/dialog';
@@ -42,6 +43,7 @@ import {ErrorInterceptor} from './interceptors/error-interceptor';
     NewProjectDialogComponent,
     ProgramDetailComponent,
     WorkspaceComponent,
+    SplitPaneComponent,
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     AppRoutingModule,

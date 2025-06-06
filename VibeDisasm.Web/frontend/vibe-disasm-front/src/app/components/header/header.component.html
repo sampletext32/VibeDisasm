@@ -1,27 +1,53 @@
 <div class="navigation-header">
-  <div class="navigation-item" (click)="toggleMenu('file')" [class.active]="activeMenu === 'file'">
-    File
-    @if (activeMenu === 'file') {
-      <div class="dropdown-menu">
-        <div class="dropdown-item" (click)="createNewProject($event)" (mouseenter)="showTooltip('new-project', $event)" (mouseleave)="hideTooltip()">New Project</div>
-        <div class="dropdown-item" (click)="openProject($event)" (mouseenter)="showTooltip('open-project', $event)" (mouseleave)="hideTooltip()">Open Project</div>
+  <div class="navigation-buttons">
+    <div class="navigation-item" (click)="toggleMenu('file')" [class.active]="activeMenu === 'file'">
+      File
+      @if (activeMenu === 'file') {
+        <div class="dropdown-menu">
+          <div class="dropdown-item" (click)="createNewProject($event)"
+               (mouseenter)="showTooltip('new-project', $event)" (mouseleave)="hideTooltip()">New Project
+          </div>
+          <div class="dropdown-item" (click)="openProject($event)" (mouseenter)="showTooltip('open-project', $event)"
+               (mouseleave)="hideTooltip()">Open Project
+          </div>
+        </div>
+      }
+    </div>
+    <div class="navigation-item" (click)="toggleMenu('edit')" [class.active]="activeMenu === 'edit'">
+      Edit
+      @if (activeMenu === 'edit') {
+        <div class="dropdown-menu">
+          <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('cut', $event)"
+               (mouseleave)="hideTooltip()">Cut
+          </div>
+          <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('copy', $event)"
+               (mouseleave)="hideTooltip()">Copy
+          </div>
+          <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('paste', $event)"
+               (mouseleave)="hideTooltip()">Paste
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  <div>
+    @if (isElectron) {
+      <div class="electron-footer" (mouseenter)="showTooltip('electron', $event, true)"
+           (mouseleave)="hideTooltip()">
+        <span>Running in Desktop Mode</span>
       </div>
     }
-  </div>
-  <div class="navigation-item" (click)="toggleMenu('edit')" [class.active]="activeMenu === 'edit'">
-    Edit
-    @if (activeMenu === 'edit') {
-      <div class="dropdown-menu">
-        <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('cut', $event)" (mouseleave)="hideTooltip()">Cut</div>
-        <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('copy', $event)" (mouseleave)="hideTooltip()">Copy</div>
-        <div class="dropdown-item" (click)="actionUnknown($event)" (mouseenter)="showTooltip('paste', $event)" (mouseleave)="hideTooltip()">Paste</div>
+    @if (!isElectron) {
+      <div class="electron-footer" (mouseenter)="showTooltip('non-electron', $event, true)"
+           (mouseleave)="hideTooltip()">
+        <span>Running in Website Mode</span>
       </div>
     }
   </div>
 </div>
 
 @if (tooltipVisible) {
-  <div class="custom-tooltip" [style.top.px]="tooltipTop" [style.left.px]="tooltipLeft">
+  <div class="custom-tooltip" [style.top.px]="tooltipTop" [style.left.px]="tooltipLeft" [style.right.px]="tooltipRight">
     {{ tooltipText }}
   </div>
 }

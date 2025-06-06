@@ -1,47 +1,52 @@
 :host {
-  height: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 auto;
+  height: 100%;
 }
 
 .vertical {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 auto;
+  height: 100%;
+  overflow: hidden;
+  
+  app-split-pane {
+    flex: 1 1 auto;
+    height: 100%;
+  }
+}
 
-  .container {
+// Styles for the content inside each pane
+.listing {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  
+  .line {
     display: flex;
-    flex: 1;
-
-    gap: 0.5em;
-
-    .listing {
-      flex: 2;
-      display: flex;
-      flex-direction: column;
-
-      .line {
-        display: flex;
-
-        .item {
-          flex: 1;
-        }
-      }
-    }
-
-    .decompile {
-      flex: 3;
-      display: flex;
-      flex-direction: column;
+    
+    .item {
+      flex: 1;
     }
   }
+}
+
+.decompile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 .window {
   box-shadow: inset 0 0 0 1px #cce8ff;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 
   .window-header {
     display: flex;
@@ -50,13 +55,15 @@
     background: linear-gradient(to right, #a9a9a9 0%, #f0f0f0 100%);
     border: 1px solid #808080;
     box-sizing: border-box;
+    flex: 0 0 auto;
   }
 
   .window-content {
-    flex: 1;
+    flex: 1 1 auto;
     padding: 0.3em;
     border: 1px solid #d9d9d9;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: auto;
+    height: calc(100% - 30px); /* Adjust based on header height */
   }
 }

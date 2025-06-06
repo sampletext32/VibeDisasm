@@ -1,14 +1,11 @@
 <div class="vertical">
-
-  <div class="container">
-
-    <div class="listing window">
+  <app-split-pane [initialLeftWidth]="initialLeftWidth">
+    <div leftPane class="listing window">
       <div class="window-header">
         Listing
       </div>
 
       <div class="window-content">
-
         <div class="line header">
           <div class="item address">Address</div>
           <div class="item bytes">Bytes</div>
@@ -27,7 +24,7 @@
       </div>
     </div>
 
-    <div class="decompile window">
+    <div rightPane class="decompile window">
       <div class="window-header">
         Decompile
       </div>
@@ -36,7 +33,5 @@
         LALALALA
       </div>
     </div>
-
-  </div>
-
+  </app-split-pane>
 </div>
