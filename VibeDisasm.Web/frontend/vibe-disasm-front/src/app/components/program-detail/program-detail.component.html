@@ -36,7 +36,6 @@
         @if (sections.length > 0) {
           <div class="tab-content">
             <h2>Sections</h2>
-            <!-- TODO: Display sections in a table -->
             <table mat-table [dataSource]="sections" class="mat-elevation-z1 full-width">
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -105,7 +104,6 @@
         @if (entryPoints.length > 0) {
           <div class="tab-content">
             <h2>Entry Points</h2>
-            <!-- TODO: Display entry points in a list -->
             <table mat-table [dataSource]="entryPoints" class="mat-elevation-z1 full-width">
               <ng-container matColumnDef="fileOffset">
                 <th mat-header-cell *matHeaderCellDef>File Offset</th>
