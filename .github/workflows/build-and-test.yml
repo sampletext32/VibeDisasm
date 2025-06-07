@@ -223,6 +223,8 @@ jobs:
         name: electron-app
         path: |
           VibeDisasm.Web/frontend/vibe-disasm-front/dist/electron/*
+          !VibeDisasm.Web/frontend/vibe-disasm-front/dist/electron/*-unpacked
+          !VibeDisasm.Web/frontend/vibe-disasm-front/dist/electron/*yml
         retention-days: 7
 
   code-coverage:
