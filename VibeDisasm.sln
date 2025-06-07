@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "meta", "meta", "{AAFE18B6-D
 		Directory.Packages.props = Directory.Packages.props
 		.github\workflows\build-and-test.yml = .github\workflows\build-and-test.yml
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VibeDisasm.DecompilerEngine.Tests", "tests\VibeDisasm.DecompilerEngine.Tests\VibeDisasm.DecompilerEngine.Tests.csproj", "{9FEDE52C-1BEF-4128-AD8C-52AA9B92D524}"
