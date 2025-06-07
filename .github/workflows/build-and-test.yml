@@ -56,12 +56,12 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
-    
+
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    
+
     - name: Check for file changes
       uses: dorny/paths-filter@v3
       id: filter
@@ -76,23 +76,23 @@ jobs:
             - '!VibeDisasm.Web/frontend/**'
           frontend:
             - 'VibeDisasm.Web/frontend/**'
-  
+
   # Backend build - runs on backend changes or when manually triggered
   build-ubuntu:
     runs-on: ubuntu-latest
     needs: changes
     if: |
-      needs.changes.outputs.backend == 'true' || 
+      needs.changes.outputs.backend == 'true' ||
       github.event_name == 'workflow_dispatch' && github.event.inputs.run_backend_build == 'true'
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    
+
     - name: Cache NuGet packages
       uses: actions/cache@v4
       with:
@@ -102,19 +102,19 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-
           ${{ runner.os }}-nuget-
-    
+
     - name: Restore dependencies
       run: dotnet restore
-    
+
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
-    
+
     - name: Test
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
-      
+
     - name: Publish CfgVisualizer
       run: dotnet publish VibeDisasm.CfgVisualizer/VibeDisasm.CfgVisualizer.csproj --configuration ${{ env.CONFIGURATION }} --output ./publish/CfgVisualizer
-      
+
     - name: Upload CfgVisualizer artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -122,21 +122,21 @@ jobs:
         path: |
           ./publish/CfgVisualizer/**/*
         retention-days: 7
-  
+
   # Windows build - optional
   build-windows:
     # Only run when explicitly requested via workflow_dispatch
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_windows_build == 'true'
     runs-on: windows-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    
+
     - name: Cache NuGet packages
       uses: actions/cache@v4
       with:
@@ -146,30 +146,30 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-
           ${{ runner.os }}-nuget-
-    
+
     - name: Restore dependencies
       run: dotnet restore
-    
+
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
-    
+
     - name: Test
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
-        
+
   # macOS build - optional
   build-macos:
     # Only run when explicitly requested via workflow_dispatch
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_macos_build == 'true'
     runs-on: macos-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    
+
     - name: Cache NuGet packages
       uses: actions/cache@v4
       with:
@@ -179,46 +179,46 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-
           ${{ runner.os }}-nuget-
-    
+
     - name: Restore dependencies
       run: dotnet restore
-    
+
     - name: Build
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
-    
+
     - name: Test
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
-      
+
   # Build and test the Electron application
   build-electron:
     runs-on: ubuntu-latest
     needs: changes
     if: |
-      needs.changes.outputs.frontend == 'true' || 
+      needs.changes.outputs.frontend == 'true' ||
       github.event_name == 'workflow_dispatch' && github.event.inputs.run_frontend_build == 'true'
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'npm'
         cache-dependency-path: 'VibeDisasm.Web/frontend/vibe-disasm-front/package-lock.json'
-    
+
     - name: Install dependencies
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
       run: npm ci
-    
+
     - name: Build Angular app
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
       run: npm run build:prod
-    
+
     - name: Package Electron app for Linux
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
-      run: npm run electron:build:linux
-    
+      run: npm run electron-build-linux
+
     - name: Upload Electron artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -226,20 +226,20 @@ jobs:
         path: |
           VibeDisasm.Web/frontend/vibe-disasm-front/dist/electron/*
         retention-days: 7
-        
+
   code-coverage:
     runs-on: ubuntu-latest
     needs: build-ubuntu
     if: needs.changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch' && github.event.inputs.run_backend_build == 'true'
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    
+
     - name: Cache NuGet packages
       uses: actions/cache@v4
       with:
@@ -249,18 +249,18 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-${{ hashFiles('Directory.Packages.props') }}-
           ${{ runner.os }}-nuget-
-    
+
     - name: Install ReportGenerator
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
-    
+
     - name: Test with coverage
       run: |
         dotnet restore
         dotnet test --configuration ${{ env.CONFIGURATION }} --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
-    
+
     - name: Generate coverage report
       run: reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"./CoverageReport" -reporttypes:"HtmlInline_AzurePipelines;Cobertura;Badges"
-    
+
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
       with:

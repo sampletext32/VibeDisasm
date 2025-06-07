@@ -15,7 +15,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: process.env.NODE_ENV === 'development'
+      devTools: true || process.env.NODE_ENV === 'development'
     },
     autoHideMenuBar: true,
     frame: true
@@ -23,15 +23,17 @@ function createWindow() {
 
   // Load the app
   const startUrl = process.env.ELECTRON_START_URL || url.format({
-    pathname: path.join(__dirname, '../dist/vibe-disasm-front/index.html'),
+    pathname: path.join(__dirname, '../dist/vibe-disasm-front/browser/index.html'),
     protocol: 'file:',
     slashes: true
   });
 
-  mainWindow.loadURL(startUrl);
+  mainWindow.loadURL(startUrl)
+    .then(() => {alert('Application loaded successfully!');})
+    .catch(() => {alert('Failed to load the application. Please check the console for errors.');});
 
   // Open the DevTools in development mode
-  if (process.env.NODE_ENV === 'development') {
+  if (true || process.env.NODE_ENV === 'development') {
 
     // Open DevTools with specific settings
     mainWindow.webContents.openDevTools({

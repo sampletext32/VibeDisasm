@@ -13,33 +13,42 @@
       "electron/**/*"
     ],
     "win": {
-      "target": ["portable"]
+      "signAndEditExecutable": false,
+      "target": [
+        "portable"
+      ]
     },
     "linux": {
-      "target": ["AppImage"]
+      "target": [
+        "AppImage"
+      ]
     },
     "mac": {
-      "target": ["dmg"]
+      "target": [
+        "dmg"
+      ]
     }
   },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --configuration production",
+    "build-prod": "ng build --configuration production",
+    "build-prod-electron": "ng build --base-href ./ --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
     "electron": "electron .",
-    "electron:dev": "node electron/electron-dev.js",
-    "electron:build": "npm run build:prod && electron-builder build",
-    "electron:build:win": "npm run build:prod && electron-builder build --win",
-    "electron:build:mac": "npm run build:prod && electron-builder build --mac",
-    "electron:build:linux": "npm run build:prod && electron-builder build --linux"
+    "electron-dev": "node electron/electron-dev.js",
+    "electron-build": "npm run build-prod-electron && electron-builder build",
+    "electron-build-win": "npm run build-prod-electron && electron-builder build --win",
+    "electron-build-mac": "npm run build-prod-electron && electron-builder build --mac",
+    "electron-build-linux": "npm run build-prod-electron && electron-builder build --linux"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^20.0.1",
+    "@angular/build": "^20.0.1",
     "@angular/cdk": "^20.0.2",
     "@angular/common": "^20.0.1",
     "@angular/compiler": "^20.0.1",
@@ -59,6 +68,7 @@
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "electron": "^36.4.0",
+    "electron-builder": "24.6.3",
     "jasmine-core": "~4.0.0",
     "karma": "^6.4.0",
     "karma-chrome-launcher": "~3.1.0",
@@ -66,7 +76,6 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "typescript": "~5.8.3",
-    "wait-on": "^7.2.0",
-    "electron-builder": "^24.13.1"
+    "wait-on": "^7.2.0"
   }
 }
