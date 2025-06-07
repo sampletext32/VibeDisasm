@@ -2,15 +2,40 @@
   "name": "vibe-disasm-front",
   "version": "0.0.0",
   "main": "electron/main.js",
+  "build": {
+    "appId": "com.vibedisasm.app",
+    "productName": "VibeDisasm",
+    "directories": {
+      "output": "dist/electron"
+    },
+    "files": [
+      "dist/vibe-disasm-front/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": ["portable"]
+    },
+    "linux": {
+      "target": ["AppImage"]
+    },
+    "mac": {
+      "target": ["dmg"]
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "lint": "ng lint",
     "electron": "electron .",
-    "electron-dev": "node electron/electron-dev.js",
-    "electron-build": "ng build && electron ."
+    "electron:dev": "node electron/electron-dev.js",
+    "electron:build": "npm run build:prod && electron-builder build",
+    "electron:build:win": "npm run build:prod && electron-builder build --win",
+    "electron:build:mac": "npm run build:prod && electron-builder build --mac",
+    "electron:build:linux": "npm run build:prod && electron-builder build --linux"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +67,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "typescript": "~5.8.3",
-    "wait-on": "^7.2.0"
+    "wait-on": "^7.2.0",
+    "electron-builder": "^24.13.1"
   }
 }
