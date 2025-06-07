@@ -74,8 +74,10 @@ jobs:
             - 'Directory.Build.props'
             - 'Directory.Packages.props'
             - '!VibeDisasm.Web/frontend/**'
+            - '.github/workflows/build-and-test.yml'
           frontend:
             - 'VibeDisasm.Web/frontend/**'
+            - '.github/workflows/build-and-test.yml'
 
   # Backend build - runs on backend changes or when manually triggered
   build-ubuntu:
@@ -211,11 +213,7 @@ jobs:
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
       run: npm ci
 
-    - name: Build Angular app
-      working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
-      run: npm run build-prod-electron
-
-    - name: Package Electron app for Linux
+    - name: Build electron app
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
       run: npm run electron-build-linux
 
