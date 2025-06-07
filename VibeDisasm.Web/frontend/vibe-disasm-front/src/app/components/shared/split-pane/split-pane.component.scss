@@ -18,17 +18,18 @@
   }
 
   .resizer {
-    width: 8px;
-    background-color: #e0e0e0;
+    //width: 0.2em;
+    //background-color: #e0e0e0;
     cursor: col-resize;
     z-index: 1;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 30px;
+    font-size: 24px;
     text-align: center;
     user-select: none;
+    padding: 0.05em;
 
     &:hover, &.active {
       background-color: #cce8ff;

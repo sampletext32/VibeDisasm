@@ -3,6 +3,8 @@
   flex-direction: column;
   flex: 1 1 auto;
   height: 100%;
+  padding: 0.2em;
+  box-sizing: border-box;
 }
 
 .vertical {
@@ -11,7 +13,7 @@
   flex: 1 1 auto;
   height: 100%;
   overflow: hidden;
-  
+
   app-split-pane {
     flex: 1 1 auto;
     height: 100%;
@@ -24,10 +26,10 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  
+
   .line {
     display: flex;
-    
+
     .item {
       flex: 1;
     }
@@ -60,8 +62,8 @@
 
   .window-content {
     flex: 1 1 auto;
-    padding: 0.3em;
-    border: 1px solid #d9d9d9;
+    padding: 0.5em;
+    border: 1px solid #808080;
     box-sizing: border-box;
     overflow-y: auto;
     height: calc(100% - 30px); /* Adjust based on header height */
