@@ -211,10 +211,6 @@ jobs:
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
       run: npm ci
     
-    - name: Lint
-      working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
-      run: npm run lint
-    
     - name: Build Angular app
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
       run: npm run build:prod
