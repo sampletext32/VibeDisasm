@@ -16,7 +16,9 @@ function createWindow() {
       nodeIntegration: true,
       contextIsolation: false,
       devTools: process.env.NODE_ENV === 'development'
-    }
+    },
+    autoHideMenuBar: true,
+    frame: true
   });
 
   // Load the app
