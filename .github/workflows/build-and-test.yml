@@ -213,7 +213,7 @@ jobs:
 
     - name: Build Angular app
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front
-      run: npm run build:prod
+      run: npm run build-prod-electron
 
     - name: Package Electron app for Linux
       working-directory: VibeDisasm.Web/frontend/vibe-disasm-front

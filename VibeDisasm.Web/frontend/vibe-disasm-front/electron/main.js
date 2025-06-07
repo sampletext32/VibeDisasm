@@ -5,10 +5,8 @@ const url = require('url');
 let mainWindow;
 
 function createWindow() {
-  // Add command line switches to disable problematic features
   app.commandLine.appendSwitch('disable-features', 'AutofillServerCommunication,PasswordGeneration');
 
-  // Create the browser window
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
