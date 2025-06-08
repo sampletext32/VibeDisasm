@@ -24,8 +24,7 @@ export class NewProjectDialogComponent implements OnInit {
     constructor(
         private fb: UntypedFormBuilder,
         private dialogRef: MatDialogRef<NewProjectDialogComponent>,
-        private apiService: ApiService,
-        private stateService: StateService
+        private apiService: ApiService
     ) {
     }
 
@@ -43,14 +42,7 @@ export class NewProjectDialogComponent implements OnInit {
             this.apiService.createProject(title).subscribe({
                 next: (projectId) => {
                     this.isCreating = false;
-                    // Return the project details to the caller
-                    const newProject: Project = {
-                        id: projectId,
-                        title: title,
-                        createdAt: new Date().toISOString()
-                    };
-                    this.stateService.setProjectId(projectId);
-                    this.dialogRef.close(newProject);
+                    this.dialogRef.close(projectId);
                 },
                 error: (error) => {
                     this.isCreating = false;

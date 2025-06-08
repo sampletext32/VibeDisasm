@@ -22,6 +22,7 @@ public class CreateProjectHandler
         }
 
         var project = new UserRuntimeProject() {Id = Guid.NewGuid(), Title = request.Title, CreatedAt = DateTime.UtcNow};
+
         await _repository.Add(project);
 
         return Result.Ok(project.Id);

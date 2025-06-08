@@ -6,6 +6,7 @@ using VibeDisasm.Web.Handlers;
 using VibeDisasm.Web.Models;
 using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;
+using VibeDisasm.Web.Services;
 using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,22 +31,22 @@ builder.Services.AddSingleton<UserRuntimeProjectRepository>();
 builder.Services.AddSingleton<UserProgramRepository>();
 builder.Services.AddSingleton<UserProgramDataRepository>();
 
-// Register state services
-builder.Services.AddSingleton<AppState>();
-
 // Register handlers
 builder.Services.AddSingleton<CreateProjectHandler>();
-builder.Services.AddSingleton<OpenProjectHandler>();
-builder.Services.AddSingleton<ListProjectsHandler>();
+builder.Services.AddSingleton<OpenRecentHandler>();
+builder.Services.AddSingleton<ListRecentsHandler>();
 builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
 builder.Services.AddSingleton<GetProgramPeDataHandler>();
 builder.Services.AddSingleton<SaveProjectHandler>();
 
 builder.Services.AddSingleton<ProjectArchiveService>();
-
+builder.Services.AddSingleton<RecentsService>();
 
 var app = builder.Build();
+
+await app.Services.GetRequiredService<RecentsService>()
+    .TryLoad();
 
 app.UseDeveloperExceptionPage();
 
@@ -59,4 +60,4 @@ app.MapProjectEndpoints();
 app.MapProgramEndpoints();
 app.MapProgramPeDataEndpoints();
 
-app.Run();
+await app.RunAsync();

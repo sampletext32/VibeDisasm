@@ -2,6 +2,7 @@
 using NativeFileDialogSharp;
 using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;
+using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Handlers;
 
@@ -9,11 +10,13 @@ public class SaveProjectHandler
 {
     private readonly ProjectArchiveService _archiveService;
     private readonly UserRuntimeProjectRepository _repository;
+    private readonly RecentsService _recentsService;
 
-    public SaveProjectHandler(ProjectArchiveService archiveService, UserRuntimeProjectRepository repository)
+    public SaveProjectHandler(ProjectArchiveService archiveService, UserRuntimeProjectRepository repository, RecentsService recentsService)
     {
         _archiveService = archiveService;
         _repository = repository;
+        _recentsService = recentsService;
     }
 
     public async Task<Result> Handle(Guid projectId)
@@ -47,6 +50,8 @@ public class SaveProjectHandler
         }
 
         await _archiveService.Save(runtimeProject);
+
+        _recentsService.Track(runtimeProject.ProjectArchivePath);
 
         return Result.Ok();
     }

@@ -9,11 +9,9 @@ namespace VibeDisasm.Web.Handlers;
 public class ListProgramsHandler
 {
     private readonly UserProgramRepository _repository;
-    private readonly AppState _state;
 
-    public ListProgramsHandler(AppState state, UserProgramRepository repository)
+    public ListProgramsHandler(UserProgramRepository repository)
     {
-        _state = state;
         _repository = repository;
     }
 
@@ -21,10 +19,6 @@ public class ListProgramsHandler
     public async Task<Result<IEnumerable<ProgramDetailsDto>>> Handle()
     {
         var userPrograms = await _repository.GetAll();
-        if (_state.ActiveProject is null)
-        {
-            return Result.Fail("Active project is not set.");
-        }
 
         var programDetails = userPrograms.Select(
             p => new ProgramDetailsDto(

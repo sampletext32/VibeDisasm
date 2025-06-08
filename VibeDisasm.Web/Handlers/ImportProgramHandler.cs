@@ -7,21 +7,14 @@ namespace VibeDisasm.Web.Handlers;
 public class ImportProgramHandler
 {
     private readonly UserProgramRepository _repository;
-    private readonly AppState _state;
 
-    public ImportProgramHandler(UserProgramRepository repository, AppState state)
+    public ImportProgramHandler(UserProgramRepository repository)
     {
         _repository = repository;
-        _state = state;
     }
 
     public async Task<Result<Guid>> Handle()
     {
-        if (_state.ActiveProject is null)
-        {
-            return Result.Fail("No project is opened");
-        }
-
         var dialog = NativeFileDialogSharp.Dialog.FileOpen("dll,exe");
 
         if (dialog.IsOk)

@@ -134,6 +134,12 @@ export interface Project {
   createdAt: string;
 }
 
+export interface RecentMetadata {
+  projectId: string,
+  path: string,
+  lastOpened: string,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -150,12 +156,12 @@ export class ApiService {
     return this.http.post<string>(`${this.baseUrl}/projects/save/${projectId}`, {});
   }
 
-  listProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(`${this.baseUrl}/projects/list`);
+  recentProjects(): Observable<RecentMetadata[]> {
+    return this.http.get<RecentMetadata[]>(`${this.baseUrl}/projects/recent`);
   }
 
-  openProject(projectId: string): Observable<boolean> {
-    return this.http.post<boolean>(`${this.baseUrl}/projects/open/${projectId}`, {});
+  openRecent(projectId: string): Observable<boolean> {
+    return this.http.post<boolean>(`${this.baseUrl}/projects/open-recent/${projectId}`, {});
   }
 
   importProgram(projectId: string): Observable<string> {

@@ -18,40 +18,39 @@
       </div>
     }
 
-    @if (!loading && projects.length === 0) {
+    @if (!loading && recents.length === 0) {
       <div class="empty-state">
         <mat-icon class="empty-icon">folder_open</mat-icon>
-        <p>No projects found. Create a new project to get started.</p>
+        <p>It seems like you don't have any projects. Create a new project to get started.</p>
       </div>
     }
 
-    @if (!loading && projects.length > 0) {
+    @if (!loading && recents.length > 0) {
       <div class="projects-grid">
-        @for (project of projects; track project) {
+        @for (recent of recents; track recent) {
           <mat-card class="project-card mat-elevation-z2"
-            (click)="openingProjectId !== project.id && viewPrograms(project)"
-            [class.loading]="openingProjectId === project.id">
-            @if (openingProjectId === project.id) {
+            (click)="openingProjectId !== recent.projectId && openRecent(recent)"
+            [class.loading]="openingProjectId === recent.projectId">
+            @if (openingProjectId === recent.projectId) {
               <div class="card-loading-overlay">
                 <mat-spinner diameter="40"></mat-spinner>
               </div>
             }
             <mat-card-header>
               <mat-icon mat-card-avatar>folder</mat-icon>
-              <mat-card-title>{{ project.title || 'Untitled Project' }}</mat-card-title>
-              <mat-card-subtitle class="project-id monospace">ID: {{ project.id }}</mat-card-subtitle>
+              <mat-card-title>{{ recent.path || 'Unknown Project' }}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
               <div class="project-metadata">
                 <div class="metadata-item">
                   <mat-icon class="metadata-icon">calendar_today</mat-icon>
-                  <span>Created: {{ (project.createdAt | date:'short') || 'Unknown' }}</span>
+                  <span>Last opened at: {{ (recent.lastOpened | date:'medium') || 'Unknown' }}</span>
                 </div>
               </div>
             </mat-card-content>
             <div class="card-hint">
-              <mat-icon>{{ openingProjectId === project.id ? 'hourglass_empty' : 'touch_app' }}</mat-icon>
-              <span>{{ openingProjectId === project.id ? 'Opening project...' : 'Click to view programs' }}</span>
+              <mat-icon>{{ openingProjectId === recent.projectId ? 'hourglass_empty' : 'touch_app' }}</mat-icon>
+              <span>{{ openingProjectId === recent.projectId ? 'Opening project...' : 'Click to view programs' }}</span>
             </div>
           </mat-card>
         }

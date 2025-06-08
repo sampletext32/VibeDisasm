@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Handlers;
+using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Endpoints;
 
@@ -15,13 +16,13 @@ public static class ProjectEndpoints
             .WithName("CreateProject")
             .WithDescription("Creates a new project with the specified title");
 
-        group.MapPost("/open/{projectId:guid}", OpenProject)
-            .WithName("OpenProject")
-            .WithDescription("Opens an existing project by its ID");
+        group.MapPost("/open-recent/{recentId:guid}", OpenRecent)
+            .WithName("OpenRecent")
+            .WithDescription("Opens a project from recent list by its ID");
 
-        group.MapGet("/list", ListProjects)
-            .WithName("ListProjects")
-            .WithDescription("Returns a list of all projects");
+        group.MapGet("/recent", RecentProjects)
+            .WithName("RecentProjects")
+            .WithDescription("Returns a list of projects that were recently opened");
 
         group.MapPost("/save/{projectId:guid}", SaveProject)
             .WithName("SaveProject")
@@ -47,15 +48,15 @@ public static class ProjectEndpoints
     }
 
     /// <summary>
-    /// Creates a new project
+    /// Opens a project from the recent list by its ID
     /// </summary>
     /// <response code="200">When open was successful</response>
     /// <response code="400">If the opening failed</response>
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    private static async Task<IResult> OpenProject(OpenProjectHandler handler, Guid projectId)
+    private static async Task<IResult> OpenRecent(OpenRecentHandler handler, Guid recentId)
     {
-        var result = await handler.Handle(projectId);
+        var result = await handler.Handle(recentId);
         return result.IsSuccess
             ? Results.Ok()
             : Results.BadRequest(
@@ -65,13 +66,13 @@ public static class ProjectEndpoints
     }
 
     /// <summary>
-    /// Lists all projects
+    /// Returns a list of recently opened projects
     /// </summary>
-    /// <response code="200">Returns a list of all projects</response>
-    /// <response code="400">If an error occurs while retrieving projects</response>
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProjectDetailsDto>))]
+    /// <response code="200">In theory always 200</response>
+    /// <response code="400">In theory, should never happen</response>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RecentJsonMetadata>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    private static async Task<IResult> ListProjects(ListProjectsHandler handler)
+    private static async Task<IResult> RecentProjects(ListRecentsHandler handler)
     {
         var result = await handler.Handle();
         return result.IsSuccess
