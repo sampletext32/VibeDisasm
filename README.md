@@ -118,20 +118,21 @@ This project is released into the public domain under the Unlicense - see the [L
 
 ## TODOS:
 
-- Backend: add save/load AppState on startup
-- Backend: add type system to backend (built-in types and user-defined)
-- Backend: think of how to store listing database (probably like a dictionary with address and over-mapped type, how to handle assembly code?)
-- Backend: add access to listing database from UI (probably fetch by an address range)
-- Backend: expose graph of assembly blocks (by function address)
-- Backend: when analyzing function, try to find a null-terminated string from a constant address, pointing to .data section (add to database?) 
+- [x] Backend: add save/load AppState on startup (app state removed in favor of regular repositories)
+- [x] Backend: save/load recent projects
+- [ ] Backend: add type system to backend (built-in types and user-defined)
+- [ ] Backend: think of how to store listing database (probably like a dictionary with address and over-mapped type, how to handle assembly code?)
+- [ ] Backend: add access to listing database from UI (probably fetch by an address range)
+- [ ] Backend: expose graph of assembly blocks (by function address)
+- [ ] Backend: when analyzing function, try to find a null-terminated string from a constant address, pointing to .data section (add to database?) 
 
-- Frontend: enhance listing UI with data from prev step.
-- Frontend: implement listing highlighting (e.g. assembly instructions, registers, etc.)
-- Frontend: when in listing Ctrl+C should copy current element to clipboard
-- Frontend: add context menu to listing (only copy for now, will be extended later)
-- Frontend: refactor tooltip from header into a separate component
-- Frontend: add tooltips to context menu in listing
-- Frontend: Desirable: add tooltip to assembly keywords in listing
-- Frontend: implement assembly block graph UI.
-- Frontend: implement popup for function selection (probably add an option to toolbar)
+- [ ] Frontend: enhance listing UI with data from prev step.
+- [ ] Frontend: implement listing highlighting (e.g. assembly instructions, registers, etc.)
+- [ ] Frontend: when in listing Ctrl+C should copy current element to clipboard
+- [ ] Frontend: add context menu to listing (only copy for now, will be extended later)
+- [ ] Frontend: refactor tooltip from header into a separate component
+- [ ] Frontend: add tooltips to context menu in listing
+- [ ] Frontend: Desirable: add tooltip to assembly keywords in listing
+- [ ] Frontend: implement assembly block graph UI.
+- [ ] Frontend: implement popup for function selection (probably add an option to toolbar)
 
