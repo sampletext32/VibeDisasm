@@ -4,6 +4,7 @@ using VibeDisasm.Web.Endpoints;
 using VibeDisasm.Web.Extensions;
 using VibeDisasm.Web.Handlers;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;
 using MvcJsonOptions = Microsoft.AspNetCore.Mvc.JsonOptions;
 
@@ -25,7 +26,7 @@ builder.Services.ConfigureHttpJsonOptions(
 builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-builder.Services.AddSingleton<UserProjectRepository>();
+builder.Services.AddSingleton<UserRuntimeProjectRepository>();
 builder.Services.AddSingleton<UserProgramRepository>();
 builder.Services.AddSingleton<UserProgramDataRepository>();
 
@@ -39,6 +40,9 @@ builder.Services.AddSingleton<ListProjectsHandler>();
 builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
 builder.Services.AddSingleton<GetProgramPeDataHandler>();
+builder.Services.AddSingleton<SaveProjectHandler>();
+
+builder.Services.AddSingleton<ProjectArchiveService>();
 
 
 var app = builder.Build();

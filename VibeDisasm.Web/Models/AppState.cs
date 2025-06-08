@@ -2,5 +2,5 @@
 
 public class AppState
 {
-    public UserProject? ActiveProject { get; set; }
+    public UserRuntimeProject? ActiveProject { get; set; }
 }

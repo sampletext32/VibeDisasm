@@ -7,9 +7,9 @@ namespace VibeDisasm.Web.Handlers;
 
 public class ListProjectsHandler
 {
-    private readonly UserProjectRepository _repository;
+    private readonly UserRuntimeProjectRepository _repository;
 
-    public ListProjectsHandler(UserProjectRepository repository)
+    public ListProjectsHandler(UserRuntimeProjectRepository repository)
     {
         _repository = repository;
     }

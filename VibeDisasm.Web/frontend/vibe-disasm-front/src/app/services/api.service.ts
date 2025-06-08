@@ -146,6 +146,10 @@ export class ApiService {
     return this.http.post<string>(`${this.baseUrl}/projects/create`, { title });
   }
 
+  saveProject(projectId: string): Observable<string> {
+    return this.http.post<string>(`${this.baseUrl}/projects/save/${projectId}`, {});
+  }
+
   listProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.baseUrl}/projects/list`);
   }
@@ -162,11 +166,6 @@ export class ApiService {
   listPrograms(projectId: string): Observable<Program[]> {
     const params = new HttpParams().set('projectId', projectId);
     return this.http.get<Program[]>(`${this.baseUrl}/programs/byproject`, { params });
-  }
-
-  // PE Data methods
-  getProgramDetails(programId: string): Observable<Program> {
-    return this.http.get<Program>(`${this.baseUrl}/programs/${programId}`);
   }
 
   getPeInfo(programId: string): Observable<PeInfo> {

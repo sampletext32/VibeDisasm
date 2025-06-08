@@ -44,6 +44,11 @@
   &:hover {
     background-color: #e5f3ff;
   }
+
+    &.disabled {
+        color: #aaa;
+        cursor: not-allowed;
+    }
 }
 
 .custom-tooltip {

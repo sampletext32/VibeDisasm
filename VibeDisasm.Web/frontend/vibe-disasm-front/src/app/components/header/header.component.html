@@ -10,6 +10,12 @@
           <div class="dropdown-item" (click)="openProject($event)" (mouseenter)="showTooltip('open-project', $event)"
                (mouseleave)="hideTooltip()">Open Project
           </div>
+          <div class="dropdown-item" [class.disabled]="isSaving()" (click)="saveProject($event)" (mouseenter)="showTooltip('save-project', $event)"
+               (mouseleave)="hideTooltip()">Save Project
+          </div>
+          <div class="dropdown-item" (click)="closeProject($event)" (mouseenter)="showTooltip('close-project', $event)"
+               (mouseleave)="hideTooltip()">Close Project
+          </div>
         </div>
       }
     </div>

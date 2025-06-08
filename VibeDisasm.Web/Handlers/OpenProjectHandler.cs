@@ -6,9 +6,9 @@ namespace VibeDisasm.Web.Handlers;
 
 public class OpenProjectHandler
 {
-    private readonly UserProjectRepository _repository;
+    private readonly UserRuntimeProjectRepository _repository;
     private readonly AppState _state;
-    public OpenProjectHandler(UserProjectRepository repository, AppState state)
+    public OpenProjectHandler(UserRuntimeProjectRepository repository, AppState state)
     {
         _repository = repository;
         _state = state;
