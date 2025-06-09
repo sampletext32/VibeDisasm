@@ -15,6 +15,5 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.isElectron = this.electronService.isElectron;
-    console.log('Running in Electron:', this.isElectron);
   }
 }

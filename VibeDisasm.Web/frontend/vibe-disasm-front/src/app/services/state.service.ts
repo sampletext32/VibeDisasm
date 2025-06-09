@@ -9,16 +9,13 @@ export class StateService {
   constructor() {
   }
 
-  public setProjectId(projectId: string | undefined): void {
-    if (projectId === undefined) {
-      localStorage.removeItem('projectId');
-      return;
-    }
+  public setProjectId(projectId: string): void {
     localStorage.setItem('projectId', projectId);
   }
 
   public getProjectId(): string {
-    return localStorage.getItem('projectId') || '';
+    let projectId = localStorage.getItem('projectId') ?? '';
+    return projectId ?? '';
   }
 
   public setSaving(saving: boolean): void {

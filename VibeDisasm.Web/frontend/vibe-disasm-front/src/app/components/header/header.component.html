@@ -7,13 +7,13 @@
           <div class="dropdown-item" (click)="createNewProject($event)"
                (mouseenter)="showTooltip('new-project', $event)" (mouseleave)="hideTooltip()">New Project
           </div>
-          <div class="dropdown-item" (click)="openProject($event)" (mouseenter)="showTooltip('open-project', $event)"
-               (mouseleave)="hideTooltip()">Open Project
+          <div class="dropdown-item" (click)="recentProjects($event)" (mouseenter)="showTooltip('recent-project', $event)"
+               (mouseleave)="hideTooltip()">Recent Project
           </div>
-          <div class="dropdown-item" [class.disabled]="isSaving()" (click)="saveProject($event)" (mouseenter)="showTooltip('save-project', $event)"
+          <div class="dropdown-item" [class.disabled]="!isProjectOpened() || isSaving()" (click)="saveProject($event)" (mouseenter)="showTooltip('save-project', $event)"
                (mouseleave)="hideTooltip()">Save Project
           </div>
-          <div class="dropdown-item" (click)="closeProject($event)" (mouseenter)="showTooltip('close-project', $event)"
+          <div class="dropdown-item" [class.disabled]="!isProjectOpened()" (click)="closeProject($event)" (mouseenter)="showTooltip('close-project', $event)"
                (mouseleave)="hideTooltip()">Close Project
           </div>
         </div>

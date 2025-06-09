@@ -56,10 +56,7 @@ export class ProgramsComponent implements OnInit {
   importProgram(): void {
     this.loading = true;
     this.apiService.importProgram(this.projectId)
-      .pipe(finalize(() => {
-        // Only set loading to false if we're not immediately loading programs
-        // which would set its own loading state
-      }))
+      .pipe(finalize(() => {}))
       .subscribe({
         next: (programId) => {
           this.snackBar.open('Program imported successfully', 'Close', {

@@ -45,10 +45,11 @@
     background-color: #e5f3ff;
   }
 
-    &.disabled {
-        color: #aaa;
-        cursor: not-allowed;
-    }
+  &.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }
 
 .custom-tooltip {

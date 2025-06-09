@@ -4,6 +4,7 @@ import {ElectronService} from "../../services/electron.service";
 import {StateService} from "../../services/state.service";
 import {ApiService} from "../../services/api.service";
 import {finalize} from "rxjs/operators";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'app-header',
@@ -24,24 +25,26 @@ export class HeaderComponent implements OnInit {
     isSaving: () => boolean =
         () => this.stateService.getSaving();
 
+    isProjectOpened: () => boolean =
+        () => this.stateService.getProjectId() !== '';
+
     constructor(
         private electronService: ElectronService,
         private router: Router,
         private stateService: StateService,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private snackBar: MatSnackBar
     ) {
     }
 
     ngOnInit(): void {
         this.isElectron = this.electronService.isElectron;
-        console.log('Running in Electron:', this.isElectron);
     }
 
-    // Tooltip content mapping
     private tooltipMap: Record<string, string> = {
         'file-menu': 'File operations',
         'new-project': 'Create a new project',
-        'open-project': 'Open an existing project',
+        'recent-project': 'Go to recent projects',
         'save-project': 'Saves current project to an archive',
         'edit-menu': 'Edit operations',
         'cut': 'Cut selected content',
@@ -60,18 +63,27 @@ export class HeaderComponent implements OnInit {
         this.hideTooltip();
         this.activeMenu = null;
         // TODO: implement project creation logic (use new-project-dialog)
-        console.log('Create new project');
+        alert('TODO: implement project creation logic (use new-project-dialog)');
     }
 
-    openProject(event: Event): void {
+    recentProjects(event: Event): void {
         event.stopPropagation();
+        this.router.navigate(['/projects']);
         this.hideTooltip();
         this.activeMenu = null;
-        this.router.navigate(['/projects']);
     }
 
     saveProject(event: MouseEvent) {
         event.stopPropagation();
+        this.hideTooltip();
+        this.activeMenu = null;
+        if (this.stateService.getProjectId() === '') {
+            this.snackBar.open('No project is opened', 'Close', {
+                duration: 3000,
+                panelClass: ['error-snackbar']
+            });
+            return;
+        }
         this.stateService.setSaving(true);
         this.apiService.saveProject(this.stateService.getProjectId())
             .pipe(finalize(() => {
@@ -82,7 +94,16 @@ export class HeaderComponent implements OnInit {
 
     closeProject(event: MouseEvent) {
         event.stopPropagation();
-        this.stateService.setProjectId(undefined);
+        this.hideTooltip();
+        this.activeMenu = null;
+        if (this.stateService.getProjectId() === '') {
+            this.snackBar.open('No project is opened', 'Close', {
+                duration: 3000,
+                panelClass: ['error-snackbar']
+            });
+            return;
+        }
+        this.stateService.setProjectId('');
         this.router.navigate(['/projects']);
     }
 
@@ -97,8 +118,7 @@ export class HeaderComponent implements OnInit {
         if (this.tooltipText) {
             this.tooltipVisible = true;
 
-            // Position the tooltip near the cursor
-            const offset = 50; // Offset from cursor
+            const offset = 50;
             this.tooltipTop = event.clientY;
             if (!left) {
                 this.tooltipLeft = event.clientX + offset;

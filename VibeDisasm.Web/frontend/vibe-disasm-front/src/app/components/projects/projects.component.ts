@@ -5,6 +5,7 @@ import {finalize} from 'rxjs/operators';
 import {ApiService, Project, RecentMetadata} from '../../services/api.service';
 import {NewProjectDialogComponent} from '../new-project-dialog/new-project-dialog.component';
 import {StateService} from "../../services/state.service";
+import {ConfirmDialogComponent, ConfirmDialogData} from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-projects',
@@ -50,31 +51,25 @@ export class ProjectsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
         this.stateService.setProjectId(result);
         this.router.navigate(['/programs', result]);
       }
     });
   }
 
-  // Track loading state for each project
   openingProjectId: string | null = null;
 
   openRecent(recent: RecentMetadata): void {
-    // Set loading state for this specific project
     this.openingProjectId = recent.projectId;
 
-    // Call the openProject endpoint
     this.apiService.openRecent(recent.projectId)
       .pipe(finalize(() => this.openingProjectId = null))
       .subscribe({
         next: () => {
-          // Only navigate after successful response
           this.router.navigate(['/programs', recent.projectId]);
         },
         error: (error) => {
           console.error('Error opening recent', error);
-          // Error handling is managed by the HTTP interceptor
         }
       });
   }
@@ -86,19 +81,27 @@ export class ProjectsComponent implements OnInit {
       return;
     }
 
-    this.deleteProjectId = recent.projectId;
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: <ConfirmDialogData>{
+        text: 'Are you sure you want to remove this recent project? This action cannot be undone.'
+      }
+    });
 
-    // Call the openProject endpoint
-    this.apiService.deleteRecent(recent.projectId)
-      .pipe(finalize(() => this.deleteProjectId = null))
-      .subscribe({
-        next: () => {
-          this.recents = this.recents.filter(x => x.projectId !== recent.projectId);
-        },
-        error: (error) => {
-          console.error('Error removing recent', error);
-          // Error handling is managed by the HTTP interceptor
-        }
-      });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteProjectId = recent.projectId;
+        this.apiService.deleteRecent(recent.projectId)
+          .pipe(finalize(() => this.deleteProjectId = null))
+          .subscribe({
+            next: () => {
+              this.recents = this.recents.filter(x => x.projectId !== recent.projectId);
+            },
+            error: (error) => {
+              console.error('Error removing recent', error);
+            }
+          });
+      }
+    });
   }
 }

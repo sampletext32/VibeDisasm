@@ -33,6 +33,7 @@ import {MatSortModule} from '@angular/material/sort';
 
 // Interceptors
 import {ErrorInterceptor} from './interceptors/error-interceptor';
+import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import {ErrorInterceptor} from './interceptors/error-interceptor';
     ProgramDetailComponent,
     WorkspaceComponent,
     SplitPaneComponent,
+    ConfirmDialogComponent,
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     AppRoutingModule,
