@@ -2,14 +2,12 @@
 
 namespace VibeDisasm.Web.Services;
 
-public record RecentJsonMetadata(Guid ProjectId, string Path, DateTime LastOpened);
-
 /// <summary>
 /// Service for loading and managing recently opened projects.
 /// </summary>
 public class RecentsService
 {
-    private HashSet<RecentJsonMetadata> _recents = [];
+    private List<RecentJsonMetadata> _recents = [];
 
     private readonly ILogger<RecentsService> _logger;
 
@@ -64,7 +62,7 @@ public class RecentsService
 
         var text = await File.ReadAllTextAsync(path);
 
-        var recents = JsonSerializer.Deserialize<HashSet<RecentJsonMetadata>>(text);
+        var recents = JsonSerializer.Deserialize<List<RecentJsonMetadata>>(text);
 
         _recents = recents ?? [];
 
