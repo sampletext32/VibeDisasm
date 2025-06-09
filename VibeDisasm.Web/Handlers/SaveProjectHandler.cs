@@ -49,7 +49,15 @@ public class SaveProjectHandler
             }
         }
 
-        await _archiveService.Save(runtimeProject);
+        var saveResult = await _archiveService.Save(runtimeProject);
+
+        if (saveResult.IsFailed)
+        {
+            return Result.Fail(
+                "Failed to save project archive. " + saveResult.Errors.FirstOrDefault()
+                    ?.Message
+            );
+        }
 
         _recentsService.Track(runtimeProject.ProjectArchivePath);
 

@@ -7,11 +7,11 @@ namespace VibeDisasm.Web.ProjectArchive;
 
 public class ProjectArchiveService
 {
-    public async Task Save(UserRuntimeProject runtimeProject)
+    public async Task<Result> Save(UserRuntimeProject runtimeProject)
     {
         if (runtimeProject.ProjectArchivePath is null)
         {
-            throw new InvalidOperationException("Project archive path is not set. Cannot save project.");
+            return Result.Fail("Project archive path is not set. Cannot save project.");
         }
 
         await using var stream = new FileStream(runtimeProject.ProjectArchivePath, FileMode.OpenOrCreate);
@@ -21,7 +21,7 @@ public class ProjectArchiveService
         await using var metadataStream = metadataEntry.Open();
         await JsonSerializer.SerializeAsync(metadataStream, new ProjectArchiveMetadata(runtimeProject.Title, runtimeProject.CreatedAt));
 
-        runtimeProject.ProjectArchivePath = runtimeProject.ProjectArchivePath;
+        return Result.Ok();
     }
 
     public async Task<Result<UserRuntimeProject>> Load(string projectArchiveAbsolutePath)
