@@ -21,11 +21,6 @@ public class RecentsService
     private void OnApplicationStopping()
     {
         _logger.LogInformation("Application is stopping, saving recents...");
-        if (_recents.Count == 0)
-        {
-            _logger.LogInformation("No recents to save, skipping.");
-            return;
-        }
 
         var path = Path.Combine(Environment.CurrentDirectory, "recents.json");
 
@@ -75,7 +70,7 @@ public class RecentsService
         if (existingRecent is not null)
         {
             _recents.Remove(existingRecent);
-            existingRecent = existingRecent with { LastOpened = DateTime.UtcNow };
+            existingRecent = existingRecent with {LastOpened = DateTime.UtcNow};
         }
         else
         {
@@ -83,5 +78,19 @@ public class RecentsService
         }
 
         _recents.Add(existingRecent);
+    }
+
+    public void RemoveByProjectId(Guid projectId)
+    {
+        var existingRecent = _recents.FirstOrDefault(x => x.ProjectId == projectId);
+        if (existingRecent is not null)
+        {
+            _logger.LogInformation("Removing recent project: {ProjectId} - {Path}", existingRecent.ProjectId, existingRecent.Path);
+            _recents.Remove(existingRecent);
+        }
+        else
+        {
+            _logger.LogWarning("Attempted to remove recent project with ID {ProjectId}, but it was not found.", projectId);
+        }
     }
 }

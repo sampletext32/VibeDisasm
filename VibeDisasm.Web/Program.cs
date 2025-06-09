@@ -39,6 +39,7 @@ builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
 builder.Services.AddSingleton<GetProgramPeDataHandler>();
 builder.Services.AddSingleton<SaveProjectHandler>();
+builder.Services.AddSingleton<DeleteRecentHandler>();
 
 builder.Services.AddSingleton<ProjectArchiveService>();
 builder.Services.AddSingleton<RecentsService>();

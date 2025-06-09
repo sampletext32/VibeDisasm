@@ -28,9 +28,7 @@
     @if (!loading && recents.length > 0) {
       <div class="projects-grid">
         @for (recent of recents; track recent) {
-          <mat-card class="project-card mat-elevation-z2"
-            (click)="openingProjectId !== recent.projectId && openRecent(recent)"
-            [class.loading]="openingProjectId === recent.projectId">
+          <mat-card class="project-card mat-elevation-z2" [class.loading]="openingProjectId === recent.projectId">
             @if (openingProjectId === recent.projectId) {
               <div class="card-loading-overlay">
                 <mat-spinner diameter="40"></mat-spinner>
@@ -48,9 +46,24 @@
                 </div>
               </div>
             </mat-card-content>
-            <div class="card-hint">
+
+            <div class="card-hint"
+                 (click)="openingProjectId !== recent.projectId && openRecent(recent)">
               <mat-icon>{{ openingProjectId === recent.projectId ? 'hourglass_empty' : 'touch_app' }}</mat-icon>
               <span>{{ openingProjectId === recent.projectId ? 'Opening project...' : 'Click to view programs' }}</span>
+            </div>
+
+            <div class="delete-block"
+                 (click)="deleteRecent(recent, $event)"
+                 [class.disabled]="deleteProjectId === recent.projectId">
+              @if (deleteProjectId === recent.projectId) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <mat-icon>delete</mat-icon>
+              }
+              <div class="delete">
+                Delete
+              </div>
             </div>
           </mat-card>
         }

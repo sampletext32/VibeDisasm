@@ -24,6 +24,10 @@ public static class ProjectEndpoints
             .WithName("RecentProjects")
             .WithDescription("Returns a list of projects that were recently opened");
 
+        group.MapPost("/delete-recent/{recentId:guid}", DeleteRecent)
+            .WithName("DeleteRecent")
+            .WithDescription("Removes a project from the recent list by its ID");
+
         group.MapPost("/save/{projectId:guid}", SaveProject)
             .WithName("SaveProject")
             .WithDescription("Saves the project to an archive");
@@ -77,6 +81,24 @@ public static class ProjectEndpoints
         var result = await handler.Handle();
         return result.IsSuccess
             ? Results.Ok(result.Value)
+            : Results.BadRequest(
+                result.Errors.First()
+                    .Message
+            );
+    }
+
+    /// <summary>
+    /// Deletes a project from the recent list by its ID
+    /// </summary>
+    /// <response code="200">In theory always 200</response>
+    /// <response code="400">In theory, should never happen</response>
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> DeleteRecent(DeleteRecentHandler handler, Guid recentId)
+    {
+        var result = await handler.Handle(recentId);
+        return result.IsSuccess
+            ? Results.Ok()
             : Results.BadRequest(
                 result.Errors.First()
                     .Message
