@@ -37,7 +37,14 @@ public class OpenRecentHandler
             return Result.Ok();
         }
 
-        var projectFromArchive = await _archiveService.Load(recent.Path);
+        var loadArchiveResult = await _archiveService.Load(recent.Path);
+
+        if (loadArchiveResult.IsFailed)
+        {
+            return Result.Fail("Failed to load project from archive. " + loadArchiveResult.Errors.FirstOrDefault()?.Message);
+        }
+
+        var projectFromArchive = loadArchiveResult.Value;
 
         await _repository.Add(projectFromArchive);
 

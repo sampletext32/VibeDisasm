@@ -1,5 +1,6 @@
 ﻿using System.IO.Compression;
 using System.Text.Json;
+using FluentResults;
 using VibeDisasm.Web.Models;
 
 namespace VibeDisasm.Web.ProjectArchive;
@@ -23,9 +24,14 @@ public class ProjectArchiveService
         runtimeProject.ProjectArchivePath = runtimeProject.ProjectArchivePath;
     }
 
-    public async Task<UserRuntimeProject> Load(string projectArchiveAbsolutePath)
+    public async Task<Result<UserRuntimeProject>> Load(string projectArchiveAbsolutePath)
     {
         // Create a new project archive
+        if (!File.Exists(projectArchiveAbsolutePath))
+        {
+            return Result.Fail("File doesn't exist");
+        }
+
         await using var stream = new FileStream(projectArchiveAbsolutePath, FileMode.Open);
         using var archive = new ZipArchive(stream, ZipArchiveMode.Read, true);
 
@@ -33,7 +39,7 @@ public class ProjectArchiveService
         var metadataEntry = archive.GetEntry("metadata.json");
         if (metadataEntry is null)
         {
-            throw new InvalidOperationException("File is not a valid project archive. Metadata entry is missing.");
+            return Result.Fail("File is not a valid project archive. Metadata entry is missing.");
         }
 
         await using var metadataStream = metadataEntry.Open();
@@ -41,7 +47,7 @@ public class ProjectArchiveService
 
         if (jsonMetadata is null)
         {
-            throw new InvalidOperationException("Failed to deserialize project metadata.");
+            return Result.Fail("Failed to deserialize project metadata.");
         }
 
         // Create a new runtime project
