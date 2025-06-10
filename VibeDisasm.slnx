@@ -1,0 +1,27 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/meta/">
+    <File Path=".github/workflows/build-and-test.yml" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="VibeDisasm.CfgVisualizer/VibeDisasm.CfgVisualizer.csproj" />
+    <Project Path="VibeDisasm.Core/VibeDisasm.Core.csproj" />
+    <Project Path="VibeDisasm.DecompilerEngine/VibeDisasm.DecompilerEngine.csproj" />
+    <Project Path="VibeDisasm.Disassembler.X86/VibeDisasm.Disassembler.X86.csproj" />
+    <Project Path="VibeDisasm.Pe/VibeDisasm.Pe.csproj" />
+    <Project Path="VibeDisasm.TestLand/VibeDisasm.TestLand.csproj" />
+    <Project Path="VibeDisasm.Web/VibeDisasm.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/VibeDisasm.DecompilerEngine.Tests/VibeDisasm.DecompilerEngine.Tests.csproj" />
+    <Project Path="tests/VibeDisasm.Disassembler.X86.Tests/VibeDisasm.Disassembler.X86.Tests.csproj" />
+  </Folder>
+</Solution>
