@@ -65,7 +65,7 @@ public class EntryPointsPanelViewModel : IViewModel
     public bool AddCustomEntryPoint(uint rva)
     {
         // Check if the RVA is within a valid section
-        var isValidRva = _state.OpenedFile.Sections.Any(section =>
+        var isValidRva = _state.OpenedFile!.Sections.Any(section =>
             rva >= section.VirtualAddress &&
             rva < section.VirtualAddress + section.VirtualSize);
 

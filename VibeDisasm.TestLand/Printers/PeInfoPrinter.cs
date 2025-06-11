@@ -11,7 +11,6 @@ public class PeInfoPrinter
     /// <summary>
     /// Prints PE file information to the console
     /// </summary>
-    /// <param name="peInfo">The PE information to print</param>
     public static void Print(PeInfo peInfo, string fileName)
     {
         Console.WriteLine($"PE File: {fileName}");

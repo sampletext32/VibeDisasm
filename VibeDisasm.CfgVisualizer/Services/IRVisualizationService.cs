@@ -10,17 +10,17 @@ namespace VibeDisasm.CfgVisualizer.Services;
 public class IRVisualizationService : IService
 {
     private readonly List<IRFunction> _functions = [];
-    
+
     /// <summary>
     /// Gets the collection of available IR functions
     /// </summary>
     public ReadOnlyCollection<IRFunction> Functions => _functions.AsReadOnly();
-    
+
     /// <summary>
     /// Event that fires when the functions collection changes
     /// </summary>
-    public event EventHandler<EventArgs> FunctionsChanged;
-    
+    public event EventHandler<EventArgs>? FunctionsChanged;
+
     /// <summary>
     /// Adds an IR function to the collection
     /// </summary>
@@ -33,7 +33,7 @@ public class IRVisualizationService : IService
             FunctionsChanged?.Invoke(this, EventArgs.Empty);
         }
     }
-    
+
     /// <summary>
     /// Clears all functions from the collection
     /// </summary>
@@ -42,7 +42,7 @@ public class IRVisualizationService : IService
         _functions.Clear();
         FunctionsChanged?.Invoke(this, EventArgs.Empty);
     }
-    
+
     /// <summary>
     /// Sets the current collection of functions
     /// </summary>

@@ -22,8 +22,6 @@ public static class ProgramEndpoints
     /// <summary>
     /// Imports a program into a project
     /// </summary>
-    /// <param name="handler">Program import handler</param>
-    /// <returns>The ID of the imported program</returns>
     /// <response code="200">Returns the ID of the imported program</response>
     /// <response code="400">If the project ID is invalid or import fails</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
@@ -39,9 +37,6 @@ public static class ProgramEndpoints
     /// <summary>
     /// Lists all programs in a project
     /// </summary>
-    /// <param name="projectId">ID of the project to list programs for</param>
-    /// <param name="handler">Program listing handler</param>
-    /// <returns>A list of programs in the specified project</returns>
     /// <response code="200">Returns the list of programs</response>
     /// <response code="400">If the project ID is missing or invalid</response>
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ProgramDetailsDto>))]

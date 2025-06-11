@@ -11,8 +11,6 @@ public static class CharacteristicsSectionExtractor
     /// <summary>
     /// Extracts sections with specific characteristics from a raw PE file
     /// </summary>
-    /// <param name="rawPeFile">The raw PE file to extract sections from</param>
-    /// <returns>An array of matching section information</returns>
     public static SectionInfo[] Extract(RawPeFile rawPeFile, uint characteristicsMask)
     {
         if (rawPeFile == null)

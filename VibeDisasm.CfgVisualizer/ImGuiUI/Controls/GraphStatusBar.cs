@@ -23,8 +23,6 @@ public class GraphStatusBar
     /// <summary>
     /// Renders the status bar
     /// </summary>
-    /// <param name="canvasPos">Canvas position</param>
-    /// <param name="canvasSize">Canvas size</param>
     public void Render(Vector2 canvasPos, Vector2 canvasSize, ImDrawListPtr drawList)
     {
         if (_panelViewModel.CfgViewModel == null)

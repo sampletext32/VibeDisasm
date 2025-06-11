@@ -11,8 +11,6 @@ public static class NamedSectionExtractor
     /// <summary>
     /// Extracts a specific section by name from a raw PE file
     /// </summary>
-    /// <param name="rawPeFile">The raw PE file to extract the section from</param>
-    /// <returns>The section information, or null if not found</returns>
     public static SectionInfo? Extract(RawPeFile rawPeFile, string sectionName)
     {
         if (string.IsNullOrEmpty(sectionName))

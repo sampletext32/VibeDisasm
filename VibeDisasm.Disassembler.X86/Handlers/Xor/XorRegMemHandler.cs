@@ -10,9 +10,6 @@ public class XorRegMemHandler : InstructionHandler
     /// <summary>
     /// Initializes a new instance of the XorRegMemHandler class
     /// </summary>
-    /// <param name="codeBuffer">The buffer containing the code to decode</param>
-    /// <param name="decoder">The instruction decoder that owns this handler</param>
-    /// <param name="length">The length of the buffer</param>
     public XorRegMemHandler(InstructionDecoder decoder)
         : base(decoder)
     {
