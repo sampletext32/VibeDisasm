@@ -8,7 +8,6 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ProjectsComponent} from './components/projects/projects.component';
 import {ProgramsComponent} from './components/programs/programs.component';
-import {ProgramDetailComponent} from './components/program-detail/program-detail.component';
 import {HeaderComponent} from './components/header/header.component';
 import {NewProjectDialogComponent} from './components/new-project-dialog/new-project-dialog.component';
 import {WorkspaceComponent} from "./components/workspace/workspace.component";
@@ -34,6 +33,7 @@ import {MatSortModule} from '@angular/material/sort';
 // Interceptors
 import {ErrorInterceptor} from './interceptors/error-interceptor';
 import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog.component";
+import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -42,7 +42,6 @@ import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog
     ProgramsComponent,
     HeaderComponent,
     NewProjectDialogComponent,
-    ProgramDetailComponent,
     WorkspaceComponent,
     SplitPaneComponent,
     ConfirmDialogComponent,
@@ -64,7 +63,7 @@ import {ConfirmDialogComponent} from "./components/confirm-dialog/confirm-dialog
     MatTableModule,
     MatSortModule,
     MatToolbarModule,
-    MatListModule], providers: [
+    MatListModule, CdkVirtualScrollViewport, CdkVirtualForOf, CdkFixedSizeVirtualScroll], providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     ElectronService,
     provideHttpClient(withInterceptorsFromDi())

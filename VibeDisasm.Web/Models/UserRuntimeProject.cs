@@ -15,15 +15,4 @@ public class UserRuntimeProject
     /// path to zip archive of the project. Can be null if the project is a newly created.
     /// </summary>
     public string? ProjectArchivePath { get; set; }
-
-    public void Test()
-    {
-        using var ms = new MemoryStream();
-        using var archive = new ZipArchive(ms, ZipArchiveMode.Create);
-
-        var metadataEntry = archive.CreateEntry("metadata.json", CompressionLevel.Fastest);
-
-        using var metadataStream = metadataEntry.Open();
-        JsonSerializer.Serialize(metadataStream, new ProjectArchiveMetadata(Title, CreatedAt));
-    }
 }

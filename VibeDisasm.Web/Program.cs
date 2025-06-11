@@ -37,7 +37,6 @@ builder.Services.AddSingleton<OpenRecentHandler>();
 builder.Services.AddSingleton<ListRecentsHandler>();
 builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
-builder.Services.AddSingleton<GetProgramPeDataHandler>();
 builder.Services.AddSingleton<SaveProjectHandler>();
 builder.Services.AddSingleton<DeleteRecentHandler>();
 
@@ -59,6 +58,5 @@ app.UseSwaggerUI();
 // Map API endpoints
 app.MapProjectEndpoints();
 app.MapProgramEndpoints();
-app.MapProgramPeDataEndpoints();
 
 await app.RunAsync();

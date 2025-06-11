@@ -6,15 +6,22 @@ namespace VibeDisasm.Web.Handlers;
 
 public class ImportProgramHandler
 {
-    private readonly UserProgramRepository _repository;
+    private readonly UserRuntimeProjectRepository _repository;
 
-    public ImportProgramHandler(UserProgramRepository repository)
+    public ImportProgramHandler(UserRuntimeProjectRepository repository)
     {
         _repository = repository;
     }
 
-    public async Task<Result<Guid>> Handle()
+    public async Task<Result<Guid>> Handle(Guid projectId)
     {
+        var project = await _repository.GetById(projectId);
+
+        if (project is null)
+        {
+            return Result.Fail("Project not found");
+        }
+
         var dialog = NativeFileDialogSharp.Dialog.FileOpen("dll,exe");
 
         if (dialog.IsOk)
@@ -23,7 +30,8 @@ public class ImportProgramHandler
 
             var program = new UserProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath));
 
-            await _repository.Add(program);
+            project.Programs.Add(program);
+
             return Result.Ok(program.Id);
         }
         else

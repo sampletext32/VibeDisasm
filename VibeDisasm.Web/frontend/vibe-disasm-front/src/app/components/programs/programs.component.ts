@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { finalize } from 'rxjs/operators';
-import { ApiService, Program } from '../../services/api.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {finalize} from 'rxjs/operators';
+import {ApiService} from '../../services/api.service';
+import {Program} from "../../dtos/program";
 
 @Component({
-    selector: 'app-programs',
-    templateUrl: './programs.component.html',
-    styleUrls: ['./programs.component.scss'],
-    standalone: false
+  selector: 'app-programs',
+  templateUrl: './programs.component.html',
+  styleUrls: ['./programs.component.scss'],
+  standalone: false
 })
 export class ProgramsComponent implements OnInit {
   projectId: string = '';
@@ -21,7 +22,8 @@ export class ProgramsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -56,7 +58,8 @@ export class ProgramsComponent implements OnInit {
   importProgram(): void {
     this.loading = true;
     this.apiService.importProgram(this.projectId)
-      .pipe(finalize(() => {}))
+      .pipe(finalize(() => {
+      }))
       .subscribe({
         next: (programId) => {
           this.snackBar.open('Program imported successfully', 'Close', {

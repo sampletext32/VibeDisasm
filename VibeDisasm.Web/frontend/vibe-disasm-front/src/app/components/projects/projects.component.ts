@@ -2,10 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {finalize} from 'rxjs/operators';
-import {ApiService, Project, RecentMetadata} from '../../services/api.service';
+import {ApiService} from '../../services/api.service';
 import {NewProjectDialogComponent} from '../new-project-dialog/new-project-dialog.component';
 import {StateService} from "../../services/state.service";
 import {ConfirmDialogComponent, ConfirmDialogData} from "../confirm-dialog/confirm-dialog.component";
+import {Project} from "../../services/project";
+import {RecentMetadata} from "../../services/recentMetadata";
 
 @Component({
   selector: 'app-projects',

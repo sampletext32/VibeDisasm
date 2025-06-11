@@ -67,5 +67,9 @@
     box-sizing: border-box;
     overflow-y: auto;
     height: calc(100% - 30px); /* Adjust based on header height */
+
+    .virtual-scroll {
+      height: calc(100% - 1.5em); /* Adjust based on header height */
+    }
   }
 }
