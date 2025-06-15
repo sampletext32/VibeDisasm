@@ -6,8 +6,7 @@ import {ApiService} from '../../services/api.service';
 import {NewProjectDialogComponent} from '../new-project-dialog/new-project-dialog.component';
 import {StateService} from "../../services/state.service";
 import {ConfirmDialogComponent, ConfirmDialogData} from "../confirm-dialog/confirm-dialog.component";
-import {Project} from "../../services/project";
-import {RecentMetadata} from "../../services/recentMetadata";
+import {RecentMetadata} from "../../dtos/recentMetadata";
 
 @Component({
   selector: 'app-projects',

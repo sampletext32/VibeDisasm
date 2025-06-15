@@ -63,7 +63,8 @@ import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} fr
     MatTableModule,
     MatSortModule,
     MatToolbarModule,
-    MatListModule, CdkVirtualScrollViewport, CdkVirtualForOf, CdkFixedSizeVirtualScroll], providers: [
+    MatListModule, CdkVirtualScrollViewport, CdkVirtualForOf, CdkFixedSizeVirtualScroll],
+  providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     ElectronService,
     provideHttpClient(withInterceptorsFromDi())

@@ -28,7 +28,6 @@ builder.Services.Configure<JsonOptions>(o => o.SerializerOptions.Converters.Add(
 builder.Services.Configure<MvcJsonOptions>(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddSingleton<UserRuntimeProjectRepository>();
-builder.Services.AddSingleton<UserProgramRepository>();
 builder.Services.AddSingleton<UserProgramDataRepository>();
 
 // Register handlers
@@ -39,6 +38,8 @@ builder.Services.AddSingleton<ImportProgramHandler>();
 builder.Services.AddSingleton<ListProgramsHandler>();
 builder.Services.AddSingleton<SaveProjectHandler>();
 builder.Services.AddSingleton<DeleteRecentHandler>();
+
+builder.Services.AddSingleton<ListingAtAddressHandler>();
 
 builder.Services.AddSingleton<ProjectArchiveService>();
 builder.Services.AddSingleton<RecentsService>();
@@ -58,5 +59,6 @@ app.UseSwaggerUI();
 // Map API endpoints
 app.MapProjectEndpoints();
 app.MapProgramEndpoints();
+app.MapListingEndpoints();
 
 await app.RunAsync();

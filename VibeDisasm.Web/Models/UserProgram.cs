@@ -6,10 +6,13 @@ public class UserProgram
     public string Name { get; set; }
     public string FilePath { get; set; }
 
+    public UserProgramDatabase Database { get; set; }
+
     public UserProgram(Guid id, string filePath, string name)
     {
         Id = id;
         FilePath = filePath;
         Name = name;
+        Database = new UserProgramDatabase();
     }
 }

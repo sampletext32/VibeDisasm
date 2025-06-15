@@ -128,49 +128,4 @@ public class RawPeFile
     /// Gets whether this is a 64-bit PE file (PE32+)
     /// </summary>
     public bool IsPe32Plus => OptionalHeader.IsPe32Plus;
-
-    /// <summary>
-    /// Gets the raw data for a specific section
-    /// </summary>
-    /// <param name="sectionHeader">The section header</param>
-    /// <returns>The raw section data</returns>
-    public byte[] GetSectionData(RawSectionHeader sectionHeader)
-    {
-        if (sectionHeader == null)
-        {
-            throw new ArgumentNullException(nameof(sectionHeader));
-        }
-
-        if (sectionHeader.PointerToRawData == 0 || sectionHeader.SizeOfRawData == 0)
-        {
-            return Array.Empty<byte>();
-        }
-
-        if (sectionHeader.PointerToRawData + sectionHeader.SizeOfRawData > RawData.Length)
-        {
-            throw new ArgumentException("Section data exceeds file bounds");
-        }
-
-        var sectionData = new byte[sectionHeader.SizeOfRawData];
-        Array.Copy(RawData, sectionHeader.PointerToRawData, sectionData, 0, sectionHeader.SizeOfRawData);
-        return sectionData;
-    }
-
-    /// <summary>
-    /// Gets the raw data at a specific file offset
-    /// </summary>
-    /// <param name="offset">The file offset</param>
-    /// <param name="size">The number of bytes to read</param>
-    /// <returns>The raw data</returns>
-    public byte[] GetRawDataAtOffset(uint offset, uint size)
-    {
-        if (offset + size > RawData.Length)
-        {
-            throw new ArgumentException("Data at offset exceeds file bounds");
-        }
-
-        var data = new byte[size];
-        Array.Copy(RawData, offset, data, 0, size);
-        return data;
-    }
 }

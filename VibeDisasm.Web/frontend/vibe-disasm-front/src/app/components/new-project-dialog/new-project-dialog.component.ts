@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {ApiService} from '../../services/api.service';
-import {StateService} from "../../services/state.service";
-import {Project} from "../../services/project";
 
 @Component({
     selector: 'app-new-project-dialog',
