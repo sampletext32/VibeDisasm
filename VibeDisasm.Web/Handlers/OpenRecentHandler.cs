@@ -27,6 +27,7 @@ public class OpenRecentHandler
 
         if (recent is null)
         {
+            _logger.LogWarning("Open recent failed: recent project {ProjectId} not found", projectId);
             return Result.Fail("Recent project not found");
         }
 
@@ -34,6 +35,7 @@ public class OpenRecentHandler
 
         if (project is not null)
         {
+            _logger.LogInformation("Opened existing recent project: {ProjectId}", projectId);
             return Result.Ok();
         }
 
@@ -41,6 +43,7 @@ public class OpenRecentHandler
 
         if (loadArchiveResult.IsFailed)
         {
+            _logger.LogWarning("Open recent failed: could not load archive for project {ProjectId}. Error: {Error}", projectId, loadArchiveResult.Errors.FirstOrDefault()?.Message);
             return Result.Fail("Failed to load project from archive. " + loadArchiveResult.Errors.FirstOrDefault()?.Message);
         }
 
