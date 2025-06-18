@@ -14,8 +14,4 @@
         <PackageReference Include="NativeFileDialogSharp" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="frontend\" />
-    </ItemGroup>
-
 </Project>
