@@ -2,7 +2,7 @@
 
 namespace VibeDisasm.Web.Models;
 
-public class TypeStorage(UserProgram program)
+public class TypeStorage(UserRuntimeProgram program)
 {
     public List<DatabaseType> Types { get; set; } = [];
 

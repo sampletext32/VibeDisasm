@@ -2,7 +2,7 @@ using VibeDisasm.Web.Models.DatabaseEntries;
 
 namespace VibeDisasm.Web.Models;
 
-public class DatabaseEntryManager(UserProgram program)
+public class DatabaseEntryManager(UserRuntimeProgram program)
 {
     private readonly List<UserProgramDatabaseEntry> _entries = [];
 

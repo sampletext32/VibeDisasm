@@ -1,6 +1,6 @@
 ﻿namespace VibeDisasm.Web.Models;
 
-public class UserProgram
+public class UserRuntimeProgram
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -9,7 +9,7 @@ public class UserProgram
 
     public UserProgramDatabase Database { get; set; }
 
-    public UserProgram(Guid id, string filePath, string name, long fileLength)
+    public UserRuntimeProgram(Guid id, string filePath, string name, long fileLength)
     {
         Id = id;
         Name = name;

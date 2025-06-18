@@ -11,7 +11,7 @@ public class UserProgramDatabase
     public TypeStorage TypeStorage { get; set; }
     public DatabaseEntryManager EntryManager { get; }
 
-    public UserProgramDatabase(UserProgram program)
+    public UserProgramDatabase(UserRuntimeProgram program)
     {
         TypeStorage = new TypeStorage(program);
         EntryManager = new DatabaseEntryManager(program);

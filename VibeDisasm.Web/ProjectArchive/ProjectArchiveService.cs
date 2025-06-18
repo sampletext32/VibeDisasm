@@ -9,7 +9,8 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
 {
     public async Task<Result> Save(UserRuntimeProject runtimeProject)
     {
-        logger.LogInformation("Attempting to save project {ProjectId} to {ArchivePath}", runtimeProject.Id, runtimeProject.ProjectArchivePath);
+        logger.LogInformation("Attempting to save project {ProjectId} to {ArchivePath}", runtimeProject.Id,
+            runtimeProject.ProjectArchivePath);
 
         if (runtimeProject.ProjectArchivePath is null)
         {
@@ -19,34 +20,62 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
 
         try
         {
-            await using var stream = new FileStream(runtimeProject.ProjectArchivePath, FileMode.OpenOrCreate);
-            using var archive = new ZipArchive(stream, ZipArchiveMode.Update, true);
+            var tempFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.tmp");
+            try
+            {
+                await using (var stream = new FileStream(tempFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+                using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, true))
+                {
+                    await WriteProjectMetadataAsync(archive, runtimeProject);
+                    await WriteProgramsAsync(archive, runtimeProject.Programs);
+                }
 
-            logger.LogInformation("Creating metadata entry for project {ProjectId}", runtimeProject.Id);
-            var metadataEntry = archive.CreateEntry("metadata.json", CompressionLevel.Fastest);
-            await using var metadataStream = metadataEntry.Open();
-            await JsonSerializer.SerializeAsync(metadataStream, new ProjectArchiveMetadata(runtimeProject.Id, runtimeProject.Title, runtimeProject.CreatedAt));
-
-            logger.LogInformation("Successfully saved project {ProjectId} to {ArchivePath}", runtimeProject.Id, runtimeProject.ProjectArchivePath);
-            return Result.Ok();
+                File.Copy(tempFile, runtimeProject.ProjectArchivePath, overwrite: true);
+                logger.LogInformation("Successfully saved project {ProjectId} to {ArchivePath}", runtimeProject.Id, runtimeProject.ProjectArchivePath);
+                return Result.Ok();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to save project {ProjectId} to {ArchivePath}", runtimeProject.Id, runtimeProject.ProjectArchivePath);
+                return Result.Fail($"Failed to save project: {ex.Message}");
+            }
+            finally
+            {
+                if (File.Exists(tempFile))
+                    File.Delete(tempFile);
+            }
         }
         catch (Exception ex)
         {
-            logger.LogError(
-                ex,
-                "Failed to save project {ProjectId} to {ArchivePath}",
-                runtimeProject.Id,
-                runtimeProject.ProjectArchivePath
-            );
+            logger.LogError(ex, "Failed to save project {ProjectId} to {ArchivePath}", runtimeProject.Id, runtimeProject.ProjectArchivePath);
             return Result.Fail($"Failed to save project: {ex.Message}");
         }
     }
+
+    private static async Task WriteProjectMetadataAsync(ZipArchive archive, UserRuntimeProject project)
+    {
+        var metadataEntry = archive.CreateEntry("metadata.json", CompressionLevel.Fastest);
+        await using var metadataStream = metadataEntry.Open();
+        await JsonSerializer.SerializeAsync(metadataStream,
+            new ProjectArchiveMetadata(project.Id, project.Title, project.CreatedAt));
+    }
+
+    private static async Task WriteProgramsAsync(ZipArchive archive, IEnumerable<UserRuntimeProgram> programs)
+    {
+        foreach (var program in programs)
+        {
+            var entry = archive.CreateEntry($"programs/{program.Id}/metadata.json", CompressionLevel.Fastest);
+            await using var entryStream = entry.Open();
+            var archiveProgram = ProjectArchiveProgramMetadata.FromUserProgram(program);
+            await JsonSerializer.SerializeAsync(entryStream, archiveProgram);
+        }
+    }
+
 
     public async Task<Result<UserRuntimeProject>> Load(string projectArchiveAbsolutePath)
     {
         logger.LogInformation("Attempting to load project from {ArchivePath}", projectArchiveAbsolutePath);
 
-        // Check if the project archive exists
         if (!File.Exists(projectArchiveAbsolutePath))
         {
             logger.LogError("Failed to load project: File doesn't exist at {ArchivePath}", projectArchiveAbsolutePath);
@@ -58,30 +87,25 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
             await using var stream = new FileStream(projectArchiveAbsolutePath, FileMode.Open);
             using var archive = new ZipArchive(stream, ZipArchiveMode.Read, true);
 
-            // Get metadata entry
-            logger.LogInformation("Looking for metadata entry in archive at {ArchivePath}", projectArchiveAbsolutePath);
-            var metadataEntry = archive.GetEntry("metadata.json");
-            if (metadataEntry is null)
-            {
-                logger.LogError("Invalid project archive: Metadata entry is missing in {ArchivePath}", projectArchiveAbsolutePath);
-                return Result.Fail("File is not a valid project archive. Metadata entry is missing.");
-            }
-
-            // Deserialize metadata
-            logger.LogInformation("Deserializing project metadata from {ArchivePath}", projectArchiveAbsolutePath);
-            await using var metadataStream = metadataEntry.Open();
-            var jsonMetadata = JsonSerializer.Deserialize<ProjectArchiveMetadata>(metadataStream);
-
+            var jsonMetadata = await ReadProjectMetadataAsync(archive);
             if (jsonMetadata is null)
             {
-                logger.LogError("Failed to deserialize project metadata from {ArchivePath}", projectArchiveAbsolutePath);
+                logger.LogError("Failed to deserialize project metadata from {ArchivePath}",
+                    projectArchiveAbsolutePath);
                 return Result.Fail("Failed to deserialize project metadata.");
             }
 
-            // Create a new runtime project
-            var runtimeProject = new UserRuntimeProject {Id = jsonMetadata.ProjectId, Title = jsonMetadata.Title, CreatedAt = jsonMetadata.CreatedAt, ProjectArchivePath = projectArchiveAbsolutePath};
+            var runtimeProject = new UserRuntimeProject
+            {
+                Id = jsonMetadata.ProjectId,
+                Title = jsonMetadata.Title,
+                CreatedAt = jsonMetadata.CreatedAt,
+                ProjectArchivePath = projectArchiveAbsolutePath
+            };
+            runtimeProject.Programs = await ReadProgramsAsync(archive);
 
-            logger.LogInformation("Successfully loaded project {ProjectId} from {ArchivePath}", jsonMetadata.ProjectId, projectArchiveAbsolutePath);
+            logger.LogInformation("Successfully loaded project {ProjectId} from {ArchivePath}", jsonMetadata.ProjectId,
+                projectArchiveAbsolutePath);
             return runtimeProject;
         }
         catch (Exception ex)
@@ -89,5 +113,30 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
             logger.LogError(ex, "Failed to load project from {ArchivePath}", projectArchiveAbsolutePath);
             return Result.Fail($"Failed to load project: {ex.Message}");
         }
+    }
+
+    private static async Task<ProjectArchiveMetadata?> ReadProjectMetadataAsync(ZipArchive archive)
+    {
+        var metadataEntry = archive.GetEntry("metadata.json");
+        if (metadataEntry is null) return null;
+        await using var metadataStream = metadataEntry.Open();
+        return await JsonSerializer.DeserializeAsync<ProjectArchiveMetadata>(metadataStream);
+    }
+
+    private static async Task<List<UserRuntimeProgram>> ReadProgramsAsync(ZipArchive archive)
+    {
+        var programs = new List<UserRuntimeProgram>();
+        foreach (var entry in archive.Entries)
+        {
+            if (entry.FullName.StartsWith("programs/") && entry.FullName.EndsWith("/metadata.json"))
+            {
+                await using var programStream = entry.Open();
+                var archiveProgram = await JsonSerializer.DeserializeAsync<ProjectArchiveProgramMetadata>(programStream);
+                if (archiveProgram is not null)
+                    programs.Add(archiveProgram.ToUserProgram());
+            }
+        }
+
+        return programs;
     }
 }
