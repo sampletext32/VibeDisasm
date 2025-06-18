@@ -7,10 +7,12 @@ namespace VibeDisasm.Web.Handlers;
 public class ImportProgramHandler
 {
     private readonly UserRuntimeProjectRepository _repository;
+    private readonly UserProgramDataRepository _dataRepository;
 
-    public ImportProgramHandler(UserRuntimeProjectRepository repository)
+    public ImportProgramHandler(UserRuntimeProjectRepository repository, UserProgramDataRepository dataRepository)
     {
         _repository = repository;
+        _dataRepository = dataRepository;
     }
 
     public async Task<Result<Guid>> Handle(Guid projectId)
@@ -28,7 +30,14 @@ public class ImportProgramHandler
         {
             var filePath = dialog.Path;
 
-            var program = new UserProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath));
+            var fileLength = new FileInfo(filePath).Length;
+
+            if (fileLength > int.MaxValue)
+            {
+                throw new InvalidOperationException("File size too large");
+            }
+
+            var program = new UserProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath), fileLength);
 
             project.Programs.Add(program);
 

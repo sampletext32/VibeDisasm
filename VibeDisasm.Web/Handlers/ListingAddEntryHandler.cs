@@ -1,21 +1,19 @@
-﻿using System.Text.Json;
-using FluentResults;
-using VibeDisasm.Web.Dtos;
+﻿using FluentResults;
 using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListingAtAddressHandler
+public class ListingAddEntryHandler
 {
     private readonly UserRuntimeProjectRepository _repository;
 
-    public ListingAtAddressHandler(UserRuntimeProjectRepository repository)
+    public ListingAddEntryHandler(UserRuntimeProjectRepository repository)
     {
         _repository = repository;
     }
 
-    public async Task<Result<(UserProgramDatabaseEntry?, JsonSerializerOptions)>> Handle(Guid projectId, Guid programId, uint address)
+    public async Task<Result> Handle(Guid projectId, Guid programId, UserProgramDatabaseEntry entry)
     {
         var project = await _repository.GetById(projectId);
         if (project is null)
@@ -30,8 +28,8 @@ public class ListingAtAddressHandler
             return Result.Fail("Program not found");
         }
 
-        var entry = program.Database.EntryManager.GetEntryAt(address);
+        program.Database.EntryManager.AddEntry(entry);
 
-        return Result.Ok((entry, JsonSerializerOptionsPresets.DatabaseEntryTypeOptions));
+        return Result.Ok();
     }
 }

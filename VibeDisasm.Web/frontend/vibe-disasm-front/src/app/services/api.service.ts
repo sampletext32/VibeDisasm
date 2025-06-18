@@ -38,6 +38,6 @@ export class ApiService {
   }
 
   listPrograms(projectId: string): Observable<Program[]> {
-    return this.http.get<Program[]>(`${this.baseUrl}/program/${projectId}/byproject`);
+    return this.http.get<Program[]>(`${this.baseUrl}/program/${projectId}/list`);
   }
 }

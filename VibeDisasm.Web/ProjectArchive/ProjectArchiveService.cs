@@ -1,7 +1,6 @@
 using System.IO.Compression;
 using System.Text.Json;
 using FluentResults;
-using Microsoft.Extensions.Logging;
 using VibeDisasm.Web.Models;
 
 namespace VibeDisasm.Web.ProjectArchive;

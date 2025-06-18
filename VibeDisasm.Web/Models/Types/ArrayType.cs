@@ -1,8 +1,11 @@
+using System.Diagnostics;
+
 namespace VibeDisasm.Web.Models.Types;
 
 /// <summary>
 /// Array of anything, e.g. int[3], MyStruct[1]
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public class ArrayType : DatabaseType
 {
     public DatabaseType ElementType { get; set; }
@@ -14,9 +17,13 @@ public class ArrayType : DatabaseType
         ElementCount = elementCount;
     }
 
+    public override string Semantic =>  $"{ElementType.Semantic}[{ElementCount}]";
+
     public override ArrayType AsReadonly()
     {
         MakeReadonly();
         return this;
     }
+
+    protected internal override string DebugDisplay =>  $"{ElementType.DebugDisplay}[{ElementCount}]";
 }

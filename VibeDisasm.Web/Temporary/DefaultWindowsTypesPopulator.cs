@@ -1,5 +1,4 @@
-﻿using VibeDisasm.Web.Extensions;
-using VibeDisasm.Web.Models;
+﻿using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.Temporary;
@@ -8,6 +7,10 @@ public static class DefaultWindowsTypesPopulator
 {
     public static void Populate(TypeStorage typeStorage)
     {
+        typeStorage.AddType(new PrimitiveType(1, "undefined").AsReadonly());
+
+        // ----
+
         typeStorage.AddType(new PrimitiveType(1, "char").AsReadonly());
         typeStorage.AddType(new PrimitiveType(1, "byte").AsReadonly());
         typeStorage.AddType(new PrimitiveType(1, "uint8_t").AsReadonly());
@@ -38,35 +41,35 @@ public static class DefaultWindowsTypesPopulator
         var eres2Type = typeStorage.AddType(new ArrayType(wordType, 10));
 
         typeStorage.AddType(new StructureType("IMAGE_DOS_HEADER", [
-            new(wordType,  "e_magic"),      /* 00: MZ Header signature */
-            new(wordType,  "e_cblp"),       /* 02: Bytes on last page of file */
-            new(wordType,  "e_cp"),         /* 04: Pages in file */
-            new(wordType,  "e_crlc"),       /* 06: Relocations */
-            new(wordType,  "e_cparhdr"),    /* 08: Size of header in paragraphs */
-            new(wordType,  "e_minalloc"),   /* 0a: Minimum extra paragraphs needed */
-            new(wordType,  "e_maxalloc"),   /* 0c: Maximum extra paragraphs needed */
-            new(wordType,  "e_ss"),         /* 0e: Initial (relative) SS value */
-            new(wordType,  "e_sp"),         /* 10: Initial SP value */
-            new(wordType,  "e_csum"),       /* 12: Checksum */
-            new(wordType,  "e_ip"),         /* 14: Initial IP value */
-            new(wordType,  "e_cs"),         /* 16: Initial (relative) CS value */
-            new(wordType,  "e_lfarlc"),     /* 18: File address of relocation table */
-            new(wordType,  "e_ovno"),       /* 1a: Overlay number */
-            new(eresType,  "e_res"),        /* 1c: Reserved words */
-            new(wordType,  "e_oemid"),      /* 24: OEM identifier (for e_oeminfo) */
-            new(wordType,  "e_oeminfo"),    /* 26: OEM information; e_oemid specific */
-            new(eres2Type,  "e_res2"),      /* 28: Reserved words */
-            new(dwordType, "e_lfanew"),     /* 3c: Offset to extended header */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_magic"), /* 00: MZ Header signature */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_cblp"), /* 02: Bytes on last page of file */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_cp"), /* 04: Pages in file */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_crlc"), /* 06: Relocations */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_cparhdr"), /* 08: Size of header in paragraphs */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_minalloc"), /* 0a: Minimum extra paragraphs needed */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_maxalloc"), /* 0c: Maximum extra paragraphs needed */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_ss"), /* 0e: Initial (relative) SS value */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_sp"), /* 10: Initial SP value */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_csum"), /* 12: Checksum */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_ip"), /* 14: Initial IP value */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_cs"), /* 16: Initial (relative) CS value */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_lfarlc"), /* 18: File address of relocation table */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_ovno"), /* 1a: Overlay number */
+            new(eresType, "e_res"), /* 1c: Reserved words */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_oemid"), /* 24: OEM identifier (for e_oeminfo) */
+            new(new PrimitiveType(2, "WORD").AsReadonly(), "e_oeminfo"), /* 26: OEM information; e_oemid specific */
+            new(eres2Type, "e_res2"), /* 28: Reserved words */
+            new(dwordType, "e_lfanew"), /* 3c: Offset to extended header */
         ]).AsReadonly());
 
         var imageFileHeader = typeStorage.AddType(new StructureType("IMAGE_FILE_HEADER", [
             new(wordType, "Machine"),
-            new (wordType, "NumberOfSections"),
-            new (dwordType, "TimeDateStamp"),
-            new (dwordType, "PointerToSymbolTable"),
-            new (dwordType, "NumberOfSymbols"),
-            new (wordType, "SizeOfOptionalHeader"),
-            new (wordType, "Characteristics"),
+            new(wordType, "NumberOfSections"),
+            new(dwordType, "TimeDateStamp"),
+            new(dwordType, "PointerToSymbolTable"),
+            new(dwordType, "NumberOfSymbols"),
+            new(wordType, "SizeOfOptionalHeader"),
+            new(wordType, "Characteristics"),
         ]).AsReadonly());
 
         var imageDataDirectoryType = typeStorage.AddType(new StructureType("IMAGE_DATA_DIRECTORY", [
@@ -146,12 +149,12 @@ public static class DefaultWindowsTypesPopulator
         typeStorage.AddType(new StructureType("IMAGE_NT_HEADERS32", [
             new(dwordType, "Signature"),
             new(imageFileHeader, "FileHeader"),
-            new (imageOptionalHeader32Type, "OptionalHeader")
+            new(imageOptionalHeader32Type, "OptionalHeader")
         ]).AsReadonly());
         typeStorage.AddType(new StructureType("IMAGE_NT_HEADERS64", [
             new(dwordType, "Signature"),
             new(imageFileHeader, "FileHeader"),
-            new (imageOptionalHeader64Type, "OptionalHeader")
+            new(imageOptionalHeader64Type, "OptionalHeader")
         ]).AsReadonly());
     }
 }

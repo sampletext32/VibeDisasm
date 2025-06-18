@@ -2,13 +2,31 @@
 
 namespace VibeDisasm.Web.Models;
 
-public class TypeStorage
+public class TypeStorage(UserProgram program)
 {
     public List<DatabaseType> Types { get; set; } = [];
+
+    public DatabaseType FindSemantic(string semantic)
+    {
+        var type = Types.FirstOrDefault(x => x.Semantic == semantic);
+
+        if (type is null)
+        {
+            throw new InvalidOperationException("Could not find type " + semantic);
+        }
+
+        return type;
+    }
 
     public T AddType<T>(T type)
         where T : DatabaseType
     {
+        var existingType = Types.FirstOrDefault(x => x == type);
+        if (existingType is not null)
+        {
+            Console.WriteLine($"Type already exists {existingType.DebugDisplay}");
+            return existingType as T ?? throw new InvalidOperationException($"Failed to cast {type.DebugDisplay} to {typeof(T).Name}");
+        }
         Types.Add(type);
         return type;
     }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.Json;
 using VibeDisasm.Web.Endpoints;
 using VibeDisasm.Web.Extensions;
 using VibeDisasm.Web.Handlers;
-using VibeDisasm.Web.Models;
 using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;
 using VibeDisasm.Web.Services;
@@ -40,6 +39,7 @@ builder.Services.AddSingleton<SaveProjectHandler>();
 builder.Services.AddSingleton<DeleteRecentHandler>();
 
 builder.Services.AddSingleton<ListingAtAddressHandler>();
+builder.Services.AddSingleton<ListingAddEntryHandler>();
 
 builder.Services.AddSingleton<ProjectArchiveService>();
 builder.Services.AddSingleton<RecentsService>();

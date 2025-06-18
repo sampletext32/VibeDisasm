@@ -1,4 +1,3 @@
-using System.Diagnostics.Contracts;
 using FluentResults;
 using VibeDisasm.Web.Services;
 
@@ -13,7 +12,6 @@ public class DeleteRecentHandler
         _recents = recents;
     }
 
-    [Pure]
     public Task<Result> Handle(Guid recentId)
     {
         _recents.RemoveByProjectId(recentId);

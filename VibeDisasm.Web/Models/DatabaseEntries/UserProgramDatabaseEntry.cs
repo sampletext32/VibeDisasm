@@ -11,6 +11,8 @@ public class UserProgramDatabaseEntry
     public uint Address { get; set; }
     public DatabaseType Type { get; set; }
 
+    public virtual long Size => Type.Size;
+
     protected UserProgramDatabaseEntry(uint address, DatabaseType type)
     {
         Address = address;

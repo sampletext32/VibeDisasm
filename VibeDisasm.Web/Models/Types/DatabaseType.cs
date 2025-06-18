@@ -9,6 +9,15 @@ public abstract class DatabaseType
 
     public bool ReadOnly { get; set; }
 
+    /// <summary>
+    /// Semantic representation of a type.
+    /// Primitive => type
+    /// Array => type[int]
+    /// Pointer => type*
+    /// Structure => name
+    /// </summary>
+    public abstract string Semantic { get; }
+
     public DatabaseType(int size)
     {
         Size = size;
@@ -21,4 +30,5 @@ public abstract class DatabaseType
     }
 
     public abstract DatabaseType AsReadonly();
+    protected internal abstract string DebugDisplay { get; }
 }
