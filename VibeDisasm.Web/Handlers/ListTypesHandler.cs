@@ -5,21 +5,22 @@ using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Repositories;
 using Microsoft.Extensions.Logging;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListingAtAddressHandler
+public class ListTypesHandler
 {
     private readonly UserRuntimeProjectRepository _repository;
-    private readonly ILogger<ListingAtAddressHandler> _logger;
+    private readonly ILogger<ListTypesHandler> _logger;
 
-    public ListingAtAddressHandler(UserRuntimeProjectRepository repository, ILogger<ListingAtAddressHandler> logger)
+    public ListTypesHandler(UserRuntimeProjectRepository repository, ILogger<ListTypesHandler> logger)
     {
         _repository = repository;
         _logger = logger;
     }
 
-    public async Task<Result<(UserProgramDatabaseEntry?, JsonSerializerOptions)>> Handle(Guid projectId, Guid programId, uint address)
+    public async Task<Result<(List<DatabaseType>, JsonSerializerOptions)>> Handle(Guid projectId, Guid programId)
     {
         var project = await _repository.GetById(projectId);
         if (project is null)
@@ -36,8 +37,7 @@ public class ListingAtAddressHandler
             return Result.Fail("Program not found");
         }
 
-        var entry = program.Database.EntryManager.GetEntryAt(address);
-        _logger.LogInformation("Fetched entry at address {Address} in program {ProgramId} of project {ProjectId}", address, programId, projectId);
-        return Result.Ok((entry, DatabaseEntryTypeOptions: JsonSerializerOptionsPresets.DatabaseEntryOptions));
+        var types = program.Database.TypeStorage.Types;
+        return Result.Ok((types, JsonSerializerOptionsPresets.DatabaseTypeOptions));
     }
 }

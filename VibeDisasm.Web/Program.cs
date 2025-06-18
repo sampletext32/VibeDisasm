@@ -40,6 +40,7 @@ builder.Services.AddSingleton<DeleteRecentHandler>();
 
 builder.Services.AddSingleton<ListingAtAddressHandler>();
 builder.Services.AddSingleton<ListingAddEntryHandler>();
+builder.Services.AddSingleton<ListTypesHandler>();
 
 builder.Services.AddSingleton<ProjectArchiveService>();
 builder.Services.AddSingleton<RecentsService>();
@@ -60,5 +61,6 @@ app.UseSwaggerUI();
 app.MapProjectEndpoints();
 app.MapProgramEndpoints();
 app.MapListingEndpoints();
+app.MapTypesEndpoints();
 
 await app.RunAsync();

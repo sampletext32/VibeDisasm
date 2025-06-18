@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Handlers;
+using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.DatabaseEntries;
 
 namespace VibeDisasm.Web.Endpoints;
@@ -36,7 +37,7 @@ public static class ListingEndpoints
         HttpContext context)
     {
         var entry = await context.Request.ReadFromJsonAsync<UserProgramDatabaseEntry>(JsonSerializerOptionsPresets
-            .DatabaseEntryTypeOptions
+            .DatabaseEntryOptions
         );
 
         if (entry is null)
