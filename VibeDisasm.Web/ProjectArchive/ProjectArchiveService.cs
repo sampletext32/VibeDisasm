@@ -25,7 +25,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
             logger.LogInformation("Creating metadata entry for project {ProjectId}", runtimeProject.Id);
             var metadataEntry = archive.CreateEntry("metadata.json", CompressionLevel.Fastest);
             await using var metadataStream = metadataEntry.Open();
-            await JsonSerializer.SerializeAsync(metadataStream, new ProjectArchiveMetadata(runtimeProject.Title, runtimeProject.CreatedAt));
+            await JsonSerializer.SerializeAsync(metadataStream, new ProjectArchiveMetadata(runtimeProject.Id, runtimeProject.Title, runtimeProject.CreatedAt));
 
             logger.LogInformation("Successfully saved project {ProjectId} to {ArchivePath}", runtimeProject.Id, runtimeProject.ProjectArchivePath);
             return Result.Ok();
@@ -79,10 +79,9 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
             }
 
             // Create a new runtime project
-            var projectId = Guid.NewGuid();
-            var runtimeProject = new UserRuntimeProject {Id = projectId, Title = jsonMetadata.Title, CreatedAt = jsonMetadata.CreatedAt, ProjectArchivePath = projectArchiveAbsolutePath};
+            var runtimeProject = new UserRuntimeProject {Id = jsonMetadata.ProjectId, Title = jsonMetadata.Title, CreatedAt = jsonMetadata.CreatedAt, ProjectArchivePath = projectArchiveAbsolutePath};
 
-            logger.LogInformation("Successfully loaded project {ProjectId} from {ArchivePath}", projectId, projectArchiveAbsolutePath);
+            logger.LogInformation("Successfully loaded project {ProjectId} from {ArchivePath}", jsonMetadata.ProjectId, projectArchiveAbsolutePath);
             return runtimeProject;
         }
         catch (Exception ex)
