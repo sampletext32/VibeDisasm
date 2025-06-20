@@ -121,16 +121,29 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
 
             foreach (var typeArchivePath in distinctTypeArchivePaths)
             {
-                var typeArchive = await LoadTypeArchive(typeArchivePath);
+                var archivePath = typeArchivePath;
+                if (Path.IsPathFullyQualified(typeArchivePath))
+                {
+                    logger.LogInformation("Attempting to load type archive from absolute path {TypeArchivePath}",
+                        typeArchivePath);
+                }
+                else
+                {
+                    archivePath = Path.GetFullPath(typeArchivePath);
+                    logger.LogInformation("Attempting to load type archive from relative path {TypeArchivePath}",
+                        typeArchivePath);
+                }
+
+                var typeArchive = await LoadTypeArchive(archivePath);
 
                 if (typeArchive is null)
                 {
                     logger.LogWarning("Failed to load type archive for {TypeArchivePath}. Program may not work.",
-                        typeArchivePath);
+                        archivePath);
                     continue;
                 }
 
-                foreach (var programId in programsByTypeArchivePathDict[typeArchivePath])
+                foreach (var programId in programsByTypeArchivePathDict[archivePath])
                 {
                     var program = runtimeProject.Programs.FirstOrDefault(x => x.Id == programId) ??
                                   throw new InvalidOperationException($"Failed to find program with id {programId}");
@@ -150,25 +163,14 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
         }
     }
 
-    private async Task<RuntimeTypeArchive?> LoadTypeArchive(string typeArchivePath)
+    private async Task<RuntimeTypeArchive?> LoadTypeArchive(string typeArchiveAbsolutePath)
     {
-        if (Path.IsPathFullyQualified(typeArchivePath))
-        {
-            logger.LogInformation("Attempting to load type archive from absolute path {TypeArchivePath}",
-                typeArchivePath);
-        }
-        else
-        {
-            logger.LogInformation("Attempting to load type archive from relative path {TypeArchivePath}",
-                typeArchivePath);
-        }
-
-        if (!File.Exists(typeArchivePath))
+        if (!File.Exists(typeArchiveAbsolutePath))
         {
             return null;
         }
 
-        await using var stream = new FileStream(typeArchivePath, FileMode.Open);
+        await using var stream = new FileStream(typeArchiveAbsolutePath, FileMode.Open);
         var typeArchiveJson =
             await JsonSerializer.DeserializeAsync<TypeArchiveJson>(stream,
                 JsonSerializerOptionsPresets.TypeArchiveJsonOptions);
@@ -227,6 +229,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
         }
 
         typeArchive.Types = resolvedTypes.Values.ToList();
+        typeArchive.AbsoluteFilePath = typeArchiveAbsolutePath;
 
         return typeArchive;
     }
