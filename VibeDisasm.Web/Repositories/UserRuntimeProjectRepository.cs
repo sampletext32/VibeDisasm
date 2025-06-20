@@ -4,20 +4,20 @@ namespace VibeDisasm.Web.Repositories;
 
 public class UserRuntimeProjectRepository
 {
-    private readonly List<UserRuntimeProject> _projects = [];
+    private readonly List<RuntimeUserProject> _projects = [];
 
-    public Task<UserRuntimeProject?> GetById(Guid id)
+    public Task<RuntimeUserProject?> GetById(Guid id)
     {
         return Task.FromResult(_projects.FirstOrDefault(x => x.Id == id));
     }
 
-    public Task Add(UserRuntimeProject runtimeProject)
+    public Task Add(RuntimeUserProject runtimeProject)
     {
         _projects.Add(runtimeProject);
         return Task.CompletedTask;
     }
 
-    public Task<List<UserRuntimeProject>> GetAll()
+    public Task<List<RuntimeUserProject>> GetAll()
     {
         return Task.FromResult(_projects);
     }

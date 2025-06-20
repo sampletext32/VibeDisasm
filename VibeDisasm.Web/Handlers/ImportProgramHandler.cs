@@ -41,7 +41,7 @@ public class ImportProgramHandler
                 throw new InvalidOperationException("File size too large");
             }
 
-            var program = new UserRuntimeProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath), fileLength);
+            var program = new RuntimeUserProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath), fileLength);
             project.Programs.Add(program);
             _logger.LogInformation("Imported program {ProgramId} into project {ProjectId}", program.Id, projectId);
             return Result.Ok(program.Id);

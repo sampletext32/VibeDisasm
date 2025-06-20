@@ -6,19 +6,19 @@ namespace VibeDisasm.Web.Models.Types;
 /// Function, e.g. void func(int a, int b), int* func()
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public sealed class FunctionType : DatabaseType
+public sealed class RuntimeFunctionType : RuntimeDatabaseType
 {
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public TypeRefType ReturnType { get; }
+    public RuntimeTypeRefType ReturnType { get; }
     public List<FunctionArgument> Arguments { get; }
 
-    public FunctionType(
+    public RuntimeFunctionType(
         Guid id,
         string @namespace,
         string name,
-        TypeRefType returnType,
+        RuntimeTypeRefType returnType,
         List<FunctionArgument> arguments
     ) : base(id)
     {
@@ -27,7 +27,7 @@ public sealed class FunctionType : DatabaseType
         ReturnType = returnType;
         Arguments = arguments;
     }
-    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitFunction(this);
+    public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitFunction(this);
 
     protected internal override string DebugDisplay =>
         $"{ReturnType.DebugDisplay} func({string.Join(", ", Arguments.Select(x => x.DebugDisplay))})";
@@ -35,11 +35,11 @@ public sealed class FunctionType : DatabaseType
 
 public class FunctionArgument
 {
-    public TypeRefType Type { get; set; }
+    public RuntimeTypeRefType Type { get; set; }
 
     public string Name { get; set; }
 
-    public FunctionArgument(TypeRefType type, string name)
+    public FunctionArgument(RuntimeTypeRefType type, string name)
     {
         Type = type;
         Name = name;

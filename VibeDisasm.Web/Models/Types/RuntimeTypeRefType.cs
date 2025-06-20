@@ -3,7 +3,7 @@
 /// <summary>
 /// A type representing a reference to another type
 /// </summary>
-public sealed class TypeRefType : DatabaseType
+public sealed class RuntimeTypeRefType : RuntimeDatabaseType
 {
     public override string Namespace { get; set; }
 
@@ -14,12 +14,12 @@ public sealed class TypeRefType : DatabaseType
         set => throw new InvalidOperationException("Set Name property of TypeRefType is prohibited.");
     }
 
-    public TypeRefType(Guid id, string @namespace) : base(id)
+    public RuntimeTypeRefType(Guid id, string @namespace) : base(id)
     {
         Namespace = @namespace;
     }
 
-    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitRef(this);
+    public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitRef(this);
 
     protected internal override string DebugDisplay => $"ref_{Id}_in_{Namespace}";
 }

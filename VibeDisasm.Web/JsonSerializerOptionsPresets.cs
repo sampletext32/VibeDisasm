@@ -13,7 +13,7 @@ public static class JsonSerializerOptionsPresets
     };
     public static readonly JsonSerializerOptions DatabaseTypeOptions = new(JsonSerializerOptions.Web)
     {
-        TypeInfoResolver = new DatabaseTypeResolver()
+        TypeInfoResolver = new RuntimeDatabaseTypeResolver()
     };
     public static readonly JsonSerializerOptions TypeArchiveJsonOptions = new(JsonSerializerOptions.Default)
     {

@@ -1,4 +1,3 @@
-using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Temporary;
 
 namespace VibeDisasm.Web.Models;
@@ -6,15 +5,15 @@ namespace VibeDisasm.Web.Models;
 /// <summary>
 /// Database, holding all defined data inside the binary. Includes types and entries (function, data etc.)
 /// </summary>
-public class UserProgramDatabase
+public class RuntimeUserProgramDatabase
 {
-    public TypeStorage TypeStorage { get; set; }
-    public DatabaseEntryManager EntryManager { get; }
+    public RuntimeTypeStorage TypeStorage { get; set; }
+    public RuntimeDatabaseEntryManager EntryManager { get; }
 
-    public UserProgramDatabase(UserRuntimeProgram program)
+    public RuntimeUserProgramDatabase(RuntimeUserProgram program)
     {
-        TypeStorage = new TypeStorage(program);
-        EntryManager = new DatabaseEntryManager(program);
+        TypeStorage = new RuntimeTypeStorage(program);
+        EntryManager = new RuntimeDatabaseEntryManager(program);
 
         DefaultWindowsTypesPopulator.Populate(TypeStorage);
 

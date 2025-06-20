@@ -4,7 +4,7 @@ namespace VibeDisasm.Web.Models.DatabaseEntries;
 
 public class ArrayUserProgramDatabaseEntry : UserProgramDatabaseEntry
 {
-    public ArrayUserProgramDatabaseEntry(uint address, ArrayType type) : base(address, type)
+    public ArrayUserProgramDatabaseEntry(uint address, RuntimeArrayType type) : base(address, type)
     {
     }
 }

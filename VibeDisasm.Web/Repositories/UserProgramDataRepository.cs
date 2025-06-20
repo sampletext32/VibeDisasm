@@ -7,7 +7,7 @@ public class UserProgramDataRepository
 {
     private readonly Dictionary<Guid, byte[]> _userProgramData = [];
 
-    public async ValueTask<byte[]> GetOrLoad(UserRuntimeProgram program)
+    public async ValueTask<byte[]> GetOrLoad(RuntimeUserProgram program)
     {
         if (_userProgramData.TryGetValue(program.Id, out var bytes))
         {

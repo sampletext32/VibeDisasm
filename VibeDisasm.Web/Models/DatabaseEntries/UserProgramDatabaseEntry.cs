@@ -9,9 +9,9 @@ namespace VibeDisasm.Web.Models.DatabaseEntries;
 public abstract class UserProgramDatabaseEntry
 {
     public uint Address { get; set; }
-    public DatabaseType Type { get; set; }
+    public RuntimeDatabaseType Type { get; set; }
 
-    protected UserProgramDatabaseEntry(uint address, DatabaseType type)
+    protected UserProgramDatabaseEntry(uint address, RuntimeDatabaseType type)
     {
         Address = address;
         Type = type;

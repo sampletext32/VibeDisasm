@@ -1,11 +1,14 @@
 namespace VibeDisasm.Web.Models;
 
-public class UserRuntimeProject
+/// <summary>
+/// A runtime representation of user project (basically a pack of programs)
+/// </summary>
+public class RuntimeUserProject
 {
     public Guid Id { get; set; }
     public string Title { get; set; } = "";
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public List<UserRuntimeProgram> Programs { get; set; } = [];
+    public List<RuntimeUserProgram> Programs { get; set; } = [];
 
     /// <summary>
     /// path to zip archive of the project. Can be null if the project is a newly created.

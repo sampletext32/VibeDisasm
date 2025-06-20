@@ -20,7 +20,7 @@ public class ListTypesHandler
         _logger = logger;
     }
 
-    public async Task<Result<(List<DatabaseType>, JsonSerializerOptions)>> Handle(Guid projectId, Guid programId)
+    public async Task<Result<(List<RuntimeDatabaseType>, JsonSerializerOptions)>> Handle(Guid projectId, Guid programId)
     {
         var project = await _repository.GetById(projectId);
         if (project is null)

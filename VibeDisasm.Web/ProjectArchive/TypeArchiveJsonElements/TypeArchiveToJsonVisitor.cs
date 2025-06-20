@@ -2,12 +2,12 @@
 
 namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
-public class TypeArchiveToJsonVisitor : DatabaseTypeVisitor<TypeArchiveJsonElement>
+public class TypeArchiveToJsonVisitor : RuntimeDatabaseTypeVisitor<TypeArchiveJsonElement>
 {
-    public override TypeArchiveJsonElement VisitPrimitive(PrimitiveType type) =>
+    public override TypeArchiveJsonElement VisitPrimitive(RuntimePrimitiveType type) =>
         new PrimitiveArchiveJsonElement() { Id = type.Id, Name = type.Name };
 
-    public override TypeArchiveJsonElement VisitStruct(StructureType type) =>
+    public override TypeArchiveJsonElement VisitStruct(RuntimeStructureType type) =>
         new StructArchiveJsonElement()
         {
             Id = type.Id,
@@ -19,13 +19,13 @@ public class TypeArchiveToJsonVisitor : DatabaseTypeVisitor<TypeArchiveJsonEleme
             }).ToList()
         };
 
-    public override TypeArchiveJsonElement VisitPointer(PointerType type) => new PointerArchiveJsonElement()
+    public override TypeArchiveJsonElement VisitPointer(RuntimePointerType type) => new PointerArchiveJsonElement()
     {
         Id = type.Id,
         PointedType = new TypeRefJsonElement() { Id = type.PointedType.Id, Namespace = type.PointedType.Namespace }
     };
 
-    public override TypeArchiveJsonElement VisitFunction(FunctionType type) => new FunctionArchiveJsonElement()
+    public override TypeArchiveJsonElement VisitFunction(RuntimeFunctionType type) => new FunctionArchiveJsonElement()
     {
         Id = type.Id,
         Name = type.Name,
@@ -36,7 +36,7 @@ public class TypeArchiveToJsonVisitor : DatabaseTypeVisitor<TypeArchiveJsonEleme
         }).ToList()
     };
 
-    public override TypeArchiveJsonElement VisitArray(ArrayType type) => new ArrayArchiveJsonElement()
+    public override TypeArchiveJsonElement VisitArray(RuntimeArrayType type) => new ArrayArchiveJsonElement()
     {
         Id = type.Id,
         Name = type.Name,
@@ -44,7 +44,7 @@ public class TypeArchiveToJsonVisitor : DatabaseTypeVisitor<TypeArchiveJsonEleme
         ElementCount = type.ElementCount
     };
 
-    public override TypeArchiveJsonElement VisitRef(TypeRefType type) => new TypeRefJsonElement()
+    public override TypeArchiveJsonElement VisitRef(RuntimeTypeRefType type) => new TypeRefJsonElement()
     {
         Id = type.Id, Namespace = type.Namespace,
     };

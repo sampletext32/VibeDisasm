@@ -2,12 +2,14 @@
 
 namespace VibeDisasm.Web.Models;
 
-public class TypeStorage(UserRuntimeProgram program)
+public class RuntimeTypeStorage(RuntimeUserProgram program)
 {
-    public List<DatabaseType> Types { get; set; } = [];
+    public List<RuntimeTypeArchive> Archives { get; set; } = [];
+
+    public List<RuntimeDatabaseType> Types { get; set; } = [];
 
     public T AddType<T>(T type)
-        where T : DatabaseType
+        where T : RuntimeDatabaseType
     {
         var existingType = Types.FirstOrDefault(x => x == type);
         if (existingType is not null)

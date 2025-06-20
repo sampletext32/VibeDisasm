@@ -6,32 +6,32 @@ namespace VibeDisasm.Web.Models.Types;
 /// Structure type, that can be declared or used in the program, e.g. _IMAGE_FILE_HEADER, MyStructure, vtable
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public sealed class StructureType : DatabaseType
+public sealed class RuntimeStructureType : RuntimeDatabaseType
 {
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public List<StructureTypeField> Fields { get; set; }
+    public List<RuntimeStructureTypeField> Fields { get; set; }
 
-    public StructureType(Guid id, string @namespace, string name, List<StructureTypeField> fields) : base(id)
+    public RuntimeStructureType(Guid id, string @namespace, string name, List<RuntimeStructureTypeField> fields) : base(id)
     {
         Namespace = @namespace;
         Name = name;
         Fields = fields;
     }
-    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitStruct(this);
+    public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitStruct(this);
 
     protected internal override string DebugDisplay => $"struct {Name} {{ {Fields.Count} fields }}";
 }
 
 [DebuggerDisplay("{DebugDisplay}")]
-public class StructureTypeField
+public class RuntimeStructureTypeField
 {
-    public TypeRefType Type { get; set; }
+    public RuntimeTypeRefType Type { get; set; }
 
     public string Name { get; set; }
 
-    public StructureTypeField(TypeRefType type, string name)
+    public RuntimeStructureTypeField(RuntimeTypeRefType type, string name)
     {
         Type = type;
         Name = name;

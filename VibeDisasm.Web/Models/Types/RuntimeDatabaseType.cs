@@ -3,7 +3,7 @@ namespace VibeDisasm.Web.Models.Types;
 /// <summary>
 /// Any type, that can be declared or used in the program, e.g. int, word, void*, MyStructure etc.
 /// </summary>
-public abstract class DatabaseType
+public abstract class RuntimeDatabaseType
 {
     public Guid Id { get; set; }
 
@@ -13,14 +13,14 @@ public abstract class DatabaseType
 
     public string FullName => $"{Namespace}::{Name}";
 
-    protected DatabaseType(Guid id)
+    protected RuntimeDatabaseType(Guid id)
     {
         Id = id;
     }
 
-    public TypeRefType MakeRef() => new(Id, Namespace);
+    public RuntimeTypeRefType MakeRef() => new(Id, Namespace);
 
-    public abstract T Accept<T>(DatabaseTypeVisitor<T> visitor);
+    public abstract T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor);
 
     protected internal abstract string DebugDisplay { get; }
 }

@@ -7,22 +7,22 @@ namespace VibeDisasm.Web.Models.Types;
 /// <summary>
 /// Polymorphic JSON resolver for UserProgramDatabaseEntry and its derived types.
 /// </summary>
-public sealed class DatabaseTypeResolver : DefaultJsonTypeInfoResolver
+public sealed class RuntimeDatabaseTypeResolver : DefaultJsonTypeInfoResolver
 {
     private static readonly List<(Type, string)> _map = [
-        (typeof(ArrayType), "array"),
-        (typeof(FunctionType), "func"),
-        (typeof(PointerType), "ptr"),
-        (typeof(PrimitiveType), "primitive"),
-        (typeof(StructureType), "struct"),
-        (typeof(TypeRefType), "ref"),
+        (typeof(RuntimeArrayType), "array"),
+        (typeof(RuntimeFunctionType), "func"),
+        (typeof(RuntimePointerType), "ptr"),
+        (typeof(RuntimePrimitiveType), "primitive"),
+        (typeof(RuntimeStructureType), "struct"),
+        (typeof(RuntimeTypeRefType), "ref"),
     ];
 
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
     {
         var jsonTypeInfo = base.GetTypeInfo(type, options);
 
-        if (jsonTypeInfo.Type == typeof(DatabaseType))
+        if (jsonTypeInfo.Type == typeof(RuntimeDatabaseType))
         {
             jsonTypeInfo.PolymorphismOptions = new JsonPolymorphismOptions
             {

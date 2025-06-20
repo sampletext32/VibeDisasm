@@ -57,7 +57,7 @@ internal static class ServiceCollectionExtensions
             {
                 options.ConfigObject.TryItOutEnabled = true;
                 options.RoutePrefix = "swagger";
-                options.SwaggerEndpoint("v1/swagger.json", "Taro API V1");
+                options.SwaggerEndpoint("v1/swagger.json", "VibeDisasm API V1");
             }
         );
 

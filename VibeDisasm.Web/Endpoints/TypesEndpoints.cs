@@ -15,7 +15,7 @@ public static class TypesEndpoints
             .WithDescription("Lists all types in a program");
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DatabaseType))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RuntimeDatabaseType))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> ListTypes(
         ListTypesHandler handler,

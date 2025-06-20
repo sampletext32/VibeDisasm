@@ -9,7 +9,7 @@ namespace VibeDisasm.Web.ProjectArchive;
 
 public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
 {
-    public async Task<Result> Save(UserRuntimeProject runtimeProject)
+    public async Task<Result> Save(RuntimeUserProject runtimeProject)
     {
         logger.LogInformation("Attempting to save project {ProjectId} to {ArchivePath}", runtimeProject.Id,
             runtimeProject.ProjectArchivePath);
@@ -58,7 +58,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
         }
     }
 
-    private static async Task WriteProjectMetadataAsync(ZipArchive archive, UserRuntimeProject project)
+    private static async Task WriteProjectMetadataAsync(ZipArchive archive, RuntimeUserProject project)
     {
         var metadataEntry = archive.CreateEntry("metadata.json", CompressionLevel.Fastest);
         await using var metadataStream = metadataEntry.Open();
@@ -70,7 +70,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
             ));
     }
 
-    private static async Task WriteProgramsAsync(ZipArchive archive, IEnumerable<UserRuntimeProgram> programs)
+    private static async Task WriteProgramsAsync(ZipArchive archive, IEnumerable<RuntimeUserProgram> programs)
     {
         foreach (var program in programs)
         {
@@ -82,7 +82,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
     }
 
 
-    public async Task<Result<UserRuntimeProject>> Load(string projectArchiveAbsolutePath)
+    public async Task<Result<RuntimeUserProject>> Load(string projectArchiveAbsolutePath)
     {
         logger.LogInformation("Attempting to load project from {ArchivePath}", projectArchiveAbsolutePath);
 
@@ -105,7 +105,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
                 return Result.Fail("Failed to deserialize project metadata.");
             }
 
-            var runtimeProject = new UserRuntimeProject
+            var runtimeProject = new RuntimeUserProject
             {
                 Id = jsonMetadata.ProjectId,
                 Title = jsonMetadata.Title,
@@ -183,41 +183,41 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
 
         var typeArchive = new RuntimeTypeArchive(typeArchiveJson.Namespace);
 
-        Dictionary<Guid, DatabaseType> resolvedTypes = [];
+        Dictionary<Guid, RuntimeDatabaseType> resolvedTypes = [];
 
         foreach (var typeArchiveJsonElement in typeArchiveJson.Types)
         {
-            DatabaseType resolvedType = typeArchiveJsonElement switch
+            RuntimeDatabaseType resolvedType = typeArchiveJsonElement switch
             {
-                ArrayArchiveJsonElement element => new ArrayType(
+                ArrayArchiveJsonElement element => new RuntimeArrayType(
                     element.Id,
                     typeArchiveJson.Namespace,
-                    new TypeRefType(element.ElementType.Id, element.ElementType.Namespace),
+                    new RuntimeTypeRefType(element.ElementType.Id, element.ElementType.Namespace),
                     element.ElementCount
                 ),
-                FunctionArchiveJsonElement element => new FunctionType(
+                FunctionArchiveJsonElement element => new RuntimeFunctionType(
                     element.Id,
                     typeArchiveJson.Namespace,
                     element.Name,
-                    new TypeRefType(element.ReturnType.Id, element.ReturnType.Namespace),
-                    element.Arguments.Select(x => new FunctionArgument(new TypeRefType(x.Type.Id, x.Type.Namespace), x.Name)).ToList()
+                    new RuntimeTypeRefType(element.ReturnType.Id, element.ReturnType.Namespace),
+                    element.Arguments.Select(x => new FunctionArgument(new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace), x.Name)).ToList()
                 ),
-                PointerArchiveJsonElement element => new PointerType(
+                PointerArchiveJsonElement element => new RuntimePointerType(
                     element.Id,
                     typeArchiveJson.Namespace,
-                    new TypeRefType(element.PointedType.Id, element.PointedType.Namespace)
+                    new RuntimeTypeRefType(element.PointedType.Id, element.PointedType.Namespace)
                 ),
-                PrimitiveArchiveJsonElement element => new PrimitiveType(
+                PrimitiveArchiveJsonElement element => new RuntimePrimitiveType(
                     element.Id,
                     typeArchiveJson.Namespace,
                     element.Name
                 ),
-                StructArchiveJsonElement element => new StructureType(
+                StructArchiveJsonElement element => new RuntimeStructureType(
                     element.Id,
                     typeArchiveJson.Namespace,
                     element.Name,
-                    element.Fields.Select(x => new StructureTypeField(
-                        new TypeRefType(x.Type.Id, x.Type.Namespace),
+                    element.Fields.Select(x => new RuntimeStructureTypeField(
+                        new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace),
                         x.Name
                     )).ToList()
                 ),
@@ -242,10 +242,10 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
     }
 
     private static async
-        Task<(List<UserRuntimeProgram> Programs, Dictionary<string, List<Guid>> ProgramsByTypeArchiveDict)>
+        Task<(List<RuntimeUserProgram> Programs, Dictionary<string, List<Guid>> ProgramsByTypeArchiveDict)>
         ReadProgramsAsync(ZipArchive archive)
     {
-        var programs = new List<UserRuntimeProgram>();
+        var programs = new List<RuntimeUserProgram>();
         var programsByTypeArchiveDict = new Dictionary<string, List<Guid>>();
 
         foreach (var entry in archive.Entries)

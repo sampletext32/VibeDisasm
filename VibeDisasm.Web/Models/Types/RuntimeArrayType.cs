@@ -6,15 +6,15 @@ namespace VibeDisasm.Web.Models.Types;
 /// Array of anything, e.g. int[3], MyStruct[1]
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public sealed class ArrayType : DatabaseType
+public sealed class RuntimeArrayType : RuntimeDatabaseType
 {
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public TypeRefType ElementType { get; set; }
+    public RuntimeTypeRefType ElementType { get; set; }
     public int ElementCount { get; set; }
 
-    public ArrayType(Guid id, string @namespace, TypeRefType elementType, int elementCount) : base(id)
+    public RuntimeArrayType(Guid id, string @namespace, RuntimeTypeRefType elementType, int elementCount) : base(id)
     {
         Namespace = @namespace;
         Name = $"{elementType.Name}[{elementCount}]";
@@ -22,7 +22,7 @@ public sealed class ArrayType : DatabaseType
         ElementCount = elementCount;
     }
 
-    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitArray(this);
+    public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitArray(this);
 
     protected internal override string DebugDisplay =>  $"{ElementType.DebugDisplay}[{ElementCount}]";
 }

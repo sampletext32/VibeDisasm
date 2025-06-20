@@ -8,7 +8,7 @@ public record ProjectArchiveProgramMetadata(
     List<string> TypeArchivePaths
 )
 {
-    public static ProjectArchiveProgramMetadata FromUserProgram(Models.UserRuntimeProgram program) =>
+    public static ProjectArchiveProgramMetadata FromUserProgram(Models.RuntimeUserProgram program) =>
         new(
             program.Id,
             program.Name,
@@ -20,6 +20,6 @@ public record ProjectArchiveProgramMetadata(
                 .ToList()
         );
 
-    public Models.UserRuntimeProgram ToUserProgram() =>
+    public Models.RuntimeUserProgram ToUserProgram() =>
         new(Id, FilePath, Name, FileLength);
 }
