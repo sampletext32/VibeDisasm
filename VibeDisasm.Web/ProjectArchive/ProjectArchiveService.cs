@@ -192,21 +192,20 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
                 ArrayArchiveJsonElement element => new ArrayType(
                     element.Id,
                     typeArchiveJson.Namespace,
-                    resolvedTypes[element.ElementTypeId],
+                    new TypeRefType(element.ElementType.Id, element.ElementType.Namespace),
                     element.ElementCount
                 ),
                 FunctionArchiveJsonElement element => new FunctionType(
                     element.Id,
                     typeArchiveJson.Namespace,
                     element.Name,
-                    resolvedTypes[element.ReturnTypeId],
-                    element.Arguments.Select(x => new FunctionArgument(resolvedTypes[x.TypeId], x.Name)).ToList()
+                    new TypeRefType(element.ReturnType.Id, element.ReturnType.Namespace),
+                    element.Arguments.Select(x => new FunctionArgument(new TypeRefType(x.Type.Id, x.Type.Namespace), x.Name)).ToList()
                 ),
                 PointerArchiveJsonElement element => new PointerType(
                     element.Id,
                     typeArchiveJson.Namespace,
-                    element.Name,
-                    resolvedTypes[element.PointedTypeId]
+                    new TypeRefType(element.PointedType.Id, element.PointedType.Namespace)
                 ),
                 PrimitiveArchiveJsonElement element => new PrimitiveType(
                     element.Id,
@@ -218,7 +217,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
                     typeArchiveJson.Namespace,
                     element.Name,
                     element.Fields.Select(x => new StructureTypeField(
-                        resolvedTypes[x.TypeId],
+                        new TypeRefType(x.Type.Id, x.Type.Namespace),
                         x.Name
                     )).ToList()
                 ),

@@ -14,24 +14,25 @@ public class TypeArchiveToJsonVisitor : DatabaseTypeVisitor<TypeArchiveJsonEleme
             Name = type.Name,
             Fields = type.Fields.Select(f => new StructFieldArchiveJsonElement()
             {
-                TypeId = f.Type.Id, Name = f.Name,
+                Type = new TypeRefJsonElement() { Id = f.Type.Id, Namespace = f.Type.Namespace, },
+                Name = f.Name,
             }).ToList()
         };
 
     public override TypeArchiveJsonElement VisitPointer(PointerType type) => new PointerArchiveJsonElement()
     {
-        Id = type.Id, Name = type.Name, PointedTypeId = type.PointedType.Id
+        Id = type.Id,
+        PointedType = new TypeRefJsonElement() { Id = type.PointedType.Id, Namespace = type.PointedType.Namespace }
     };
 
     public override TypeArchiveJsonElement VisitFunction(FunctionType type) => new FunctionArchiveJsonElement()
     {
         Id = type.Id,
         Name = type.Name,
-        ReturnTypeId = type.ReturnType.Id,
+        ReturnType = new TypeRefJsonElement() { Id = type.ReturnType.Id, Namespace = type.ReturnType.Namespace },
         Arguments = type.Arguments.Select(x => new FunctionArgumentJsonElement()
         {
-            TypeId = x.Type.Id,
-            Name = x.Name
+            Type = new TypeRefJsonElement() { Id = x.Type.Id, Namespace = x.Type.Namespace }, Name = x.Name
         }).ToList()
     };
 
@@ -39,7 +40,12 @@ public class TypeArchiveToJsonVisitor : DatabaseTypeVisitor<TypeArchiveJsonEleme
     {
         Id = type.Id,
         Name = type.Name,
-        ElementTypeId = type.ElementType.Id,
+        ElementType = new TypeRefJsonElement() { Id = type.ElementType.Id, Namespace = type.ElementType.Namespace },
         ElementCount = type.ElementCount
+    };
+
+    public override TypeArchiveJsonElement VisitRef(TypeRefType type) => new TypeRefJsonElement()
+    {
+        Id = type.Id, Namespace = type.Namespace,
     };
 }

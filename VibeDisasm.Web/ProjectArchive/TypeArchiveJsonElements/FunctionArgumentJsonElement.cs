@@ -2,6 +2,6 @@
 
 public class FunctionArgumentJsonElement
 {
-    public Guid TypeId { get; set; }
+    public TypeRefJsonElement Type { get; set; } = null!;
     public string Name { get; set; } = "";
 }

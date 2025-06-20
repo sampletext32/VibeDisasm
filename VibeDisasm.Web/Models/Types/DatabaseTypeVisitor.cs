@@ -9,4 +9,5 @@ public abstract class DatabaseTypeVisitor<TReturn>
     public abstract TReturn VisitPointer(PointerType type);
     public abstract TReturn VisitFunction(FunctionType type);
     public abstract TReturn VisitArray(ArrayType type);
+    public abstract TReturn VisitRef(TypeRefType type);
 }

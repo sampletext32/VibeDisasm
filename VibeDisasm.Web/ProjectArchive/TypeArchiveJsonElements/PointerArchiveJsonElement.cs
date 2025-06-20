@@ -5,5 +5,5 @@
 /// </summary>
 public class PointerArchiveJsonElement : TypeArchiveJsonElement
 {
-    public Guid PointedTypeId { get; set; }
+    public TypeRefJsonElement PointedType { get; set; } = null!;
 }

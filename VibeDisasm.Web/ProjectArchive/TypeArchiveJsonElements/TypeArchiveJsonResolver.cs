@@ -15,6 +15,7 @@ public sealed class TypeArchiveJsonResolver : DefaultJsonTypeInfoResolver
         (typeof(PointerArchiveJsonElement), "ptr"),
         (typeof(PrimitiveArchiveJsonElement), "prm"),
         (typeof(StructArchiveJsonElement), "str"),
+        (typeof(TypeRefJsonElement), "ref"),
     ];
 
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)

@@ -15,6 +15,7 @@ public sealed class DatabaseTypeResolver : DefaultJsonTypeInfoResolver
         (typeof(PointerType), "ptr"),
         (typeof(PrimitiveType), "primitive"),
         (typeof(StructureType), "struct"),
+        (typeof(TypeRefType), "ref"),
     ];
 
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)

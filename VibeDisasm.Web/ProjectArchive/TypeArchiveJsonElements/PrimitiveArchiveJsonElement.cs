@@ -1,3 +1,6 @@
 ﻿namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
-public class PrimitiveArchiveJsonElement : TypeArchiveJsonElement;
+public class PrimitiveArchiveJsonElement : TypeArchiveJsonElement
+{
+    public string Name { get; set; } = "";
+}

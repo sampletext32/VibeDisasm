@@ -23,22 +23,22 @@ public static class DefaultWindowsTypesPopulator
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "uint32_t"));
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "int32_t"));
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "long long"));
-        var uint64tType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "uint64_t"));
+        var uint64tType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "uint64_t")).MakeRef();
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "int64_t"));
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "float"));
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "double"));
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "void"));
         typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "builtin", "bool"));
 
-        var dwordType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "DWORD"));
-        var wordType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "WORD"));
-        var byteType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "BYTE"));
-        var handleType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "HANDLE"));
-        var hinstanceType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "HINSTANCE"));
-        var hwndType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "HWND"));
-        var lpvoidType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "LPVOID"));
-        var eresType = typeStorage.AddType(new ArrayType(Guid.NewGuid(), "win32", wordType, 4));
-        var eres2Type = typeStorage.AddType(new ArrayType(Guid.NewGuid(), "win32", wordType, 10));
+        var dwordType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "DWORD")).MakeRef();
+        var wordType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "WORD")).MakeRef();
+        var byteType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "BYTE")).MakeRef();
+        var handleType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "HANDLE")).MakeRef();
+        var hinstanceType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "HINSTANCE")).MakeRef();
+        var hwndType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "HWND")).MakeRef();
+        var lpvoidType = typeStorage.AddType(new PrimitiveType(Guid.NewGuid(), "win32", "LPVOID")).MakeRef();
+        var eresType = typeStorage.AddType(new ArrayType(Guid.NewGuid(), "win32", wordType, 4)).MakeRef();
+        var eres2Type = typeStorage.AddType(new ArrayType(Guid.NewGuid(), "win32", wordType, 10)).MakeRef();
 
         typeStorage.AddType(new StructureType(Guid.NewGuid(), "win32", "IMAGE_DOS_HEADER", [
             new StructureTypeField(wordType, "e_magic"), /* 00: MZ Header signature */
@@ -70,15 +70,15 @@ public static class DefaultWindowsTypesPopulator
             new(dwordType, "NumberOfSymbols"),
             new(wordType, "SizeOfOptionalHeader"),
             new(wordType, "Characteristics"),
-        ]));
+        ])).MakeRef();
 
         var imageDataDirectoryType = typeStorage.AddType(new StructureType(Guid.NewGuid(), "win32",
             "IMAGE_DATA_DIRECTORY", [
                 new(dwordType, "VirtualAddress"),
                 new(dwordType, "Size"),
-            ]));
+            ])).MakeRef();
 
-        var dataDirectoryType = typeStorage.AddType(new ArrayType(Guid.NewGuid(), "win32", imageDataDirectoryType, 16));
+        var dataDirectoryType = typeStorage.AddType(new ArrayType(Guid.NewGuid(), "win32", imageDataDirectoryType, 16)).MakeRef();
 
         var imageOptionalHeader32Type = typeStorage.AddType(new StructureType(Guid.NewGuid(), "win32",
             "IMAGE_OPTIONAL_HEADER32", [
@@ -113,7 +113,7 @@ public static class DefaultWindowsTypesPopulator
                 new(dwordType, "LoaderFlags"),
                 new(dwordType, "NumberOfRvaAndSizes"),
                 new(dataDirectoryType, "DataDirectory")
-            ]));
+            ])).MakeRef();
 
         var imageOptionalHeader64Type = typeStorage.AddType(new StructureType(Guid.NewGuid(), "win32",
             "IMAGE_OPTIONAL_HEADER64", [
@@ -147,7 +147,7 @@ public static class DefaultWindowsTypesPopulator
                 new(dwordType, "LoaderFlags"),
                 new(dwordType, "NumberOfRvaAndSizes"),
                 new(dataDirectoryType, "DataDirectory")
-            ]));
+            ])).MakeRef();
 
         typeStorage.AddType(new StructureType(Guid.NewGuid(), "win32", "IMAGE_NT_HEADERS32", [
             new(dwordType, "Signature"),

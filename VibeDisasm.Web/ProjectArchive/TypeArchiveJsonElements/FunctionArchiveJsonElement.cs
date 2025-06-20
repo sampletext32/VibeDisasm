@@ -2,7 +2,8 @@
 
 public class FunctionArchiveJsonElement : TypeArchiveJsonElement
 {
-    public Guid ReturnTypeId { get; set; }
+    public string Name { get; set; } = "";
+    public TypeRefJsonElement ReturnType { get; set; } = null!;
 
     public List<FunctionArgumentJsonElement> Arguments { get; set; } = [];
 }

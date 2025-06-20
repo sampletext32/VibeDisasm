@@ -6,15 +6,19 @@ namespace VibeDisasm.Web.Models.Types;
 /// Pointer to anything, e.g. void*, int*, MyStruct*
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public class PointerType : DatabaseType
+public sealed class PointerType : DatabaseType
 {
-    public DatabaseType PointedType { get; set; }
+    public override string Namespace { get; set; }
+    public override string Name { get; set; }
 
-    public PointerType(Guid id, string @namespace, string name, DatabaseType pointedType) : base(id, @namespace, name)
+    public TypeRefType PointedType { get; set; }
+
+    public PointerType(Guid id, string @namespace, TypeRefType pointedType) : base(id)
     {
+        Namespace = @namespace;
         PointedType = pointedType;
+        Name = $"ptr_to_{PointedType.Name}";
     }
-
     public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitPointer(this);
 
     protected internal override string DebugDisplay => $"{PointedType.DebugDisplay}*";

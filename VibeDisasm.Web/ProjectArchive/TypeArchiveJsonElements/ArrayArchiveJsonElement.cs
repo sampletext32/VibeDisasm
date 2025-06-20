@@ -2,7 +2,9 @@
 
 public class ArrayArchiveJsonElement : TypeArchiveJsonElement
 {
-    public Guid ElementTypeId { get; set; }
+    public string Name { get; set; } = "";
+
+    public TypeRefJsonElement ElementType { get; set; } = null!;
 
     public int ElementCount { get; set; }
 }
