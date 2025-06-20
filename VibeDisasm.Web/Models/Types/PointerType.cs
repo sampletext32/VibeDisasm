@@ -10,18 +10,12 @@ public class PointerType : DatabaseType
 {
     public DatabaseType PointedType { get; set; }
 
-    public PointerType(DatabaseType pointedType, int size) : base(size)
+    public PointerType(Guid id, string @namespace, string name, DatabaseType pointedType) : base(id, @namespace, name)
     {
         PointedType = pointedType;
     }
 
-    public override string Semantic => $"{PointedType.Semantic}*";
-
-    public override PointerType AsReadonly()
-    {
-        MakeReadonly();
-        return this;
-    }
+    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitPointer(this);
 
     protected internal override string DebugDisplay => $"{PointedType.DebugDisplay}*";
 }

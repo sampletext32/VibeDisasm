@@ -5,30 +5,22 @@ namespace VibeDisasm.Web.Models.Types;
 /// </summary>
 public abstract class DatabaseType
 {
-    public int Size { get; set; }
+    public Guid Id { get; set; }
 
-    public bool ReadOnly { get; set; }
+    public string Namespace { get; set; }
 
-    /// <summary>
-    /// Semantic representation of a type.
-    /// Primitive => type
-    /// Array => type[int]
-    /// Pointer => type*
-    /// Structure => name
-    /// </summary>
-    public abstract string Semantic { get; }
+    public string Name { get; set; }
 
-    public DatabaseType(int size)
+    public string FullName => $"{Namespace}::{Name}";
+
+    protected DatabaseType(Guid id, string @namespace, string name)
     {
-        Size = size;
-        ReadOnly = false;
+        Id = id;
+        Namespace = @namespace;
+        Name = name;
     }
 
-    protected void MakeReadonly()
-    {
-        ReadOnly = true;
-    }
+    public abstract T Accept<T>(DatabaseTypeVisitor<T> visitor);
 
-    public abstract DatabaseType AsReadonly();
     protected internal abstract string DebugDisplay { get; }
 }

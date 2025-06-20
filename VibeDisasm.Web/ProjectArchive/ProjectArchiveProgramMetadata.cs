@@ -1,9 +1,24 @@
 namespace VibeDisasm.Web.ProjectArchive;
 
-public record ProjectArchiveProgramMetadata(Guid Id, string Name, string FilePath, long FileLength)
+public record ProjectArchiveProgramMetadata(
+    Guid Id,
+    string Name,
+    string FilePath,
+    long FileLength,
+    List<string> TypeArchivePaths
+)
 {
     public static ProjectArchiveProgramMetadata FromUserProgram(Models.UserRuntimeProgram program) =>
-        new(program.Id, program.Name, program.FilePath, program.FileLength);
+        new(
+            program.Id,
+            program.Name,
+            program.FilePath,
+            program.FileLength,
+            program.TypeArchives
+                .Select(x => x.AbsoluteFilePath ?? throw new InvalidOperationException(
+                    $"When attempting to save program to archive, type archive {x.Namespace} didn't have absolute file path. User needs to save it first."))
+                .ToList()
+        );
 
     public Models.UserRuntimeProgram ToUserProgram() =>
         new(Id, FilePath, Name, FileLength);

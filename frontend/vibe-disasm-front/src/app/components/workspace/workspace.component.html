@@ -1,5 +1,5 @@
 <div class="vertical">
-  <app-split-pane [initialLeftWidth]="initialLeftWidth">
+  <app-split-pane [initialLeftWidth]="40">
     <div leftPane class="listing window">
       <div class="window-header">
         Listing
@@ -23,14 +23,6 @@
             </div>
           </div>
         </cdk-virtual-scroll-viewport>
-<!--        @for (i of [].constructor(500); track i) {-->
-<!--          <div class="line">-->
-<!--            <div class="item address">0x00400000</div>-->
-<!--            <div class="item bytes">00 12 34 56</div>-->
-<!--            <div class="item disasm">&lt;non&gt;</div>-->
-<!--            <div class="item semantic">arbitrary</div>-->
-<!--          </div>-->
-<!--        }-->
       </div>
     </div>
 

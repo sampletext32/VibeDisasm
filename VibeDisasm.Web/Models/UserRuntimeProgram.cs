@@ -9,6 +9,8 @@ public class UserRuntimeProgram
 
     public UserProgramDatabase Database { get; set; }
 
+    public List<RuntimeTypeArchive> TypeArchives { get; set; } = [];
+
     public UserRuntimeProgram(Guid id, string filePath, string name, long fileLength)
     {
         Id = id;

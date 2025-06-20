@@ -9,24 +9,37 @@ namespace VibeDisasm.Web.Models.Types;
 public class FunctionType : DatabaseType
 {
     public DatabaseType ReturnType { get; }
-    public List<DatabaseType> ParameterTypes { get; }
+    public List<FunctionArgument> Arguments { get; }
 
-    public FunctionType(DatabaseType returnType, List<DatabaseType> parameterTypes)
-        : base(4)
+    public FunctionType(
+        Guid id,
+        string @namespace,
+        string name,
+        DatabaseType returnType,
+        List<FunctionArgument> arguments
+    ) : base(id, @namespace, name)
     {
         ReturnType = returnType;
-
-        ParameterTypes = parameterTypes;
+        Arguments = arguments;
     }
 
-    public override string Semantic =>
-        $"{ReturnType.Semantic} func({string.Join(", ", ParameterTypes.Select(x => x.Semantic))})";
+    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitFunction(this);
 
-    public override FunctionType AsReadonly()
+    protected internal override string DebugDisplay =>
+        $"{ReturnType.DebugDisplay} func({string.Join(", ", Arguments.Select(x => x.DebugDisplay))})";
+}
+
+public class FunctionArgument
+{
+    public DatabaseType Type { get; set; }
+
+    public string Name { get; set; }
+
+    public FunctionArgument(DatabaseType type, string name)
     {
-        MakeReadonly();
-        return this;
+        Type = type;
+        Name = name;
     }
 
-    protected internal override string DebugDisplay =>  $"{ReturnType.DebugDisplay} func({string.Join(", ", ParameterTypes.Select(x => x.DebugDisplay))})";
+    public string DebugDisplay => $"{Type.DebugDisplay} {Name}";
 }

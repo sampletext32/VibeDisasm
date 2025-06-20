@@ -4,7 +4,7 @@ namespace VibeDisasm.Web.Models.DatabaseEntries;
 
 public class UndefinedUserProgramDatabaseEntry : UserProgramDatabaseEntry
 {
-    public override long Size { get; }
+    public long Size { get; }
 
     public UndefinedUserProgramDatabaseEntry(uint address, DatabaseType type, long programSize) : base(address, type)
     {

@@ -8,20 +8,11 @@ namespace VibeDisasm.Web.Models.Types;
 [DebuggerDisplay("{DebugDisplay}")]
 public class PrimitiveType : DatabaseType
 {
-    public string Name { get; set; }
-
-    public PrimitiveType(int size, string name) : base(size)
+    public PrimitiveType(Guid id, string @namespace, string name) : base(id, @namespace, name)
     {
-        Name = name;
     }
 
-    public override string Semantic => Name;
-
-    public override PrimitiveType AsReadonly()
-    {
-        MakeReadonly();
-        return this;
-    }
+    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitPrimitive(this);
 
     protected internal override string DebugDisplay => Name;
 }

@@ -11,19 +11,13 @@ public class ArrayType : DatabaseType
     public DatabaseType ElementType { get; set; }
     public int ElementCount { get; set; }
 
-    public ArrayType(DatabaseType elementType, int elementCount) : base(elementType.Size * elementCount)
+    public ArrayType(Guid id, string @namespace, DatabaseType elementType, int elementCount) : base(id, @namespace, $"{elementType.Name}[{elementCount}]")
     {
         ElementType = elementType;
         ElementCount = elementCount;
     }
 
-    public override string Semantic =>  $"{ElementType.Semantic}[{ElementCount}]";
-
-    public override ArrayType AsReadonly()
-    {
-        MakeReadonly();
-        return this;
-    }
+    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitArray(this);
 
     protected internal override string DebugDisplay =>  $"{ElementType.DebugDisplay}[{ElementCount}]";
 }

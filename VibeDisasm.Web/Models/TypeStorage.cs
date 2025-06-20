@@ -6,18 +6,6 @@ public class TypeStorage(UserRuntimeProgram program)
 {
     public List<DatabaseType> Types { get; set; } = [];
 
-    public DatabaseType FindSemantic(string semantic)
-    {
-        var type = Types.FirstOrDefault(x => x.Semantic == semantic);
-
-        if (type is null)
-        {
-            throw new InvalidOperationException("Could not find type " + semantic);
-        }
-
-        return type;
-    }
-
     public T AddType<T>(T type)
         where T : DatabaseType
     {

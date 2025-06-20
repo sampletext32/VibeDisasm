@@ -9,36 +9,36 @@ public class DatabaseEntryManager(UserRuntimeProgram program)
     [Pure]
     public UserProgramDatabaseEntry? GetEntryAt(uint address)
     {
-        if (_entries.Count == 0)
-        {
-            return null;
-        }
-
-        if (_entries.Count == 1)
-        {
-            var entry = _entries[0];
-            return entry.Address <= address && address < entry.Address + entry.Size ? entry : null;
-        }
-
-        // binary search for speed
-        int left = 0, right = _entries.Count - 1;
-        while (left <= right)
-        {
-            int mid = left + ((right - left) >> 1);
-            var entry = _entries[mid];
-            if (address < entry.Address)
-            {
-                right = mid - 1;
-            }
-            else if (address >= entry.Address + entry.Size)
-            {
-                left = mid + 1;
-            }
-            else
-            {
-                return entry;
-            }
-        }
+        // if (_entries.Count == 0)
+        // {
+        //     return null;
+        // }
+        //
+        // if (_entries.Count == 1)
+        // {
+        //     var entry = _entries[0];
+        //     return entry.Address <= address && address < entry.Address + entry.Size ? entry : null;
+        // }
+        //
+        // // binary search for speed
+        // int left = 0, right = _entries.Count - 1;
+        // while (left <= right)
+        // {
+        //     int mid = left + ((right - left) >> 1);
+        //     var entry = _entries[mid];
+        //     if (address < entry.Address)
+        //     {
+        //         right = mid - 1;
+        //     }
+        //     else if (address >= entry.Address + entry.Size)
+        //     {
+        //         left = mid + 1;
+        //     }
+        //     else
+        //     {
+        //         return entry;
+        //     }
+        // }
         return null;
     }
 

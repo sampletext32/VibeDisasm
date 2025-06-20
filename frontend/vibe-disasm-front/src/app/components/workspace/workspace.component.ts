@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
-import { SplitPaneComponent } from '../shared/split-pane/split-pane.component';
+import {Component, OnInit} from '@angular/core';
+import {SplitPaneComponent} from '../shared/split-pane/split-pane.component';
+import {ApiService} from "../../services/api.service";
+import {StateService} from "../../services/state.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {finalize} from "rxjs/operators";
 
 @Component({
   selector: 'app-workspace',
@@ -7,7 +11,32 @@ import { SplitPaneComponent } from '../shared/split-pane/split-pane.component';
   styleUrl: './workspace.component.scss',
   standalone: false
 })
-export class WorkspaceComponent {
-  // Configuration for the split pane
-  initialLeftWidth = 40; // 40% initial width for the left pane
+export class WorkspaceComponent implements OnInit {
+  constructor(
+    private api: ApiService,
+    private state: StateService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const programId = params.get('programId');
+      if (programId) {
+
+        this.api.listingAt(this.state.getProjectId(), programId, 0)
+          .pipe(finalize(() => {
+          }))
+          .subscribe({
+            next: listing => {
+            }
+          });
+      } else {
+        this.router.navigate(['/projects']);
+      }
+    });
+  }
+
+
 }

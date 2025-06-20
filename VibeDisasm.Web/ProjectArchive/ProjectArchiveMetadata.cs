@@ -1,3 +1,7 @@
 namespace VibeDisasm.Web.ProjectArchive;
 
-public record ProjectArchiveMetadata(Guid ProjectId, string Title, DateTime CreatedAt);
+public record ProjectArchiveMetadata(
+    Guid ProjectId,
+    string Title,
+    DateTime CreatedAt
+);

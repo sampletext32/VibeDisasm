@@ -18,7 +18,7 @@ public class UserProgramDatabase
 
         DefaultWindowsTypesPopulator.Populate(TypeStorage);
 
-        EntryManager.AddEntry(new UndefinedUserProgramDatabaseEntry(0x0, TypeStorage.FindSemantic("undefined"), program.FileLength));
+        // EntryManager.AddEntry(new UndefinedUserProgramDatabaseEntry(0x0, TypeStorage.FindSemantic("undefined"), program.FileLength));
 
         _ = 5;
     }

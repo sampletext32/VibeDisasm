@@ -6,12 +6,10 @@ namespace VibeDisasm.Web.Models.DatabaseEntries;
 /// Entry in user-program listing, e.g. defined function, structure, array etc.
 /// Must have an address of definition and type
 /// </summary>
-public class UserProgramDatabaseEntry
+public abstract class UserProgramDatabaseEntry
 {
     public uint Address { get; set; }
     public DatabaseType Type { get; set; }
-
-    public virtual long Size => Type.Size;
 
     protected UserProgramDatabaseEntry(uint address, DatabaseType type)
     {

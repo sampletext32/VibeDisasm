@@ -15,7 +15,7 @@ public static class ListingEndpoints
             .WithName("AtAddress")
             .WithDescription("Get listing at exact address");
 
-        group.MapPost("/add/", AddEntry)
+        group.MapPost("/add", AddEntry)
             .WithName("AddEntry")
             .WithDescription("Add an entry to the listing");
     }
@@ -36,8 +36,8 @@ public static class ListingEndpoints
     private static async Task<IResult> AddEntry(ListingAddEntryHandler handler, Guid projectId, Guid programId,
         HttpContext context)
     {
-        var entry = await context.Request.ReadFromJsonAsync<UserProgramDatabaseEntry>(JsonSerializerOptionsPresets
-            .DatabaseEntryOptions
+        var entry = await context.Request.ReadFromJsonAsync<UserProgramDatabaseEntry>(
+            JsonSerializerOptionsPresets.DatabaseEntryOptions
         );
 
         if (entry is null)

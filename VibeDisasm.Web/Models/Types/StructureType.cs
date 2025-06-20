@@ -8,23 +8,14 @@ namespace VibeDisasm.Web.Models.Types;
 [DebuggerDisplay("{DebugDisplay}")]
 public class StructureType : DatabaseType
 {
-    public string Name { get; set; }
-
     public List<StructureTypeField> Fields { get; set; }
 
-    public StructureType(string name, List<StructureTypeField> fields) : base(fields.Sum(x => x.Type.Size))
+    public StructureType(Guid id, string @namespace, string name, List<StructureTypeField> fields) : base(id, @namespace, name)
     {
-        Name = name;
         Fields = fields;
     }
 
-    public override string Semantic => Name;
-
-    public override StructureType AsReadonly()
-    {
-        MakeReadonly();
-        return this;
-    }
+    public override T Accept<T>(DatabaseTypeVisitor<T> visitor) => visitor.VisitStruct(this);
 
     protected internal override string DebugDisplay => $"struct {Name} {{ {Fields.Count} fields }}";
 }
