@@ -14,7 +14,7 @@ public record ProjectArchiveProgramMetadata(
             program.Name,
             program.FilePath,
             program.FileLength,
-            program.TypeArchives
+            program.Database.TypeStorage.Archives
                 .Select(x => x.AbsoluteFilePath ?? throw new InvalidOperationException(
                     $"When attempting to save program to archive, type archive {x.Namespace} didn't have absolute file path. User needs to save it first."))
                 .ToList()

@@ -148,7 +148,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
                     var program = runtimeProject.Programs.FirstOrDefault(x => x.Id == programId) ??
                                   throw new InvalidOperationException($"Failed to find program with id {programId}");
 
-                    program.TypeArchives.Add(typeArchive);
+                    program.Database.TypeStorage.Archives.Add(typeArchive);
                 }
             }
 

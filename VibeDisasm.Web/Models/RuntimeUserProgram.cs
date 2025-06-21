@@ -12,8 +12,6 @@ public class RuntimeUserProgram
 
     public RuntimeUserProgramDatabase Database { get; set; }
 
-    public List<RuntimeTypeArchive> TypeArchives { get; set; } = [];
-
     public RuntimeUserProgram(Guid id, string filePath, string name, long fileLength)
     {
         Id = id;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Handlers;
 using VibeDisasm.Web.Models.Types;
 
@@ -10,20 +11,36 @@ public static class TypesEndpoints
     {
         var group = app.MapGroup("/types/{projectId:guid}/{programId:guid}").WithTags("Types");
 
-        group.MapGet("/list", ListTypes)
-            .WithName("ListTypes")
-            .WithDescription("Lists all types in a program");
+        group.MapGet("/list-archives", ListArchives)
+            .WithName("ListArchives")
+            .WithDescription("Lists type archives associated with the program");
+
+        group.MapGet("/{archiveNamespace}/list", ListArchiveTypes)
+            .WithName("ListArchiveTypes")
+            .WithDescription("Lists types in the specified archive");
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RuntimeDatabaseType))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TypeArchiveListItem>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    private static async Task<IResult> ListTypes(
-        ListTypesHandler handler,
+    private static async Task<IResult> ListArchives(
+        ListArchivesHandler handler,
         Guid projectId, Guid programId)
     {
         var result = await handler.Handle(projectId, programId);
         return result.IsSuccess
-            ? Results.Json(result.Value.Item1, result.Value.Item2)
+            ? Results.Json(result.Value)
+            : Results.BadRequest(result.Errors.First().Message);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TypeArchiveListItem>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> ListArchiveTypes(
+        ListArchiveTypesHandler handler,
+        Guid projectId, Guid programId, string archiveNamespace)
+    {
+        var result = await handler.Handle(projectId, programId, archiveNamespace);
+        return result.IsSuccess
+            ? Results.Json(result.Value)
             : Results.BadRequest(result.Errors.First().Message);
     }
 }

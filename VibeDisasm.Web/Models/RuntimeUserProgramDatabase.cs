@@ -1,3 +1,4 @@
+using VibeDisasm.Web.Models.Types;
 using VibeDisasm.Web.Temporary;
 
 namespace VibeDisasm.Web.Models;

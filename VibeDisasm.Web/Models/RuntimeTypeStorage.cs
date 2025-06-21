@@ -6,18 +6,40 @@ public class RuntimeTypeStorage(RuntimeUserProgram program)
 {
     public List<RuntimeTypeArchive> Archives { get; set; } = [];
 
-    public List<RuntimeDatabaseType> Types { get; set; } = [];
-
-    public T AddType<T>(T type)
-        where T : RuntimeDatabaseType
+    /// <summary>
+    /// Resolves a typeref, by looking in it's namespace-specified archive. If resolved type is a typeref itself - returns it as is.
+    /// </summary>
+    public RuntimeDatabaseType? ResolveTypeRef(RuntimeTypeRefType type)
     {
-        var existingType = Types.FirstOrDefault(x => x == type);
-        if (existingType is not null)
+        var archive = Archives.FirstOrDefault(x => x.Namespace == type.Namespace);
+
+        if (archive is null)
         {
-            Console.WriteLine($"Type already exists {existingType.DebugDisplay}");
-            return existingType as T ?? throw new InvalidOperationException($"Failed to cast {type.DebugDisplay} to {typeof(T).Name}");
+            return null;
         }
-        Types.Add(type);
-        return type;
+
+        var resolvedType = archive.Types.FirstOrDefault(x => x.Id == type.Id);
+
+        if (resolvedType is null)
+        {
+            return null;
+        }
+
+        return resolvedType;
+    }
+
+    /// <summary>
+    /// Resolves a typeref, by looking in it's namespace-specified archive. If resolved type is a typeref itself - resolves it to discrete type.
+    /// </summary>
+    public RuntimeDatabaseType? DeepResolveTypeRef(RuntimeTypeRefType type)
+    {
+        var resolvedType = ResolveTypeRef(type);
+
+        if (resolvedType is RuntimeTypeRefType nestedRef)
+        {
+            return DeepResolveTypeRef(nestedRef);
+        }
+
+        return resolvedType;
     }
 }
