@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using FluentResults;
+using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Handlers;
 using VibeDisasm.Web.Models.Types;
@@ -40,7 +42,7 @@ public static class TypesEndpoints
     {
         var result = await handler.Handle(projectId, programId, archiveNamespace);
         return result.IsSuccess
-            ? Results.Json(result.Value)
+            ? Results.Json(result.Value.types, result.Value.SerializerOptions)
             : Results.BadRequest(result.Errors.First().Message);
     }
 }

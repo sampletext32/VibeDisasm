@@ -40,9 +40,11 @@ builder.Services.AddSingleton<DeleteRecentHandler>();
 
 builder.Services.AddSingleton<ListingAtAddressHandler>();
 builder.Services.AddSingleton<ListingAddEntryHandler>();
+builder.Services.AddSingleton<ListArchivesHandler>();
 builder.Services.AddSingleton<ListArchiveTypesHandler>();
 
 builder.Services.AddSingleton<ProjectArchiveService>();
+builder.Services.AddSingleton<TypeArchiveService>();
 builder.Services.AddSingleton<RecentsService>();
 
 var app = builder.Build();

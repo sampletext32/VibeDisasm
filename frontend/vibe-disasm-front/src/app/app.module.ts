@@ -13,6 +13,7 @@ import {NewProjectDialogComponent} from './components/new-project-dialog/new-pro
 import {WorkspaceComponent} from "./components/workspace/workspace.component";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SplitPaneComponent} from "./components/shared/split-pane/split-pane.component";
+import {ThreeSplitPaneComponent} from "./components/shared/three-split-pane/three-split-pane.component";
 
 // Angular Material
 import {MatDialogModule} from '@angular/material/dialog';
@@ -44,6 +45,7 @@ import {CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport} fr
     NewProjectDialogComponent,
     WorkspaceComponent,
     SplitPaneComponent,
+    ThreeSplitPaneComponent,
     ConfirmDialogComponent,
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,

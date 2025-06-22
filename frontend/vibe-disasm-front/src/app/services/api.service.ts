@@ -4,6 +4,8 @@ import {Observable} from 'rxjs';
 import {environment} from 'src/environments/environment';
 import {RecentMetadata} from "../dtos/recentMetadata";
 import {Program} from "../dtos/program";
+import {TypeArchiveListItem} from "../dtos/type-archive-list-item";
+import {DatabaseType} from "../dtos/type-archive";
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +43,26 @@ export class ApiService {
   }
   listingAt(projectId: string, programId: string, address: number): Observable<{}> {
     return this.http.get<{ }>(`${this.baseUrl}/listing/${projectId}/${programId}/ataddress/${address}`);
+  }
+
+  /**
+   * Lists type archives associated with the program
+   * @param projectId The project ID
+   * @param programId The program ID
+   * @returns Observable of type archive list items
+   */
+  listTypeArchives(projectId: string, programId: string): Observable<TypeArchiveListItem[]> {
+    return this.http.get<TypeArchiveListItem[]>(`${this.baseUrl}/types/${projectId}/${programId}/list-archives`);
+  }
+
+  /**
+   * Lists types in the specified archive
+   * @param projectId The project ID
+   * @param programId The program ID
+   * @param archiveNamespace The archive namespace
+   * @returns Observable of database types
+   */
+  listArchiveTypes(projectId: string, programId: string, archiveNamespace: string): Observable<DatabaseType[]> {
+    return this.http.get<DatabaseType[]>(`${this.baseUrl}/types/${projectId}/${programId}/${archiveNamespace}/list`);
   }
 }

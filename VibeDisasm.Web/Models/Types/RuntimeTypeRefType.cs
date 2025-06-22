@@ -10,8 +10,10 @@ public sealed class RuntimeTypeRefType : RuntimeDatabaseType
     [Obsolete]
     public override string Name
     {
-        get => throw new InvalidOperationException("Get Name property of TypeRefType is prohibited.");
-        set => throw new InvalidOperationException("Set Name property of TypeRefType is prohibited.");
+        get => "Get Name property of TypeRefType is prohibited.";
+        set
+        {
+        }
     }
 
     public RuntimeTypeRefType(Guid id, string @namespace) : base(id)

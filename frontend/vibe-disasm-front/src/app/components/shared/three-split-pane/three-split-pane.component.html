@@ -1,0 +1,17 @@
+<div class="three-split-container">
+  <div class="left-pane" #leftPane>
+    <ng-content select="[leftPane]"></ng-content>
+  </div>
+
+  <div class="resizer left-resizer" #leftResizer></div>
+
+  <div class="middle-pane" #middlePane>
+    <ng-content select="[middlePane]"></ng-content>
+  </div>
+
+  <div class="resizer right-resizer" #rightResizer></div>
+
+  <div class="right-pane" #rightPane>
+    <ng-content select="[rightPane]"></ng-content>
+  </div>
+</div>

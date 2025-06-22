@@ -2,12 +2,10 @@ using System.IO.Compression;
 using System.Text.Json;
 using FluentResults;
 using VibeDisasm.Web.Models;
-using VibeDisasm.Web.Models.Types;
-using VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
 namespace VibeDisasm.Web.ProjectArchive;
 
-public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
+public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogger<ProjectArchiveService> logger)
 {
     public async Task<Result> Save(RuntimeUserProject runtimeProject)
     {
@@ -117,40 +115,7 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
 
             runtimeProject.Programs = programs;
 
-            var distinctTypeArchivePaths = programsByTypeArchivePathDict.Keys;
-
-            foreach (var typeArchivePath in distinctTypeArchivePaths)
-            {
-                var archivePath = typeArchivePath;
-                if (Path.IsPathFullyQualified(typeArchivePath))
-                {
-                    logger.LogInformation("Attempting to load type archive from absolute path {TypeArchivePath}",
-                        typeArchivePath);
-                }
-                else
-                {
-                    archivePath = Path.GetFullPath(typeArchivePath);
-                    logger.LogInformation("Attempting to load type archive from relative path {TypeArchivePath}",
-                        typeArchivePath);
-                }
-
-                var typeArchive = await LoadTypeArchive(archivePath);
-
-                if (typeArchive is null)
-                {
-                    logger.LogWarning("Failed to load type archive for {TypeArchivePath}. Program may not work.",
-                        archivePath);
-                    continue;
-                }
-
-                foreach (var programId in programsByTypeArchivePathDict[archivePath])
-                {
-                    var program = runtimeProject.Programs.FirstOrDefault(x => x.Id == programId) ??
-                                  throw new InvalidOperationException($"Failed to find program with id {programId}");
-
-                    program.Database.TypeStorage.Archives.Add(typeArchive);
-                }
-            }
+            await typeArchiveService.LoadAllTypeArchive(programsByTypeArchivePathDict, runtimeProject);
 
             logger.LogInformation("Successfully loaded project {ProjectId} from {ArchivePath}", jsonMetadata.ProjectId,
                 projectArchiveAbsolutePath);
@@ -163,75 +128,6 @@ public class ProjectArchiveService(ILogger<ProjectArchiveService> logger)
         }
     }
 
-    private async Task<RuntimeTypeArchive?> LoadTypeArchive(string typeArchiveAbsolutePath)
-    {
-        if (!File.Exists(typeArchiveAbsolutePath))
-        {
-            return null;
-        }
-
-        await using var stream = new FileStream(typeArchiveAbsolutePath, FileMode.Open);
-        var typeArchiveJson =
-            await JsonSerializer.DeserializeAsync<TypeArchiveJson>(stream,
-                JsonSerializerOptionsPresets.TypeArchiveJsonOptions);
-
-        if (typeArchiveJson is null)
-        {
-            logger.LogWarning("TypeArchive is corrupted. Deserialization Failed");
-            return null;
-        }
-
-        var typeArchive = new RuntimeTypeArchive(typeArchiveJson.Namespace);
-
-        Dictionary<Guid, RuntimeDatabaseType> resolvedTypes = [];
-
-        foreach (var typeArchiveJsonElement in typeArchiveJson.Types)
-        {
-            RuntimeDatabaseType resolvedType = typeArchiveJsonElement switch
-            {
-                ArrayArchiveJsonElement element => new RuntimeArrayType(
-                    element.Id,
-                    typeArchiveJson.Namespace,
-                    new RuntimeTypeRefType(element.ElementType.Id, element.ElementType.Namespace),
-                    element.ElementCount
-                ),
-                FunctionArchiveJsonElement element => new RuntimeFunctionType(
-                    element.Id,
-                    typeArchiveJson.Namespace,
-                    element.Name,
-                    new RuntimeTypeRefType(element.ReturnType.Id, element.ReturnType.Namespace),
-                    element.Arguments.Select(x => new FunctionArgument(new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace), x.Name)).ToList()
-                ),
-                PointerArchiveJsonElement element => new RuntimePointerType(
-                    element.Id,
-                    typeArchiveJson.Namespace,
-                    new RuntimeTypeRefType(element.PointedType.Id, element.PointedType.Namespace)
-                ),
-                PrimitiveArchiveJsonElement element => new RuntimePrimitiveType(
-                    element.Id,
-                    typeArchiveJson.Namespace,
-                    element.Name
-                ),
-                StructArchiveJsonElement element => new RuntimeStructureType(
-                    element.Id,
-                    typeArchiveJson.Namespace,
-                    element.Name,
-                    element.Fields.Select(x => new RuntimeStructureTypeField(
-                        new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace),
-                        x.Name
-                    )).ToList()
-                ),
-                _ => throw new ArgumentOutOfRangeException(nameof(typeArchiveJsonElement))
-            };
-
-            resolvedTypes[resolvedType.Id] = resolvedType;
-        }
-
-        typeArchive.Types = resolvedTypes.Values.ToList();
-        typeArchive.AbsoluteFilePath = typeArchiveAbsolutePath;
-
-        return typeArchive;
-    }
 
     private static async Task<ProjectArchiveMetadata?> ReadProjectMetadataAsync(ZipArchive archive)
     {

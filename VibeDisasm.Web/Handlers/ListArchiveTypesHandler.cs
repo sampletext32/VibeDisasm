@@ -18,7 +18,7 @@ public class ListArchiveTypesHandler
         _logger = logger;
     }
 
-    public async Task<Result<(List<TypeArchiveElementDto> types, JsonSerializerOptions DatabaseTypeOptions)>> Handle(
+    public async Task<Result<(List<TypeArchiveElementDto> types, JsonSerializerOptions SerializerOptions)>> Handle(
         Guid projectId,
         Guid programId,
         string archiveNamespace

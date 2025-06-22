@@ -6,6 +6,20 @@ public class RuntimeTypeStorage(RuntimeUserProgram program)
 {
     public List<RuntimeTypeArchive> Archives { get; set; } = [];
 
+    public RuntimeDatabaseType? FindType(string @namespace, string name)
+    {
+        var archive = Archives.FirstOrDefault(x => x.Namespace == @namespace);
+
+        if (archive is null)
+        {
+            return null;
+        }
+
+        var type = archive.Types.FirstOrDefault(x => x.Name == name);
+
+        return type ?? null;
+    }
+
     /// <summary>
     /// Resolves a typeref, by looking in it's namespace-specified archive. If resolved type is a typeref itself - returns it as is.
     /// </summary>

@@ -8,7 +8,7 @@ const routes: Routes = [
   {path: '', redirectTo: '/projects', pathMatch: 'full'},
   {path: 'projects', component: ProjectsComponent},
   {path: 'programs/:projectId', component: ProgramsComponent},
-  {path: 'workspace/:programId', component: WorkspaceComponent},
+  {path: 'workspace/:projectId/:programId', component: WorkspaceComponent},
   {path: '**', redirectTo: '/projects'}
 ];
 

@@ -1,6 +1,16 @@
 <div class="vertical">
-  <app-split-pane [initialLeftWidth]="40">
-    <div leftPane class="listing window">
+  <app-three-split-pane [initialLeftWidth]="25" [initialMiddleWidth]="40">
+    <div leftPane class="types window">
+      <div class="window-header">
+        Types
+      </div>
+
+      <div class="window-content">
+        Left column content
+      </div>
+    </div>
+
+    <div middlePane class="listing window">
       <div class="window-header">
         Listing
       </div>
@@ -32,8 +42,8 @@
       </div>
 
       <div class="window-content">
-        LALALALA
+        Right column content
       </div>
     </div>
-  </app-split-pane>
+  </app-three-split-pane>
 </div>

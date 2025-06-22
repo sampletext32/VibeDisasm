@@ -51,10 +51,6 @@ export class ProgramsComponent implements OnInit {
       });
   }
 
-  openProgram(programId: string): void {
-    this.router.navigate(['/workspace', programId]);
-  }
-
   importProgram(): void {
     this.loading = true;
     this.apiService.importProgram(this.projectId)

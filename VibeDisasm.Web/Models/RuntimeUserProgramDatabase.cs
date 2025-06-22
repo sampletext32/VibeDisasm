@@ -16,9 +16,11 @@ public class RuntimeUserProgramDatabase
         TypeStorage = new RuntimeTypeStorage(program);
         EntryManager = new RuntimeDatabaseEntryManager(program);
 
-        DefaultWindowsTypesPopulator.Populate(TypeStorage);
+        var builtinArchive = DefaultWindowsTypesPopulator.CreateBuiltinArchive();
+        TypeStorage.Archives.Add(builtinArchive);
 
-        // EntryManager.AddEntry(new UndefinedUserProgramDatabaseEntry(0x0, TypeStorage.FindSemantic("undefined"), program.FileLength));
+        var win32Archive = DefaultWindowsTypesPopulator.CreateWin32Archive(TypeStorage);
+        TypeStorage.Archives.Add(win32Archive);
 
         _ = 5;
     }

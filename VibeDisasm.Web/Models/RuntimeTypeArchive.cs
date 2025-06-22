@@ -20,4 +20,10 @@ public class RuntimeTypeArchive
     {
         Namespace = @namespace;
     }
+
+    public RuntimeDatabaseType AddType(RuntimeDatabaseType type)
+    {
+        Types.Add(type);
+        return type;
+    }
 }
