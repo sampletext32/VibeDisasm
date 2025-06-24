@@ -11,6 +11,7 @@ public sealed class RuntimeDatabaseTypeResolver : DefaultJsonTypeInfoResolver
 {
     private static readonly List<(Type, string)> _map = [
         (typeof(RuntimeArrayType), "array"),
+        (typeof(RuntimeEnumType), "enum"),
         (typeof(RuntimeFunctionType), "func"),
         (typeof(RuntimePointerType), "ptr"),
         (typeof(RuntimePrimitiveType), "primitive"),

@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Dtos;
+namespace VibeDisasm.Web.Dtos;
 
 public abstract record TypeArchiveElementDto(Guid Id);
 
@@ -27,3 +27,12 @@ public record TypeArchiveFunctionElementDto(
 public record TypeArchiveFunctionArgumentElementDto(TypeArchiveElementDto Type, string Name);
 
 public record TypeArchiveTypeRefElementDto(Guid Id, TypeArchiveElementDto Type) : TypeArchiveElementDto(Id);
+
+public record TypeArchiveEnumElementDto(
+    Guid Id,
+    string Name,
+    TypeArchiveElementDto UnderlyingType,
+    IEnumerable<TypeArchiveEnumMemberElementDto> Members
+) : TypeArchiveElementDto(Id);
+
+public record TypeArchiveEnumMemberElementDto(string Name, long Value);

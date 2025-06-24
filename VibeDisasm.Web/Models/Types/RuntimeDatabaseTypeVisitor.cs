@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Models.Types;
+namespace VibeDisasm.Web.Models.Types;
 
 public abstract class RuntimeDatabaseTypeVisitor<TReturn>
 {
@@ -10,4 +10,5 @@ public abstract class RuntimeDatabaseTypeVisitor<TReturn>
     public abstract TReturn VisitFunction(RuntimeFunctionType type);
     public abstract TReturn VisitArray(RuntimeArrayType type);
     public abstract TReturn VisitRef(RuntimeTypeRefType type);
+    public abstract TReturn VisitEnum(RuntimeEnumType type);
 }

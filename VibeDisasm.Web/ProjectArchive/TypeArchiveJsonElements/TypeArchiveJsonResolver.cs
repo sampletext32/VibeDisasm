@@ -11,6 +11,7 @@ public sealed class TypeArchiveJsonResolver : DefaultJsonTypeInfoResolver
 {
     private static readonly List<(Type, string)> _map = [
         (typeof(ArrayArchiveJsonElement), "arr"),
+        (typeof(EnumArchiveJsonElement), "enum"),
         (typeof(FunctionArchiveJsonElement), "fun"),
         (typeof(PointerArchiveJsonElement), "ptr"),
         (typeof(PrimitiveArchiveJsonElement), "prm"),

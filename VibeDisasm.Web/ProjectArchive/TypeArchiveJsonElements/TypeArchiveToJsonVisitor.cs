@@ -1,4 +1,4 @@
-﻿using VibeDisasm.Web.Models.Types;
+using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
@@ -47,5 +47,17 @@ public class TypeArchiveToJsonVisitor : RuntimeDatabaseTypeVisitor<TypeArchiveJs
     public override TypeArchiveJsonElement VisitRef(RuntimeTypeRefType type) => new TypeRefJsonElement()
     {
         Id = type.Id, Namespace = type.Namespace,
+    };
+    
+    public override TypeArchiveJsonElement VisitEnum(RuntimeEnumType type) => new EnumArchiveJsonElement()
+    {
+        Id = type.Id,
+        Name = type.Name,
+        UnderlyingType = new TypeRefJsonElement() { Id = type.UnderlyingType.Id, Namespace = type.UnderlyingType.Namespace },
+        Members = type.Members.Select(m => new EnumMemberJsonElement()
+        {
+            Name = m.Name,
+            Value = m.Value
+        }).ToList()
     };
 }

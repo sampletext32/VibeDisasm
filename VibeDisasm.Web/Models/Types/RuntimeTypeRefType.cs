@@ -15,6 +15,7 @@ public sealed class RuntimeTypeRefType : RuntimeDatabaseType
     public RuntimeTypeRefType(Guid id, string @namespace) : base(id)
     {
         Namespace = @namespace;
+        Name = $"TypeRef-{Id}";
     }
 
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitRef(this);
