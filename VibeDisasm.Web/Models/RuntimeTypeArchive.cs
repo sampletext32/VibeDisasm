@@ -7,9 +7,9 @@ public class RuntimeTypeArchive
     /// <summary>
     /// Namespace declared by this archive, effectively it's Id
     /// </summary>
-    public string Namespace { get; set; }
+    public string Namespace { get; init; }
 
-    public List<RuntimeDatabaseType> Types { get; set; } = [];
+    public List<RuntimeDatabaseType> Types { get; init; } = [];
 
     /// <summary>
     /// Absolute path to the file, containing this archive. Can be null if this archive is a newly created one.

@@ -44,6 +44,19 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
 
+# Method parameters wrapping
+csharp_wrap_parameters_style = chop_if_long
+csharp_wrap_arguments_style = chop_if_long
+csharp_max_line_length = 120
+csharp_wrap_before_comma = false
+csharp_wrap_after_dot_in_method_calls = true
+csharp_wrap_chained_method_calls = chop_if_long
+csharp_wrap_parameters_threshold = 3
+csharp_wrap_after_declaration_lpar = true
+csharp_wrap_before_declaration_rpar = true
+csharp_wrap_after_invocation_lpar = true
+csharp_wrap_before_invocation_rpar = true
+
 # Expression-level preferences
 csharp_prefer_braces = true:warning
 csharp_style_deconstructed_variable_declaration = true:suggestion
@@ -82,10 +95,11 @@ csharp_style_var_when_type_is_apparent = true:warning
 csharp_style_var_elsewhere = true:warning
 
 # Namespace declarations
-csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_namespace_declarations = file_scoped:error
+dotnet_diagnostic.IDE0161.severity = error
 
 # Prefer collection expressions
-csharp_style_prefer_collection_expression = true:suggestion
+csharp_style_prefer_collection_expression = true:error
 
 # Modifier preferences
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
@@ -167,6 +181,8 @@ dotnet_diagnostic.IDE0005.severity = warning # Remove unnecessary using directiv
 dotnet_diagnostic.IDE0008.severity = warning # Use explicit type instead of var
 dotnet_diagnostic.IDE0058.severity = none # Expression value is never used
 dotnet_diagnostic.IDE0130.severity = warning # Namespace does not match folder structure
+
+dotnet_diagnostic.CA1000.severity = warning
 
 # JSON and XML files
 [*.{json,xml,yml,yaml}]

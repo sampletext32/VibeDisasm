@@ -5,12 +5,12 @@
 /// </summary>
 public class RuntimeUserProgram
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string FilePath { get; set; }
+    public Guid Id { get; init; }
+    public string Name { get; init; }
+    public string FilePath { get; init; }
     public long FileLength { get; }
 
-    public RuntimeUserProgramDatabase Database { get; set; }
+    public RuntimeUserProgramDatabase Database { get; init; }
 
     public RuntimeUserProgram(Guid id, string filePath, string name, long fileLength)
     {

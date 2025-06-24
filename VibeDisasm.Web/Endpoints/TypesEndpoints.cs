@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Dtos;
@@ -20,6 +20,14 @@ public static class TypesEndpoints
         group.MapGet("/{archiveNamespace}/list", ListArchiveTypes)
             .WithName("ListArchiveTypes")
             .WithDescription("Lists types in the specified archive");
+
+        group.MapPost("/{archiveNamespace}/save", SaveTypeArchive)
+            .WithName("SaveTypeArchive")
+            .WithDescription("Saves the specified type archive to a file");
+
+        group.MapPost("/create-archive", CreateTypeArchive)
+            .WithName("CreateTypeArchive")
+            .WithDescription("Creates a new type archive with the specified namespace");
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TypeArchiveListItem>))]
@@ -43,6 +51,31 @@ public static class TypesEndpoints
         var result = await handler.Handle(projectId, programId, archiveNamespace);
         return result.IsSuccess
             ? Results.Json(result.Value.types, result.Value.SerializerOptions)
+            : Results.BadRequest(result.Errors.First().Message);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> SaveTypeArchive(
+        SaveTypeArchiveHandler handler,
+        Guid projectId, Guid programId, string archiveNamespace)
+    {
+        var result = await handler.Handle(projectId, programId, archiveNamespace);
+        return result.IsSuccess
+            ? Results.Ok()
+            : Results.BadRequest(result.Errors.First().Message);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> CreateTypeArchive(
+        CreateTypeArchiveHandler handler,
+        Guid projectId, Guid programId,
+        [FromQuery] string archiveNamespace)
+    {
+        var result = await handler.Handle(projectId, programId, archiveNamespace);
+        return result.IsSuccess
+            ? Results.Ok()
             : Results.BadRequest(result.Errors.First().Message);
     }
 }

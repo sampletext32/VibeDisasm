@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using FluentResults;
 using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.Types;
 using VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
@@ -117,18 +118,12 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
         return typeArchive;
     }
 
-    public async Task SaveTypeArchive(RuntimeTypeArchive typeArchive, string outputPath)
+    public async Task<Result> SaveTypeArchive(RuntimeTypeArchive typeArchive)
     {
-        if (typeArchive is null)
+        if (typeArchive.AbsoluteFilePath is null)
         {
-            throw new ArgumentNullException(nameof(typeArchive));
-        }
-
-        // Create directory if it doesn't exist
-        var directory = Path.GetDirectoryName(outputPath);
-        if (!string.IsNullOrEmpty(directory))
-        {
-            Directory.CreateDirectory(directory);
+            logger.LogError("Failed to save type-archive {ArchiveNamespace}: AbsoluteFilePath is not set", typeArchive.Namespace);
+            return Result.Fail("TypeArchive.AbsoluteFilePath not set. Cannot save type-archive.");
         }
 
         var typeArchiveJson = new TypeArchiveJson(
@@ -186,8 +181,10 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
             }).ToList()
         );
 
-        await using var stream = new FileStream(outputPath, FileMode.Create);
+        await using var stream = new FileStream(typeArchive.AbsoluteFilePath, FileMode.Create);
         await JsonSerializer.SerializeAsync(stream, typeArchiveJson,
             JsonSerializerOptionsPresets.TypeArchiveJsonOptions);
+
+        return Result.Ok();
     }
 }

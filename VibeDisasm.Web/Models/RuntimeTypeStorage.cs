@@ -4,7 +4,7 @@ namespace VibeDisasm.Web.Models;
 
 public class RuntimeTypeStorage(RuntimeUserProgram program)
 {
-    public List<RuntimeTypeArchive> Archives { get; set; } = [];
+    public List<RuntimeTypeArchive> Archives { get; init; } = [];
 
     public RuntimeDatabaseType? FindType(string @namespace, string name)
     {
