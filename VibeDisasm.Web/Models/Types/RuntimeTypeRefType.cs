@@ -1,20 +1,16 @@
-﻿namespace VibeDisasm.Web.Models.Types;
+﻿using System.Diagnostics;
+
+namespace VibeDisasm.Web.Models.Types;
 
 /// <summary>
 /// A type representing a reference to another type
 /// </summary>
+[DebuggerDisplay("{DebugDisplay}")]
 public sealed class RuntimeTypeRefType : RuntimeDatabaseType
 {
     public override string Namespace { get; set; }
 
-    [Obsolete]
-    public override string Name
-    {
-        get => "Get Name property of TypeRefType is prohibited.";
-        set
-        {
-        }
-    }
+    public override string Name { get; set; }
 
     public RuntimeTypeRefType(Guid id, string @namespace) : base(id)
     {

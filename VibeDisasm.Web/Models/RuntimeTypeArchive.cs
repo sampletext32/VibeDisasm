@@ -9,7 +9,7 @@ public class RuntimeTypeArchive
     /// </summary>
     public string Namespace { get; init; }
 
-    public List<RuntimeDatabaseType> Types { get; init; } = [];
+    public List<RuntimeDatabaseType> Types { get; set; } = [];
 
     /// <summary>
     /// Absolute path to the file, containing this archive. Can be null if this archive is a newly created one.
