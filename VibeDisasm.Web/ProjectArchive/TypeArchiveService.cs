@@ -95,7 +95,8 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
                 PrimitiveArchiveJsonElement element => new RuntimePrimitiveType(
                     element.Id,
                     typeArchiveJson.Namespace,
-                    element.Name
+                    element.Name,
+                    element.Size
                 ),
                 StructArchiveJsonElement element => new RuntimeStructureType(
                     element.Id,

@@ -10,25 +10,25 @@ public static class DefaultWindowsTypesPopulator
     {
         var archive = new RuntimeTypeArchive("builtin");
 
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "undefined"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "char"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "byte"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint8_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int8_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "short"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint16_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int16_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint32_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int32_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "long long"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint64_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int64_t"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "float"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "double"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "void"));
-        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "bool"));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "undefined", 1));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "char", 1));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "byte", 1));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint8_t", 1));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int8_t", 1));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "short", 2));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint16_t", 2));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int16_t", 2));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int", 4));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint", 4));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint32_t", 4));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int32_t", 4));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "long long", 8));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "uint64_t", 8));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "int64_t", 8));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "float", 4));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "double", 8));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "void", 0));
+        archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "builtin", "bool", 1));
 
         return archive;
     }
@@ -37,13 +37,13 @@ public static class DefaultWindowsTypesPopulator
     {
         var archive = new RuntimeTypeArchive("win32");
 
-        var dwordType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "DWORD")).MakeRef();
-        var wordType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "WORD")).MakeRef();
-        var byteType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "BYTE")).MakeRef();
-        var handleType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "HANDLE")).MakeRef();
-        var hinstanceType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "HINSTANCE")).MakeRef();
-        var hwndType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "HWND")).MakeRef();
-        var lpvoidType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "LPVOID")).MakeRef();
+        var dwordType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "DWORD", 4)).MakeRef();
+        var wordType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "WORD", 2)).MakeRef();
+        var byteType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "BYTE", 1)).MakeRef();
+        var handleType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "HANDLE", 4)).MakeRef();
+        var hinstanceType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "HINSTANCE", 4)).MakeRef();
+        var hwndType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "HWND", 4)).MakeRef();
+        var lpvoidType = archive.AddType(new RuntimePrimitiveType(Guid.NewGuid(), "win32", "LPVOID", 4)).MakeRef();
         var eresType = archive.AddType(new RuntimeArrayType(Guid.NewGuid(), "win32", wordType, 4)).MakeRef();
         var eres2Type = archive.AddType(new RuntimeArrayType(Guid.NewGuid(), "win32", wordType, 10)).MakeRef();
 

@@ -2,7 +2,7 @@ namespace VibeDisasm.Web.Dtos;
 
 public abstract record TypeArchiveElementDto(Guid Id);
 
-public record TypeArchivePrimitiveElementDto(Guid Id, string Name) : TypeArchiveElementDto(Id);
+public record TypeArchivePrimitiveElementDto(Guid Id, string Name, int Size) : TypeArchiveElementDto(Id);
 
 public record TypeArchivePointerElementDto(Guid Id, TypeArchiveElementDto Type) : TypeArchiveElementDto(Id);
 

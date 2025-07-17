@@ -4,6 +4,7 @@
   </PropertyGroup>
   <!-- Package versions used across the solution -->
   <ItemGroup>
+    <PackageVersion Include="FluentAssertions" Version="8.4.0" />
     <PackageVersion Include="FluentResults" Version="3.16.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.0" />

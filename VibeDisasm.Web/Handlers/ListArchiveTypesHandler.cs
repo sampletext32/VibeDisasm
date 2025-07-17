@@ -86,7 +86,8 @@ public class ListArchiveTypesHandler
             ),
             RuntimePrimitiveType type => new TypeArchivePrimitiveElementDto(
                 type.Id,
-                type.Name
+                type.Name,
+                type.Size
             ),
             RuntimeStructureType type => new TypeArchiveStructureElementDto(
                 type.Id,
