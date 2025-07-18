@@ -6,9 +6,14 @@
 public class RuntimeUserProgram
 {
     public Guid Id { get; init; }
-    public string Name { get; init; }
+
+    public string Name { get; set; }
     public string FilePath { get; init; }
     public long FileLength { get; }
+
+    public ProgramArchitecture Architecture { get; set; }
+
+    public ProgramKind Kind { get; set; }
 
     public RuntimeUserProgramDatabase Database { get; init; }
 
@@ -20,4 +25,6 @@ public class RuntimeUserProgram
         FileLength = fileLength;
         Database = new RuntimeUserProgramDatabase(this);
     }
+
+    public int GetPointerSize() => Architecture.GetPointerSize();
 }
