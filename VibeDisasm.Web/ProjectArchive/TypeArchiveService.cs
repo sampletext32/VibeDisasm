@@ -127,59 +127,11 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
             return Result.Fail("TypeArchive.AbsoluteFilePath not set. Cannot save type-archive.");
         }
 
+        var visitor = new TypeArchiveToJsonVisitor();
+
         var typeArchiveJson = new TypeArchiveJson(
             typeArchive.Namespace,
-            typeArchive.Types.Select(type => type switch
-            {
-                RuntimeArrayType arrayType => new ArrayArchiveJsonElement
-                {
-                    Id = arrayType.Id,
-                    ElementType = new TypeRefJsonElement()
-                    {
-                        Id = arrayType.ElementType.Id, Namespace = arrayType.ElementType.Namespace
-                    },
-                    ElementCount = arrayType.ElementCount
-                },
-                RuntimeFunctionType funcType => new FunctionArchiveJsonElement
-                {
-                    Id = funcType.Id,
-                    Name = funcType.Name,
-                    ReturnType =
-                        new TypeRefJsonElement()
-                        {
-                            Id = funcType.ReturnType.Id, Namespace = funcType.ReturnType.Namespace
-                        },
-                    Arguments = funcType.Arguments.Select(arg => new FunctionArgumentJsonElement()
-                    {
-                        Type = new TypeRefJsonElement() { Id = arg.Type.Id, Namespace = arg.Type.Namespace },
-                        Name = arg.Name
-                    }).ToList()
-                },
-                RuntimePointerType ptrType => new PointerArchiveJsonElement
-                {
-                    Id = ptrType.Id,
-                    PointedType = new TypeRefJsonElement()
-                    {
-                        Id = ptrType.PointedType.Id, Namespace = ptrType.PointedType.Namespace
-                    }
-                },
-                RuntimePrimitiveType primType => new PrimitiveArchiveJsonElement
-                {
-                    Id = primType.Id, Name = primType.Name
-                },
-                RuntimeStructureType structType => new StructArchiveJsonElement
-                {
-                    Id = structType.Id,
-                    Name = structType.Name,
-                    Fields = structType.Fields.Select(field => new StructFieldArchiveJsonElement()
-                    {
-                        Type =
-                            new TypeRefJsonElement() { Id = field.Type.Id, Namespace = field.Type.Namespace },
-                        Name = field.Name
-                    }).ToList()
-                } as TypeArchiveJsonElement,
-                _ => throw new ArgumentOutOfRangeException(nameof(type))
-            }).ToList()
+            typeArchive.Types.Select(type => visitor.Visit(type)).ToList()
         );
 
         await using var stream = new FileStream(typeArchive.AbsoluteFilePath, FileMode.Create);
