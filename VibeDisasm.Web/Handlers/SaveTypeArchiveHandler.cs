@@ -60,7 +60,7 @@ public class SaveTypeArchiveHandler
 
         if (string.IsNullOrWhiteSpace(archive.AbsoluteFilePath))
         {
-            var dialog = Dialog.FileSave("vdisa");
+            var dialog = Dialog.FileSave(Constants.TypeArchiveFileExtension);
 
             if (dialog.IsOk)
             {
@@ -68,7 +68,7 @@ public class SaveTypeArchiveHandler
 
                 if (Path.GetExtension(path) is "")
                 {
-                    path += ".vtarc";
+                    path += $".{Constants.TypeArchiveFileExtension}";
                 }
 
                 archive.AbsoluteFilePath = path;

@@ -34,7 +34,7 @@ public class SaveProjectHandler
 
         if (string.IsNullOrWhiteSpace(runtimeProject.ProjectArchivePath))
         {
-            var dialog = Dialog.FileSave("vdisa");
+            var dialog = Dialog.FileSave(Constants.ProjectArchiveFileExtension);
 
             if (dialog.IsOk)
             {
@@ -42,7 +42,7 @@ public class SaveProjectHandler
 
                 if (Path.GetExtension(path) is "")
                 {
-                    path += ".vdisa";
+                    path += $".{Constants.ProjectArchiveFileExtension}";
                 }
 
                 runtimeProject.ProjectArchivePath = path;
