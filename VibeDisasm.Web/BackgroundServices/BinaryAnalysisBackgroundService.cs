@@ -33,14 +33,14 @@ public class BinaryAnalysisBackgroundService : BackgroundService
                 job.Program.Id
             );
 
-            await DoAnalysis(job, stoppingToken);
+            var result = await DoAnalysis(job, stoppingToken);
+            job.Status = result.IsSuccess ? BackgroundJobStatus.Completed : BackgroundJobStatus.Failed;
 
             _logger.LogInformation(
                 "Finished analysis for program {ProgramId} in project {ProjectId}",
                 job.Project.Id,
                 job.Program.Id
             );
-            job.Status = BackgroundJobStatus.Failed;
         }
     }
 

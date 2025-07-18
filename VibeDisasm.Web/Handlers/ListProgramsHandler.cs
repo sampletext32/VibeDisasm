@@ -32,7 +32,10 @@ public class ListProgramsHandler
             p => new ProgramDetailsDto(
                 p.Id,
                 p.Name,
-                p.FilePath
+                p.FilePath,
+                p.FileLength,
+                p.Kind,
+                p.Architecture
             )
         );
         _logger.LogInformation("Listed programs for project {ProjectId}", projectId);

@@ -11,9 +11,8 @@ public class RuntimeUserProgram
     public string FilePath { get; init; }
     public long FileLength { get; }
 
-    public ProgramArchitecture Architecture { get; set; }
-
     public ProgramKind Kind { get; set; }
+    public ProgramArchitecture Architecture { get; set; }
 
     public RuntimeUserProgramDatabase Database { get; init; }
 
