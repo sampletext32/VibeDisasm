@@ -1,3 +1,5 @@
+using VibeDisasm.Web.Models.TypeInterpretation;
+
 namespace VibeDisasm.Web.Models.Types;
 
 /// <summary>
@@ -10,6 +12,8 @@ public abstract class RuntimeDatabaseType
     public abstract string Namespace { get; set; }
 
     public abstract string Name { get; set; }
+
+    public InterpretAs InterpretAs { get; set; }
 
     public string FullName => $"{Namespace}::{Name}";
 

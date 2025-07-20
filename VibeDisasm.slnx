@@ -24,5 +24,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/VibeDisasm.DecompilerEngine.Tests/VibeDisasm.DecompilerEngine.Tests.csproj" />
     <Project Path="tests/VibeDisasm.Disassembler.X86.Tests/VibeDisasm.Disassembler.X86.Tests.csproj" />
+    <Project Path="VibeDisasm.Web.Tests\VibeDisasm.Web.Tests.csproj" />
   </Folder>
 </Solution>

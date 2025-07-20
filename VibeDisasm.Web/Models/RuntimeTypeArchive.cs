@@ -26,4 +26,32 @@ public class RuntimeTypeArchive
         Types.Add(type);
         return type;
     }
+
+    public RuntimeDatabaseType? FindType(string name)
+    {
+        var type = Types.FirstOrDefault(x => x.Name == name);
+
+        return type ?? null;
+    }
+    public RuntimeDatabaseType FindRequiredType(string name)
+    {
+        var type = Types.FirstOrDefault(x => x.Name == name);
+
+        return type ?? throw new Exception($"Type with name '{name}' not found in archive '{Namespace}'.");
+    }
+
+    public T? FindType<T>(string name)
+        where T : RuntimeDatabaseType
+    {
+        var type = Types.FirstOrDefault(x => x.Name == name);
+
+        return type as T;
+    }
+    public T FindRequiredType<T>(string name)
+        where T : RuntimeDatabaseType
+    {
+        var type = Types.FirstOrDefault(x => x.Name == name);
+
+        return type as T ?? throw new Exception($"Type with name '{name}' not found in archive '{Namespace}'.");
+    }
 }

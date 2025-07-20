@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.Web.Models.TypeInterpretation;
 
 namespace VibeDisasm.Web.Models.Types;
 
@@ -13,11 +14,12 @@ public sealed class RuntimePrimitiveType : RuntimeDatabaseType
 
     public int Size { get; set; }
 
-    public RuntimePrimitiveType(Guid id, string @namespace, string name, int size) : base(id)
+    public RuntimePrimitiveType(Guid id, string @namespace, string name, int size, InterpretAs interpretAs = InterpretAs.Bytes) : base(id)
     {
         Namespace = @namespace;
         Name = name;
         Size = size;
+        InterpretAs = interpretAs;
     }
 
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitPrimitive(this);
