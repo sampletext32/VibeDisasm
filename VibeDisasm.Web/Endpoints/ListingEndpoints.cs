@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Handlers;
-using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.DatabaseEntries;
 
 namespace VibeDisasm.Web.Endpoints;

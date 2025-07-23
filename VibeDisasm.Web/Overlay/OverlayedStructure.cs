@@ -3,11 +3,24 @@ using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.Overlay;
 
-[DebuggerDisplay("overlayed {Structure.Name} ({Structure.Fields.Count} fields)")]
-public record OverlayedStructure(RuntimeStructureType Structure, IReadOnlyList<OverlayedStructureField> Fields, int ByteSize)
+[DebuggerDisplay("{DebugDisplay}")]
+public record OverlayedStructure(
+    RuntimeStructureType SourceStructure,
+    IReadOnlyList<OverlayedStructureField> Fields,
+    Memory<byte> Bytes
+) : OverlayedType
 {
-    public int ByteSize { get; } = ByteSize;
-
     public OverlayedStructureField this[int index] => Fields[index];
-    public OverlayedStructureField this[string name] => Fields.First(x => x.Field.Name == name);
+    public OverlayedStructureField this[string name] => Fields.First(x => x.SourceField.Name == name);
+    public override string DebugDisplay => $"overlayed {SourceStructure.Name} ({SourceStructure.Fields.Count} fields)";
+};
+
+[DebuggerDisplay("{DebugDisplay}")]
+public record OverlayedStructureField(
+    RuntimeStructureTypeField SourceField,
+    OverlayedType OverlayedValue,
+    Memory<byte> Bytes
+) : OverlayedType
+{
+    public override string DebugDisplay => $"{OverlayedValue.DebugDisplay} {SourceField.Name}";
 };

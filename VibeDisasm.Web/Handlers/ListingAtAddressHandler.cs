@@ -1,10 +1,7 @@
 using System.Text.Json;
 using FluentResults;
-using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Repositories;
-using Microsoft.Extensions.Logging;
-using VibeDisasm.Web.Models;
 
 namespace VibeDisasm.Web.Handlers;
 

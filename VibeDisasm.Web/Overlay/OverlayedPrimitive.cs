@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
-using VibeDisasm.Web.Models.TypeInterpretation;
 using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.Overlay;
 
-[DebuggerDisplay("{InterpretedValue.DebugDisplay} ({Primitive.DebugDisplay})")]
+[DebuggerDisplay("{DebugDisplay}")]
 public record OverlayedPrimitive(
     RuntimePrimitiveType Primitive,
-    InterpretedValue InterpretedValue
-);
+    Memory<byte> Bytes
+) : OverlayedType
+{
+    public override string DebugDisplay => $"overlayed {Primitive.DebugDisplay} [{Bytes.Length} bytes]";
+};

@@ -1,7 +1,6 @@
 using FluentResults;
 using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Repositories;
-using Microsoft.Extensions.Logging;
 
 namespace VibeDisasm.Web.Handlers;
 

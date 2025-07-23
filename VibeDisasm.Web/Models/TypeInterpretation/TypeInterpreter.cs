@@ -1,41 +1,61 @@
 using VibeDisasm.Web.Models.Types;
+using VibeDisasm.Web.Overlay;
 
 namespace VibeDisasm.Web.Models.TypeInterpretation;
 
 public static class TypeInterpreter
 {
-    [Pure]
-    public static InterpretedValue InterpretType(RuntimeDatabaseType type, Memory<byte> bytes, int byteLength)
+    public static InterpretedValue Interpret(OverlayedType type)
     {
-        if (bytes.Length < byteLength)
+        return type switch
         {
-            throw new ArgumentException(
-                $"Required length ({byteLength} bytes) exceeds available memory length ({bytes.Length} bytes)"
-            );
-        }
+            OverlayedStructure structure => InterpretStructure(structure),
+            OverlayedStructureField structureField => InterpretStructureField(structureField),
+            OverlayedPrimitive primitive => InterpretPrimitive(primitive),
+            OverlayedArray array => InterpretArray(array),
+            _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unknown overlayed type: {type.GetType()}")
+        };
+    }
 
-        var data = bytes[..byteLength];
+    public static InterpretedStructField InterpretStructureField(OverlayedStructureField field) =>
+        new InterpretedStructField(field.Bytes, field.SourceField.Name, Interpret(field.OverlayedValue));
+    public static InterpretedValue InterpretPrimitive(OverlayedPrimitive primitive) =>
+        InterpretType(primitive.Primitive, primitive.Bytes);
 
-        return type.InterpretAs switch
+    public static InterpretedValue InterpretArray(OverlayedArray array)
+    {
+        var interpretedValues = array.Elements.Select(Interpret).ToList();
+        return new InterpretedArrayValue(array.Bytes, interpretedValues);
+    }
+
+    public static InterpretedValue InterpretStructure(OverlayedStructure structure)
+    {
+        var interpretedValues = structure.Fields.Select(InterpretStructureField).ToList();
+        return new InterpretedStructValue(structure.Bytes, structure.SourceStructure.Name, interpretedValues);
+    }
+
+    [Pure]
+    public static InterpretedValue InterpretType(
+        RuntimeDatabaseType resolvedType,
+        Memory<byte> bytes
+    )
+    {
+        return resolvedType.InterpretAs switch
         {
-            InterpretAs.Bytes => new InterpretedRawValue(data, Endianness.LittleEndian),
-
-            InterpretAs.SignedIntegerBE => new InterpretedSignedInteger(data, Endianness.BigEndian),
-            InterpretAs.SignedIntegerLE => new InterpretedSignedInteger(data, Endianness.LittleEndian),
-            InterpretAs.UnsignedIntegerBE => new InterpretedUnsignedInteger(data, Endianness.BigEndian),
-            InterpretAs.UnsignedIntegerLE => new InterpretedUnsignedInteger(data, Endianness.LittleEndian),
-
-            InterpretAs.FloatingPoint => byteLength == 4
-                ? new InterpretedFloat(data, Endianness.LittleEndian)
-                : new InterpretedDouble(data, Endianness.LittleEndian),
-            InterpretAs.Boolean => new InterpretedBoolean(data, Endianness.LittleEndian),
-
-            InterpretAs.AsciiString => new InterpretedAsciiString(data),
-            InterpretAs.WideString => new InterpretedWideString(data),
-
+            InterpretAs.Bytes => new InterpretedRawValue(bytes, Endianness.LittleEndian),
+            InterpretAs.SignedIntegerBE => new InterpretedSignedInteger(bytes, Endianness.BigEndian),
+            InterpretAs.SignedIntegerLE => new InterpretedSignedInteger(bytes, Endianness.LittleEndian),
+            InterpretAs.UnsignedIntegerBE => new InterpretedUnsignedInteger(bytes, Endianness.BigEndian),
+            InterpretAs.UnsignedIntegerLE => new InterpretedUnsignedInteger(bytes, Endianness.LittleEndian),
+            InterpretAs.FloatingPoint => bytes.Length == 4
+                ? new InterpretedFloat(bytes, Endianness.LittleEndian)
+                : new InterpretedDouble(bytes, Endianness.LittleEndian),
+            InterpretAs.Boolean => new InterpretedBoolean(bytes, Endianness.LittleEndian),
+            InterpretAs.AsciiString => new InterpretedAsciiString(bytes),
+            InterpretAs.WideString => new InterpretedWideString(bytes),
             _ => throw new ArgumentOutOfRangeException(
-                nameof(type.InterpretAs),
-                $"Unknown interpretation type: {type.InterpretAs}"
+                nameof(resolvedType.InterpretAs),
+                $"Unknown interpretation type: {resolvedType.InterpretAs}"
             )
         };
     }

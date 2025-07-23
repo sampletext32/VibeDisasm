@@ -1,9 +1,6 @@
-using System.Text.Json;
-using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Handlers;
-using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.Endpoints;
 

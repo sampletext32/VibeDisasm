@@ -1,4 +1,4 @@
-﻿using System.Buffers.Binary;
+using System.Buffers.Binary;
 using System.Diagnostics;
 using System.Text;
 
@@ -23,15 +23,54 @@ public abstract class InterpretedValue(Memory<byte> sourceMemory, Endianness end
     public abstract T Reinterpret<T>() where T : InterpretedRawValue, IInterpretedValue;
 }
 
-[DebuggerDisplay("{DebugDisplay}")]
 public class InterpretedRawValue(Memory<byte> sourceMemory, Endianness endianness)
     : InterpretedValue(sourceMemory, endianness)
 {
-    public override string DebugDisplay => SourceMemory.Length <= 20
-        ? $"[{SourceMemory.MemoryString()}]"
-        : $"[{SourceMemory[..20].MemoryString()}, ...{SourceMemory.Length - 20} more bytes]";
+    public override string DebugDisplay => $"[{SourceMemory.MemoryString()}]";
 
-    public override T Reinterpret<T>() => typeof(T) == this.GetType() ? (this as T)! : T.Create<T>(SourceMemory, T.DefaultEndianness);
+    public override T Reinterpret<T>() =>
+        typeof(T) == this.GetType() ? (this as T)! : T.Create<T>(SourceMemory, T.DefaultEndianness);
+}
+
+[DebuggerDisplay("{DebugDisplay}")]
+public class InterpretedArrayValue(Memory<byte> sourceMemory, List<InterpretedValue> values)
+    : InterpretedRawValue(sourceMemory, Endianness.LittleEndian), IInterpretedValue
+{
+    public List<InterpretedValue> Values { get; set; } = values;
+
+    public override string DebugDisplay =>
+        $"[{string.Join(',', Values.Select(x => x.DebugDisplay))}]";
+
+    public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
+        throw new Exception("Attempted to Reinterpret array. Arrays should not be reinterpreted.");
+}
+
+[DebuggerDisplay("{DebugDisplay}")]
+public class InterpretedStructValue(Memory<byte> sourceMemory, string name, List<InterpretedStructField> fields)
+    : InterpretedRawValue(sourceMemory, Endianness.LittleEndian), IInterpretedValue
+{
+    public string Name { get; } = name;
+    public List<InterpretedStructField> Fields { get; set; } = fields;
+
+    public override string DebugDisplay =>
+        $"struct {Name} {{{Fields.Count} fields}}";
+
+    public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
+        throw new Exception("Attempted to Reinterpret struct. Structs should not be reinterpreted.");
+}
+
+[DebuggerDisplay("{DebugDisplay}")]
+public class InterpretedStructField(Memory<byte> sourceMemory, string name, InterpretedValue value)
+    : InterpretedRawValue(sourceMemory, Endianness.LittleEndian), IInterpretedValue
+{
+    public string Name { get; } = name;
+    public InterpretedValue Value { get; set; } = value;
+
+    public override string DebugDisplay =>
+        $"{Name} = {Value.DebugDisplay}";
+
+    public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
+        throw new Exception("Attempted to Reinterpret struct field. Struct fields should not be reinterpreted.");
 }
 
 [DebuggerDisplay("{DebugDisplay}")]
@@ -57,6 +96,7 @@ public class InterpretedSignedInteger(Memory<byte> sourceMemory, Endianness endi
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedSignedInteger(sourceMemory, endianness) as T)!;
+
     public long Get() => Value;
 }
 
@@ -91,12 +131,15 @@ public class InterpretedUnsignedInteger(Memory<byte> sourceMemory, Endianness en
 public class InterpretedFloat(Memory<byte> sourceMemory, Endianness endianness)
     : InterpretedRawValue(sourceMemory, endianness), IInterpretedValue
 {
-    public float Value => BinaryPrimitives.ReadSingleLittleEndian(SourceMemory.Span);
+    public float Value => Endianness == Endianness.LittleEndian
+        ? BinaryPrimitives.ReadSingleLittleEndian(SourceMemory.Span)
+        : BinaryPrimitives.ReadSingleBigEndian(SourceMemory.Span);
 
     public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedFloat(sourceMemory, endianness) as T)!;
+
     public float Get() => Value;
 }
 
@@ -109,8 +152,10 @@ public class InterpretedDouble(Memory<byte> sourceMemory, Endianness endianness)
         : BinaryPrimitives.ReadDoubleBigEndian(SourceMemory.Span);
 
     public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedDouble(sourceMemory, endianness) as T)!;
+
     public double Get() => Value;
 }
 
@@ -123,8 +168,10 @@ public class InterpretedBoolean(Memory<byte> sourceMemory, Endianness endianness
         : BinaryPrimitives.ReadUInt64BigEndian(SourceMemory.Span) != 0;
 
     public override string DebugDisplay => $"{(Value ? "False" : "True")} [{SourceMemory.MemoryString()}]";
+
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedBoolean(sourceMemory, endianness) as T)!;
+
     public bool Get() => Value;
 }
 
@@ -137,8 +184,10 @@ public class InterpretedAsciiString(Memory<byte> sourceMemory)
         : Encoding.ASCII.GetString(SourceMemory.Span[..SourceMemory.Span.IndexOf((byte)0)]);
 
     public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedAsciiString(sourceMemory) as T)!;
+
     public string Get() => Value;
 }
 
@@ -172,6 +221,7 @@ public class InterpretedWideString(Memory<byte> sourceMemory)
     }
 
     public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedWideString(sourceMemory) as T)!;
 

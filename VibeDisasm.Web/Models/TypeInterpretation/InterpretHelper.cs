@@ -5,11 +5,20 @@ public static class InterpretHelper
     public static string MemoryString(this Memory<byte> memory)
     {
         if (memory.IsEmpty)
-            return "";
-
-        var hex = string.Create(memory.Length * 6 - 2, memory, (span, mem) =>
         {
-            for (int i = 0; i < mem.Length; i++)
+            return "";
+        }
+
+        var suffix = "";
+        if (memory.Length > 20)
+        {
+            suffix = $", ...{memory.Length - 20} more bytes";
+            memory = memory[..20];
+        }
+
+        var hex = string.Create(memory.Length * 6 - 2 + suffix.Length, memory, (span, mem) =>
+        {
+            for (var i = 0; i < mem.Length; i++)
             {
                 var c1 = ToCharUpper(mem.Span[i] >> 4);
                 var c2 = ToCharUpper(mem.Span[i]);
@@ -23,6 +32,11 @@ public static class InterpretHelper
                     span[i * 6 + 4] = ',';
                     span[i * 6 + 5] = ' ';
                 }
+            }
+
+            if (!string.IsNullOrEmpty(suffix))
+            {
+                suffix.AsSpan().CopyTo(span[(mem.Length * 6 - 2)..]);
             }
         });
 

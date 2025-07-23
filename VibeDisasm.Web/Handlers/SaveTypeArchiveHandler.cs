@@ -1,5 +1,4 @@
 using FluentResults;
-using Microsoft.Extensions.Logging;
 using NativeFileDialogSharp;
 using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;

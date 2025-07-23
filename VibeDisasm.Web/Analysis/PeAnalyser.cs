@@ -1,5 +1,6 @@
 using FluentResults;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Models.TypeInterpretation;
 using VibeDisasm.Web.Models.Types;
 using VibeDisasm.Web.Overlay;
@@ -19,55 +20,41 @@ public class PeAnalyser : IAnalyser
     {
         await Task.Yield();
 
-        var overlayedImageDosHeaderResult = OverlayHelper.OverlayStructure(
+        var overlayedImageDosHeader = OverlayHelper.OverlayStructure(
             program,
             program.Database.TypeStorage.FindRequiredType<RuntimeStructureType>("win32", "IMAGE_DOS_HEADER"),
             binaryData,
             0
         );
 
-        if (overlayedImageDosHeaderResult.IsFailed)
-        {
-            return overlayedImageDosHeaderResult.ToResult();
-        }
+        var interpretedImageDosHeader = TypeInterpreter.Interpret(overlayedImageDosHeader);
 
-        var overlayedImageDosHeader = overlayedImageDosHeaderResult.Value;
+        var e_lfanewField = overlayedImageDosHeader["e_lfanew"];
 
-        var e_lfanew = overlayedImageDosHeader["e_lfanew"].
-            InterpretedValue.Reinterpret<InterpretedUnsignedInteger>().
-            Get();
+        var e_lfanew = TypeInterpreter.InterpretStructureField(e_lfanewField)
+            .Reinterpret<InterpretedUnsignedInteger>().Get();
 
-        var overlayedImageFileHeaderResult = OverlayHelper.OverlayStructure(
+        var overlayedImageFileHeader = OverlayHelper.OverlayStructure(
             program,
             program.Database.TypeStorage.FindRequiredType<RuntimeStructureType>("win32", "IMAGE_FILE_HEADER"),
             binaryData,
             (int)e_lfanew + 4
         );
 
-        if (overlayedImageFileHeaderResult.IsFailed)
-        {
-            return overlayedImageFileHeaderResult.ToResult();
-        }
-
-        var overlayedImageFileHeader = overlayedImageFileHeaderResult.Value;
+        var timeDateStampField = overlayedImageFileHeader["TimeDateStamp"];
 
         var timeDateStamp = new DateTime(1970, 1, 1).AddSeconds(
-            overlayedImageFileHeader["TimeDateStamp"].InterpretedValue.Reinterpret<InterpretedUnsignedInteger>().Get()
+            TypeInterpreter.InterpretStructureField(timeDateStampField).Reinterpret<InterpretedUnsignedInteger>().Get()
         );
 
-        var overlayOptionalMagicResult = OverlayHelper.OverlayPrimitive(
+        var overlayOptionalMagic = OverlayHelper.OverlayPrimitive(
             program,
             program.Database.TypeStorage.FindRequiredType<RuntimePrimitiveType>("win32", "WORD"),
             binaryData,
-            (int)e_lfanew + 4 + overlayedImageFileHeader.ByteSize
+            (int)e_lfanew + 4 + overlayedImageFileHeader.Bytes.Length
         );
 
-        if (overlayOptionalMagicResult.IsFailed)
-        {
-            return overlayOptionalMagicResult.ToResult();
-        }
-
-        var optionalMagic = overlayOptionalMagicResult.Value.InterpretedValue.
+        var optionalMagic = TypeInterpreter.InterpretPrimitive(overlayOptionalMagic).
             Reinterpret<InterpretedUnsignedInteger>().
             Get();
 
@@ -85,6 +72,23 @@ public class PeAnalyser : IAnalyser
         }
 
         program.Architecture = architecture.Value;
+
+        var imageOptionalHeaderType = architecture switch
+        {
+            ProgramArchitecture.X86 => "IMAGE_OPTIONAL_HEADER32",
+            ProgramArchitecture.X64 => "IMAGE_OPTIONAL_HEADER64",
+            _ => throw new NotSupportedException($"Unsupported architecture: {architecture}")
+        };
+
+        var overlayImageOptionalHeader = OverlayHelper.OverlayStructure(
+            program,
+            program.Database.TypeStorage.FindRequiredType<RuntimeStructureType>("win32", imageOptionalHeaderType),
+            binaryData,
+            (int)e_lfanew + 4 + overlayedImageFileHeader.Bytes.Length
+        );
+
+        program.Database.EntryManager.AddEntry(new StructUserProgramDatabaseEntry(0, overlayedImageDosHeader.SourceStructure));
+        program.Database.EntryManager.AddEntry(new StructUserProgramDatabaseEntry((uint)e_lfanew + 4, overlayedImageFileHeader.SourceStructure));
 
         return Result.Ok();
     }

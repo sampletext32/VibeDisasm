@@ -3,7 +3,6 @@ using NativeFileDialogSharp;
 using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;
 using VibeDisasm.Web.Services;
-using Microsoft.Extensions.Logging;
 
 namespace VibeDisasm.Web.Handlers;
 
