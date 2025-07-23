@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
+﻿using FluentAssertions;
+using Microsoft.Extensions.Logging.Abstractions;
 using VibeDisasm.Web.Analysis;
 using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Models.DatabaseEntries;
 
 namespace VibeDisasm.Web.Tests;
 
@@ -15,5 +17,13 @@ public class UnitTest1
         var program = new RuntimeUserProgram(Guid.NewGuid(), "file-path", "file-name", bytes.Length);
 
         await analyser.Run(program, bytes, CancellationToken.None);
+
+        var entry = program.Database.EntryManager.GetEntryAt(0);
+
+        entry.Should().
+            NotBeNull().
+            And.BeOfType<StructUserProgramDatabaseEntry>().
+            Which.Type.Name.Should().
+            Be("IMAGE_DOS_HEADER");
     }
 }

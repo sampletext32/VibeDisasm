@@ -2,9 +2,6 @@
 
 namespace VibeDisasm.Web.Models.DatabaseEntries;
 
-public class ArrayUserProgramDatabaseEntry : UserProgramDatabaseEntry
+public record ArrayUserProgramDatabaseEntry(uint Address, long Size, RuntimeArrayType Type) : UserProgramDatabaseEntry(Address, Size)
 {
-    public ArrayUserProgramDatabaseEntry(uint address, RuntimeArrayType type) : base(address, type)
-    {
-    }
 }

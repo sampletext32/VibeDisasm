@@ -31,8 +31,9 @@ public class PeAnalyser : IAnalyser
 
         var e_lfanewField = overlayedImageDosHeader["e_lfanew"];
 
-        var e_lfanew = TypeInterpreter.InterpretStructureField(e_lfanewField)
-            .Reinterpret<InterpretedUnsignedInteger>().Get();
+        var e_lfanew = TypeInterpreter.InterpretStructureField(e_lfanewField).
+            Reinterpret<InterpretedUnsignedInteger>().
+            Get();
 
         var overlayedImageFileHeader = OverlayHelper.OverlayStructure(
             program,
@@ -87,8 +88,21 @@ public class PeAnalyser : IAnalyser
             (int)e_lfanew + 4 + overlayedImageFileHeader.Bytes.Length
         );
 
-        program.Database.EntryManager.AddEntry(new StructUserProgramDatabaseEntry(0, overlayedImageDosHeader.SourceStructure));
-        program.Database.EntryManager.AddEntry(new StructUserProgramDatabaseEntry((uint)e_lfanew + 4, overlayedImageFileHeader.SourceStructure));
+        program.Database.EntryManager.AddEntry(
+            new StructUserProgramDatabaseEntry(
+                0,
+                overlayedImageDosHeader.Bytes.Length,
+                overlayedImageDosHeader.SourceStructure
+            )
+        );
+
+        program.Database.EntryManager.AddEntry(
+            new StructUserProgramDatabaseEntry(
+                (uint)e_lfanew + 4,
+                overlayedImageFileHeader.Bytes.Length,
+                overlayedImageFileHeader.SourceStructure
+            )
+        );
 
         return Result.Ok();
     }

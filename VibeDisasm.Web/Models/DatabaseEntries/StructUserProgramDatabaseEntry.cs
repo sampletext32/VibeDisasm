@@ -7,16 +7,11 @@ namespace VibeDisasm.Web.Models.DatabaseEntries;
 /// Represents a structure overlay at a specific memory address
 /// </summary>
 [DebuggerDisplay("{DebugDisplay}")]
-public class StructUserProgramDatabaseEntry : UserProgramDatabaseEntry
+public record StructUserProgramDatabaseEntry(uint Address, long Size, RuntimeStructureType Type) : UserProgramDatabaseEntry(Address, Size)
 {
     /// <summary>
     /// Gets the structure type associated with this entry
     /// </summary>
-    public RuntimeStructureType StructType => (RuntimeStructureType)Type;
 
-    public StructUserProgramDatabaseEntry(uint address, RuntimeStructureType type) : base(address, type)
-    {
-    }
-
-    private string DebugDisplay => $"struct {StructType.Name} @ 0x{Address:X8}";
+    private string DebugDisplay => $"struct {Type.Name} @ 0x{Address:X8}";
 }

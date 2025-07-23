@@ -2,9 +2,6 @@
 
 namespace VibeDisasm.Web.Models.DatabaseEntries;
 
-public class PrimitiveUserProgramDatabaseEntry : UserProgramDatabaseEntry
+public record PrimitiveUserProgramDatabaseEntry(uint Address, RuntimePrimitiveType Type) : UserProgramDatabaseEntry(Address, Type.Size)
 {
-    public PrimitiveUserProgramDatabaseEntry(uint address, RuntimePrimitiveType type) : base(address, type)
-    {
-    }
 }
