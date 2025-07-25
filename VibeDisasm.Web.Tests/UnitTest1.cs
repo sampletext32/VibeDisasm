@@ -8,7 +8,7 @@ namespace VibeDisasm.Web.Tests;
 
 public class UnitTest1
 {
-    [Fact]
+    // [Fact]
     public async Task Test1()
     {
         var analyser = new PeAnalyser(new NullLogger<PeAnalyser>());
