@@ -1,4 +1,4 @@
-﻿using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Models;
 
 namespace VibeDisasm.Web.Repositories;
 

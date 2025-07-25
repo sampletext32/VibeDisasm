@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using VibeDisasm.Web.Models.Types;
 
 namespace VibeDisasm.Web.Overlay;

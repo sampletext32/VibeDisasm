@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Models;
+namespace VibeDisasm.Web.Models;
 
 /// <summary>
 /// Processor architecture of a program

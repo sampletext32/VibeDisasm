@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Models.Types;

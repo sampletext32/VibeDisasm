@@ -55,7 +55,9 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
             finally
             {
                 if (File.Exists(tempFile))
+                {
                     File.Delete(tempFile);
+                }
             }
         }
         catch (Exception ex)
@@ -94,7 +96,6 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
             await JsonSerializer.SerializeAsync(entryStream, archiveProgram);
         }
     }
-
 
     public async Task<Result<RuntimeUserProject>> Load(string projectArchiveAbsolutePath)
     {
@@ -149,11 +150,14 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
         }
     }
 
-
     private static async Task<ProjectArchiveMetadata?> ReadProjectMetadataAsync(ZipArchive archive)
     {
         var metadataEntry = archive.GetEntry(Constants.ProjectArchive.MetadataFileName);
-        if (metadataEntry is null) return null;
+        if (metadataEntry is null)
+        {
+            return null;
+        }
+
         await using var metadataStream = metadataEntry.Open();
         return await JsonSerializer.DeserializeAsync<ProjectArchiveMetadata>(metadataStream);
     }

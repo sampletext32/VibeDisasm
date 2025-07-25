@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Extensions;
+namespace VibeDisasm.Web.Extensions;
 
 public static class ListExtensions
 {

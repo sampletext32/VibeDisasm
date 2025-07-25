@@ -1,5 +1,3 @@
-using VibeDisasm.Web.Models.Types;
-
 namespace VibeDisasm.Web.Models.DatabaseEntries;
 
 /// <summary>

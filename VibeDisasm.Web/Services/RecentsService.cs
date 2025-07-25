@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace VibeDisasm.Web.Services;
 
@@ -70,7 +70,7 @@ public class RecentsService
         if (existingRecent is not null)
         {
             _recents.Remove(existingRecent);
-            existingRecent = existingRecent with {LastOpened = DateTime.UtcNow};
+            existingRecent = existingRecent with { LastOpened = DateTime.UtcNow };
         }
         else
         {

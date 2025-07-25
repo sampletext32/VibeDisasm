@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
+namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
 public abstract class TypeArchiveJsonElement
 {

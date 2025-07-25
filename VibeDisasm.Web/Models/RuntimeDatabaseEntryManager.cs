@@ -1,11 +1,10 @@
 using VibeDisasm.Web.Models.DatabaseEntries;
-using VibeDisasm.Web.ProjectArchive;
 
 namespace VibeDisasm.Web.Models;
 
 public class RuntimeDatabaseEntryManager(RuntimeUserProgram program)
 {
-    private readonly List<UserProgramDatabaseEntry> _entries = [];
+    private readonly SortedList<uint, UserProgramDatabaseEntry> _entries = [];
 
     [Pure]
     public UserProgramDatabaseEntry? GetEntryAt(uint address)
@@ -25,8 +24,8 @@ public class RuntimeDatabaseEntryManager(RuntimeUserProgram program)
         int left = 0, right = _entries.Count - 1;
         while (left <= right)
         {
-            int mid = left + ((right - left) >> 1);
-            var entry = _entries[mid];
+            var mid = left + ((right - left) >> 1);
+            var entry = _entries.GetValueAtIndex(mid);
             if (address < entry.Address)
             {
                 right = mid - 1;
@@ -40,6 +39,7 @@ public class RuntimeDatabaseEntryManager(RuntimeUserProgram program)
                 return entry;
             }
         }
+
         return null;
     }
 
@@ -50,6 +50,6 @@ public class RuntimeDatabaseEntryManager(RuntimeUserProgram program)
             throw new InvalidOperationException("Adding overlapping entries is not supported yet.");
         }
 
-        _entries.Add(entry);
+        _entries.Add(entry.Address, entry);
     }
 }

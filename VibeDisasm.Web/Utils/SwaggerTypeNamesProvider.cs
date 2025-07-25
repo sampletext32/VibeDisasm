@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Utils;
+namespace VibeDisasm.Web.Utils;
 
 /// <summary>
 /// Поставщик информации об именах типов в Swagger
@@ -26,7 +26,7 @@ public static class SwaggerTypeNamesProvider
 
         if (type.IsGenericType)
         {
-            var cleanTypeName = type.Name[.. ^2]; // допускаем, что больше 9 generic-параметров в типе не будет
+            var cleanTypeName = type.Name[..^2]; // допускаем, что больше 9 generic-параметров в типе не будет
             var genericArguments = string.Join("And", type.GenericTypeArguments.Select(BuildDisplayedTypeName));
 
             return $"{prefix}{cleanTypeName}Of{genericArguments}";

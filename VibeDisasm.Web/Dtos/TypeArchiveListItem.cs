@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Dtos;
+namespace VibeDisasm.Web.Dtos;
 
 public record TypeArchiveListItem(
     string Namespace,

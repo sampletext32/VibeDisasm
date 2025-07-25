@@ -1,23 +1,18 @@
 using FluentResults;
+using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class DeleteRecentHandler
+public class DeleteRecentHandler(
+    RecentsService recents,
+    ILogger<DeleteRecentHandler> logger
+) : IHandler
 {
-    private readonly RecentsService _recents;
-    private readonly ILogger<DeleteRecentHandler> _logger;
-
-    public DeleteRecentHandler(RecentsService recents, ILogger<DeleteRecentHandler> logger)
-    {
-        _recents = recents;
-        _logger = logger;
-    }
-
     public Task<Result> Handle(Guid recentId)
     {
-        _recents.RemoveByProjectId(recentId);
-        _logger.LogInformation("Deleted recent project {RecentId}", recentId);
+        recents.RemoveByProjectId(recentId);
+        logger.LogInformation("Deleted recent project {RecentId}", recentId);
         return Task.FromResult(Result.Ok());
     }
 }

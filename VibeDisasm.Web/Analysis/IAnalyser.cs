@@ -1,4 +1,4 @@
-﻿using FluentResults;
+using FluentResults;
 using VibeDisasm.Web.Models;
 
 namespace VibeDisasm.Web.Analysis;

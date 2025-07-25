@@ -1,29 +1,22 @@
 using FluentResults;
+using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ImportProgramHandler
+public class ImportProgramHandler(
+    UserRuntimeProjectRepository repository,
+    ILogger<ImportProgramHandler> logger
+) : IHandler
 {
-    private readonly UserRuntimeProjectRepository _repository;
-    private readonly UserProgramDataRepository _dataRepository;
-    private readonly ILogger<ImportProgramHandler> _logger;
-
-    public ImportProgramHandler(UserRuntimeProjectRepository repository, UserProgramDataRepository dataRepository, ILogger<ImportProgramHandler> logger)
-    {
-        _repository = repository;
-        _dataRepository = dataRepository;
-        _logger = logger;
-    }
-
     public async Task<Result<Guid>> Handle(Guid projectId)
     {
-        var project = await _repository.GetById(projectId);
+        var project = await repository.GetById(projectId);
 
         if (project is null)
         {
-            _logger.LogWarning("Import failed: project {ProjectId} not found", projectId);
+            logger.ProjectNotFound(projectId);
             return Result.Fail("Project not found");
         }
 
@@ -36,18 +29,18 @@ public class ImportProgramHandler
 
             if (fileLength > int.MaxValue)
             {
-                _logger.LogWarning("Import failed: file {FilePath} too large", filePath);
+                logger.LogWarning("File {FilePath} too large", filePath);
                 throw new InvalidOperationException("File size too large");
             }
 
             var program = new RuntimeUserProgram(Guid.NewGuid(), filePath, Path.GetFileName(filePath), fileLength);
             project.Programs.Add(program);
-            _logger.LogInformation("Imported program {ProgramId} into project {ProjectId}", program.Id, projectId);
+            logger.LogInformation("Imported program {ProgramId} into project {ProjectId}", program.Id, projectId);
             return Result.Ok(program.Id);
         }
         else
         {
-            _logger.LogWarning("Import cancelled by user for project {ProjectId}", projectId);
+            logger.LogWarning("Import cancelled by user for project {ProjectId}", projectId);
             return Result.Fail("File selection was cancelled");
         }
     }

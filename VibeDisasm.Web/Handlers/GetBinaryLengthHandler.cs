@@ -1,16 +1,15 @@
 using FluentResults;
 using VibeDisasm.Web.Abstractions;
-using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListArchivesHandler(
+public class GetBinaryLengthHandler(
     UserRuntimeProjectRepository repository,
-    ILogger<ListArchivesHandler> logger
+    ILogger<GetBinaryLengthHandler> logger
 ) : IHandler
 {
-    public async Task<Result<IEnumerable<TypeArchiveListItem>>> Handle(Guid projectId, Guid programId)
+    public async Task<Result<long>> Handle(Guid projectId, Guid programId)
     {
         var project = await repository.GetById(projectId);
         if (project is null)
@@ -27,13 +26,6 @@ public class ListArchivesHandler(
             return Result.Fail("Program not found");
         }
 
-        var mapped = program.Database.TypeStorage.Archives.Select(x => new TypeArchiveListItem(
-                x.Namespace,
-                x.AbsoluteFilePath,
-                x.Types.Count
-            )
-        );
-
-        return Result.Ok(mapped);
+        return Result.Ok(program.FileLength);
     }
 }

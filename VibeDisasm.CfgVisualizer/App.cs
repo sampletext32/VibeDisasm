@@ -8,6 +8,7 @@ using VibeDisasm.CfgVisualizer.Abstractions;
 using VibeDisasm.CfgVisualizer.Services;
 using VibeDisasm.CfgVisualizer.State;
 using VibeDisasm.CfgVisualizer.ViewModels;
+using VibeDisasm.Core;
 
 namespace VibeDisasm.CfgVisualizer;
 

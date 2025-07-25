@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Overlay;
+namespace VibeDisasm.Web.Overlay;
 
 public abstract record OverlayedType
 {

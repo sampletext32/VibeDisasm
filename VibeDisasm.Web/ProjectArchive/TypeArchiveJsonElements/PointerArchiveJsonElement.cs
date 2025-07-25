@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
+namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
 /// <summary>
 /// Pointer type can point to anything, even to other archive types

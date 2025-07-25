@@ -1,4 +1,4 @@
-﻿using VibeDisasm.Web.Models;
+using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.TypeInterpretation;
 using VibeDisasm.Web.Models.Types;
 

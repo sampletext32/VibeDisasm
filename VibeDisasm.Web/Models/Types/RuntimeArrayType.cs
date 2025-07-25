@@ -24,5 +24,5 @@ public sealed class RuntimeArrayType : RuntimeDatabaseType
 
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitArray(this);
 
-    protected internal override string DebugDisplay =>  $"{ElementType.DebugDisplay}[{ElementCount}]";
+    protected internal override string DebugDisplay => $"{ElementType.DebugDisplay}[{ElementCount}]";
 }

@@ -1,4 +1,4 @@
-﻿using VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
+using VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 
 namespace VibeDisasm.Web.ProjectArchive;
 

@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Models.TypeInterpretation;
+namespace VibeDisasm.Web.Models.TypeInterpretation;
 
 public static class InterpretHelper
 {

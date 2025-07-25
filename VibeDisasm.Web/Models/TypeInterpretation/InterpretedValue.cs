@@ -6,9 +6,9 @@ namespace VibeDisasm.Web.Models.TypeInterpretation;
 
 public interface IInterpretedValue
 {
-    public static virtual Endianness DefaultEndianness => Endianness.LittleEndian;
+    virtual static Endianness DefaultEndianness => Endianness.LittleEndian;
 
-    public static abstract T Create<T>(Memory<byte> sourceMemory, Endianness endianness)
+    abstract static T Create<T>(Memory<byte> sourceMemory, Endianness endianness)
         where T : class, IInterpretedValue;
 }
 

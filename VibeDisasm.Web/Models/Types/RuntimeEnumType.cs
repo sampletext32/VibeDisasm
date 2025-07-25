@@ -10,12 +10,12 @@ public sealed class RuntimeEnumType : RuntimeDatabaseType
 {
     public override string Namespace { get; set; }
     public override string Name { get; set; }
-    
+
     /// <summary>
     /// Underlying type of the enum (typically int, byte, etc.)
     /// </summary>
     public RuntimeTypeRefType UnderlyingType { get; set; }
-    
+
     /// <summary>
     /// Collection of enum members with their values
     /// </summary>
@@ -44,7 +44,7 @@ public class RuntimeEnumMember
     /// Name of the enum member
     /// </summary>
     public string Name { get; set; }
-    
+
     /// <summary>
     /// Integer value of the enum member
     /// </summary>

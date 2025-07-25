@@ -1,4 +1,4 @@
-﻿using System.Threading.Channels;
+using System.Threading.Channels;
 using FluentResults;
 using VibeDisasm.Web.Analysis;
 using VibeDisasm.Web.BackgroundServices.BackgroundJobs;

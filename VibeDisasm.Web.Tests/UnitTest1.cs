@@ -18,7 +18,7 @@ public class UnitTest1
 
         await analyser.Run(program, bytes, CancellationToken.None);
 
-        var entry = program.Database.EntryManager.GetEntryAt(0);
+        var entry = program.Database.EntryManager.GetEntryAt(8);
 
         entry.Should().
             NotBeNull().

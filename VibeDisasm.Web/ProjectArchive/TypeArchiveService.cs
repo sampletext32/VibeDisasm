@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using FluentResults;
 using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.Types;

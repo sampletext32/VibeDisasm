@@ -1,27 +1,26 @@
 using System.Text.Json;
 using FluentResults;
+using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListingAtAddressHandler
+public class ListingAtAddressHandler(
+    UserRuntimeProjectRepository repository,
+    ILogger<ListingAtAddressHandler> logger
+) : IHandler
 {
-    private readonly UserRuntimeProjectRepository _repository;
-    private readonly ILogger<ListingAtAddressHandler> _logger;
-
-    public ListingAtAddressHandler(UserRuntimeProjectRepository repository, ILogger<ListingAtAddressHandler> logger)
+    public async Task<Result<(UserProgramDatabaseEntry?, JsonSerializerOptions)>> Handle(
+        Guid projectId,
+        Guid programId,
+        uint address
+    )
     {
-        _repository = repository;
-        _logger = logger;
-    }
-
-    public async Task<Result<(UserProgramDatabaseEntry?, JsonSerializerOptions)>> Handle(Guid projectId, Guid programId, uint address)
-    {
-        var project = await _repository.GetById(projectId);
+        var project = await repository.GetById(projectId);
         if (project is null)
         {
-            _logger.LogWarning("Get entry at address failed: project {ProjectId} not found", projectId);
+            logger.ProjectNotFound(projectId);
             return Result.Fail("Project not found");
         }
 
@@ -29,12 +28,17 @@ public class ListingAtAddressHandler
 
         if (program is null)
         {
-            _logger.LogWarning("Get entry at address failed: program {ProgramId} not found in project {ProjectId}", programId, projectId);
+            logger.ProgramNotFound(programId, projectId);
             return Result.Fail("Program not found");
         }
 
         var entry = program.Database.EntryManager.GetEntryAt(address);
-        _logger.LogInformation("Fetched entry at address {Address} in program {ProgramId} of project {ProjectId}", address, programId, projectId);
+        logger.LogInformation(
+            "Fetched entry at address {Address} in program {ProgramId} of project {ProjectId}",
+            address,
+            programId,
+            projectId
+        );
         return Result.Ok((entry, DatabaseEntryTypeOptions: JsonSerializerOptionsPresets.DatabaseEntryOptions));
     }
 }

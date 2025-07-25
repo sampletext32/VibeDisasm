@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web;
+namespace VibeDisasm.Web;
 
 public static class Constants
 {

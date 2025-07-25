@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Handlers;
 
 namespace VibeDisasm.Web.Endpoints;
@@ -15,12 +15,28 @@ public static class AEndpoints
         group.MapGet("/launch-analysis", LaunchBinaryAnalysis)
             .WithName("LaunchBinaryAnalysis")
             .WithDescription("Launches binary analysis on specified program");
+
+        group.MapGet("/length", GetBinaryLength)
+            .WithName("GetBinaryLength")
+            .WithDescription("Gets the length of the binary in bytes");
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> LaunchBinaryAnalysis(
         LaunchBinaryAnalysisHandler handler,
+        Guid projectId, Guid programId)
+    {
+        var result = await handler.Handle(projectId, programId);
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
+            : Results.BadRequest(result.Errors.First().Message);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> GetBinaryLength(
+        GetBinaryLengthHandler handler,
         Guid projectId, Guid programId)
     {
         var result = await handler.Handle(projectId, programId);

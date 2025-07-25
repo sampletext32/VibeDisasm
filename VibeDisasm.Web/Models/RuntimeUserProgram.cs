@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Models;
+namespace VibeDisasm.Web.Models;
 
 /// <summary>
 /// A runtime representation of user program.

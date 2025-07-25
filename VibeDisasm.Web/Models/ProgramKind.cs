@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.Models;
+namespace VibeDisasm.Web.Models;
 
 /// <summary>
 /// Kind of program, that user can analyze

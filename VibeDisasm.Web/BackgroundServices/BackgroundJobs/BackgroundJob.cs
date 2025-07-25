@@ -1,4 +1,4 @@
-﻿namespace VibeDisasm.Web.BackgroundServices.BackgroundJobs;
+namespace VibeDisasm.Web.BackgroundServices.BackgroundJobs;
 
 /// <summary>
 /// Any background job

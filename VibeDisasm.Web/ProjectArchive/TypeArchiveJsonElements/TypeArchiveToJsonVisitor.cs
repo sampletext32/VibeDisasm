@@ -32,7 +32,8 @@ public class TypeArchiveToJsonVisitor : RuntimeDatabaseTypeVisitor<TypeArchiveJs
         ReturnType = new TypeRefJsonElement() { Id = type.ReturnType.Id, Namespace = type.ReturnType.Namespace },
         Arguments = type.Arguments.Select(x => new FunctionArgumentJsonElement()
         {
-            Type = new TypeRefJsonElement() { Id = x.Type.Id, Namespace = x.Type.Namespace }, Name = x.Name
+            Type = new TypeRefJsonElement() { Id = x.Type.Id, Namespace = x.Type.Namespace },
+            Name = x.Name
         }).ToList()
     };
 
@@ -46,9 +47,10 @@ public class TypeArchiveToJsonVisitor : RuntimeDatabaseTypeVisitor<TypeArchiveJs
 
     public override TypeArchiveJsonElement VisitRef(RuntimeTypeRefType type) => new TypeRefJsonElement()
     {
-        Id = type.Id, Namespace = type.Namespace,
+        Id = type.Id,
+        Namespace = type.Namespace,
     };
-    
+
     public override TypeArchiveJsonElement VisitEnum(RuntimeEnumType type) => new EnumArchiveJsonElement()
     {
         Id = type.Id,

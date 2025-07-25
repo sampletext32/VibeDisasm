@@ -1,34 +1,28 @@
 using FluentResults;
+using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.Dtos;
 using VibeDisasm.Web.Repositories;
 
 namespace VibeDisasm.Web.Handlers;
 
-public class ListProgramsHandler
+public class ListProgramsHandler(
+    UserRuntimeProjectRepository repository,
+    ILogger<ListProgramsHandler> logger
+) : IHandler
 {
-    private readonly UserRuntimeProjectRepository _repository;
-    private readonly ILogger<ListProgramsHandler> _logger;
-
-    public ListProgramsHandler(UserRuntimeProjectRepository repository, ILogger<ListProgramsHandler> logger)
-    {
-        _repository = repository;
-        _logger = logger;
-    }
-
     [Pure]
     public async Task<Result<IEnumerable<ProgramDetailsDto>>> Handle(Guid projectId)
     {
-        var project = await _repository.GetById(projectId);
+        var project = await repository.GetById(projectId);
 
         if (project is null)
         {
-            _logger.LogWarning("List programs failed: project {ProjectId} not found", projectId);
+            logger.ProjectNotFound(projectId);
             return Result.Fail("Project not found");
         }
 
         var userPrograms = project.Programs;
-        var programDetails = userPrograms.Select(
-            p => new ProgramDetailsDto(
+        var programDetails = userPrograms.Select(p => new ProgramDetailsDto(
                 p.Id,
                 p.Name,
                 p.FilePath,
@@ -37,7 +31,7 @@ public class ListProgramsHandler
                 p.Architecture
             )
         );
-        _logger.LogInformation("Listed programs for project {ProjectId}", projectId);
+        logger.LogInformation("Listed programs for project {ProjectId}", projectId);
         return Result.Ok(programDetails);
     }
 }

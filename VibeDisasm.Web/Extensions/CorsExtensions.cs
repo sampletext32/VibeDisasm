@@ -1,28 +1,38 @@
-﻿namespace VibeDisasm.Web.Extensions;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+
+namespace VibeDisasm.Web.Extensions;
 
 public static class CorsExtensions
 {
-    public static IServiceCollection AddCorsConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCorsConfiguration(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        ILogger? logger = null
+    )
     {
         var hosts = configuration.GetSection("Cors:AllowedOrigins").Get<string[]?>() ?? [];
 
-        Console.WriteLine("using hosts: " + string.Join(", ", hosts));
+        logger?.LogInformation("Cors configuration contains {AllowedOrigins}", string.Join(',', hosts));
 
-        return services.AddCors(options =>
-        {
-            options.AddPolicy("CorsPolicy", p =>
-            {
-                p.AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials()
-                    .WithOrigins(hosts)
-                    .SetIsOriginAllowedToAllowWildcardSubdomains();
-            });
-        });
+        services.AddCors()
+            .Configure<CorsOptions>(options =>
+                {
+                    options.AddPolicy(
+                        "CorsPolicy",
+                        p =>
+                        {
+                            p.AllowAnyHeader()
+                                .AllowAnyMethod()
+                                .AllowCredentials()
+                                .WithOrigins(hosts)
+                                .SetIsOriginAllowedToAllowWildcardSubdomains();
+                        }
+                    );
+                }
+            );
+
+        return services;
     }
 
-    public static IApplicationBuilder UseCorsConfiguration(this IApplicationBuilder app)
-    {
-        return app.UseCors("CorsPolicy");
-    }
+    public static IApplicationBuilder UseCorsConfiguration(this IApplicationBuilder app) => app.UseCors("CorsPolicy");
 }
