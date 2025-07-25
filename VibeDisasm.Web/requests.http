@@ -1,0 +1,39 @@
+﻿# @name Create project
+
+POST http://localhost:5201/projects/create
+Content-Type: application/json
+
+{
+  "title": "Example"
+}
+
+> {%
+    client.global.set("projectId", response.body);
+    console.log('Created project with ID:', response.body);
+%}
+
+###
+# @name Import program
+POST http://localhost:5201/program/{{projectId}}/import
+
+> {%
+    client.global.set("programId", response.body);
+    console.log('Created program with ID:', response.body);
+%}
+
+###
+# @name Run analysis on program
+GET http://localhost:5201/general/{{projectId}}/{{programId}}/sync-analysis
+
+> {%
+    console.log('Analysed project', client.global.get('projectId'), 'program: ', client.global.get('programId'));
+%}
+
+###
+# @name Retrieve of program entries
+GET http://localhost:5201/listing/{{projectId}}/{{programId}}/all
+
+> {%
+    console.log(response.body);
+%}
+

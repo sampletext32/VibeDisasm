@@ -15,9 +15,18 @@ public static class ListingEndpoints
             .WithName("AtAddress")
             .WithDescription("Get listing at exact address");
 
+        group.MapGet("/all", AllListing)
+            .WithName("All")
+            .WithDescription("Gets all entries in the listing")
+            .WithTags("DEBUG");
+
         group.MapPost("/add", AddEntry)
             .WithName("AddEntry")
             .WithDescription("Add an entry to the listing");
+
+        group.MapGet("/length", GetBinaryLength)
+            .WithName("GetBinaryLength")
+            .WithDescription("Gets the length of the binary in bytes");
     }
 
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretedValue))]
@@ -30,6 +39,20 @@ public static class ListingEndpoints
     )
     {
         var result = await handler.Handle(projectId, programId, address);
+        return result.IsSuccess
+            ? Results.Json(result.Value.Item1, result.Value.Item2)
+            : Results.BadRequest(result.Errors.First().Message);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretedValue[]))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> AllListing(
+        AllListingHandler handler,
+        Guid projectId,
+        Guid programId
+    )
+    {
+        var result = await handler.Handle(projectId, programId);
         return result.IsSuccess
             ? Results.Json(result.Value.Item1, result.Value.Item2)
             : Results.BadRequest(result.Errors.First().Message);
@@ -56,6 +79,20 @@ public static class ListingEndpoints
         var result = await handler.Handle(projectId, programId, entry);
         return result.IsSuccess
             ? Results.Ok()
+            : Results.BadRequest(result.Errors.First().Message);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+    private static async Task<IResult> GetBinaryLength(
+        GetBinaryLengthHandler handler,
+        Guid projectId,
+        Guid programId
+    )
+    {
+        var result = await handler.Handle(projectId, programId);
+        return result.IsSuccess
+            ? Results.Ok(result.Value)
             : Results.BadRequest(result.Errors.First().Message);
     }
 }

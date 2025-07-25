@@ -52,4 +52,6 @@ public class RuntimeDatabaseEntryManager(RuntimeUserProgram program)
 
         _entries.Add(entry.Address, entry);
     }
+
+    public IEnumerable<UserProgramDatabaseEntry> GetAllEntries() => _entries.Values;
 }

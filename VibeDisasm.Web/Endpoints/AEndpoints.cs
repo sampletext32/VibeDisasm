@@ -16,12 +16,12 @@ public static class AEndpoints
             .WithName("LaunchBinaryAnalysis")
             .WithDescription("Launches binary analysis on specified program");
 
-        group.MapGet("/length", GetBinaryLength)
-            .WithName("GetBinaryLength")
-            .WithDescription("Gets the length of the binary in bytes");
+        group.MapGet("/sync-analysis", SyncBinaryAnalysis)
+            .WithName("SyncBinaryAnalysis")
+            .WithDescription("Synchronously performs binary analysis on specified program");
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> LaunchBinaryAnalysis(
         LaunchBinaryAnalysisHandler handler,
@@ -35,13 +35,13 @@ public static class AEndpoints
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    private static async Task<IResult> GetBinaryLength(
-        GetBinaryLengthHandler handler,
+    private static async Task<IResult> SyncBinaryAnalysis(
+        SyncBinaryAnalysisHandler handler,
         Guid projectId, Guid programId)
     {
         var result = await handler.Handle(projectId, programId);
         return result.IsSuccess
-            ? Results.Ok(result.Value)
+            ? Results.Ok()
             : Results.BadRequest(result.Errors.First().Message);
     }
 }
