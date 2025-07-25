@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using VibeDisasm.Web.Handlers;
 using VibeDisasm.Web.Models.DatabaseEntries;
+using VibeDisasm.Web.Models.TypeInterpretation;
 
 namespace VibeDisasm.Web.Endpoints;
 
@@ -19,10 +20,14 @@ public static class ListingEndpoints
             .WithDescription("Add an entry to the listing");
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserProgramDatabaseEntry))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretedValue))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    private static async Task<IResult> AtAddress(ListingAtAddressHandler handler, Guid projectId, Guid programId,
-        uint address)
+    private static async Task<IResult> AtAddress(
+        ListingAtAddressHandler handler,
+        Guid projectId,
+        Guid programId,
+        uint address
+    )
     {
         var result = await handler.Handle(projectId, programId, address);
         return result.IsSuccess
@@ -32,8 +37,12 @@ public static class ListingEndpoints
 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
-    private static async Task<IResult> AddEntry(ListingAddEntryHandler handler, Guid projectId, Guid programId,
-        HttpContext context)
+    private static async Task<IResult> AddEntry(
+        ListingAddEntryHandler handler,
+        Guid projectId,
+        Guid programId,
+        HttpContext context
+    )
     {
         var entry = await context.Request.ReadFromJsonAsync<UserProgramDatabaseEntry>(
             JsonSerializerOptionsPresets.DatabaseEntryOptions

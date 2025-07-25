@@ -31,7 +31,9 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> ListArchives(
         ListArchivesHandler handler,
-        Guid projectId, Guid programId)
+        Guid projectId,
+        Guid programId
+    )
     {
         var result = await handler.Handle(projectId, programId);
         return result.IsSuccess
@@ -43,7 +45,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> ListArchiveTypes(
         ListArchiveTypesHandler handler,
-        Guid projectId, Guid programId, string archiveNamespace)
+        Guid projectId,
+        Guid programId,
+        string archiveNamespace
+    )
     {
         var result = await handler.Handle(projectId, programId, archiveNamespace);
         return result.IsSuccess
@@ -55,7 +60,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> SaveTypeArchive(
         SaveTypeArchiveHandler handler,
-        Guid projectId, Guid programId, string archiveNamespace)
+        Guid projectId,
+        Guid programId,
+        string archiveNamespace
+    )
     {
         var result = await handler.Handle(projectId, programId, archiveNamespace);
         return result.IsSuccess
@@ -67,8 +75,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> CreateTypeArchive(
         CreateTypeArchiveHandler handler,
-        Guid projectId, Guid programId,
-        [FromQuery] string archiveNamespace)
+        Guid projectId,
+        Guid programId,
+        [FromQuery] string archiveNamespace
+    )
     {
         var result = await handler.Handle(projectId, programId, archiveNamespace);
         return result.IsSuccess

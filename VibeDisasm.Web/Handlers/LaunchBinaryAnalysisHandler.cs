@@ -9,7 +9,7 @@ namespace VibeDisasm.Web.Handlers;
 public class LaunchBinaryAnalysisHandler(
     UserRuntimeProjectRepository repository,
     UserProgramDataRepository dataRepository,
-    Channel<BinaryAnalysisBackgroundJob> channel,
+    Channel<BinaryAnalysisJob> channel,
     BackgroundJobRepository backgroundJobRepository,
     ILogger<LaunchBinaryAnalysisHandler> logger
 ) : IHandler
@@ -35,7 +35,7 @@ public class LaunchBinaryAnalysisHandler(
         var binaryData = await dataRepository.GetOrLoad(program);
 
         var id = Guid.NewGuid();
-        var backgroundJob = new BinaryAnalysisBackgroundJob(id, project, program, binaryData);
+        var backgroundJob = new BinaryAnalysisJob(id, project, program, binaryData);
 
         await backgroundJobRepository.Add(backgroundJob);
         await channel.Writer.WriteAsync(backgroundJob);

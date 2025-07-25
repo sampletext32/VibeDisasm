@@ -6,9 +6,9 @@ namespace VibeDisasm.Web.Models.TypeInterpretation;
 
 public interface IInterpretedValue
 {
-    virtual static Endianness DefaultEndianness => Endianness.LittleEndian;
+    static virtual Endianness DefaultEndianness => Endianness.LittleEndian;
 
-    abstract static T Create<T>(Memory<byte> sourceMemory, Endianness endianness)
+    static abstract T Create<T>(Memory<byte> sourceMemory, Endianness endianness)
         where T : class, IInterpretedValue;
 }
 
@@ -18,7 +18,7 @@ public abstract class InterpretedValue(Memory<byte> sourceMemory, Endianness end
     public Endianness Endianness { get; set; } = endianness;
 
     public int Size => SourceMemory.Length;
-    public abstract string DebugDisplay { get; }
+    internal abstract string DebugDisplay { get; }
 
     public abstract T Reinterpret<T>() where T : InterpretedRawValue, IInterpretedValue;
 }
@@ -26,7 +26,7 @@ public abstract class InterpretedValue(Memory<byte> sourceMemory, Endianness end
 public class InterpretedRawValue(Memory<byte> sourceMemory, Endianness endianness)
     : InterpretedValue(sourceMemory, endianness)
 {
-    public override string DebugDisplay => $"[{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"[{SourceMemory.MemoryString()}]";
 
     public override T Reinterpret<T>() =>
         typeof(T) == this.GetType() ? (this as T)! : T.Create<T>(SourceMemory, T.DefaultEndianness);
@@ -38,7 +38,7 @@ public class InterpretedArrayValue(Memory<byte> sourceMemory, List<InterpretedVa
 {
     public List<InterpretedValue> Values { get; set; } = values;
 
-    public override string DebugDisplay =>
+    internal override string DebugDisplay =>
         $"[{string.Join(',', Values.Select(x => x.DebugDisplay))}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
@@ -52,7 +52,7 @@ public class InterpretedStructValue(Memory<byte> sourceMemory, string name, List
     public string Name { get; } = name;
     public List<InterpretedStructField> Fields { get; set; } = fields;
 
-    public override string DebugDisplay =>
+    internal override string DebugDisplay =>
         $"struct {Name} {{{Fields.Count} fields}}";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
@@ -66,7 +66,7 @@ public class InterpretedStructField(Memory<byte> sourceMemory, string name, Inte
     public string Name { get; } = name;
     public InterpretedValue Value { get; set; } = value;
 
-    public override string DebugDisplay =>
+    internal override string DebugDisplay =>
         $"{Name} = {Value.DebugDisplay}";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
@@ -92,7 +92,7 @@ public class InterpretedSignedInteger(Memory<byte> sourceMemory, Endianness endi
         _ => throw new ArgumentOutOfRangeException()
     };
 
-    public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedSignedInteger(sourceMemory, endianness) as T)!;
@@ -119,7 +119,7 @@ public class InterpretedUnsignedInteger(Memory<byte> sourceMemory, Endianness en
         _ => throw new ArgumentOutOfRangeException()
     };
 
-    public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedUnsignedInteger(sourceMemory, endianness) as T)!;
@@ -135,7 +135,7 @@ public class InterpretedFloat(Memory<byte> sourceMemory, Endianness endianness)
         ? BinaryPrimitives.ReadSingleLittleEndian(SourceMemory.Span)
         : BinaryPrimitives.ReadSingleBigEndian(SourceMemory.Span);
 
-    public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedFloat(sourceMemory, endianness) as T)!;
@@ -151,7 +151,7 @@ public class InterpretedDouble(Memory<byte> sourceMemory, Endianness endianness)
         ? BinaryPrimitives.ReadDoubleLittleEndian(SourceMemory.Span)
         : BinaryPrimitives.ReadDoubleBigEndian(SourceMemory.Span);
 
-    public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedDouble(sourceMemory, endianness) as T)!;
@@ -167,7 +167,7 @@ public class InterpretedBoolean(Memory<byte> sourceMemory, Endianness endianness
         ? BinaryPrimitives.ReadUInt64LittleEndian(SourceMemory.Span) != 0
         : BinaryPrimitives.ReadUInt64BigEndian(SourceMemory.Span) != 0;
 
-    public override string DebugDisplay => $"{(Value ? "False" : "True")} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{(Value ? "False" : "True")} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedBoolean(sourceMemory, endianness) as T)!;
@@ -183,7 +183,7 @@ public class InterpretedAsciiString(Memory<byte> sourceMemory)
         ? Encoding.ASCII.GetString(SourceMemory.Span)
         : Encoding.ASCII.GetString(SourceMemory.Span[..SourceMemory.Span.IndexOf((byte)0)]);
 
-    public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedAsciiString(sourceMemory) as T)!;
@@ -220,7 +220,7 @@ public class InterpretedWideString(Memory<byte> sourceMemory)
         }
     }
 
-    public override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
+    internal override string DebugDisplay => $"{Value} [{SourceMemory.MemoryString()}]";
 
     public static T Create<T>(Memory<byte> sourceMemory, Endianness endianness) where T : class, IInterpretedValue =>
         (new InterpretedWideString(sourceMemory) as T)!;

@@ -104,6 +104,14 @@ public class PeAnalyser : IAnalyser
             )
         );
 
+        program.Database.EntryManager.AddEntry(
+            new StructUserProgramDatabaseEntry(
+                (uint)e_lfanew + 4 + (uint)overlayedImageFileHeader.Bytes.Length,
+                overlayImageOptionalHeader.Bytes.Length,
+                overlayImageOptionalHeader.SourceStructure
+            )
+        );
+
         return Result.Ok();
     }
 }

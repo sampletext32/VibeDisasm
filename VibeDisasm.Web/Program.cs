@@ -37,7 +37,7 @@ builder.Services.AddSingleton<UserRuntimeProjectRepository>();
 builder.Services.AddSingleton<UserProgramDataRepository>();
 builder.Services.AddSingleton<BackgroundJobRepository>();
 
-var channel = Channel.CreateBounded<BinaryAnalysisBackgroundJob>(
+var channel = Channel.CreateBounded<BinaryAnalysisJob>(
     new BoundedChannelOptions(1)
     {
         Capacity = 1,
@@ -51,6 +51,7 @@ builder.Services.AddHostedService<BinaryAnalysisBackgroundService>();
 
 builder.Services.AddSingleton<PeAnalyser>();
 builder.Services.AddSingleton<AnalyserResolver>();
+builder.Services.AddSingleton<AnalysisExecutor>();
 
 // Register handlers
 foreach (var handlerType in Utils.GetAssignableTypes<IHandler>())
