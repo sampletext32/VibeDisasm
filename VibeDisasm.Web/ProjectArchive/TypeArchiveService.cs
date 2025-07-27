@@ -140,6 +140,15 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
 
     public async Task<Result> SaveTypeArchive(RuntimeTypeArchive typeArchive)
     {
+        if (typeArchive.IsEmbedded)
+        {
+            logger.LogError(
+                "Failed to save type-archive {ArchiveNamespace}: Archive is embedded and cannot be saved",
+                typeArchive.Namespace
+            );
+            return Result.Fail("TypeArchive is embedded and cannot be saved to a file.");
+        }
+
         if (typeArchive.AbsoluteFilePath is null)
         {
             logger.LogError(
