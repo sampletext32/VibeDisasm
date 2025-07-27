@@ -15,8 +15,7 @@ public sealed class RuntimeDatabaseTypeResolver : DefaultJsonTypeInfoResolver
         (typeof(RuntimeFunctionType), "func"),
         (typeof(RuntimePointerType), "ptr"),
         (typeof(RuntimePrimitiveType), "primitive"),
-        (typeof(RuntimeStructureType), "struct"),
-        // (typeof(RuntimeTypeRefType), "ref"),
+        (typeof(RuntimeStructureType), "struct")
     ];
 
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)

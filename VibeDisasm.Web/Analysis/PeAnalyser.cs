@@ -10,11 +10,20 @@ namespace VibeDisasm.Web.Analysis;
 
 public class PeAnalyser(
     ITypeArchiveStorage typeArchiveStorage,
-    ILogger<PeAnalyser> logger) : IAnalyser
+    ILogger<PeAnalyser> logger
+) : IAnalyser
 {
     public async Task<Result> Run(RuntimeUserProgram program, byte[] binaryData, CancellationToken cancellationToken)
     {
         await Task.Yield();
+
+        // since we know this is a PE file, import required types
+
+        var builtinArchive = typeArchiveStorage.FindRequiredArchive("builtin");
+        var win32Archive = typeArchiveStorage.FindRequiredArchive("win32");
+
+        program.ReferencedTypeArchives.Add(builtinArchive);
+        program.ReferencedTypeArchives.Add(win32Archive);
 
         var overlayedImageDosHeader = OverlayHelper.OverlayStructure(
             program,
@@ -27,9 +36,9 @@ public class PeAnalyser(
 
         var e_lfanewField = overlayedImageDosHeader["e_lfanew"];
 
-        var e_lfanew = TypeInterpreter.InterpretStructureField(e_lfanewField).
-            Reinterpret<InterpretedUnsignedInteger>().
-            Get();
+        var e_lfanew = TypeInterpreter.InterpretStructureField(e_lfanewField)
+            .Reinterpret<InterpretedUnsignedInteger>()
+            .Get();
 
         var overlayedImageFileHeader = OverlayHelper.OverlayStructure(
             program,
@@ -51,9 +60,9 @@ public class PeAnalyser(
             (int)e_lfanew + 4 + overlayedImageFileHeader.Bytes.Length
         );
 
-        var optionalMagic = TypeInterpreter.InterpretPrimitive(overlayOptionalMagic).
-            Reinterpret<InterpretedUnsignedInteger>().
-            Get();
+        var optionalMagic = TypeInterpreter.InterpretPrimitive(overlayOptionalMagic)
+            .Reinterpret<InterpretedUnsignedInteger>()
+            .Get();
 
         ProgramArchitecture? architecture = optionalMagic switch
         {

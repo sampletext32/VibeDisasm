@@ -11,7 +11,7 @@ public sealed class RuntimeFunctionType : RuntimeDatabaseType
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public RuntimeDatabaseType ReturnType { get; }
+    public RuntimeDatabaseType ReturnType { get; set; }
     public List<FunctionArgument> Arguments { get; }
 
     public RuntimeFunctionType(

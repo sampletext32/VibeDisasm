@@ -137,7 +137,7 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
 
             runtimeProject.Programs = programs;
 
-            await typeArchiveService.LoadAllTypeArchives(programsByTypeArchivePathDict, runtimeProject);
+            await typeArchiveService.LoadAllTypeArchives(programsByTypeArchivePathDict);
 
             logger.LogInformation(
                 "Successfully loaded project {ProjectId} from {ArchivePath}",

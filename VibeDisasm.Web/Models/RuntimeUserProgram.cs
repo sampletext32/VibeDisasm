@@ -14,7 +14,15 @@ public class RuntimeUserProgram
     public ProgramKind Kind { get; set; }
     public ProgramArchitecture Architecture { get; set; }
 
-    public List<RuntimeTypeArchive> TypeArchives { get; } = [];
+    /// <summary>
+    /// Types directly defined in this program
+    /// </summary>
+    public RuntimeTypeArchive SelfTypeArchive { get; set; }
+
+    /// <summary>
+    /// Archives of types, that this program uses
+    /// </summary>
+    public List<RuntimeTypeArchive> ReferencedTypeArchives { get; } = [];
 
     public RuntimeUserProgramDatabase Database { get; init; }
 
@@ -24,6 +32,8 @@ public class RuntimeUserProgram
         Name = name;
         FilePath = filePath;
         FileLength = fileLength;
+        // self type archive is always embedded, because it is a part of the program
+        SelfTypeArchive = new RuntimeTypeArchive(Name, isEmbedded: true);
         Database = new RuntimeUserProgramDatabase(this);
     }
 

@@ -13,6 +13,8 @@ public class CreateTypeArchiveHandler(
 {
     public async Task<Result> Handle(string archiveNamespace)
     {
+        await Task.Yield();
+
         // Check if archive with the same namespace already exists
         if (typeArchiveStorage.FindArchive(archiveNamespace) is not null)
         {

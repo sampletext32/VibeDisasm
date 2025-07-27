@@ -13,6 +13,8 @@ public class ListArchivesHandler(
 {
     public async Task<Result<IEnumerable<TypeArchiveListItem>>> Handle()
     {
+        await Task.Yield();
+
         var mapped = typeArchiveStorage.TypeArchives.Select(x => new TypeArchiveListItem(
                 x.Namespace,
                 x.AbsoluteFilePath,

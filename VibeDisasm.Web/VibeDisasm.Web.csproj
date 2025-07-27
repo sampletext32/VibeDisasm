@@ -14,4 +14,10 @@
         <PackageReference Include="NativeFileDialogSharp" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="ProjectArchive\TypeArchiveService.TypeResolvePass.cs">
+        <DependentUpon>TypeArchiveService.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

@@ -9,6 +9,5 @@ public abstract class RuntimeDatabaseTypeVisitor<TReturn>
     public abstract TReturn VisitPointer(RuntimePointerType type);
     public abstract TReturn VisitFunction(RuntimeFunctionType type);
     public abstract TReturn VisitArray(RuntimeArrayType type);
-    // public abstract TReturn VisitRef(RuntimeTypeRefType type);
     public abstract TReturn VisitEnum(RuntimeEnumType type);
 }

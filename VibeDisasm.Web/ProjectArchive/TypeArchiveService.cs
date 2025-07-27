@@ -2,7 +2,6 @@ using System.Text.Json;
 using FluentResults;
 using VibeDisasm.Web.Extensions;
 using VibeDisasm.Web.Models;
-using VibeDisasm.Web.Models.Types;
 using VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 using VibeDisasm.Web.Services;
 
@@ -13,18 +12,19 @@ public record LaterResolvedType(
     TypeArchiveJsonElement Type
 );
 
-public class TypeArchiveService(
+public partial class TypeArchiveService(
     ITypeArchiveStorage typeArchiveStorage,
     ILogger<TypeArchiveJson> logger
 )
 {
     public async Task LoadAllTypeArchives(
-        Dictionary<ProgramTypeArchiveReference, List<RuntimeUserProgram>> programsByTypeArchivePathDict,
-        RuntimeUserProject runtimeProject
+        Dictionary<ProgramTypeArchiveReference, List<RuntimeUserProgram>> programsByTypeArchivePathDict
     )
     {
         var archiveReferences = programsByTypeArchivePathDict.Keys;
-        Queue<LaterResolvedType> queue = new();
+        HashSet<LaterResolvedType> laterResolvedTypes = new(
+            EqualityComparer<LaterResolvedType>.Create((x, y) => x!.Type.Id == y!.Type.Id, x => x.Type.Id.GetHashCode())
+        );
         Dictionary<string, RuntimeTypeArchive> loadedTypeArchives = new();
 
         foreach (var archiveReference in archiveReferences)
@@ -72,219 +72,16 @@ public class TypeArchiveService(
 
             foreach (var program in programsByTypeArchivePathDict[archiveReference])
             {
-                program.TypeArchives.Add(typeArchiveLoaded.Archive);
+                program.ReferencedTypeArchives.Add(typeArchiveLoaded.Archive);
             }
 
             loadedTypeArchives[typeArchiveLoaded.Archive.Namespace] = typeArchiveLoaded.Archive;
 
-            queue.EnqueueRange(typeArchiveLoaded.Types);
+            laterResolvedTypes.AddRange(typeArchiveLoaded.Types);
         }
 
         // Perform resolving pass
-        TypeResolvePass(queue, loadedTypeArchives);
-    }
-
-    private void TypeResolvePass(
-        Queue<LaterResolvedType> queue,
-        Dictionary<string, RuntimeTypeArchive> loadedTypeArchives
-    )
-    {
-        var prevCount = -1;
-        while (queue.Count > 0)
-        {
-            if (queue.Count == prevCount)
-            {
-                logger.LogWarning(
-                    "Type resolve pass is stuck, queue size: {QueueSize}. Types:{Types}",
-                    queue.Count,
-                    string.Join(", ", queue.Select(x => x.Type.Id))
-                );
-
-                throw new InvalidOperationException(
-                    "Type resolve pass is stuck, queue size did not change."
-                );
-            }
-
-            var resolveType = queue.Dequeue();
-
-            RuntimeDatabaseType resolvedType;
-            switch (resolveType.Type)
-            {
-                case ArrayArchiveJsonElement element:
-                {
-                    var resolvedElementType = FindType(element.ElementType, loadedTypeArchives);
-
-                    if (resolvedElementType is null)
-                    {
-                        queue.Enqueue(resolveType);
-                        break;
-                    }
-
-                    resolvedType = new RuntimeArrayType(
-                        element.Id,
-                        resolveType.Archive.Namespace,
-                        resolvedElementType,
-                        element.ElementCount
-                    );
-                    resolveType.Archive.AddType(resolvedType);
-                    break;
-                }
-                case FunctionArchiveJsonElement element:
-                {
-                    var resolvedReturnType = FindType(element.ReturnType, loadedTypeArchives);
-
-                    if (resolvedReturnType is null)
-                    {
-                        queue.Enqueue(resolveType);
-                        break;
-                    }
-
-                    Dictionary<string, RuntimeDatabaseType> argumentsByName = new();
-
-                    var hasUnresolvedArgument = false;
-                    foreach (var functionArgumentJsonElement in element.Arguments)
-                    {
-                        var argumentType = FindType(functionArgumentJsonElement.Type, loadedTypeArchives);
-
-                        if (argumentType is null)
-                        {
-                            hasUnresolvedArgument = true;
-                            break;
-                        }
-
-                        argumentsByName[functionArgumentJsonElement.Name] = argumentType;
-                    }
-
-                    if (hasUnresolvedArgument)
-                    {
-                        queue.Enqueue(resolveType);
-                        break;
-                    }
-
-                    resolvedType = new RuntimeFunctionType(
-                        element.Id,
-                        resolveType.Archive.Namespace,
-                        element.Name,
-                        resolvedReturnType,
-                        element.Arguments.Select(x => new FunctionArgument(
-                                    argumentsByName[x.Name],
-                                    x.Name
-                                )
-                            )
-                            .ToList()
-                    );
-                    resolveType.Archive.AddType(resolvedType);
-                    break;
-                }
-                case PointerArchiveJsonElement element:
-                {
-                    var resolvedPointedType = FindType(element.PointedType, loadedTypeArchives);
-
-                    if (resolvedPointedType is null)
-                    {
-                        queue.Enqueue(resolveType);
-                        break;
-                    }
-
-                    resolvedType = new RuntimePointerType(
-                        element.Id,
-                        resolveType.Archive.Namespace,
-                        resolvedPointedType
-                    );
-                    resolveType.Archive.AddType(resolvedType);
-                    break;
-                }
-                case PrimitiveArchiveJsonElement element:
-                {
-                    resolvedType = new RuntimePrimitiveType(
-                        element.Id,
-                        resolveType.Archive.Namespace,
-                        element.Name,
-                        element.Size
-                    );
-                    resolveType.Archive.AddType(resolvedType);
-                    break;
-                }
-                case StructArchiveJsonElement element:
-                {
-                    Dictionary<string, RuntimeDatabaseType> fieldsByName = new();
-
-                    var hasUnresolvedField = false;
-                    foreach (var structFieldArchiveJsonElement in element.Fields)
-                    {
-                        var resolvedFieldType = FindType(structFieldArchiveJsonElement.Type, loadedTypeArchives);
-
-                        if (resolvedFieldType is null)
-                        {
-                            hasUnresolvedField = true;
-                            break;
-                        }
-
-                        fieldsByName[structFieldArchiveJsonElement.Name] = resolvedFieldType;
-                    }
-
-                    if (hasUnresolvedField)
-                    {
-                        // TODO: recursive structures will fail to resolve (linked list for example). Fix ASAP
-                        queue.Enqueue(resolveType);
-                        break;
-                    }
-
-                    resolvedType = new RuntimeStructureType(
-                        element.Id,
-                        resolveType.Archive.Namespace,
-                        element.Name,
-                        element.Fields.Select(x => new RuntimeStructureTypeField(
-                                    fieldsByName[x.Name],
-                                    x.Name
-                                )
-                            )
-                            .ToList()
-                    );
-                    resolveType.Archive.AddType(resolvedType);
-                    break;
-                }
-                default:
-                {
-                    throw new ArgumentOutOfRangeException("Unknown type of resolveType", (Exception?)null);
-                }
-            }
-        }
-    }
-
-    private RuntimeDatabaseType? FindType(
-        TypeRefJsonElement reference,
-        Dictionary<string, RuntimeTypeArchive> loadedTypeArchives
-    )
-    {
-        // first try to find in embedded types, then in loaded type archives
-
-        var embeddedArchive =
-            typeArchiveStorage.TypeArchives.FirstOrDefault(x => x.Namespace == reference.Namespace);
-
-        var foundType = embeddedArchive?.FindById(reference.Id);
-
-        if (foundType != null)
-        {
-            return foundType;
-        }
-
-        if (loadedTypeArchives.TryGetValue(reference.Namespace, out var archive))
-        {
-            foundType = archive.FindById(reference.Id);
-            if (foundType != null)
-            {
-                return foundType;
-            }
-        }
-
-        logger.LogWarning(
-            "Failed to resolve type {TypeId} in namespace {Namespace}. Type may not work.",
-            reference.Id,
-            reference.Namespace
-        );
-
-        return null;
+        TypeResolvePass(laterResolvedTypes, loadedTypeArchives);
     }
 
     public async Task<(RuntimeTypeArchive? Archive, List<LaterResolvedType> Types)> LoadTypeArchive(
@@ -318,63 +115,6 @@ public class TypeArchiveService(
 
         typeArchive.AbsoluteFilePath = typeArchiveAbsolutePath;
         return (typeArchive, typeArchiveJson.Types.Select(x => new LaterResolvedType(typeArchive, x)).ToList());
-
-        // var typeQueue = new Queue<TypeArchiveJsonElement>(typeArchiveJson.Types);
-        //
-        // Dictionary<Guid, RuntimeDatabaseType> resolvedTypes = [];
-        //
-        // foreach (var typeArchiveJsonElement in typeArchiveJson.Types)
-        // {
-        //     RuntimeDatabaseType resolvedType = typeArchiveJsonElement switch
-        //     {
-        //         ArrayArchiveJsonElement element => new RuntimeArrayType(
-        //             element.Id,
-        //             typeArchiveJson.Namespace,
-        //             new RuntimeTypeRefType(element.ElementType.Id, element.ElementType.Namespace),
-        //             element.ElementCount
-        //         ),
-        //         FunctionArchiveJsonElement element => new RuntimeFunctionType(
-        //             element.Id,
-        //             typeArchiveJson.Namespace,
-        //             element.Name,
-        //             new RuntimeTypeRefType(element.ReturnType.Id, element.ReturnType.Namespace),
-        //             element.Arguments.Select(x =>
-        //                     new FunctionArgument(new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace), x.Name)
-        //                 )
-        //                 .ToList()
-        //         ),
-        //         PointerArchiveJsonElement element => new RuntimePointerType(
-        //             element.Id,
-        //             typeArchiveJson.Namespace,
-        //             new RuntimeTypeRefType(element.PointedType.Id, element.PointedType.Namespace)
-        //         ),
-        //         PrimitiveArchiveJsonElement element => new RuntimePrimitiveType(
-        //             element.Id,
-        //             typeArchiveJson.Namespace,
-        //             element.Name,
-        //             element.Size
-        //         ),
-        //         StructArchiveJsonElement element => new RuntimeStructureType(
-        //             element.Id,
-        //             typeArchiveJson.Namespace,
-        //             element.Name,
-        //             element.Fields.Select(x => new RuntimeStructureTypeField(
-        //                         new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace),
-        //                         x.Name
-        //                     )
-        //                 )
-        //                 .ToList()
-        //         ),
-        //         _ => throw new ArgumentOutOfRangeException(nameof(typeArchiveJsonElement))
-        //     };
-        //
-        //     resolvedTypes[resolvedType.Id] = resolvedType;
-        // }
-        //
-        // typeArchive.Types = resolvedTypes.Values.ToList();
-        // typeArchive.AbsoluteFilePath = typeArchiveAbsolutePath;
-        //
-        // return typeArchive;
     }
 
     public async Task<Result> SaveTypeArchive(RuntimeTypeArchive typeArchive)

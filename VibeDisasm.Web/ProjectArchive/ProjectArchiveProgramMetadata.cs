@@ -25,7 +25,7 @@ public record ProjectArchiveProgramMetadata(
             program.FileLength,
             program.Kind,
             program.Architecture,
-            program.TypeArchives
+            program.ReferencedTypeArchives
                 .Select(x => x.IsEmbedded
                     ? new ProgramTypeArchiveReference(x.Namespace, true)
                     : new ProgramTypeArchiveReference(
