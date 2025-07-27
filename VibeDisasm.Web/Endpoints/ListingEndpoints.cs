@@ -68,7 +68,7 @@ public static class ListingEndpoints
     )
     {
         var entry = await context.Request.ReadFromJsonAsync<UserProgramDatabaseEntry>(
-            JsonSerializerOptionsPresets.DatabaseEntryOptions
+            JsonSerializerOptionsPresets.StandardOptions
         );
 
         if (entry is null)

@@ -13,9 +13,7 @@ public class ListProgramsHandler(
     [Pure]
     public async Task<Result<IEnumerable<ProgramDetailsDto>>> Handle(Guid projectId)
     {
-        var project = await repository.GetById(projectId);
-
-        if (project is null)
+        if (await repository.GetById(projectId) is not {} project)
         {
             logger.ProjectNotFound(projectId);
             return Result.Fail("Project not found");

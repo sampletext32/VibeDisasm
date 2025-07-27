@@ -12,9 +12,8 @@ public class ImportProgramHandler(
 {
     public async Task<Result<Guid>> Handle(Guid projectId)
     {
-        var project = await repository.GetById(projectId);
 
-        if (project is null)
+        if (await repository.GetById(projectId) is not {} project)
         {
             logger.ProjectNotFound(projectId);
             return Result.Fail("Project not found");

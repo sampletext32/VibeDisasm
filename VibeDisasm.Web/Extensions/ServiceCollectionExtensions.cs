@@ -2,6 +2,7 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
+using System.Text.Json.Serialization;
 using VibeDisasm.Web.Utils;
 using Path = System.IO.Path;
 
@@ -36,6 +37,9 @@ internal static class ServiceCollectionExtensions
                     }
                 );
 
+                options.UseOneOfForPolymorphism();
+                options.UseAllOfForInheritance();
+
                 // Add /api prefix to all operations
                 // options.AddServer(new OpenApiServer
                 // {
@@ -46,6 +50,14 @@ internal static class ServiceCollectionExtensions
                     () => new OpenApiSchema
                     {
                         Type = "string",
+                        Example = new OpenApiString("00:00")
+                    }
+                );
+                options.MapType<Memory<byte>>(
+                    () => new OpenApiSchema
+                    {
+                        Type = "string",
+                        Format = "base64",
                         Example = new OpenApiString("00:00")
                     }
                 );

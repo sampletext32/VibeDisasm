@@ -18,9 +18,7 @@ public class ListArchiveTypesHandler(
     {
         await Task.Yield();
 
-        var archive = typeArchiveStorage.FindArchive(archiveNamespace);
-
-        if (archive is null)
+        if (typeArchiveStorage.FindArchive(archiveNamespace) is not {} archive)
         {
             logger.LogWarning(
                 "Archive {ArchiveNamespace} not found",
@@ -34,7 +32,7 @@ public class ListArchiveTypesHandler(
             archive.Types.Select(CreateTypeArchiveElementDto)
         );
 
-        return Result.Ok((types, JsonSerializerOptionsPresets.TypeArchiveElementOptions));
+        return Result.Ok((types, JsonSerializerOptionsPresets.StandardOptions));
     }
 
     private static TypeArchiveElementDto CreateTypeArchiveElementDto(

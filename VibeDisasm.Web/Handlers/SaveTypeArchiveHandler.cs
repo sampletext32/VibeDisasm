@@ -17,8 +17,7 @@ public class SaveTypeArchiveHandler(
         string archiveNamespace
     )
     {
-        var archive = typeArchiveStorage.FindArchive(archiveNamespace);
-        if (archive is null)
+        if (typeArchiveStorage.FindArchive(archiveNamespace) is not {} archive)
         {
             logger.LogWarning(
                 "Archive {ArchiveNamespace} not found",

@@ -24,9 +24,7 @@ public class OpenRecentHandler(
             return Result.Fail("Recent project not found");
         }
 
-        var project = await repository.GetById(projectId);
-
-        if (project is not null)
+        if (await repository.GetById(projectId) is not null)
         {
             logger.LogInformation("Opened existing recent project: {ProjectId}", projectId);
             return Result.Ok();

@@ -51,13 +51,6 @@ public static class OverlayHelper
                 throw new Exception($"Field {field.Name} in structure {structure.Name} has zero size, thus the structure is corrupted");
             }
 
-            // var resolvedFieldType = program.Database.TypeStorage.DeepResolveTypeRef(field.Type);
-            //
-            // if (resolvedFieldType is null)
-            // {
-            //     throw new Exception($"Could not resolve type for field {field.Name} in structure {structure.Name}");
-            // }
-
             var fieldBytes = binaryData.Slice(offset + fieldOffset, fieldSize);
 
             var overlayFieldResult = OverlayType(program, field.Type, fieldBytes, 0);

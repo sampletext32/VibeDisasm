@@ -98,7 +98,7 @@ public partial class TypeArchiveService(
         var typeArchiveJson =
             await JsonSerializer.DeserializeAsync<TypeArchiveJson>(
                 stream,
-                JsonSerializerOptionsPresets.TypeArchiveJsonOptions
+                JsonSerializerOptionsPresets.StandardOptions
             );
 
         if (typeArchiveJson is null)
@@ -148,7 +148,7 @@ public partial class TypeArchiveService(
         await JsonSerializer.SerializeAsync(
             stream,
             typeArchiveJson,
-            JsonSerializerOptionsPresets.TypeArchiveJsonOptions
+            JsonSerializerOptionsPresets.StandardOptions
         );
 
         return Result.Ok();

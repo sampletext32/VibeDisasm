@@ -14,4 +14,9 @@ public class RuntimeUserProject
     /// path to zip archive of the project. Can be null if the project is a newly created.
     /// </summary>
     public string? ProjectArchivePath { get; set; }
+
+    public RuntimeUserProgram? GetProgram(Guid programId)
+    {
+        return Programs.FirstOrDefault(p => p.Id == programId);
+    }
 }

@@ -19,16 +19,13 @@ public class AllListingHandler(
         Guid programId
     )
     {
-        var project = await repository.GetById(projectId);
-        if (project is null)
+        if (await repository.GetById(projectId) is not {} project)
         {
             logger.ProjectNotFound(projectId);
             return Result.Fail("Project not found");
         }
 
-        var program = project.Programs.FirstOrDefault(x => x.Id == programId);
-
-        if (program is null)
+        if (project.GetProgram(programId) is not {} program)
         {
             logger.ProgramNotFound(programId, projectId);
             return Result.Fail("Program not found");
@@ -64,6 +61,6 @@ public class AllListingHandler(
             programId,
             projectId
         );
-        return Result.Ok((interpretedValues, JsonOptions: JsonSerializerOptionsPresets.InterpretedValueOptions));
+        return Result.Ok((interpretedValues, JsonOptions: JsonSerializerOptionsPresets.StandardOptions));
     }
 }
