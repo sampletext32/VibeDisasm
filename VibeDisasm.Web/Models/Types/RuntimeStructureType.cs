@@ -27,11 +27,11 @@ public sealed class RuntimeStructureType : RuntimeDatabaseType
 [DebuggerDisplay("{DebugDisplay}")]
 public class RuntimeStructureTypeField
 {
-    public RuntimeTypeRefType Type { get; set; }
+    public RuntimeDatabaseType Type { get; set; }
 
     public string Name { get; set; }
 
-    public RuntimeStructureTypeField(RuntimeTypeRefType type, string name)
+    public RuntimeStructureTypeField(RuntimeDatabaseType type, string name)
     {
         Type = type;
         Name = name;

@@ -11,10 +11,10 @@ public sealed class RuntimeArrayType : RuntimeDatabaseType
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public RuntimeTypeRefType ElementType { get; set; }
+    public RuntimeDatabaseType ElementType { get; set; }
     public int ElementCount { get; set; }
 
-    public RuntimeArrayType(Guid id, string @namespace, RuntimeTypeRefType elementType, int elementCount) : base(id)
+    public RuntimeArrayType(Guid id, string @namespace, RuntimeDatabaseType elementType, int elementCount) : base(id)
     {
         Namespace = @namespace;
         Name = $"{elementType.Name}[{elementCount}]";

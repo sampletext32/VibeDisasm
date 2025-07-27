@@ -64,9 +64,14 @@ builder.Services.AddSingleton<ProjectArchiveService>();
 builder.Services.AddSingleton<TypeArchiveService>();
 builder.Services.AddSingleton<RecentsService>();
 
+builder.Services.AddSingleton<ITypeArchiveStorage, TypeArchiveStorage>();
+
 var app = builder.Build();
 
 await app.Services.GetRequiredService<RecentsService>().TryLoad();
+
+// Force initialize the embedded type archive storage
+_ = app.Services.GetRequiredService<ITypeArchiveStorage>();
 
 app.UseDeveloperExceptionPage();
 

@@ -2,32 +2,19 @@ using FluentResults;
 using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Repositories;
+using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Handlers;
 
 public class CreateTypeArchiveHandler(
-    UserRuntimeProjectRepository repository,
+    ITypeArchiveStorage typeArchiveStorage,
     ILogger<CreateTypeArchiveHandler> logger
 ) : IHandler
 {
-    public async Task<Result> Handle(Guid projectId, Guid programId, string archiveNamespace)
+    public async Task<Result> Handle(string archiveNamespace)
     {
-        var project = await repository.GetById(projectId);
-        if (project is null)
-        {
-            logger.ProjectNotFound(projectId);
-            return Result.Fail("Project not found");
-        }
-
-        var program = project.Programs.FirstOrDefault(x => x.Id == programId);
-        if (program is null)
-        {
-            logger.ProgramNotFound(programId, projectId);
-            return Result.Fail("Program not found");
-        }
-
         // Check if archive with the same namespace already exists
-        if (program.Database.TypeStorage.Archives.Any(x => x.Namespace == archiveNamespace))
+        if (typeArchiveStorage.FindArchive(archiveNamespace) is not null)
         {
             logger.LogWarning(
                 "Archive with namespace {ArchiveNamespace} already exists",
@@ -40,12 +27,11 @@ public class CreateTypeArchiveHandler(
         {
             // user created archives are not embedded by design
             var newArchive = new RuntimeTypeArchive(archiveNamespace, isEmbedded: false);
-            program.Database.TypeStorage.Archives.Add(newArchive);
+            typeArchiveStorage.Import(newArchive);
 
             logger.LogInformation(
-                "Successfully created type archive {ArchiveNamespace} for program {ProgramId}",
-                archiveNamespace,
-                programId
+                "Successfully created type archive {ArchiveNamespace}",
+                archiveNamespace
             );
             return Result.Ok();
         }

@@ -39,6 +39,13 @@ public class RuntimeTypeArchive
 
         return type ?? null;
     }
+
+    public RuntimeDatabaseType? FindById(Guid id)
+    {
+        var type = Types.FirstOrDefault(x => x.Id == id);
+
+        return type ?? null;
+    }
     public RuntimeDatabaseType FindRequiredType(string name)
     {
         var type = Types.FirstOrDefault(x => x.Name == name);

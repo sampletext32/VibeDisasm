@@ -14,14 +14,14 @@ public sealed class RuntimeEnumType : RuntimeDatabaseType
     /// <summary>
     /// Underlying type of the enum (typically int, byte, etc.)
     /// </summary>
-    public RuntimeTypeRefType UnderlyingType { get; set; }
+    public RuntimeDatabaseType UnderlyingType { get; set; }
 
     /// <summary>
     /// Collection of enum members with their values
     /// </summary>
     public List<RuntimeEnumMember> Members { get; set; }
 
-    public RuntimeEnumType(Guid id, string @namespace, string name, RuntimeTypeRefType underlyingType, List<RuntimeEnumMember> members) : base(id)
+    public RuntimeEnumType(Guid id, string @namespace, string name, RuntimeDatabaseType underlyingType, List<RuntimeEnumMember> members) : base(id)
     {
         Namespace = @namespace;
         Name = name;

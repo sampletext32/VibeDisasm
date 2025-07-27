@@ -3,45 +3,37 @@ using NativeFileDialogSharp;
 using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.ProjectArchive;
 using VibeDisasm.Web.Repositories;
+using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Handlers;
 
 public class SaveTypeArchiveHandler(
-    UserRuntimeProjectRepository repository,
+    ITypeArchiveStorage typeArchiveStorage,
     TypeArchiveService typeArchiveService,
     ILogger<SaveTypeArchiveHandler> logger
 ) : IHandler
 {
     public async Task<Result> Handle(
-        Guid projectId,
-        Guid programId,
         string archiveNamespace
     )
     {
-        var project = await repository.GetById(projectId);
-        if (project is null)
-        {
-            logger.ProjectNotFound(projectId);
-            return Result.Fail("Project not found");
-        }
-
-        var program = project.Programs.FirstOrDefault(x => x.Id == programId);
-
-        if (program is null)
-        {
-            logger.ProgramNotFound(programId, projectId);
-            return Result.Fail("Program not found");
-        }
-
-        var archive = program.Database.TypeStorage.Archives.FirstOrDefault(x => x.Namespace == archiveNamespace);
+        var archive = typeArchiveStorage.FindArchive(archiveNamespace);
         if (archive is null)
         {
             logger.LogWarning(
-                "Save type archive failed: archive {ArchiveNamespace} not found in program {ProgramId}",
-                archiveNamespace,
-                programId
+                "Archive {ArchiveNamespace} not found",
+                archiveNamespace
             );
             return Result.Fail("Type archive not found");
+        }
+
+        if (archive.IsEmbedded)
+        {
+            logger.LogWarning(
+                "Archive {ArchiveNamespace} is embedded and cannot be saved",
+                archiveNamespace
+            );
+            return Result.Fail("Type archive is embedded and cannot be saved to a file");
         }
 
         if (string.IsNullOrWhiteSpace(archive.AbsoluteFilePath))
@@ -62,7 +54,7 @@ public class SaveTypeArchiveHandler(
             else
             {
                 logger.LogWarning(
-                    "Save cancelled: file selection was cancelled for type-archive {ArchiveNamespace}",
+                    "File selection was cancelled for type-archive {ArchiveNamespace}",
                     archiveNamespace
                 );
                 return Result.Fail("File selection was cancelled");

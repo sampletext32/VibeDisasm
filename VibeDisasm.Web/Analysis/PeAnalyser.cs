@@ -4,25 +4,21 @@ using VibeDisasm.Web.Models.DatabaseEntries;
 using VibeDisasm.Web.Models.TypeInterpretation;
 using VibeDisasm.Web.Models.Types;
 using VibeDisasm.Web.Overlay;
+using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Analysis;
 
-public class PeAnalyser : IAnalyser
+public class PeAnalyser(
+    ITypeArchiveStorage typeArchiveStorage,
+    ILogger<PeAnalyser> logger) : IAnalyser
 {
-    private readonly ILogger<PeAnalyser> _logger;
-
-    public PeAnalyser(ILogger<PeAnalyser> logger)
-    {
-        _logger = logger;
-    }
-
     public async Task<Result> Run(RuntimeUserProgram program, byte[] binaryData, CancellationToken cancellationToken)
     {
         await Task.Yield();
 
         var overlayedImageDosHeader = OverlayHelper.OverlayStructure(
             program,
-            program.Database.TypeStorage.FindRequiredType<RuntimeStructureType>("win32", "IMAGE_DOS_HEADER"),
+            typeArchiveStorage.FindRequiredType<RuntimeStructureType>("win32", "IMAGE_DOS_HEADER"),
             binaryData,
             0
         );
@@ -37,7 +33,7 @@ public class PeAnalyser : IAnalyser
 
         var overlayedImageFileHeader = OverlayHelper.OverlayStructure(
             program,
-            program.Database.TypeStorage.FindRequiredType<RuntimeStructureType>("win32", "IMAGE_FILE_HEADER"),
+            typeArchiveStorage.FindRequiredType<RuntimeStructureType>("win32", "IMAGE_FILE_HEADER"),
             binaryData,
             (int)e_lfanew + 4
         );
@@ -50,7 +46,7 @@ public class PeAnalyser : IAnalyser
 
         var overlayOptionalMagic = OverlayHelper.OverlayPrimitive(
             program,
-            program.Database.TypeStorage.FindRequiredType<RuntimePrimitiveType>("win32", "WORD"),
+            typeArchiveStorage.FindRequiredType<RuntimePrimitiveType>("win32", "WORD"),
             binaryData,
             (int)e_lfanew + 4 + overlayedImageFileHeader.Bytes.Length
         );
@@ -68,7 +64,7 @@ public class PeAnalyser : IAnalyser
 
         if (architecture is null)
         {
-            _logger.LogError("Failed to determine architecture for program {ProgramId}", program.Id);
+            logger.LogError("Failed to determine architecture for program {ProgramId}", program.Id);
             return Result.Fail("Failed to determine architecture");
         }
 
@@ -83,7 +79,7 @@ public class PeAnalyser : IAnalyser
 
         var overlayImageOptionalHeader = OverlayHelper.OverlayStructure(
             program,
-            program.Database.TypeStorage.FindRequiredType<RuntimeStructureType>("win32", imageOptionalHeaderType),
+            typeArchiveStorage.FindRequiredType<RuntimeStructureType>("win32", imageOptionalHeaderType),
             binaryData,
             (int)e_lfanew + 4 + overlayedImageFileHeader.Bytes.Length
         );

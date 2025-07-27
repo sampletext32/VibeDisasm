@@ -185,7 +185,7 @@ public static class DefaultWindowsTypesPopulator
         return archive;
     }
 
-    public static RuntimeTypeArchive CreateWin32Archive(RuntimeTypeStorage storage)
+    public static RuntimeTypeArchive CreateWin32Archive(RuntimeTypeArchive builtinArchive)
     {
         var archive = new RuntimeTypeArchive("win32", true);
 
@@ -197,8 +197,7 @@ public static class DefaultWindowsTypesPopulator
                     4,
                     InterpretAs.UnsignedIntegerLE
                 )
-            )
-            .MakeRef();
+            );
         var wordType = archive.AddType(
                 new RuntimePrimitiveType(
                     new Guid("26505cc8-6d60-44fc-b403-6e8ce18240dc"),
@@ -207,8 +206,7 @@ public static class DefaultWindowsTypesPopulator
                     2,
                     InterpretAs.UnsignedIntegerLE
                 )
-            )
-            .MakeRef();
+            );
         var byteType = archive.AddType(
                 new RuntimePrimitiveType(
                     new Guid("eadf3262-d4d3-480c-925e-01ab50f790e4"),
@@ -217,12 +215,10 @@ public static class DefaultWindowsTypesPopulator
                     1,
                     InterpretAs.UnsignedIntegerLE
                 )
-            )
-            .MakeRef();
+            );
         var handleType = archive.AddType(
                 new RuntimePrimitiveType(new Guid("e906809e-ecce-4be1-9b6d-210c6ac701d8"), "win32", "HANDLE", 4)
-            )
-            .MakeRef();
+            );
         var hinstanceType = archive.AddType(
                 new RuntimePrimitiveType(
                     new Guid("7430d3b7-616d-43e9-b323-71714e9b37b4"),
@@ -230,24 +226,19 @@ public static class DefaultWindowsTypesPopulator
                     "HINSTANCE",
                     4
                 )
-            )
-            .MakeRef();
+            );
         var hwndType = archive.AddType(
                 new RuntimePrimitiveType(new Guid("06b1795a-aa1a-427d-9b74-24f49601b02c"), "win32", "HWND", 4)
-            )
-            .MakeRef();
+            );
         var lpvoidType = archive.AddType(
                 new RuntimePrimitiveType(new Guid("152665c2-abf1-4907-9db7-66ce39b87551"), "win32", "LPVOID", 4)
-            )
-            .MakeRef();
+            );
         var eresType = archive.AddType(
                 new RuntimeArrayType(new Guid("bd30205d-1db6-4e71-9441-29556ca12b52"), "win32", wordType, 4)
-            )
-            .MakeRef();
+            );
         var eres2Type = archive.AddType(
                 new RuntimeArrayType(new Guid("c14ff7e2-0589-4e0d-9946-17612fa3ffe6"), "win32", wordType, 10)
-            )
-            .MakeRef();
+            );
 
         archive.AddType(
             new RuntimeStructureType(
@@ -293,8 +284,7 @@ public static class DefaultWindowsTypesPopulator
                         new(wordType, "Characteristics"),
                     ]
                 )
-            )
-            .MakeRef();
+            );
 
         var imageDataDirectoryType = archive.AddType(
                 new RuntimeStructureType(
@@ -306,8 +296,7 @@ public static class DefaultWindowsTypesPopulator
                         new(dwordType, "Size"),
                     ]
                 )
-            )
-            .MakeRef();
+            );
 
         var dataDirectoryType = archive
             .AddType(
@@ -317,8 +306,7 @@ public static class DefaultWindowsTypesPopulator
                     imageDataDirectoryType,
                     16
                 )
-            )
-            .MakeRef();
+            );
 
         var imageOptionalHeader32Type = archive.AddType(
                 new RuntimeStructureType(
@@ -359,10 +347,9 @@ public static class DefaultWindowsTypesPopulator
                         new(dataDirectoryType, "DataDirectory")
                     ]
                 )
-            )
-            .MakeRef();
+            );
 
-        var uint64tType = storage.FindType("builtin", "uint64_t")!.MakeRef();
+        var uint64tType = builtinArchive.FindRequiredType("uint64_t");
 
         var imageOptionalHeader64Type = archive.AddType(
                 new RuntimeStructureType(
@@ -402,8 +389,7 @@ public static class DefaultWindowsTypesPopulator
                         new(dataDirectoryType, "DataDirectory")
                     ]
                 )
-            )
-            .MakeRef();
+            );
 
         archive.AddType(
             new RuntimeStructureType(

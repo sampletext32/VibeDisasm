@@ -11,9 +11,9 @@ public sealed class RuntimePointerType : RuntimeDatabaseType
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public RuntimeTypeRefType PointedType { get; set; }
+    public RuntimeDatabaseType PointedType { get; set; }
 
-    public RuntimePointerType(Guid id, string @namespace, RuntimeTypeRefType pointedType) : base(id)
+    public RuntimePointerType(Guid id, string @namespace, RuntimeDatabaseType pointedType) : base(id)
     {
         Namespace = @namespace;
         PointedType = pointedType;

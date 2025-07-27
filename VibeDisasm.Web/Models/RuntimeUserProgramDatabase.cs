@@ -7,19 +7,11 @@ namespace VibeDisasm.Web.Models;
 /// </summary>
 public class RuntimeUserProgramDatabase
 {
-    public RuntimeTypeStorage TypeStorage { get; set; }
     public RuntimeDatabaseEntryManager EntryManager { get; }
 
     public RuntimeUserProgramDatabase(RuntimeUserProgram program)
     {
-        TypeStorage = new RuntimeTypeStorage(program);
         EntryManager = new RuntimeDatabaseEntryManager(program);
-
-        var builtinArchive = DefaultWindowsTypesPopulator.CreateBuiltinArchive();
-        TypeStorage.Archives.Add(builtinArchive);
-
-        var win32Archive = DefaultWindowsTypesPopulator.CreateWin32Archive(TypeStorage);
-        TypeStorage.Archives.Add(win32Archive);
 
         _ = 5;
     }

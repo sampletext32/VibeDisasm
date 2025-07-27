@@ -14,6 +14,8 @@ public class RuntimeUserProgram
     public ProgramKind Kind { get; set; }
     public ProgramArchitecture Architecture { get; set; }
 
+    public List<RuntimeTypeArchive> TypeArchives { get; } = [];
+
     public RuntimeUserProgramDatabase Database { get; init; }
 
     public RuntimeUserProgram(Guid id, string filePath, string name, long fileLength)

@@ -7,4 +7,12 @@ public static class ListExtensions
         list.Add(value);
         return value;
     }
+
+    public static void EnqueueRange<T>(this Queue<T> queue, IEnumerable<T> values)
+    {
+        foreach (var value in values)
+        {
+            queue.Enqueue(value);
+        }
+    }
 }

@@ -137,7 +137,7 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
 
             runtimeProject.Programs = programs;
 
-            await typeArchiveService.LoadAllTypeArchive(programsByTypeArchivePathDict, runtimeProject);
+            await typeArchiveService.LoadAllTypeArchives(programsByTypeArchivePathDict, runtimeProject);
 
             logger.LogInformation(
                 "Successfully loaded project {ProjectId} from {ArchivePath}",
@@ -166,11 +166,12 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
     }
 
     private static async
-        Task<(List<RuntimeUserProgram> Programs, Dictionary<string, List<Guid>> ProgramsByTypeArchiveDict)>
+        Task<(List<RuntimeUserProgram> Programs, Dictionary<ProgramTypeArchiveReference, List<RuntimeUserProgram>>
+            ProgramsByTypeArchiveDict)>
         ReadProgramsAsync(ZipArchive archive)
     {
         var programs = new List<RuntimeUserProgram>();
-        var programsByTypeArchiveDict = new Dictionary<string, List<Guid>>();
+        var programsByTypeArchiveDict = new Dictionary<ProgramTypeArchiveReference, List<RuntimeUserProgram>>();
 
         foreach (var entry in archive.Entries)
         {
@@ -188,20 +189,13 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
 
                     foreach (var typeArchiveReference in archiveProgram.TypeArchives)
                     {
-                        if (typeArchiveReference.IsEmbedded)
+                        if (programsByTypeArchiveDict.TryGetValue(typeArchiveReference, out var list))
                         {
-                            // TODO: validate that we have this embedded archive in the project
+                            list.Add(userRuntimeProgram);
                         }
                         else
                         {
-                            if (programsByTypeArchiveDict.TryGetValue(typeArchiveReference.PathOrName, out var list))
-                            {
-                                list.Add(userRuntimeProgram.Id);
-                            }
-                            else
-                            {
-                                programsByTypeArchiveDict[typeArchiveReference.PathOrName] = [userRuntimeProgram.Id];
-                            }
+                            programsByTypeArchiveDict[typeArchiveReference] = [userRuntimeProgram];
                         }
                     }
                 }

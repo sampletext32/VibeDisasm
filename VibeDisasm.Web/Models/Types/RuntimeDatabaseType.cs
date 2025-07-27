@@ -22,7 +22,7 @@ public abstract class RuntimeDatabaseType
         Id = id;
     }
 
-    public RuntimeTypeRefType MakeRef() => new(Id, Namespace);
+    // public RuntimeTypeRefType MakeRef() => new(Id, Namespace);
 
     public abstract T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor);
 

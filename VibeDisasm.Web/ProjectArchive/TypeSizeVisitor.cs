@@ -21,11 +21,11 @@ public class TypeSizeVisitor(RuntimeUserProgram program) : RuntimeDatabaseTypeVi
     public override int VisitArray(RuntimeArrayType type) => Visit(type.ElementType) * type.ElementCount;
 
     // ref type is a reference to another type, so its size is the size of type it's pointing to
-    public override int VisitRef(RuntimeTypeRefType type)
-    {
-        var resolvedType = program.Database.TypeStorage.DeepResolveTypeRef(type);
-        return resolvedType is null ? 0 : Visit(resolvedType);
-    }
+    // public override int VisitRef(RuntimeTypeRefType type)
+    // {
+    //     var resolvedType = program.Database.TypeStorage.DeepResolveTypeRef(type);
+    //     return resolvedType is null ? 0 : Visit(resolvedType);
+    // }
 
     // enum is basically it's underlying type (e.g. int), so technically it's size is the same as of the underlying type
     public override int VisitEnum(RuntimeEnumType type) => Visit(type.UnderlyingType);

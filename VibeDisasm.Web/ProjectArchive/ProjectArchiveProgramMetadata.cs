@@ -3,7 +3,7 @@ using VibeDisasm.Web.Models;
 namespace VibeDisasm.Web.ProjectArchive;
 
 public record ProgramTypeArchiveReference(
-    string PathOrName,
+    string PathOrNamespace,
     bool IsEmbedded
 );
 
@@ -25,7 +25,7 @@ public record ProjectArchiveProgramMetadata(
             program.FileLength,
             program.Kind,
             program.Architecture,
-            program.Database.TypeStorage.Archives
+            program.TypeArchives
                 .Select(x => x.IsEmbedded
                     ? new ProgramTypeArchiveReference(x.Namespace, true)
                     : new ProgramTypeArchiveReference(

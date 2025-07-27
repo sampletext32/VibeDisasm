@@ -2,85 +2,65 @@ using System.Text.Json;
 using FluentResults;
 using VibeDisasm.Web.Abstractions;
 using VibeDisasm.Web.Dtos;
-using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.Types;
-using VibeDisasm.Web.Repositories;
+using VibeDisasm.Web.Services;
 
 namespace VibeDisasm.Web.Handlers;
 
 public class ListArchiveTypesHandler(
-    UserRuntimeProjectRepository repository,
+    ITypeArchiveStorage typeArchiveStorage,
     ILogger<ListArchiveTypesHandler> logger
 ) : IHandler
 {
     public async Task<Result<(List<TypeArchiveElementDto> types, JsonSerializerOptions SerializerOptions)>> Handle(
-        Guid projectId,
-        Guid programId,
         string archiveNamespace
     )
     {
-        var project = await repository.GetById(projectId);
-        if (project is null)
-        {
-            logger.ProjectNotFound(projectId);
-            return Result.Fail("Project not found");
-        }
+        await Task.Yield();
 
-        var program = project.Programs.FirstOrDefault(x => x.Id == programId);
-
-        if (program is null)
-        {
-            logger.ProgramNotFound(programId, projectId);
-            return Result.Fail("Program not found");
-        }
-
-        var archive = program.Database.TypeStorage.Archives.FirstOrDefault(x => x.Namespace == archiveNamespace);
+        var archive = typeArchiveStorage.FindArchive(archiveNamespace);
 
         if (archive is null)
         {
             logger.LogWarning(
-                "Archive {ArchiveNamespace} not found for program {ProgramId} in project {ProjectId}",
-                archiveNamespace,
-                programId,
-                projectId
+                "Archive {ArchiveNamespace} not found",
+                archiveNamespace
             );
             return Result.Fail("Archive not found");
         }
 
         var types = new List<TypeArchiveElementDto>(archive.Types.Count);
         types.AddRange(
-            archive.Types.Select(databaseType => CreateTypeArchiveElementDto(databaseType, program.Database.TypeStorage)
-            )
+            archive.Types.Select(CreateTypeArchiveElementDto)
         );
 
         return Result.Ok((types, JsonSerializerOptionsPresets.TypeArchiveElementOptions));
     }
 
     private static TypeArchiveElementDto CreateTypeArchiveElementDto(
-        RuntimeDatabaseType databaseType,
-        RuntimeTypeStorage storage
+        RuntimeDatabaseType databaseType
     )
     {
         return databaseType switch
         {
             RuntimeArrayType type => new TypeArchiveArrayElementDto(
                 type.Id,
-                CreateTypeArchiveElementDto(type.ElementType, storage),
+                CreateTypeArchiveElementDto(type.ElementType),
                 type.ElementCount
             ),
             RuntimeFunctionType type => new TypeArchiveFunctionElementDto(
                 type.Id,
                 type.Name,
-                CreateTypeArchiveElementDto(type.ReturnType, storage),
+                CreateTypeArchiveElementDto(type.ReturnType),
                 type.Arguments.Select(x => new TypeArchiveFunctionArgumentElementDto(
-                        CreateTypeArchiveElementDto(x.Type, storage),
+                        CreateTypeArchiveElementDto(x.Type),
                         x.Name
                     )
                 )
             ),
             RuntimePointerType type => new TypeArchivePointerElementDto(
                 type.Id,
-                CreateTypeArchiveElementDto(type.PointedType, storage)
+                CreateTypeArchiveElementDto(type.PointedType)
             ),
             RuntimePrimitiveType type => new TypeArchivePrimitiveElementDto(
                 type.Id,
@@ -91,17 +71,9 @@ public class ListArchiveTypesHandler(
                 type.Id,
                 type.Name,
                 type.Fields.Select(x => new TypeArchiveStructureFieldElementDto(
-                        CreateTypeArchiveElementDto(x.Type, storage),
+                        CreateTypeArchiveElementDto(x.Type),
                         x.Name
                     )
-                )
-            ),
-            RuntimeTypeRefType type => new TypeArchiveTypeRefElementDto(
-                type.Id,
-                CreateTypeArchiveElementDto(
-                    storage.ResolveTypeRef(type)
-                    ?? new RuntimeTypeRefType(Guid.Empty, "unresolved"),
-                    storage
                 )
             ),
             _ => throw new ArgumentOutOfRangeException(nameof(databaseType))

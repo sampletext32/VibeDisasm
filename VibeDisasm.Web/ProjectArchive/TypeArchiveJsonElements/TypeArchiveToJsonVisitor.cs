@@ -45,11 +45,11 @@ public class TypeArchiveToJsonVisitor : RuntimeDatabaseTypeVisitor<TypeArchiveJs
         ElementCount = type.ElementCount
     };
 
-    public override TypeArchiveJsonElement VisitRef(RuntimeTypeRefType type) => new TypeRefJsonElement()
-    {
-        Id = type.Id,
-        Namespace = type.Namespace,
-    };
+    // public override TypeArchiveJsonElement VisitRef(RuntimeTypeRefType type) => new TypeRefJsonElement()
+    // {
+    //     Id = type.Id,
+    //     Namespace = type.Namespace,
+    // };
 
     public override TypeArchiveJsonElement VisitEnum(RuntimeEnumType type) => new EnumArchiveJsonElement()
     {

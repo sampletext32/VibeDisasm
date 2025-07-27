@@ -8,7 +8,7 @@ public static class TypesEndpoints
 {
     public static void MapTypesEndpoints(this WebApplication app)
     {
-        var group = app.MapGroup("/types/{projectId:guid}/{programId:guid}").WithTags("Types");
+        var group = app.MapGroup("/types").WithTags("Types");
 
         group.MapGet("/list-archives", ListArchives)
             .WithName("ListArchives")
@@ -30,12 +30,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TypeArchiveListItem>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> ListArchives(
-        ListArchivesHandler handler,
-        Guid projectId,
-        Guid programId
+        ListArchivesHandler handler
     )
     {
-        var result = await handler.Handle(projectId, programId);
+        var result = await handler.Handle();
         return result.IsSuccess
             ? Results.Json(result.Value)
             : Results.BadRequest(result.Errors.First().Message);
@@ -45,12 +43,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> ListArchiveTypes(
         ListArchiveTypesHandler handler,
-        Guid projectId,
-        Guid programId,
         string archiveNamespace
     )
     {
-        var result = await handler.Handle(projectId, programId, archiveNamespace);
+        var result = await handler.Handle(archiveNamespace);
         return result.IsSuccess
             ? Results.Json(result.Value.types, result.Value.SerializerOptions)
             : Results.BadRequest(result.Errors.First().Message);
@@ -60,12 +56,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> SaveTypeArchive(
         SaveTypeArchiveHandler handler,
-        Guid projectId,
-        Guid programId,
         string archiveNamespace
     )
     {
-        var result = await handler.Handle(projectId, programId, archiveNamespace);
+        var result = await handler.Handle(archiveNamespace);
         return result.IsSuccess
             ? Results.Ok()
             : Results.BadRequest(result.Errors.First().Message);
@@ -75,12 +69,10 @@ public static class TypesEndpoints
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> CreateTypeArchive(
         CreateTypeArchiveHandler handler,
-        Guid projectId,
-        Guid programId,
         [FromQuery] string archiveNamespace
     )
     {
-        var result = await handler.Handle(projectId, programId, archiveNamespace);
+        var result = await handler.Handle(archiveNamespace);
         return result.IsSuccess
             ? Results.Ok()
             : Results.BadRequest(result.Errors.First().Message);

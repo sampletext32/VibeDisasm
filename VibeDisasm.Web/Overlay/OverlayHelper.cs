@@ -51,16 +51,16 @@ public static class OverlayHelper
                 throw new Exception($"Field {field.Name} in structure {structure.Name} has zero size, thus the structure is corrupted");
             }
 
-            var resolvedFieldType = program.Database.TypeStorage.DeepResolveTypeRef(field.Type);
-
-            if (resolvedFieldType is null)
-            {
-                throw new Exception($"Could not resolve type for field {field.Name} in structure {structure.Name}");
-            }
+            // var resolvedFieldType = program.Database.TypeStorage.DeepResolveTypeRef(field.Type);
+            //
+            // if (resolvedFieldType is null)
+            // {
+            //     throw new Exception($"Could not resolve type for field {field.Name} in structure {structure.Name}");
+            // }
 
             var fieldBytes = binaryData.Slice(offset + fieldOffset, fieldSize);
 
-            var overlayFieldResult = OverlayType(program, resolvedFieldType, fieldBytes, 0);
+            var overlayFieldResult = OverlayType(program, field.Type, fieldBytes, 0);
 
             if (overlayFieldResult.IsFailed)
             {
@@ -127,19 +127,13 @@ public static class OverlayHelper
         }
 
         var rawBytes = binaryData.Slice(offset, size);
-        var elementType = program.Database.TypeStorage.DeepResolveTypeRef(arrayType.ElementType);
 
-        if (elementType is null)
-        {
-            throw new Exception($"Could not resolve element type for array {arrayType.Name}");
-        }
-
-        var elementSize = typeSizeVisitor.Visit(elementType);
+        var elementSize = typeSizeVisitor.Visit(arrayType.ElementType);
 
         var overlayedElements = new List<OverlayedType>(arrayType.ElementCount);
         for (var i = 0; i < arrayType.ElementCount; i++)
         {
-            var overlayElementResult = OverlayType(program, elementType, rawBytes.Slice(i * elementSize, elementSize), offset);
+            var overlayElementResult = OverlayType(program, arrayType.ElementType, rawBytes.Slice(i * elementSize, elementSize), offset);
 
             if (overlayElementResult.IsFailed)
             {
@@ -149,7 +143,7 @@ public static class OverlayHelper
             overlayedElements.Add(overlayElementResult.Value);
         }
 
-        var result = new OverlayedArray(arrayType, elementType, overlayedElements, rawBytes);
+        var result = new OverlayedArray(arrayType, arrayType.ElementType, overlayedElements, rawBytes);
         return result;
     }
 }

@@ -11,14 +11,14 @@ public sealed class RuntimeFunctionType : RuntimeDatabaseType
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public RuntimeTypeRefType ReturnType { get; }
+    public RuntimeDatabaseType ReturnType { get; }
     public List<FunctionArgument> Arguments { get; }
 
     public RuntimeFunctionType(
         Guid id,
         string @namespace,
         string name,
-        RuntimeTypeRefType returnType,
+        RuntimeDatabaseType returnType,
         List<FunctionArgument> arguments
     ) : base(id)
     {
@@ -30,16 +30,16 @@ public sealed class RuntimeFunctionType : RuntimeDatabaseType
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitFunction(this);
 
     protected internal override string DebugDisplay =>
-        $"{ReturnType.DebugDisplay} func({string.Join(", ", Arguments.Select(x => x.DebugDisplay))})";
+        $"{ReturnType.DebugDisplay} {Name}({string.Join(", ", Arguments.Select(x => x.DebugDisplay))})";
 }
 
 public class FunctionArgument
 {
-    public RuntimeTypeRefType Type { get; set; }
+    public RuntimeDatabaseType Type { get; set; }
 
     public string Name { get; set; }
 
-    public FunctionArgument(RuntimeTypeRefType type, string name)
+    public FunctionArgument(RuntimeDatabaseType type, string name)
     {
         Type = type;
         Name = name;
