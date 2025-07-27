@@ -72,6 +72,7 @@ public partial class TypeArchiveService
             typeToResolve.Archive.AddType(resolvedType);
         }
 
+        // second pass, resolve types that were partially resolved in the first pass e.g. resolve placeholders
         var progressMade = true;
         while (progressMade && partiallyResolvedTypes.Count > 0)
         {
@@ -185,8 +186,7 @@ public partial class TypeArchiveService
 
         if (partiallyResolvedTypes.Count > 0)
         {
-            LoggerExtensions.LogError(
-                logger,
+            logger.LogError(
                 "Unresolved types remain: {Ids}",
                 string.Join(", ", partiallyResolvedTypes.Keys)
             );

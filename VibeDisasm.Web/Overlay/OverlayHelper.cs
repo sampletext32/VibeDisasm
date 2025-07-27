@@ -143,7 +143,7 @@ public static class OverlayHelper
             overlayedElements.Add(overlayElementResult.Value);
         }
 
-        var result = new OverlayedArray(arrayType, arrayType.ElementType, overlayedElements, rawBytes);
+        var result = new OverlayedArray(arrayType, overlayedElements, rawBytes);
         return result;
     }
 }
