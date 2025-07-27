@@ -2,6 +2,11 @@ using VibeDisasm.Web.Models;
 
 namespace VibeDisasm.Web.ProjectArchive;
 
+public record ProgramTypeArchiveReference(
+    string PathOrName,
+    bool IsEmbedded
+);
+
 public record ProjectArchiveProgramMetadata(
     Guid Id,
     string Name,
@@ -9,7 +14,7 @@ public record ProjectArchiveProgramMetadata(
     long FileLength,
     ProgramKind Kind,
     ProgramArchitecture Architecture,
-    List<string> TypeArchivePaths
+    List<ProgramTypeArchiveReference> TypeArchives
 )
 {
     public static ProjectArchiveProgramMetadata FromUserProgram(Models.RuntimeUserProgram program) =>
@@ -21,15 +26,18 @@ public record ProjectArchiveProgramMetadata(
             program.Kind,
             program.Architecture,
             program.Database.TypeStorage.Archives
-                .Select(x => x.AbsoluteFilePath ?? throw new InvalidOperationException(
-                    $"When attempting to save program to archive, type archive {x.Namespace} didn't have absolute file path. User needs to save it first."))
+                .Select(x => x.IsEmbedded
+                    ? new ProgramTypeArchiveReference(x.Namespace, true)
+                    : new ProgramTypeArchiveReference(
+                        x.AbsoluteFilePath ?? throw new InvalidOperationException(
+                            $"When attempting to save program to archive, type archive {x.Namespace} didn't have absolute file path. User needs to save it first."
+                        ),
+                        false
+                    )
+                )
                 .ToList()
         );
 
     public Models.RuntimeUserProgram ToUserProgram() =>
-        new(Id, FilePath, Name, FileLength)
-        {
-            Kind = Kind,
-            Architecture = Architecture
-        };
+        new(Id, FilePath, Name, FileLength) { Kind = Kind, Architecture = Architecture };
 }

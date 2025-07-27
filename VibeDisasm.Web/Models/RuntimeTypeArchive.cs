@@ -12,13 +12,19 @@ public class RuntimeTypeArchive
     public List<RuntimeDatabaseType> Types { get; set; } = [];
 
     /// <summary>
-    /// Absolute path to the file, containing this archive. Can be null if this archive is a newly created one.
+    /// Absolute path to the file, containing this archive. Can be null if this archive is a newly created one or embedded.
     /// </summary>
     public string? AbsoluteFilePath { get; set; }
 
-    public RuntimeTypeArchive(string @namespace)
+    /// <summary>
+    /// If an archive is embedded, it means that it is not supposed to be stored in a file
+    /// </summary>
+    public bool IsEmbedded { get; set; }
+
+    public RuntimeTypeArchive(string @namespace, bool isEmbedded)
     {
         Namespace = @namespace;
+        IsEmbedded = isEmbedded;
     }
 
     public RuntimeDatabaseType AddType(RuntimeDatabaseType type)

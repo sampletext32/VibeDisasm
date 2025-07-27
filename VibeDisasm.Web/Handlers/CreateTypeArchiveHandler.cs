@@ -38,7 +38,8 @@ public class CreateTypeArchiveHandler(
 
         try
         {
-            var newArchive = new RuntimeTypeArchive(archiveNamespace);
+            // user created archives are not embedded by design
+            var newArchive = new RuntimeTypeArchive(archiveNamespace, isEmbedded: false);
             program.Database.TypeStorage.Archives.Add(newArchive);
 
             logger.LogInformation(

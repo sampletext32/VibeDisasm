@@ -8,8 +8,10 @@ namespace VibeDisasm.Web.ProjectArchive;
 
 public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
 {
-    public async Task LoadAllTypeArchive(Dictionary<string, List<Guid>> programsByTypeArchivePathDict,
-        RuntimeUserProject runtimeProject)
+    public async Task LoadAllTypeArchive(
+        Dictionary<string, List<Guid>> programsByTypeArchivePathDict,
+        RuntimeUserProject runtimeProject
+    )
     {
         var distinctTypeArchivePaths = programsByTypeArchivePathDict.Keys;
 
@@ -18,22 +20,28 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
             var archivePath = typeArchivePath;
             if (Path.IsPathFullyQualified(typeArchivePath))
             {
-                logger.LogInformation("Attempting to load type archive from absolute path {TypeArchivePath}",
-                    typeArchivePath);
+                logger.LogInformation(
+                    "Attempting to load type archive from absolute path {TypeArchivePath}",
+                    typeArchivePath
+                );
             }
             else
             {
                 archivePath = Path.GetFullPath(typeArchivePath);
-                logger.LogInformation("Attempting to load type archive from relative path {TypeArchivePath}",
-                    typeArchivePath);
+                logger.LogInformation(
+                    "Attempting to load type archive from relative path {TypeArchivePath}",
+                    typeArchivePath
+                );
             }
 
             var typeArchive = await LoadTypeArchive(archivePath);
 
             if (typeArchive is null)
             {
-                logger.LogWarning("Failed to load type archive for {TypeArchivePath}. Program may not work.",
-                    archivePath);
+                logger.LogWarning(
+                    "Failed to load type archive for {TypeArchivePath}. Program may not work.",
+                    archivePath
+                );
                 continue;
             }
 
@@ -51,21 +59,28 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
     {
         if (!File.Exists(typeArchiveAbsolutePath))
         {
+            logger.LogWarning("TypeArchive at {ArchivePath} does not exist", typeArchiveAbsolutePath);
             return null;
         }
 
         await using var stream = new FileStream(typeArchiveAbsolutePath, FileMode.Open);
         var typeArchiveJson =
-            await JsonSerializer.DeserializeAsync<TypeArchiveJson>(stream,
-                JsonSerializerOptionsPresets.TypeArchiveJsonOptions);
+            await JsonSerializer.DeserializeAsync<TypeArchiveJson>(
+                stream,
+                JsonSerializerOptionsPresets.TypeArchiveJsonOptions
+            );
 
         if (typeArchiveJson is null)
         {
-            logger.LogWarning("TypeArchive is corrupted. Deserialization Failed");
+            logger.LogWarning(
+                "TypeArchive at {ArchivePath} is corrupted. Deserialization Failed",
+                typeArchiveAbsolutePath
+            );
             return null;
         }
 
-        var typeArchive = new RuntimeTypeArchive(typeArchiveJson.Namespace);
+        // archives from the file system are not embedded by design
+        var typeArchive = new RuntimeTypeArchive(typeArchiveJson.Namespace, isEmbedded: false);
 
         Dictionary<Guid, RuntimeDatabaseType> resolvedTypes = [];
 
@@ -85,7 +100,9 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
                     element.Name,
                     new RuntimeTypeRefType(element.ReturnType.Id, element.ReturnType.Namespace),
                     element.Arguments.Select(x =>
-                        new FunctionArgument(new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace), x.Name)).ToList()
+                            new FunctionArgument(new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace), x.Name)
+                        )
+                        .ToList()
                 ),
                 PointerArchiveJsonElement element => new RuntimePointerType(
                     element.Id,
@@ -103,9 +120,11 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
                     typeArchiveJson.Namespace,
                     element.Name,
                     element.Fields.Select(x => new RuntimeStructureTypeField(
-                        new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace),
-                        x.Name
-                    )).ToList()
+                                new RuntimeTypeRefType(x.Type.Id, x.Type.Namespace),
+                                x.Name
+                            )
+                        )
+                        .ToList()
                 ),
                 _ => throw new ArgumentOutOfRangeException(nameof(typeArchiveJsonElement))
             };
@@ -123,7 +142,10 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
     {
         if (typeArchive.AbsoluteFilePath is null)
         {
-            logger.LogError("Failed to save type-archive {ArchiveNamespace}: AbsoluteFilePath is not set", typeArchive.Namespace);
+            logger.LogError(
+                "Failed to save type-archive {ArchiveNamespace}: AbsoluteFilePath is not set",
+                typeArchive.Namespace
+            );
             return Result.Fail("TypeArchive.AbsoluteFilePath not set. Cannot save type-archive.");
         }
 
@@ -135,8 +157,11 @@ public class TypeArchiveService(ILogger<TypeArchiveJson> logger)
         );
 
         await using var stream = new FileStream(typeArchive.AbsoluteFilePath, FileMode.Create);
-        await JsonSerializer.SerializeAsync(stream, typeArchiveJson,
-            JsonSerializerOptionsPresets.TypeArchiveJsonOptions);
+        await JsonSerializer.SerializeAsync(
+            stream,
+            typeArchiveJson,
+            JsonSerializerOptionsPresets.TypeArchiveJsonOptions
+        );
 
         return Result.Ok();
     }

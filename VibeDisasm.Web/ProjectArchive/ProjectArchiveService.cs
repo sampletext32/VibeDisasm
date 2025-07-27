@@ -90,7 +90,10 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
     {
         foreach (var program in programs)
         {
-            var entry = archive.CreateEntry($"{Constants.ProjectArchive.ProgramsFolderName}/{program.Id}/{Constants.ProjectArchive.ProgramMetadataFileName}", CompressionLevel.Fastest);
+            var entry = archive.CreateEntry(
+                $"{Constants.ProjectArchive.ProgramsFolderName}/{program.Id}/{Constants.ProjectArchive.ProgramMetadataFileName}",
+                CompressionLevel.Fastest
+            );
             await using var entryStream = entry.Open();
             var archiveProgram = ProjectArchiveProgramMetadata.FromUserProgram(program);
             await JsonSerializer.SerializeAsync(entryStream, archiveProgram);
@@ -171,7 +174,8 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
 
         foreach (var entry in archive.Entries)
         {
-            if (entry.FullName.StartsWith(Constants.ProjectArchive.ProgramsFolderName + "/") && entry.FullName.EndsWith($"/{Constants.ProjectArchive.ProgramMetadataFileName}"))
+            if (entry.FullName.StartsWith(Constants.ProjectArchive.ProgramsFolderName + "/") &&
+                entry.FullName.EndsWith($"/{Constants.ProjectArchive.ProgramMetadataFileName}"))
             {
                 await using var programStream = entry.Open();
                 var archiveProgram =
@@ -182,15 +186,22 @@ public class ProjectArchiveService(TypeArchiveService typeArchiveService, ILogge
                     var userRuntimeProgram = archiveProgram.ToUserProgram();
                     programs.Add(userRuntimeProgram);
 
-                    foreach (var programTypeArchivePath in archiveProgram.TypeArchivePaths)
+                    foreach (var typeArchiveReference in archiveProgram.TypeArchives)
                     {
-                        if (programsByTypeArchiveDict.TryGetValue(programTypeArchivePath, out var list))
+                        if (typeArchiveReference.IsEmbedded)
                         {
-                            list.Add(userRuntimeProgram.Id);
+                            // TODO: validate that we have this embedded archive in the project
                         }
                         else
                         {
-                            programsByTypeArchiveDict[programTypeArchivePath] = [userRuntimeProgram.Id];
+                            if (programsByTypeArchiveDict.TryGetValue(typeArchiveReference.PathOrName, out var list))
+                            {
+                                list.Add(userRuntimeProgram.Id);
+                            }
+                            else
+                            {
+                                programsByTypeArchiveDict[typeArchiveReference.PathOrName] = [userRuntimeProgram.Id];
+                            }
                         }
                     }
                 }
