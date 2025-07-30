@@ -14,7 +14,7 @@ public class ListingAtAddressHandler(
     ILogger<ListingAtAddressHandler> logger
 ) : IHandler
 {
-    public async Task<Result<(InterpretedValue? interpretedValue, JsonSerializerOptions DatabaseEntryOptions)>> Handle(
+    public async Task<Result<(InterpretValue2? interpretedValue, JsonSerializerOptions DatabaseEntryOptions)>> Handle(
         Guid projectId,
         Guid programId,
         uint address
@@ -39,11 +39,11 @@ public class ListingAtAddressHandler(
         var interpretedValue = entry switch
         {
             ArrayUserProgramDatabaseEntry arrayEntry =>
-                TypeInterpreter.Interpret(OverlayHelper.OverlayArray(program, arrayEntry.Type, data, (int)entry.Address)),
+                TypeInterpreter.InterpretDefault2(OverlayHelper.OverlayArray(arrayEntry.Type, data, (int)entry.Address)),
             PrimitiveUserProgramDatabaseEntry primitiveEntry =>
-                TypeInterpreter.Interpret(OverlayHelper.OverlayPrimitive(program, primitiveEntry.Type, data, (int)entry.Address)),
+                TypeInterpreter.InterpretDefault2(OverlayHelper.OverlayPrimitive(primitiveEntry.Type, data, (int)entry.Address)),
             StructUserProgramDatabaseEntry structEntry =>
-                TypeInterpreter.Interpret(OverlayHelper.OverlayStructure(program, structEntry.Type, data, (int)entry.Address)),
+                TypeInterpreter.InterpretDefault2(OverlayHelper.OverlayStructure(structEntry.Type, data, (int)entry.Address)),
             UndefinedUserProgramDatabaseEntry undefinedEntry => null,
             null => null,
             _ => throw new ArgumentOutOfRangeException(nameof(entry))

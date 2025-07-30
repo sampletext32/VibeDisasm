@@ -12,10 +12,11 @@ public record TypeArchiveArrayElementDto(Guid Id, TypeArchiveElementDto ElementT
 public record TypeArchiveStructureElementDto(
     Guid Id,
     string Name,
-    IEnumerable<TypeArchiveStructureFieldElementDto> Fields
+    IEnumerable<TypeArchiveElementDto> Fields
 ) : TypeArchiveElementDto(Id);
 
-public record TypeArchiveStructureFieldElementDto(TypeArchiveElementDto Type, string Name);
+public record TypeArchiveStructureFieldElementDto(TypeArchiveElementDto Type, string Name)
+    : TypeArchiveElementDto(null!);
 
 public record TypeArchiveFunctionElementDto(
     Guid Id,

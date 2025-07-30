@@ -8,9 +8,9 @@ public record OverlayedArray(
     RuntimeArrayType ArrayType,
     List<OverlayedType> Elements,
     Memory<byte> Bytes
-) : OverlayedType
+) : OverlayedType(ArrayType, Bytes)
 {
     public OverlayedType this[int index] => Elements[index];
 
-    public override string DebugDisplay => $"overlayed {ArrayType.Name}[{ArrayType.ElementCount}] [{Bytes.Length} bytes]";
+    public override string DebugDisplay => $"overlayed {ArrayType.Name} [{Bytes.Length} bytes]";
 };

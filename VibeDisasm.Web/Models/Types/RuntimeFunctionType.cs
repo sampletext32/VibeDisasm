@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.Web.Models.TypeInterpretation;
 
 namespace VibeDisasm.Web.Models.Types;
 
@@ -27,6 +28,7 @@ public sealed class RuntimeFunctionType : RuntimeDatabaseType
         ReturnType = returnType;
         Arguments = arguments;
     }
+
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitFunction(this);
 
     protected internal override string DebugDisplay =>

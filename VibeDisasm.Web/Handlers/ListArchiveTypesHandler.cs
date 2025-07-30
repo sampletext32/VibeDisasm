@@ -36,7 +36,7 @@ public class ListArchiveTypesHandler(
     }
 
     private static TypeArchiveElementDto CreateTypeArchiveElementDto(
-        RuntimeDatabaseType databaseType
+        IRuntimeDatabaseType databaseType
     )
     {
         return databaseType switch
@@ -69,11 +69,12 @@ public class ListArchiveTypesHandler(
                 type.Id,
                 type.Name,
                 type.Fields.Select(x => new TypeArchiveStructureFieldElementDto(
-                        CreateTypeArchiveElementDto(x.Type),
+                        CreateTypeArchiveElementDto(x),
                         x.Name
                     )
                 )
             ),
+            RuntimeStructureTypeField field => CreateTypeArchiveElementDto(field.Type),
             _ => throw new ArgumentOutOfRangeException(nameof(databaseType))
         };
     }

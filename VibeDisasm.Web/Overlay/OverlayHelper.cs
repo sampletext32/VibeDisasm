@@ -1,41 +1,32 @@
-using FluentResults;
-using VibeDisasm.Web.Models;
 using VibeDisasm.Web.Models.Types;
-using VibeDisasm.Web.ProjectArchive;
 
 namespace VibeDisasm.Web.Overlay;
 
 public static class OverlayHelper
 {
-    public static Result<OverlayedType> OverlayType(
-        RuntimeUserProgram program,
-        RuntimeDatabaseType type,
+    public static OverlayedType OverlayType(
+        IRuntimeDatabaseType type,
         Memory<byte> binaryData,
         int offset
-    )
+    ) => type switch
     {
-        return type switch
-        {
-            RuntimeStructureType structure => OverlayStructure(program, structure, binaryData, offset),
-            RuntimePrimitiveType primitive => OverlayPrimitive(program, primitive, binaryData, offset),
-            RuntimeArrayType array => OverlayArray(program, array, binaryData, offset),
-            _ => Result.Fail($"Unsupported type {type.Name} for overlaying in program {program.Id}")
-        };
-    }
+        RuntimeStructureType structure => OverlayStructure(structure, binaryData, offset),
+        RuntimePrimitiveType primitive => OverlayPrimitive(primitive, binaryData, offset),
+        RuntimeArrayType array => OverlayArray(array, binaryData, offset),
+        _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unsupported type {type.Name} for overlaying")
+    };
 
     public static OverlayedStructure OverlayStructure(
-        RuntimeUserProgram program,
         RuntimeStructureType structure,
         Memory<byte> binaryData,
         int offset
     )
     {
-        var typeSizeVisitor = new TypeSizeVisitor(program);
-        var size = typeSizeVisitor.Visit(structure);
+        var size = structure.Size;
 
         if (offset + size > binaryData.Length)
         {
-            throw new Exception($"Overlaying structure {structure.Name} at offset {offset} exceeds binary data length for program {program.Id}");
+            throw new Exception($"Overlaying structure {structure.Name} at offset {offset} exceeds binary data length");
         }
 
         var rawBytes = binaryData.Slice(offset, size);
@@ -45,24 +36,21 @@ public static class OverlayHelper
         for (var i = 0; i < structure.Fields.Count; i++)
         {
             var field = structure.Fields[i];
-            var fieldSize = typeSizeVisitor.Visit(field.Type);
+            var fieldSize = field.Type.Size;
             if (fieldSize is 0)
             {
-                throw new Exception($"Field {field.Name} in structure {structure.Name} has zero size, thus the structure is corrupted");
+                throw new Exception(
+                    $"Field {field.Name} in structure {structure.Name} has zero size, thus the structure is corrupted"
+                );
             }
 
             var fieldBytes = binaryData.Slice(offset + fieldOffset, fieldSize);
 
-            var overlayFieldResult = OverlayType(program, field.Type, fieldBytes, 0);
-
-            if (overlayFieldResult.IsFailed)
-            {
-                throw new Exception(overlayFieldResult.Errors.First().Message);
-            }
+            var overlayedType = OverlayType(field.Type, fieldBytes, 0);
 
             var overlayedField = new OverlayedStructureField(
                 field,
-                overlayFieldResult.Value,
+                overlayedType,
                 fieldBytes
             );
             overlayedFields.Add(overlayedField);
@@ -75,18 +63,16 @@ public static class OverlayHelper
     }
 
     public static OverlayedPrimitive OverlayPrimitive(
-        RuntimeUserProgram program,
         RuntimePrimitiveType primitive,
         Memory<byte> binaryData,
         int offset
     )
     {
-        var typeSizeVisitor = new TypeSizeVisitor(program);
-        var size = typeSizeVisitor.Visit(primitive);
+        var size = primitive.Size;
 
         if (offset + size > binaryData.Length)
         {
-            throw new Exception($"Overlaying primitive {primitive.Name} at offset {offset} exceeds binary data length for program {program.Id}");
+            throw new Exception($"Overlaying primitive {primitive.Name} at offset {offset} exceeds binary data length");
         }
 
         if (size is 0)
@@ -105,35 +91,34 @@ public static class OverlayHelper
     }
 
     public static OverlayedArray OverlayArray(
-        RuntimeUserProgram program,
         RuntimeArrayType arrayType,
         Memory<byte> binaryData,
         int offset
     )
     {
-        var typeSizeVisitor = new TypeSizeVisitor(program);
-        var size = typeSizeVisitor.Visit(arrayType);
+        var size = arrayType.Size;
 
         if (offset + size > binaryData.Length)
         {
-            throw new Exception($"Overlaying array {arrayType.Name} at offset {offset} exceeds binary data length for program {program.Id}");
+            throw new Exception(
+                $"Overlaying array {arrayType.Name} at offset {offset} exceeds binary data length"
+            );
         }
 
         var rawBytes = binaryData.Slice(offset, size);
 
-        var elementSize = typeSizeVisitor.Visit(arrayType.ElementType);
+        var elementSize = arrayType.ElementType.Size;
 
         var overlayedElements = new List<OverlayedType>(arrayType.ElementCount);
         for (var i = 0; i < arrayType.ElementCount; i++)
         {
-            var overlayElementResult = OverlayType(program, arrayType.ElementType, rawBytes.Slice(i * elementSize, elementSize), offset);
+            var overlayedElement = OverlayType(
+                arrayType.ElementType,
+                rawBytes.Slice(i * elementSize, elementSize),
+                offset
+            );
 
-            if (overlayElementResult.IsFailed)
-            {
-                throw new Exception(overlayElementResult.Errors.First().Message);
-            }
-
-            overlayedElements.Add(overlayElementResult.Value);
+            overlayedElements.Add(overlayedElement);
         }
 
         var result = new OverlayedArray(arrayType, overlayedElements, rawBytes);

@@ -6,4 +6,6 @@ namespace VibeDisasm.Web.ProjectArchive.TypeArchiveJsonElements;
 public class PointerArchiveJsonElement : TypeArchiveJsonElement
 {
     public TypeRefJsonElement PointedType { get; set; } = null!;
+
+    public int Size { get; set; }
 }

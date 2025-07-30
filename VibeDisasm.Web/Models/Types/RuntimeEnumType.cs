@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.Web.Models.TypeInterpretation;
 
 namespace VibeDisasm.Web.Models.Types;
 

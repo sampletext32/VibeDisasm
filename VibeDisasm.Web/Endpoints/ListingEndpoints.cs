@@ -29,7 +29,7 @@ public static class ListingEndpoints
             .WithDescription("Gets the length of the binary in bytes");
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretedValue))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretValue2))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> AtAddress(
         ListingAtAddressHandler handler,
@@ -44,7 +44,7 @@ public static class ListingEndpoints
             : Results.BadRequest(result.Errors.First().Message);
     }
 
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretedValue[]))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InterpretValue2[]))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
     private static async Task<IResult> AllListing(
         AllListingHandler handler,

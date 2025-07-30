@@ -46,7 +46,7 @@ public static class Utils
 
     public static IList<Type> GetAssignableTypes<T>()
     {
-        var executingAssembly = Assembly.GetCallingAssembly();
+        var executingAssembly = Assembly.GetAssembly(typeof(T))!;
         var referencedAssemblyNames = executingAssembly.GetReferencedAssemblies();
         var types = referencedAssemblyNames.SelectMany(
                 name =>

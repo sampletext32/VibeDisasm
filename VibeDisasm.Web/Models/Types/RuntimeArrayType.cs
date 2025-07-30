@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.Web.Models.TypeInterpretation;
 
 namespace VibeDisasm.Web.Models.Types;
 
@@ -20,6 +21,7 @@ public sealed class RuntimeArrayType : RuntimeDatabaseType
         Name = $"{elementType.Name}[{elementCount}]";
         ElementType = elementType;
         ElementCount = elementCount;
+        SetSize(elementType.Size * elementCount);
     }
 
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitArray(this);

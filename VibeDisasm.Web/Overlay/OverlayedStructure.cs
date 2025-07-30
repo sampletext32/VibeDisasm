@@ -8,7 +8,7 @@ public record OverlayedStructure(
     RuntimeStructureType SourceStructure,
     IReadOnlyList<OverlayedStructureField> Fields,
     Memory<byte> Bytes
-) : OverlayedType
+) : OverlayedType(SourceStructure, Bytes)
 {
     public OverlayedStructureField this[int index] => Fields[index];
     public OverlayedStructureField this[string name] => Fields.First(x => x.SourceField.Name == name);
@@ -20,7 +20,7 @@ public record OverlayedStructureField(
     RuntimeStructureTypeField SourceField,
     OverlayedType OverlayedValue,
     Memory<byte> Bytes
-) : OverlayedType
+) : OverlayedType(SourceField, Bytes)
 {
     public override string DebugDisplay => $"{OverlayedValue.DebugDisplay} {SourceField.Name}";
 };

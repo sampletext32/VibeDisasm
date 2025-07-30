@@ -38,7 +38,6 @@ internal static class ServiceCollectionExtensions
                 );
 
                 options.UseOneOfForPolymorphism();
-                options.UseAllOfForInheritance();
 
                 // Add /api prefix to all operations
                 // options.AddServer(new OpenApiServer

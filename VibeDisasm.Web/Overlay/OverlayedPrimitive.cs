@@ -7,7 +7,7 @@ namespace VibeDisasm.Web.Overlay;
 public record OverlayedPrimitive(
     RuntimePrimitiveType Primitive,
     Memory<byte> Bytes
-) : OverlayedType
+) : OverlayedType(Primitive, Bytes)
 {
     public override string DebugDisplay => $"overlayed {Primitive.DebugDisplay} [{Bytes.Length} bytes]";
 };

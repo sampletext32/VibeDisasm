@@ -18,7 +18,8 @@ public sealed class UnifiedTypeResolver : DefaultJsonTypeInfoResolver
     private static readonly Dictionary<Type, List<(Type, string)>> _typeMappings = new()
     {
         // TypeArchiveElementDto mappings
-        [typeof(TypeArchiveElementDto)] = [
+        [typeof(TypeArchiveElementDto)] =
+        [
             (typeof(TypeArchiveArrayElementDto), "array"),
             (typeof(TypeArchiveEnumElementDto), "enum"),
             (typeof(TypeArchiveFunctionElementDto), "func"),
@@ -29,7 +30,8 @@ public sealed class UnifiedTypeResolver : DefaultJsonTypeInfoResolver
         ],
 
         // UserProgramDatabaseEntry mappings
-        [typeof(UserProgramDatabaseEntry)] = [
+        [typeof(UserProgramDatabaseEntry)] =
+        [
             (typeof(ArrayUserProgramDatabaseEntry), "array"),
             (typeof(PrimitiveUserProgramDatabaseEntry), "primitive"),
             (typeof(UndefinedUserProgramDatabaseEntry), "undefined"),
@@ -37,38 +39,51 @@ public sealed class UnifiedTypeResolver : DefaultJsonTypeInfoResolver
         ],
 
         // InterpretedValue mappings
-        [typeof(InterpretedValue)] = [
-            (typeof(InterpretedRawValue), "raw"),
-            (typeof(InterpretedArrayValue), "array"),
-            (typeof(InterpretedStructValue), "struct"),
-            (typeof(InterpretedStructField), "struct-field"),
-            (typeof(InterpretedSignedInteger), "sint"),
-            (typeof(InterpretedUnsignedInteger), "uint"),
-            (typeof(InterpretedFloat), "float"),
-            (typeof(InterpretedDouble), "double"),
-            (typeof(InterpretedBoolean), "bool"),
-            (typeof(InterpretedAsciiString), "ascii"),
-            (typeof(InterpretedWideString), "wide"),
+        [typeof(InterpretValue2)] =
+        [
+            (typeof(InterpretValue2Raw), "r"),
+            (typeof(InterpretValue2Char), "c"),
+            (typeof(InterpretValue2Bool), "b"),
+            (typeof(InterpretValue2U1), "u1"),
+            (typeof(InterpretValue2U2), "u2"),
+            (typeof(InterpretValue2U4), "u4"),
+            (typeof(InterpretValue2U8), "u8"),
+            (typeof(InterpretValue2I1), "i1"),
+            (typeof(InterpretValue2I2), "i2"),
+            (typeof(InterpretValue2I4), "i4"),
+            (typeof(InterpretValue2I8), "i8"),
+            (typeof(InterpretValue2F), "f"),
+            (typeof(InterpretValue2D), "d"),
+            (typeof(InterpretValue2Timestamp), "ts"),
+            (typeof(InterpretValue2Array), "a"),
+            (typeof(InterpretValue2WString), "ws"),
+            (typeof(InterpretValue2AString), "as"),
+            (typeof(InterpretValue2Struct), "s"),
+            (typeof(InterpretValue2StructField), "sf"),
         ],
 
         // RuntimeDatabaseType mappings
-        [typeof(RuntimeDatabaseType)] = [
+        [typeof(IRuntimeDatabaseType)] =
+        [
             (typeof(RuntimeArrayType), "array"),
             (typeof(RuntimeEnumType), "enum"),
             (typeof(RuntimeFunctionType), "func"),
             (typeof(RuntimePointerType), "ptr"),
             (typeof(RuntimePrimitiveType), "primitive"),
-            (typeof(RuntimeStructureType), "struct")
+            (typeof(RuntimeStructureType), "struct"),
+            (typeof(RuntimeStructureTypeField), "struct-field")
         ],
 
         // TypeArchiveJsonElement mappings
-        [typeof(TypeArchiveJsonElement)] = [
+        [typeof(TypeArchiveJsonElement)] =
+        [
             (typeof(ArrayArchiveJsonElement), "arr"),
             (typeof(EnumArchiveJsonElement), "enum"),
             (typeof(FunctionArchiveJsonElement), "fun"),
             (typeof(PointerArchiveJsonElement), "ptr"),
             (typeof(PrimitiveArchiveJsonElement), "prm"),
             (typeof(StructArchiveJsonElement), "str"),
+            (typeof(StructFieldArchiveJsonElement), "strf"),
             (typeof(TypeRefJsonElement), "ref"),
         ]
     };
@@ -91,6 +106,19 @@ public sealed class UnifiedTypeResolver : DefaultJsonTypeInfoResolver
             {
                 jsonTypeInfo.PolymorphismOptions.DerivedTypes.Add(new JsonDerivedType(derivedType, discriminator));
             }
+        }
+
+        if (jsonTypeInfo.Type.IsAssignableTo(typeof(IRuntimeDatabaseType)))
+        {
+            jsonTypeInfo.Properties.Remove(
+                jsonTypeInfo.Properties.First(x => x.Name == JsonNamingPolicy.CamelCase.ConvertName(nameof(IRuntimeDatabaseType.DefaultInterpreter)))
+            );
+            jsonTypeInfo.Properties.Remove(
+                jsonTypeInfo.Properties.First(x => x.Name == JsonNamingPolicy.CamelCase.ConvertName(nameof(IRuntimeDatabaseType.Interpreters)))
+            );
+            jsonTypeInfo.Properties.Remove(
+                jsonTypeInfo.Properties.First(x => x.Name == JsonNamingPolicy.CamelCase.ConvertName(nameof(IRuntimeDatabaseType.InterpreterOverride)))
+            );
         }
 
         return jsonTypeInfo;

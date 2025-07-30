@@ -14,7 +14,7 @@ public class AllListingHandler(
     ILogger<AllListingHandler> logger
 ) : IHandler
 {
-    public async Task<Result<(List<InterpretedValue?> interpretedValues, JsonSerializerOptions JsonOptions)>> Handle(
+    public async Task<Result<(List<InterpretValue2?> interpretedValues, JsonSerializerOptions JsonOptions)>> Handle(
         Guid projectId,
         Guid programId
     )
@@ -38,16 +38,16 @@ public class AllListingHandler(
         var interpretedValues = entries.Select(entry => entry switch
                 {
                     ArrayUserProgramDatabaseEntry arrayEntry =>
-                        TypeInterpreter.Interpret(
-                            OverlayHelper.OverlayArray(program, arrayEntry.Type, data, (int)entry.Address)
+                        TypeInterpreter.InterpretDefault2(
+                            OverlayHelper.OverlayArray(arrayEntry.Type, data, (int)entry.Address)
                         ),
                     PrimitiveUserProgramDatabaseEntry primitiveEntry =>
-                        TypeInterpreter.Interpret(
-                            OverlayHelper.OverlayPrimitive(program, primitiveEntry.Type, data, (int)entry.Address)
+                        TypeInterpreter.InterpretDefault2(
+                            OverlayHelper.OverlayPrimitive(primitiveEntry.Type, data, (int)entry.Address)
                         ),
                     StructUserProgramDatabaseEntry structEntry =>
-                        TypeInterpreter.Interpret(
-                            OverlayHelper.OverlayStructure(program, structEntry.Type, data, (int)entry.Address)
+                        TypeInterpreter.InterpretDefault2(
+                            OverlayHelper.OverlayStructure(structEntry.Type, data, (int)entry.Address)
                         ),
                     UndefinedUserProgramDatabaseEntry undefinedEntry => null,
                     null => null,

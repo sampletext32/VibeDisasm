@@ -44,7 +44,8 @@ public partial class TypeArchiveService
                     resolvedType = new RuntimePointerType(
                         pointerJson.Id,
                         typeToResolve.Archive.Namespace,
-                        pointedType: null!
+                        pointedType: null!,
+                        pointerJson.Size
                     );
                     partiallyResolvedTypes.Add(resolvedType.Id, (resolvedType, pointerJson));
                     break;
@@ -61,7 +62,8 @@ public partial class TypeArchiveService
                         structJson.Id,
                         typeToResolve.Archive.Namespace,
                         structJson.Name,
-                        fields: []
+                        // ReSharper disable once UseCollectionExpression
+                        fields: new List<RuntimeStructureTypeField>()
                     );
                     partiallyResolvedTypes.Add(resolvedType.Id, (resolvedType, structJson));
                     break;

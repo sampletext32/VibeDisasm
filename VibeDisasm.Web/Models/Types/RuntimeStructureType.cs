@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using VibeDisasm.Web.Models.TypeInterpretation;
 
 namespace VibeDisasm.Web.Models.Types;
 
@@ -8,33 +9,65 @@ namespace VibeDisasm.Web.Models.Types;
 [DebuggerDisplay("{DebugDisplay}")]
 public sealed class RuntimeStructureType : RuntimeDatabaseType
 {
+    public override IInterpret DefaultInterpreter => InterpretBase.AsStruct();
+
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public List<RuntimeStructureTypeField> Fields { get; set; }
+    public List<RuntimeStructureTypeField> Fields { get; }
 
-    public RuntimeStructureType(Guid id, string @namespace, string name, List<RuntimeStructureTypeField> fields) : base(id)
+    public RuntimeStructureType(
+        Guid id,
+        string @namespace,
+        string name,
+        List<IRuntimeDatabaseType> fields
+    ) : base(id)
     {
         Namespace = @namespace;
         Name = name;
-        Fields = fields;
+
+        if (fields.Any(x => x is not RuntimeStructureTypeField))
+        {
+            throw new ArgumentException("All fields must be of type RuntimeStructureTypeField", nameof(fields));
+        }
+
+        Fields = fields.OfType<RuntimeStructureTypeField>().ToList();
+        SetSize(Fields.Sum(x => x.Size));
     }
+    public RuntimeStructureType(
+        Guid id,
+        string @namespace,
+        string name,
+        List<RuntimeStructureTypeField> fields
+    ) : base(id)
+    {
+        Namespace = @namespace;
+        Name = name;
+
+        Fields = fields;
+        SetSize(Fields.Sum(x => x.Size));
+    }
+
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitStruct(this);
 
     protected internal override string DebugDisplay => $"struct {Name} {{ {Fields.Count} fields }}";
 }
 
 [DebuggerDisplay("{DebugDisplay}")]
-public class RuntimeStructureTypeField
+public class RuntimeStructureTypeField(RuntimeDatabaseType type, string name) : IRuntimeDatabaseType
 {
-    public RuntimeDatabaseType Type { get; set; }
+    public RuntimeDatabaseType Type { get; set; } = type;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = name;
+    public int Size => Type.Size;
+    public IInterpret DefaultInterpreter => Type.DefaultInterpreter;
+    public IEnumerable<IInterpret> Interpreters => Type.Interpreters;
+    public IInterpret? InterpreterOverride { get; private set; }
 
-    public RuntimeStructureTypeField(RuntimeDatabaseType type, string name)
+    public IRuntimeDatabaseType WithInterpreterOverride(IInterpret interpreter)
     {
-        Type = type;
-        Name = name;
+        InterpreterOverride = interpreter;
+        return this;
     }
 
     protected internal string DebugDisplay => $"{Type.DebugDisplay} {Name}";

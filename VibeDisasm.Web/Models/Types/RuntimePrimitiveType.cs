@@ -12,14 +12,11 @@ public sealed class RuntimePrimitiveType : RuntimeDatabaseType
     public override string Namespace { get; set; }
     public override string Name { get; set; }
 
-    public int Size { get; set; }
-
-    public RuntimePrimitiveType(Guid id, string @namespace, string name, int size, InterpretAs interpretAs = InterpretAs.Bytes) : base(id)
+    public RuntimePrimitiveType(Guid id, string @namespace, string name, int size) : base(id)
     {
         Namespace = @namespace;
         Name = name;
-        Size = size;
-        InterpretAs = interpretAs;
+        SetSize(size);
     }
 
     public override T Accept<T>(RuntimeDatabaseTypeVisitor<T> visitor) => visitor.VisitPrimitive(this);
